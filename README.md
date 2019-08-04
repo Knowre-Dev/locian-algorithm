@@ -1,1 +1,1 @@
-# locian-algorithm
+# locian Geometry2D algorithm
