@@ -1,0 +1,44 @@
+15/03/29 17:48:14
+----------
+{"type":"Block","value":[{"type":"Input","mode":"math","value":"y-4=\\frac{2}{7}(x-0)","order":1}]}
+----------
+Array
+(
+    [math] => Array
+        (
+            [0] => Array
+                (
+                    [value] => y-4=\frac{2}{7}(x-0)
+                    [order] => 1
+                )
+
+        )
+
+)
+
+----------
+Array
+(
+    [math] => Array
+        (
+            [0] => Array
+                (
+                    [value] => y-4=\frac{2}{7}x
+                    [order] => 1
+                    [checktype] => Array
+                        (
+                            [0] => single
+                            [1] => eq
+                            [2] => simp
+                            [3] => equi
+                        )
+
+                )
+
+        )
+
+)
+
+----------
+result : TRUE
+
