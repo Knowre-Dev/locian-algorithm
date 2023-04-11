@@ -1,11 +1,12 @@
 
 
+import {organizeAnswerObj} from '../rc/functions.js';
+
 export function compareSingleChoice(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'SingleChoice' && input_1['type'] === 'SingleChoice') {
-        //fb(right_1, 'right_SingleChoice_ahjin');
-        //fb(input_1, 'user_SingleChoice_ahjin');
+       
         
         var right_answer;
         if (Array.isArray(right_1['answer'])) {
@@ -42,7 +43,36 @@ export function SingleChoice_getAnswer(object, answer, checktypeDefault) {
     var tempanswer = Array.isArray(object_1['answer']) ? typeof object_1['answer'][0] != 'undefined' ? object_1['answer'][0] : -1 : object_1['answer'];
     organizeAnswerObj(object_1['choices'][tempanswer], answer, checktypeDefault);
 
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     
     return object_1;
+}
+
+var object = {
+    "type": "SingleChoice",
+    "choices": [
+        {
+            "type": "Text",
+            "content": "red"
+        },
+        {
+            "type": "Text",
+            "content": "yellow"
+        },
+        {
+            "type": "Text",
+            "content": "blue"
+        },
+        {
+            "type": "Text",
+            "content": "pink"
+        },
+        {
+            "type": "Text",
+            "content": "purple"
+        }
+    ],
+    "answer": [
+        2
+    ]
 }

@@ -1,12 +1,14 @@
 
 
+
+import {organizeAnswerObj} from '../rc/functions.js';
+
 export function compareMultipleChoice(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'MultipleChoice' && input_1['type'] === 'MultipleChoice') {
-        //fb(right_1, 'right_MultipleChoice_ahjin');
-        //fb(input_1, 'user_MultipleChoice_ahjin');
-        
+       
+        var right_answer;
         if (Array.isArray(right_1['answer'])) {
             if (!right_1['answer']) {
                 right_answer = [-1];
@@ -16,7 +18,9 @@ export function compareMultipleChoice(right = null, input = null) {
         } else {
             right_answer = [right_1['answer']];
         }
-        if (Array.IsArray(input_1['answer'])) {
+
+        var input_answer;
+        if (Array.isArray(input_1['answer'])) {
             if (!input_1['answer']) {
                 input_answer = [-1];
             } else {
@@ -52,4 +56,34 @@ export function MultipleChoice_getAnswer(object, answer, checktypeDefault) {
     //fb(object_1, object_1['type'] + 'Aihua');
     
     return object_1;
+}
+
+var object = {
+    "type": "MultipleChoice",
+    "choices": [
+        {
+            "type": "Text",
+            "content": "red"
+        },
+        {
+            "type": "Text",
+            "content": "yellow"
+        },
+        {
+            "type": "Text",
+            "content": "blue"
+        },
+        {
+            "type": "Text",
+            "content": "pink"
+        },
+        {
+            "type": "Text",
+            "content": "purple"
+        }
+    ],
+    "answer": [
+        0,
+        2
+    ]
 }

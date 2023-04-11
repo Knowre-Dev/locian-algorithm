@@ -1,10 +1,11 @@
 
 
+import {organizeAnswerObj} from '../rc/functions.js';
+
 export function compareTree(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Tree_ahjin');
-    //fb(input_1, 'user_Tree_ahjin');
+    
     
     return true;
 }
@@ -57,4 +58,33 @@ export function Tree_getAnswer(object, answer, checktypeDefault) {
     //fb(object_1, object_1['type'] + 'Aihua');
     
     return object_1;
+}
+
+
+
+
+
+//object
+function getObject() {
+    var node = this.nodeData()[0];
+    node['edgeLength'] = 0.3;
+    
+    var json = {
+        'type': 'Tree',
+        'nodes': [node],
+        'nodeTitles': this.setNodeTitles(), //#Needs to be set
+        'lastLeafElements': this.setOutcomes(),
+        'flow': this.flow,
+        'size': this.size,
+        'ratio': this.ratio,
+        'display': 'inline-block',
+        'useLastLeafAlign': true
+    };
+
+    result = {
+        'type': 'Tree',
+        'newsinod': json
+    };
+   
+    return result;
 }

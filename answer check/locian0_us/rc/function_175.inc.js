@@ -1,4 +1,4 @@
-
+import {organizeAnswerObj} from '../rc/functions.js';
 
 export function compareCases(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
@@ -6,7 +6,7 @@ export function compareCases(right = null, input = null) {
     //fb(right_1, 'right_Cases_ahjin');
     //fb(input_1, 'user_Cases_ahjin');
 
-    return TRUE;
+    return true;
 }
 
 export function Cases_getAnswer(object_1, answer, checktypeDefault) {

@@ -1,31 +1,39 @@
 
+
+import {evaluateEx_new, evaluateOperation} from '../rc/function_140.inc.js';
+
+
 export function compareCartesian2D_old(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Cartesian2D' && input_1['type'] === 'Cartesian2D') {
-        //fb(right_1, 'right_Cartesian2D_old__ahjin');
-        //fb(input, 'user_Cartesian2D_old__ahjin');
         
-        var right_cplane = Cartesian2D_old_getInfinityo(right_1, null);
-        var input_cplane = Cartesian2D_old_getInfinityo(input_1, right_1);
-        //fb(answer, 'right_Cartesian2D_old__getInfinityo_ahjin');
-        //fb(inswer, 'user_Cartesian2D_old_getInfinityo_ahjin');
         
-        if (right_cplane === false || input_cplane === false)
+        var right_cplane = Cartesian2D_getInfo_old(right_1, null);
+        var input_cplane = Cartesian2D_getInfo_old(input_1, right_1);
+        //console.log(JSON.stringify(right_cplane, null, 4));
+        //console.log(JSON.stringify(input_cplane, null, 4));
+        //console.log(JSON.stringify(right_cplane, null, 4) == JSON.stringify(input_cplane, null, 4));
+        if (right_cplane === false || input_cplane === false) {
             return false;
-        //print_r(right_cplane); echo "<br />"; echo "<br />"; print_r(input_cplane);
-        //echo "<br />"; echo "<br />"; echo "<br />";
+        }
+        
         // comparing region
         if (right_cplane['region'].length === input_cplane['region'].length) {
             if (right_cplane['region'].length > 0) {
                 for (var rregion of right_cplane['region']) {
                     for (var [ki, iregion] of input_cplane['region'].entries()) {
-                        if (Cartesian2D_region(rregion, iregion)) {
-                            delete input_cplane['region'][ki];
-                            break;
+                        if (typeof iregion != 'undefined') {
+                            if (Cartesian2D_region(rregion, iregion)) {
+                                
+                                delete input_cplane['region'][ki];
+                                break;
+                            }
                         }
                     }
                 }
+                
+                input_cplane['region'] = input_cplane['region'].filter(Boolean);
                 if (input_cplane['region'].length !== 0) {
                     return false;
                 }
@@ -33,11 +41,14 @@ export function compareCartesian2D_old(right = null, input = null) {
                 return true;
             }
         } else {
+            
             return false;
         }
         // organize the point objects and the curve objects
         right_cplane = Cartesian2D_organize(right_cplane);
         input_cplane = Cartesian2D_organize(input_cplane);
+        //console.log(JSON.stringify(right_cplane, null, 4));
+        //console.log(JSON.stringify(input_cplane, null, 4));
         if (right_cplane === false) {
             return false;
         }
@@ -52,7 +63,7 @@ export function compareCartesian2D_old(right = null, input = null) {
         var input_remPoint = [];
 
         var types = [];
-        var keys = [...right_cplane.keys()].concat([...input_cplane.keys()]);
+        var keys = Object.keys(right_cplane).concat(Object.keys(input_cplane));
         for (var v_1 of keys) {
             var is_exist = false;
             for (var v_2 of types) {
@@ -65,6 +76,7 @@ export function compareCartesian2D_old(right = null, input = null) {
                 types.push(v_1);
             }
         }
+        
         for (var type of types) {
             var right_typeObj = [];
             var input_typeObj = [];
@@ -75,46 +87,68 @@ export function compareCartesian2D_old(right = null, input = null) {
             if (type in input_cplane) {
                 input_typeObj = input_cplane[type];
             }
+            //console.log(right_typeObj);
+            //console.log(input_typeObj);
+            //console.log('..........');
             if (type === 'point') { // array of objs
+                
                 var r_i = Cartesian2D_subPts(right_typeObj, input_typeObj);
+                
                 var i_r = Cartesian2D_subPts(input_typeObj, right_typeObj);
                 right_remPoint = right_remPoint.concat(r_i);
                 input_remPoint = input_remPoint.concat(i_r);
+                
             } else if (type === 'curve') { // array of arrays
+                
                 for (var rObjArr of right_typeObj) {
                     var match = false;
+                    
                     for (var [k, iObjArr] of input_typeObj.entries()) {
-                        var possiblePts = null;
-                        var match = Cartesian2D_curve(rObjArr, iObjArr, possiblePts);
-                        if (match) {
-                            right_matchedObj = right_matchedObj.concat(rObjArr);
-                            input_matchedObj = input_matchedObj.concat(iObjArr);
-                            delete input_typeObj[k];
-                            break;
-                        } else if (possiblePts != null) {
-                            var r_i = possiblePts['r_minus_i'];
-                            var i_r = possiblePts['i_minus_r'];
-                            if (r_i != null) {
-                                right_remPoint = right_remPoint.concat(r_i);
+                        //console.log(JSON.stringify(rObjArr, null, 4));
+                        //console.log(JSON.stringify(iObjArr, null, 4));
+                        if (typeof input_typeObj[k] != 'undefined') {
+                            var possiblePts = null;
+                            
+                            var match = Cartesian2D_curve(rObjArr, iObjArr, possiblePts);
+                            if (match) {
+                                right_matchedObj = right_matchedObj.concat(rObjArr);
+                                input_matchedObj = input_matchedObj.concat(iObjArr);
+                                delete input_typeObj[k];
+                                break;
+                            } else if (possiblePts != null) {
+                                var r_i = possiblePts['r_minus_i'];
+                                var i_r = possiblePts['i_minus_r'];
+                                if (r_i != null) {
+                                    right_remPoint = right_remPoint.concat(r_i);
+                                }
+                                if (i_r != null) {
+                                    input_remPoint = input_remPoint.concat(i_r);
+                                }
+                                delete input_typeObj[k];
+                                match = true; // for further examination
+                                break;
                             }
-                            if (i_r != null) {
-                                input_remPoint = input_remPoint.concat(i_r);
-                            }
-                            delete input_typeObj[k];
-                            match = true; // for further examination
-                            break;
                         }
                     }
                     if (!match) {
+                        
                         return false;
                     }
+                    
                 }
                 
+                input_typeObj = input_typeObj.filter(Boolean);
+                
                 if (input_typeObj.length !== 0) {
+                    
                     return false;
                 }
             }
+            
         }
+        
+        //console.log(right_remPoint);
+        //console.log(input_remPoint);
         
        
         var P_intersect = [];
@@ -129,15 +163,31 @@ export function compareCartesian2D_old(right = null, input = null) {
                         break
                     }
             }
-            P_intersect.push(v_1);
+            if (is_intersect) {
+                P_intersect.push(v_1);
+            }
         }
-        
-        
+
+        //console.log(right_remPoint);
+       // console.log(P_intersect);
+        //console.log(input_remPoint);
+        //console.log(P_intersect);
+        //console.log('..........');
         right_remPoint = Cartesian2D_subPts(right_remPoint, P_intersect);
         input_remPoint = Cartesian2D_subPts(input_remPoint, P_intersect);
-        
+        //console.log(right_remPoint);
+        //console.log(right_matchedObj);
+        //console.log(input_remPoint);
+        //console.log(input_matchedObj);
         right_remPoint = Cartesian2D_deletePointsOnGraphs(right_remPoint, input_matchedObj);
         input_remPoint = Cartesian2D_deletePointsOnGraphs(input_remPoint, right_matchedObj);
+        //console.log(right_remPoint);
+        //console.log(input_remPoint);
+        //console.log('......');
+        right_remPoint = right_remPoint.filter(Boolean);
+        input_remPoint = input_remPoint.filter(Boolean);
+        //console.log(right_remPoint);
+        //console.log(input_remPoint);
         if (right_remPoint.length > 0 || input_remPoint.length > 0) {
             return false;
         }
@@ -151,6 +201,7 @@ export function compareCartesian2D_old(right = null, input = null) {
 // copy and paste organizeMathTree_relationEqeq from checkmath.php
 export function Cartesian2D_organizeMathTree(tree) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
+    
     var newTree;
     switch (tree_1[0]) {
         case 'equation':
@@ -201,11 +252,12 @@ export function Cartesian2D_organizeMathTree(tree) {
     }
     
     var evaluated = evaluateEx_new(newTree);
+    
     var head = evaluated[1][1];
     evaluated = evaluated.slice(1);
     if (head[0] < 0) {
         for (var k in evaluated) {
-            switch (v[2]) {
+            switch (evaluated[k][2]) {
                 case 'gt':
                     evaluated[k][2] = 'lt';
                     break;
@@ -232,8 +284,8 @@ export function Cartesian2D_organizeMathTree(tree) {
     for (var v of evaluated) {
         var eq = v;
         var lhs = [
-            (eq[1][0]*head[0]+eq[1][1]*head[1])/(head[0]*head[0]+head[1]*head[1]),
-            (eq[1][1]*head[0]-eq[1][0]*head[1])/(head[0]*head[0]+head[1]*head[1])
+            (eq[1][0] * head[0] + eq[1][1] * head[1] ) / (head[0] * head[0] + head[1] * head[1]),
+            (eq[1][1] * head[0] - eq[1][0] * head[1]) / (head[0] * head[0] + head[1] * head[1])
         ];
         
         eq[1] = ['eval', lhs];
@@ -243,9 +295,15 @@ export function Cartesian2D_organizeMathTree(tree) {
     return newEval;
 }
 
+
+import {Relation_LatexToTree} from '../rc/function_144.inc.js';
+import {Relation_compTree} from '../rc/function_169.inc.js';
+
 export function Cartesian2D_region(region1, region2) {  
     var region1_1 = JSON.parse(JSON.stringify(region1));
     var region2_1 = JSON.parse(JSON.stringify(region2));
+    //console.log(JSON.stringify(region1_1, null, 4));
+    //console.log(JSON.stringify(region2_1, null, 4));
     if (region1_1['value'].length !== region2_1['value'].length) {
         return false;
     }
@@ -254,9 +312,14 @@ export function Cartesian2D_region(region1, region2) {
     }
     
     var mapping = [];
+    
+
     for (var [k1, value1] of region1_1['value'].entries()) {
         for (var [k2, value2] of region2_1['value'].entries()) {
-            if (value1['type'] === value2['type'] && value1['dash'] === value2['dash']) {
+            if (typeof region1_1['value'][k1] != 'undefined' &&
+                typeof region2_1['value'][k2] != 'undefined')
+            if (value1['type'] === value2['type'] && 
+                value1['dash'] === value2['dash']) {
                 var val1 = Cartesian2D_makeEq(value1['type'], value1['value']);
                 var val2 = Cartesian2D_makeEq(value2['type'], value2['value']);
                 if (val1 === false || val2 === false) {
@@ -265,7 +328,7 @@ export function Cartesian2D_region(region1, region2) {
                 
                 var tree1 = Cartesian2D_organizeMathTree(Relation_LatexToTree(val1));
                 var tree2 = Cartesian2D_organizeMathTree(Relation_LatexToTree(val2));
-               
+                
                 if (Relation_compTree(tree1, tree2)) {
                     delete region1_1['value'][k1];
                     delete region2_1['value'][k2];
@@ -275,6 +338,8 @@ export function Cartesian2D_region(region1, region2) {
             }
         }
     }
+    region1_1['value'] = region1_1['value'].filter(Boolean);
+    region2_1['value'] = region2_1['value'].filter(Boolean);
     
     if (region1_1['value'].length !== 0 || region2_1['value'].length !== 0) {
         return false;
@@ -290,21 +355,27 @@ export function Cartesian2D_region(region1, region2) {
     }
     for (var rdata of region1_1['dataFill']) {
         for (var [k, idata] of newDataFill.entries()) {
-            if (rdata === idata) {
+            if (JSON.stringify(rdata) === JSON.stringify(idata)) {
                 delete newDataFill[k];
                 break;
             }
         }
     }
     
+    newDataFill = newDataFill.filter(Boolean);
     return newDataFill.length === 0;
 }
 
 export function Cartesian2D_subPts(p1, p2) {
     var p1_1 = JSON.parse(JSON.stringify(p1));
     var p2_1 = JSON.parse(JSON.stringify(p2));
+    
+    
     var result = [];
-    if (p1_1 != null) {
+    //console.log(p1_1 != null && p1_1.length != 0);
+    //console.log(p2_1);
+    if (p1_1 != null && p1_1.length != 0) {
+        
         for (var p of p1_1) {
             var is_included = false;
             for (var v of p2_1) {
@@ -318,11 +389,15 @@ export function Cartesian2D_subPts(p1, p2) {
             }
         }
     }
+    //console.log(result);
+    //console.log('........')
+    //console.log(1);
     return result;
 }
 
 export function Cartesian2D_organize(obj) {
     var obj_1 = JSON.parse(JSON.stringify(obj));
+    
     var fn = function(o) { // copy and paste from checkcart2d.php
         if ('isFill' in o) {
             return o['isFill'];
@@ -340,17 +415,26 @@ export function Cartesian2D_organize(obj) {
         for (var [i, curve] of obj_1['curve'].entries()) {
             if (Array.isArray(curve['value'])) { //  array of points
                 var eq = Cartesian2D_makeEq(curve['type'], curve['value']);
+                //console.log(curve['value']);
                 if (eq === false) {
                     return false;
                 }
+                
                 obj_1['curve'][i]['mathTree'] = Relation_LatexToTree(eq);
+                //console.log(JSON.stringify(Relation_LatexToTree(eq), null, 4));
             } else { // value is latex string
+                
                 obj_1['curve'][i]['mathTree'] = Relation_LatexToTree(curve['value']);
+                
             } 
         }
         
         //  delete the points those are on the curves
         if (typeof obj_1['point'] != 'undefined') {
+            //console.log(obj_1['point']);
+            //console.log(obj_1['curve']);
+            //console.log(Cartesian2D_deletePointsOnGraphs(obj_1['point'], obj_1['curve']));
+            //console.log('............');
             obj_1['point'] = Cartesian2D_deletePointsOnGraphs(obj_1['point'], obj_1['curve']);
         }
         
@@ -361,7 +445,7 @@ export function Cartesian2D_organize(obj) {
             var position = -1;
             var newc = null;
             for (var [i, o] of cObj.entries()) {
-                if (Relation_compTree(Cartesian2D_organizeMathTree(o[0]['mathTree']), Cartesian2D_organizeMathTree(c['mathTree']))) {
+                if (Relation_compTree(Cartesian2D_organizeMathTree(o[0]['mathTree']),   Cartesian2D_organizeMathTree(c['mathTree']))) {
                     position = i;
                     newc = o;
                     newc.push(c);
@@ -385,7 +469,6 @@ export function Cartesian2D_organize(obj) {
                 }
                 var keys = [...cArr_new.keys];
                 var lastKey = keys[keys.length - 1];
-                //reset(cArr_new);
                 var newc = Cartesian2D_combineTwoBounds(cArr_new[lastKey], c);
                 
                 if (newc != null) { 
@@ -412,6 +495,7 @@ export function Cartesian2D_curve(rObjArr, iObjArr, possiblePts) {
     // check if the mathTree match
     var rTree = Cartesian2D_organizeMathTree(rObjArr_1[0]['mathTree']);
     var iTree = Cartesian2D_organizeMathTree(iObjArr_1[0]['mathTree']);
+    
     var match = Relation_compTree(rTree, iTree);
     if (!match) {
         return false;
@@ -420,13 +504,15 @@ export function Cartesian2D_curve(rObjArr, iObjArr, possiblePts) {
     // check if the bounds match
     if (rObjArr_1.length === iObjArr_1.length) {
         var identical = true;
-        for (var [kr, rObj] of rObjArr_1.entires()) {
+        
+        for (var [kr, rObj] of Object.entries(rObjArr_1)) {
             if (rObj['selected'] !== iObjArr_1[kr]['selected'] || Cartesian2D_cmpObjBounds(rObj, iObjArr_1[kr]) !== 0) {
                 identical = false;
                 break;
             }
         }
         if (identical) {
+            
             return true;
         }
     }
@@ -482,17 +568,21 @@ export function Cartesian2D_boundsDiffByPts(objArr1, objArr2) {
     }
     
     // check the maximum end points
-    var keys_1 = [...objArr1_1.keys];
-    var keys_2 = [...objArr2_2.keys];
-    o1 = objArr2_1[keys_2[keys_2.length - 2]]; 
+    
+    var keys_1 = [...objArr1_1.keys()];
+    var keys_2 = [...objArr2_1.keys()];
+    o1 = objArr2_1[keys_2[keys_2.length - 1]]; 
     o2 = objArr1_1[keys_1[keys_1.length - 1]]; 
-    if (is_finite(o1['bound'][1]) && !o1['endPoint'][1] && o2['endPoint'][1]) {
+    if (typeof o1['bound'] != 'undefined' && 
+        isFinite(o1['bound'][1]) && 
+        !o1['endPoint'][1] && 
+        o2['endPoint'][1]) {
         var pt = Cartesian2D_createPtObj(mathTree, o1['bound'][1]);
         points.push(pt);
     }
     
     // check points in the middle
-    for (i = 0; i < objArr2_1.length - 1; i++) {
+    for (var i = 0; i < objArr2_1.length - 1; i++) {
         o1 = objArr2_1[i];
         o2 = objArr2_1[i+1];
         
@@ -525,8 +615,10 @@ export function Cartesian2D_createPtObj(mathTree, x) {
 
 export function Cartesian2D_evalY(A, x) {
     var A_1 = JSON.parse(JSON.stringify(A));
-    if (!Array.isArray(A_1))
+    
+    if (!Array.isArray(A_1)) {
         A_1 = Relation_LatexToTree(A_1);
+    }
     if (Array.isArray(A_1) && A_1[0] == 'equation') {
     
     } else {  
@@ -645,10 +737,18 @@ export function Cartesian2D_cmpObjBounds(o1, o2) { // both of inputs are curve o
 export function Cartesian2D_deletePointsOnGraphs(pObj, cObj) { // array, array
     var pObj_1 = JSON.parse(JSON.stringify(pObj));
     var cObj_1 = JSON.parse(JSON.stringify(cObj));
+    //console.log(pObj_1);
+    //console.log(cObj_1);
+    //console.log('......');
     var result = [];
     for (var p of pObj_1) {
         var pFlag = false;
         for (var c of cObj_1) {
+            //console.log(p);
+            //console.log(c);
+            //console.log(Cartesian2D_bound(p, c));
+            //console.log(Cartesian2D_eqn(p, c));
+            //console.log('.........');
             if (Cartesian2D_bound(p, c) && Cartesian2D_eqn(p, c)) {
                 pFlag = true;
                 break;
@@ -689,6 +789,9 @@ export function Cartesian2D_bound(pobj, cobj) {
 export function Cartesian2D_eqn(pObj, cObj) {
     var pObj_1 = JSON.parse(JSON.stringify(pObj));
     var cObj_1 = JSON.parse(JSON.stringify(cObj)); 
+    //console.log(pObj_1);
+    //console.log(cObj_1);
+    //console.log('...........');
     return Cartesian2D_idEqWithVal(cObj_1['mathTree'], {'x': pObj_1['value'][0], 'y': pObj_1['value'][1]});
 }
 
@@ -697,30 +800,31 @@ export function Cartesian2D_eqn(pObj, cObj) {
 export function Cartesian2D_idEqWithVal(A, valueArr) {
     var A_1 = JSON.parse(JSON.stringify(A));
     var valueArr_1 = JSON.parse(JSON.stringify(valueArr));
-    if (gettype(A_1) !== 'array') 
+    if (!Array.isArray(A_1)) { 
         return false;
-    
-    if (gettype(A_1) === 'array' && in_array(A[0], array('equation', 'inequality'))) {
+    }
+    if (Array.isArray(A_1) && ['equation', 'inequality'].includes(A[0])) {
 
     } else {
         return false;
     }
-    
+    //console.log(JSON.stringify(A, null, 4));
+    //console.log(valueArr_1);
     var evaluatedEq = Cartesian2D_evalExWithVal(A_1, valueArr_1);
-    
+    //console.log(evaluatedEq);
     // in the export function powComplex_inLocian(from evaluateEx_new), sin(2π) is not equal to 0, the result is -2.4492935982947E-16, so the export function Relation_compTree outputs false and that causes the right answer marked false.
     for (var [k1, arrEq] of evaluatedEq.entries()) {
         if (k1 > 0) {
             for (var [k2, value] of arrEq.entries()) {
-                if (value.toString().indexOf('E') != -1) {
+                if (value.toString().indexOf('e') != -1) {
                     evaluatedEq[k1][k2] = Math.round(value);
                 }
             }
         }
     }
-    
+    //console.log(evaluatedEq);
     if (evaluatedEq[0] === 'equation') { 
-        return evaluatedEq[1] == evaluatedEq[2] || Relation_compTree(evaluatedEq[1],evaluatedEq[2]); 
+        return JSON.stringify(evaluatedEq[1]) == JSON.stringify(evaluatedEq[2]) || Relation_compTree(evaluatedEq[1], evaluatedEq[2]); 
     } else if (A[0] === 'inequality') {
         return false;
     }
@@ -761,6 +865,7 @@ export function Cartesian2D_evalExWithVal(A, valueArr) {
             return result;
 
         default:
+            
             result = evaluateOperation(operator,operand); // it's from evaluateEx_new
             return result;
     }
@@ -768,6 +873,7 @@ export function Cartesian2D_evalExWithVal(A, valueArr) {
 
 // copy and paste from checkmath.php 
 export function Cartesian2D_makeEq(type, points) {
+    
     var points_1 = JSON.parse(JSON.stringify(points)); // make latex string
     if (!Array.isArray(points_1)) {
         return points_1;
@@ -1036,29 +1142,30 @@ export function Cartesian2D_makeEq(type, points) {
     
     return result;
 }
-
-export function Cartesian2D_old_getInfinityo(cplane, right = null) {
+/*
+export function Cartesian2D_old_getInfo(cplane, right = null) {
     var cplane_1 = JSON.parse(JSON.stringify(cplane));
     var right_1 = JSON.parse(JSON.stringify(right));
-    return Cartesian2D_getInfinityo_old(cplane_1);
-    /*
-    if (isset(cplane['object'])) { 
-        return Cartesian2D_getInfinityo_old(cplane);
-    } else { 
-        return Cartesian2D_getInfinityo_new(cplane, right);
-    }
-    */
+    return Cartesian2D_H_old(cplane_1);
+    
 }
-
-export function Cartesian2D_getInfinityo_old(cplane) {
+*/
+export function Cartesian2D_getInfo_old(cplane) {
     var cplane_1 = JSON.parse(JSON.stringify(cplane));
     if (cplane_1['checkFlag'] === false) {
         return false;
     }
-    
+    //console.log(JSON.stringify(cplane_1, null, 4));
     var point = [];
     var curve = [];
     var region = [];
+    if (typeof cplane_1['object'] == 'undefined') {
+        return {
+            'point': point,
+            'curve': curve,
+            'region': region
+        };
+    }
     for_1:
     for (var object of cplane_1['object']) {
         if (object['type'] === 'Regio' || object['type'] === 'Region') {
@@ -1142,7 +1249,7 @@ export function Cartesian2D_getInfinityo_old(cplane) {
             case 'Sin': // can't find this case
             case 'Tan': // can't find this case 
                 curve.push({ 
-                    'type': strtolower(object['type']) + 'Curve',
+                    'type': object['type'].toLowerCase() + 'Curve',
                     'value': object['answerPoint'], // maybe array of points?
                     'mathTree': null,
                     'bound': object['bounded'] ? object['bound'] : null,
@@ -1166,47 +1273,56 @@ export function Cartesian2D_getInfinityo_old(cplane) {
             continue for_1;
         }
     }
- 
-    return {
+    //console.log(JSON.stringify(curve, null, 4));
+    var result = {
         'point': point,
         'curve': curve,
         'region': region
     };
+    return result;
 }
+
+import {match_all} from '../checkmath.js';
+
 
 export function Cartesian2D_JStoLatex(JS) {
     var replace = {
         ' ': '', 
         '+ -': '-'
     };
-    for (var [k, v] of replace.entries()) {
+    for (var [k, v] of Object.entries(replace)) {
         JS = JS.replaceAll(k, v);
     }
     
     var temp  = match_all(
         JS, 
         new RegExp(
-            '\(\(([^\(\)]+)\)\\/\(([^\(\)]+)\)\)',
+            '\(\(([^\(\)]+)\)\\/\(([^\(\)]+)\)\)/',
             'g')
     );
-    for (var i = 0; i < temp[0].length; i++)
-        JS = JS.replaceAll(
-            temp[0][i], 
-            '\\frac{' + temp[1][i] + '}{' + temp[2][i] + '}'
-        );
-
+   
+    if (typeof temp[0] != 'undefined') {
+        for (var i = 0; i < temp[0].length; i++) {
+            JS = JS.replaceAll(
+                temp[0][i], 
+                '\\frac{' + temp[1][i] + '}{' + temp[2][i] + '}'
+            );
+        }
+    }
     temp = match_all(
         JS, 
         new RegExp(
             'Math.pow\(([^\(\),]+),([^\(\),]+)\)',
             'g')
     );
-    for (var i = 0; i < temp[0].length; i++) {
-        //JS = strtr(JS, array(temp[0][i] => temp[1][i].'^'.temp[2][i]));
-        JS = JS.replaceAll(
-            temp[0][i],
-            '(' + temp[1][i] + ')^' + temp[2][i]
-        );
+    if (typeof temp[0] != 'undefined') {
+        for (var i = 0; i < temp[0].length; i++) {
+            
+            JS = JS.replaceAll(
+                temp[0][i],
+                '(' + temp[1][i] + ')^' + temp[2][i]
+            );
+        }
     }
 
     temp = match_all(
@@ -1215,11 +1331,258 @@ export function Cartesian2D_JStoLatex(JS) {
             'Math.sqrt\(([^\(\)]+)\)', 
             'g')
     );
-    for(var i = 0; i < temp[0].length; i++) {
-        JS = JS.replaceAll(
-            temp[0][i],
-            '\\sqrt{' + temp[1][i] + '}'
-        );
+    if (typeof temp[0] != 'undefined') {
+        for(var i = 0; i < temp[0].length; i++) {
+            JS = JS.replaceAll(
+                temp[0][i],
+                '\\sqrt{' + temp[1][i] + '}'
+            );
+        }
     }
     return JS;
 }
+
+var object = {
+    "type": "Cartesian2D",
+    "object": [
+        {
+            "type": "Grid2D",
+            "value": [
+                [
+                    -1,
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10
+                ],
+                [
+                    -1,
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10
+                ]
+            ]
+        },
+        {
+            "type": "GridLabel2D",
+            "value": [
+                [
+                    [
+                        2,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "2"
+                        }
+                    ],
+                    [
+                        4,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "4"
+                        }
+                    ],
+                    [
+                        6,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "6"
+                        }
+                    ],
+                    [
+                        8,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "8"
+                        }
+                    ]
+                ],
+                [
+                    [
+                        -0.385,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "0"
+                        }
+                    ],
+                    [
+                        2,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "2"
+                        }
+                    ],
+                    [
+                        4,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "4"
+                        }
+                    ],
+                    [
+                        6,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "6"
+                        }
+                    ],
+                    [
+                        8,
+                        {
+                            "type": "Static",
+                            "mode": "math",
+                            "value": "8"
+                        }
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "Axis2D",
+            "value": [
+                {
+                    "name": {
+                        "type": "Static",
+                        "mode": "math",
+                        "value": "x"
+                    },
+                    "visible": true
+                },
+                {
+                    "name": {
+                        "type": "Static",
+                        "mode": "math",
+                        "value": "y"
+                    },
+                    "visible": true
+                }
+            ],
+            "origin": false
+        },
+        {       
+            "type": "Punctum",
+            "input": true,
+            "coord": [
+                6,
+                3
+            ],
+            "isFill": true,
+            "selected": false,
+            "color": 100
+        },
+        {
+            "type": "Segment",
+            "source": {
+                "coord": [
+                    "0",
+                    "0"
+                ],
+                "arrow": false
+            },
+            "target": {
+                "coord": [
+                    "6",
+                    "0"
+                ],
+                "arrow": true
+            },
+            "dash": true,
+            "color": 100,
+            "label": {
+                "type": "Static",
+                "mode": "null"
+            },
+            "labelSign": true,
+            "input": true
+        },
+        {
+            "type": "Segment",
+            "source": {
+            "coord": [
+                "6",
+                "0"
+            ],
+            "arrow": false
+            },
+            "target": {
+                "coord": [
+                    "6",
+                    "3"
+                ],
+                "arrow": true
+            },
+            "dash": true,
+            "color": 100,
+            "label": {
+                "type": "Static",
+                "mode": "null"
+            },
+            "labelSign": true,
+            "input": true
+        }
+    ],
+    "bound": [
+        [
+            -1,
+            10
+        ],
+        [
+            -1,
+            10
+        ]
+    ],
+    "menu": [
+        "Point",
+        "Line",
+        "Quad",
+        "Expo",
+        "Sqrt",
+        "Reci",
+        "Sin",
+        "Tan",
+        "Abs",
+        "Log"
+    ],
+    "menuOption": {
+        "curveColor": [
+            103
+        ],
+        "pointColor": [
+            103
+        ],
+        "defaultPosition": "parent",
+        "bounded": false,
+        "endPoint": [
+            true,
+            true
+        ],
+        "bound": [
+            -1,
+            10
+        ]
+    },
+    "size": 1,
+    "checkFlag": true
+  }

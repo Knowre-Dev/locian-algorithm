@@ -4,15 +4,13 @@ export function compareStack(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Stack' && input_1['type'] === 'Stack') {
-        //fb(right_1, 'right_Stack_ahjin');
-        //fb(input_1, 'user_Stack_ahjin');
+       
         
         // Stack with pattern
         if (typeof right_1['pattern'] != 'undefined') {
             var rightArr = getIndexFromPattern_Stack(right_1);
             var inputArr = getIndexFromPattern_Stack(input_1, true);
-            //fb(rightArr, 'right_Stack_pattern_ahjin');
-            //fb(inputArr, 'user_Stack_pattern_ahjin');
+           
             
             var willAllow = right_1['willAllow'];
             if (!Array.isArray(right_1['willAllow']))
@@ -51,8 +49,7 @@ export function compareStack(right = null, input = null) {
         if (typeof right_1['objs'] != 'undefined') {
             var rightArr = arrangeObjsByOrder_Stack(right_1);
             var inputArr = arrangeObjsByOrder_Stack(input_1, true);
-            //fb(rightArr, 'right_Stack_ordered_ahjin');
-            //fb(inputArr, 'user_Stack_ordered_ahjin');
+            
             
             if (rightArr.length !== inputArr.length) {
                 return false;
@@ -120,7 +117,8 @@ export function arrangeObjsByOrder_Stack(object, user=false) {
     for (var stack of object_1['objs']) {
         var order;
         var index;
-        if (typeof stack['locianOptions']['check'] != 'undefined' && stack['locianOptions']['check']) {
+        if (typeof stack['locianOptions']['check'] != 'undefined' && 
+            stack['locianOptions']['check']) {
             order = stack['locianOptions']['order'];
             index = user ? stack['index'] : stack['locianOptions']['answer']['index'];
         } else {
@@ -140,4 +138,37 @@ export function arrangeObjsByOrder_Stack(object, user=false) {
     }
     
     return objArr;
+}
+
+var object = {
+    "type": "Stack",
+    "elements": [
+        {
+            "type": "Image",
+            "url": "https://contents.knowreapi.com/us/illust/stackTile_01b_00.png"
+        },
+        {
+            "type": "Image",
+            "url": "https://contents.knowreapi.com/us/illust/stackTile_01b_04.png"
+        },
+        {
+            "type": "Image",
+            "url": "https://contents.knowreapi.com/us/illust/stackTile_01b_01.png"
+        },
+        {
+            "type": "Image",
+            "url": "https://contents.knowreapi.com/us/illust/stackTile_01b_02.png"
+        },
+        {
+            "type": "Image",
+            "url": "https://contents.knowreapi.com/us/illust/stackTile_01b_03.png"
+        }
+    ],
+    "interaction": true,
+        "locianOptions": {
+        "check": true,
+        "answer": {
+            "index": 2
+        }
+    }
 }

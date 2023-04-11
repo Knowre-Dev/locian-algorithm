@@ -1,23 +1,22 @@
 
 
+
 export function compareClock(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Clock' && input_1['type'] === 'Clock') {
-        fb(right_1, 'right_Clock_ahjin');
-        fb(input_1, 'user_Clock_ahjin');
+        
         
         right_1 = Clock_getInfo(right_1);
         input_1 = Clock_getInfo(input_1);
-        fb(right_1, 'right_Clock_getInfo_ahjin');
-        fb(input_1, 'user_Clock_getInfo_ahjin');
         
         right_1 = right_1.join(':');
         input_1 = input_1.join(':');
-        return right === input;
+        
+        return right_1 === input_1;
     }
 
-    return FALSE;
+    return false;
 }
 
 export function Clock_getInfo(clockObj) {
@@ -45,3 +44,33 @@ export function Clock_getAnswer(object) {
     //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
 }
+
+var object = {
+    "type": "Clock",
+    "ratio": 1,
+    "menu": [
+        "hour",
+        "minute",
+        null
+    ],
+    "view": [
+        true,
+        true,
+        false
+    ],
+    "hour": 0,
+    "minute": 0,
+    "second": 0,
+    "style": {
+        "number": {
+            "fontSize": 24
+        }
+    },
+    "answer": [
+        4,
+        30,
+        null
+    ]
+}
+
+

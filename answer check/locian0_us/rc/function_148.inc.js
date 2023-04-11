@@ -1,11 +1,24 @@
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 export function compareDropzone(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));   
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Dropzone' && input_1['type'] === 'Dropzone') {
         var right_answer = Dropzone_getInfo(right_1);
         var input_answer = Dropzone_getInfo(input_1);
+        
         if (right_answer === false && input_answer === false) {
             return true;
         }
@@ -13,10 +26,7 @@ export function compareDropzone(right = null, input = null) {
             return false;
         }
         
-        //fb(right_1, 'right_Dropzone_ahjin');
-        //fb(input_1, 'user_Dropzone_ahjin');
-        //fb(right_answer, 'right_Dropzone_getInfo_ahjin');
-        //fb(input_answer, 'user_Dropzone_getInfo_ahjin');
+        
         
         var result = Dropzone_compObjs(right_answer, input_answer);
         return result;
@@ -112,11 +122,15 @@ export function Dropzone_compObjs(right_answer, input_answer) {
     var input_answer_1 = JSON.parse(JSON.stringify(input_answer));
     // ignore the color of the base ten blocks etc.
     // this is for easier comparing
+
+    
+
     if (!right_answer_1['objs'] && !input_answer_1['objs']) {
         return true;
     }
-    if (right_answer_1['objs'].length !== input_answer_1['objs'].length)
+    if (right_answer_1['objs'].length !== input_answer_1['objs'].length) {
         return false;
+    }
     
     for (var [ko, obj] of right_answer_1['objs'].entries()) {
         var index = Dropzone_in_array(obj, right_answer_1['answerSet']);
@@ -217,13 +231,16 @@ export function Dropzone_in_array(obj, setArr) {
     }
 }
 
-export function Dropzone_getInfo(ddObj, order=null) {
+export function Dropzone_getInfo(ddObj, order = null) {
     var ddObj_1 = JSON.parse(JSON.stringify(ddObj));
+    
     if (typeof ddObj_1['locianOptions']['check'] != 'undefined' && 
         ddObj_1['locianOptions']['check']) {  
-        var result = new Object;
+        var result = new Object();
         var elements = [];
+        
         if (typeof ddObj_1['answer'] != 'undefined') {
+            
             for (var ans of ddObj_1['answer']) {
                 if (ans['type'] === 'Table') {
                     elements = elements.concat(Dropzone_getInfo_Table(ans));
@@ -237,6 +254,7 @@ export function Dropzone_getInfo(ddObj, order=null) {
                 'answerSet': ddObj_1['answerSet']
             };
         } else {
+            
             if (!ddObj_1['elements']) {  // from users
                 for (var draggableObj of ddObj_1['elements']) {
                     if (draggableObj['elements'][0]['type'] === 'Table') {
@@ -287,4 +305,356 @@ export function Dropzone_getInfo_Table(table) {
     }
     
     return images;
+}
+
+
+var object = {
+    "type": "Dropzone",
+    "elements": [
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        { 
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+                "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+            {
+                "type": "Image",
+                "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+            }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        },
+        {
+            "type": "DraggableObject",
+            "elements": [
+                {
+                    "type": "Image",
+                    "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+                }
+            ],
+            "padding": {
+                "top": 0.2,
+                "bottom": 0.2,
+                "left": 0.2,
+                "right": 0.2
+            }
+        }
+    ],
+    "valid": [
+      
+    ],
+    "count": 200,
+    "remove": false,
+    "copy": false,
+    "align": "center",
+    "verticalAlign": "bottom",
+    "size": {
+        "height": 6.2,
+        "width": 1
+    },
+    "answer": [
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        },
+        {
+            "type": "Image",
+            "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+        }
+    ],
+    "locianOptions": {
+    
+    },
+    "answerSet": [
+        [
+            {
+                "type": "Image",
+                "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten.png"
+            },
+            {
+                "type": "Image",
+                "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_ten_green.png"
+            }
+        ],
+        [
+            {
+                "type": "Image",
+                "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one.png"
+            },
+            {
+                "type": "Image",
+                "url": "https:\/\/contents.knowreapi.com\/us\/illust\/base_ten_one_green.png"
+            }
+        ]
+    ]
 }

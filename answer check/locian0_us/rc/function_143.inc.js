@@ -4,23 +4,22 @@ export function compareSelect(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Select' && input_1['type'] === 'Select') { 
-        //fb(right_1, 'right_Select_' + right_1['mode'] + '_ahjin');
-        //fb(input_1, 'user_Select_' + right_1['mode'] + '_ahjin');
+        
         
         var answer = right_1['value'];
+        var answer_1 = [];
         for (var ans of answer) {
-            ans = ans + '';
+            answer_1.push(ans.toString());
         } 
         var inswer = input_1['value'];
+        var inswer_1 = [];
         for (var ins of inswer) {
-            ins = ins + '';
+            inswer_1.push(ins.toString());
         }
-        //fb(answer, 'right_Select_'+ right_1['mode'] + '_getInfo_ahjin');
-        //fb(inswer, 'user_Select_' + right_1['mode'] + '_getInfo_ahjin');
-        
-        answer.sort();
-        inswer.sort();        
-        return JSON.stringify(answer) === JSON.stringify(inswer);
+       
+        answer_1.sort();
+        inswer_1.sort();        
+        return JSON.stringify(answer_1) === JSON.stringify(inswer_1);
     }
 
     return false;
@@ -28,6 +27,28 @@ export function compareSelect(right = null, input = null) {
 
 export function Select_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
+}
+
+
+var object = {
+    "type": "Select",
+    "mode": "checkbox",
+    "value": [
+        0,
+        1
+    ],
+    "size": 2,
+    "option": [
+        {
+            "type": "Static",
+            "mode": "text",
+            "value": "mean"
+        },
+        {
+            "type": "Static",
+            "mode": "text",
+            "value": "median"
+        }
+    ]
 }

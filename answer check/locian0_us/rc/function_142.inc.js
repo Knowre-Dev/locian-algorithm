@@ -1,5 +1,4 @@
 
-
 export function compareText(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
@@ -19,32 +18,31 @@ export function compareText(right = null, input = null) {
 
 export function Text_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     
     return object_1;
 }
 
 
+var object = {
+    "type": "Select",
+    "mode": "checkbox",
+    "value": [
+        0,
+        1
+    ],
+    "size": 2,
+    "option": [
+        {
+            "type": "Static",
+            "mode": "text",
+            "value": "mean"
+        },
+        {
+            "type": "Static",
+            "mode": "text",
+            "value": "median"
+        }
+    ]
+}
 
-/*
-function json(text) {
-    var result;
-    switch (text.type) {
-        case 0:             
-            result = {
-                'type': 'Static',
-                'mode': 'math',
-                'value': text.val
-            };
-            break;
-            
-        default:
-            result = {
-                'type': 'Static', 
-                'mode': 'null'
-            };
-            break;
-    }
-    return result;
-
-*/

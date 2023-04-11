@@ -7,7 +7,7 @@ export function evaluateEx_new(tree) {
         return tree_1;
     }
     var newTree = [];
-    
+    //console.log(JSON.stringify(tree_1, null, 4));
     switch(tree_1[0]) {
         
         // 160828 larwein - inequality patch
@@ -276,7 +276,10 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = null) {
             lookupTable_1[varname] = newZ;
         }
     }
-    
+    //console.log(operator);
+           
+    //console.log(lookupTable_1);
+    //console.log('.......');
     
     if (operator === 'summation') {
         return evaluateOperation(operator, operandTree, seed, lookupTable_1);
@@ -291,9 +294,19 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = null) {
     // }
     
     var operand = [];
+
     for(var subtree of operandTree) {
+        
         operand.push(evaluateExWithSeed(subtree, seed, lookupTable_1));
+        //if (operator == 'power') {
+        //    console.log(operator);
+        //    console.log(JSON.stringify(subtree, null, 4));
+        //    console.log(evaluateExWithSeed(subtree, seed, lookupTable_1));
+        //    console.log('...........');
+        //}
     }
+    //console.log(operator);
+    //console.log(operand);
     // By the recursion above, we are guaranteed that
     // ALL subexpressions have been evaluated into numerical values
     switch(operator) {
@@ -358,6 +371,9 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = null) {
             
             
         default:
+            //console.log(operator);
+            //console.log(operand);
+            //console.log('.......');
             return evaluateOperation(operator, operand, seed, lookupTable_1);
     }
 }
@@ -370,8 +386,10 @@ Values are represented in complex number format
 (array of two numbers [real, imaginary])
 */
 export function evaluateOperation(operator, operand, seed = null, lookupTable = null) {
+    //console.log(operator);
+    //console.log(operand);
+    //console.log('.......');
     var operand_1 = JSON.parse(JSON.stringify(operand));
-    
     var lookupTable_1 = JSON.parse(JSON.stringify(lookupTable));
     switch(operator) {
         case 'natural':
@@ -447,9 +465,11 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             return [operand_1[0][0] + operand_1[1][0] / operand_1[2][0], 0];
         
         case 'power':
+            
             return powComplex_inLocian(operand_1[0], operand_1[1]);
         
         case 'squareroot':
+            
             return powComplex_inLocian(operand_1[0], [0.5, 0]);
         
         case 'nthroot':
@@ -601,6 +621,7 @@ with comments added by epark
 export function powComplex_inLocian(A, B) {  
     var A_1 = JSON.parse(JSON.stringify(A));
     var B_1 = JSON.parse(JSON.stringify(B));
+    
     if (A_1[0] == 0 && A_1[1] == 0) {
         if (B_1[0] == 0 && B_1[1] == 0) {
             return [1, 0];

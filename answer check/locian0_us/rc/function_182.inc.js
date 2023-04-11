@@ -1,4 +1,4 @@
-
+import {organizeAnswerObj} from '../rc/functions.js';
 
 export function compareTable(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
@@ -85,4 +85,67 @@ export function Table_getAnswer(object, answer, checktypeDefault) {
     
     //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
+}
+
+
+
+
+//LP_Table
+//this => table
+function json(expo = SINOD_EXPORT_TYPE_NEW){
+    var json = new Object();
+    switch(expo) {
+        case 0:
+            json = {
+                'type': 'Lattice',
+                'value': this.cells
+            };
+            break;
+            
+        case 1:
+            var margin = Object.entries(
+                {
+                    'top': this.margin['top'], 
+                    'bottom': this.margin['bottom'], 
+                    'left': this.margin['left'], 
+                    'right': this.margin['right']
+                }
+            ).filter(
+                ([k, v]) => typeof v != 'undefined'
+            );
+
+            var position = Object.entries(
+                {
+                    'top': this.position['top'],
+                    'left': this.position['left']
+                }
+            ).filter(
+                ([k, v]) => typeof v != 'undefined'
+            );
+
+            var size = Object.entries(
+                {
+                    'width': this.size['width'],
+                    'height': this.size['height']
+                }
+            ).filter(
+                ([k, v]) => typeof v != 'undefined'
+            );
+
+            //return value
+            json = Object.entries(
+                {
+                    'type': 'Table',
+                    'position': position,
+                    'margin': margin ,
+                    'cells': this.cells,
+                    'display': this.display,
+                    'size': size,
+                    'dynamic': this.dynamic
+                },
+            ).filter(
+                ([k, v]) =>  ![null, undefined, 0, '', '0'].includes(v)
+            );
+            break;
+    }
 }

@@ -2,27 +2,31 @@
 export function compareConnect(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Connect_ahjin');
-    //fb(input_1, 'user_Connect_ahjin');
+    
     
     // get objects to compare
     var r_lines = [];
-    for (var line of right_1['locianOptions']['lines']) {
-        r_lines.puhs([line['source'], line['target']]);
+    if (typeof right_1['locianOptions'] != 'undefined' && 
+        typeof right_1['locianOptions']['lines'] != 'undefined') {
+        for (var line of right_1['locianOptions']['lines']) {
+            r_lines.push([line['source'], line['target']]);
+        }
     }
-    //fb(r_lines, 'right_Connect_getInfo_ahjin');
+    
     
     var i_lines = [];
     var i = input_1['lines'].slice(right_1['lines'].length);
     for (var line of i) {
         i_lines.push([line['source'], line['target']]);
     }
-    //fb(i_lines, 'user_Connect_getInfo_ahjin');
+    
     
     // compare
-    if (right_1['locianOptions']['order'] === false) {
-        if (right_1['locianOptions']['direction'] === true) {
-            //fb('Connect', 'Order does NOT matter, direction does matter.');
+    if (typeof right_1['locianOptions'] != 'undefined' && 
+        typeof right_1['locianOptions']['order'] != 'undefined' &&
+        right_1['locianOptions']['order'] === false) {
+        if (typeof right_1['locianOptions']['direction'] != 'undefined' &&
+            right_1['locianOptions']['direction'] === true) {
             if (r_lines.length !== i_lines.length) {
                 return false;
             }
@@ -35,17 +39,17 @@ export function compareConnect(right = null, input = null) {
                     }
                 }
             }
-            
+            r_lines = r_lines.filter(Boolean);
+            i_lines = i_lines.filter(Boolean);
             if (r_lines.length !== 0 || i_lines.length !== 0) {
                 return false;
             }
         } else {
-            //fb('Connect', 'Order does NOT matter, direction does NOT matter.');
             for (var [kr, r] of r_lines.entries()) {
                 var count = 0;
                 for (var [ki, i] of i_lines.entries()) {
-                    if ( (r[0] === i[0] && r[1] === i[1]) ||
-                        (r[1] === i[0] && r[0] === i[1]) ) {
+                    if ((r[0] === i[0] && r[1] === i[1]) ||
+                        (r[1] === i[0] && r[0] === i[1])) {
                         count++;
                         delete i_lines[ki];
                     }
@@ -54,14 +58,16 @@ export function compareConnect(right = null, input = null) {
                     delete r_lines[kr];
                 }
             }
-            
+            r_lines = r_lines.filter(Boolean);
+            i_lines = i_lines.filter(Boolean);
             if (r_lines.length !== 0 || i_lines.length !== 0) {
                 return false;
             }
         }
     } else {
-        if (right_1['locianOptions']['direction'] === true) {
-            //fb('Connect', 'Order does matter, direction does matter.');
+        if (typeof right_1['locianOptions'] != 'undefined' && 
+            typeof right_1['locianOptions']['direction'] != 'undefined' &&
+            right_1['locianOptions']['direction'] === true) {
             if (r_lines.length !== i_lines.length) {
                 return false;
             }
@@ -71,7 +77,6 @@ export function compareConnect(right = null, input = null) {
                 }
             }
         } else {
-            //fb('Connect', 'Order does matter, direction does NOT matter.');
             
             for (var [kr, r] of r_lines.entries()) {
                 if (i_lines.length > 0) {
@@ -82,12 +87,13 @@ export function compareConnect(right = null, input = null) {
                         delete i_lines[1];
                     }
                     delete r_lines[kr];
-                    i_lines = [...i_lines.values()];
+                    i_lines = i_lines.filter(Boolean);
                 } else {
                     break;
                 }
             }
-            
+            r_lines = r_lines.filter(Boolean);
+            i_lines = i_lines.filter(Boolean);
             if (r_lines.length !== 0 || i_lines.length !== 0) {
                 return false;
             }
@@ -99,6 +105,64 @@ export function compareConnect(right = null, input = null) {
 
 export function Connect_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
+}
+
+//this => connect
+function getObject() {
+    var dotStyle;
+    var sameDotStyle
+    if (!isNaN(parseFloat(this.edgeCount))) {
+        dotStyle = {
+            'lineLimit': {
+                'source': DStophp(this.edgeCount), 
+                'target': DStophp(this.edgeCount)
+            }
+        };
+        sameDotStyle = true;
+    } else if (Array.isArray(this.edgeCount) && 
+        !isNaN(parseFloat(DStophp(this.edgeCount[0]))) && 
+        !isNan(parseFloat(DStophp(this.edgeCount[1])))) {
+        dotStyle = {
+            'lineLimit': {
+                'source': DStophp(this.edgeCount[0]), 
+                'target': DStophp(this.edgeCount[1])
+            }
+        };
+        sameDotStyle = true;
+    } else {
+        dotStyle = {
+            'lineLimit': {
+                'source': 1, 'target': 1
+            }
+        };
+        sameDotStyle = false;
+    }
+    
+    var json = {
+        'type': 'Connect',
+        'size': DStophp(this.size),
+        'dots': this.getDots(),
+        'labels': this.getLabels(),
+        'lines': this.getLines(),
+        'arrow': this.arrow,
+        'dotStyle': $dotStyle,
+        'sameDotStyle': $sameDotStyle,
+        'display': 'inline-block'
+    };
+
+    if (!isNaN(parseFloat(this.dotColor))) {
+        json['sameDotStyle'] = true;
+        json['dotStyle']['style']['color']['code'] = DStophp(this.dotColor);
+    }
+    
+    if (!isNaN(parseFloat(this.lineColor))) {
+        json['color']['code'] = DStophp(this.lineColor);
+    }
+    
+    var result = {
+        'type': 'Connect',
+        'newsinod': json
+    };
+    return result;
 }

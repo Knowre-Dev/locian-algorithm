@@ -1125,6 +1125,7 @@ var latex = '\\tan\\frac{1}{2}(1+x)';
 console.log(JSON.stringify(LatexToTree(latex), null, 4));
 */
 
+//console.log(LatexToTree('-1'));
 
 function sub_LatexToTree(newA, node, node_idx) {
     var node_1 = JSON.parse(JSON.stringify(node));
@@ -1192,6 +1193,7 @@ function sub_LatexToTree(newA, node, node_idx) {
         'g');
     
     match = match_all(newA, regex);
+    
     if (match.length !== 0) {
         if (match[1].length === 1) {
             

@@ -1,4 +1,4 @@
-
+import {organizeAnswerObj} from '../rc/functions.js';
 
 export function compareLayer(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
@@ -38,4 +38,66 @@ export function Layer_getAnswer(object, answer, checktypeDefault) {
     
     //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
+}
+
+//this => layer
+
+function json(expo = SINOD_EXPORT_TYPE_NEW) {
+    var json;
+    switch(expo) {
+        case 0:
+            json = {
+                'type': 'Layer',
+                'source': this.background,
+                'target': this.elements
+            };
+            break;
+
+        case 1:
+            var margin = Object.entries(
+                {
+                    'top': this.margin['top'], 
+                    'bottom': this.margin['bottom'], 
+                    'left': this.margin['left'], 
+                    'right': this.margin['right']
+                }
+            ).filter(
+                ([k, v]) => ![null, undefined].includes(v)
+            );
+
+            var position = Object.entries(
+                {
+                    'top': this.position['top'],
+                    'left': this.position['left']
+                }   
+            ).filter(
+                ([k, v]) => ![null, undefined].includes(v)
+            );
+
+            var size = Object.entries(
+                {
+                    'width': this.size['width'],
+                    'height': this.size['height']
+                }
+            ).filter(
+                ([k, v]) => ![null, undefined].includes(v)
+            );
+
+            //return value
+            json = Object.entries(
+                {
+                    'type': 'Layer',
+                    'position': position,
+                    'margin': margin ,
+                    'source': this.background,
+                    'elements': this.elements,
+                    'display': this.display,
+                    'size': size
+                }
+            ).filter(
+                ([k, v]) => ![null, undefined, 0, '', '0'].includes(v)
+            );
+            break;
+    }
+    return json;
 }

@@ -1,4 +1,4 @@
-
+import {organizeAnswerObj} from '../rc/functions.js';
 
 export function compareSpan(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
@@ -6,7 +6,7 @@ export function compareSpan(right = null, input = null) {
     //fb(right_1, 'right_Span_ahjin');
     //fb(input_1, 'user_Span_ahjin');
 
-    return TRUE;
+    return true;
 }
 
 export function Span_getAnswer(object, answer, checktypeDefault) {

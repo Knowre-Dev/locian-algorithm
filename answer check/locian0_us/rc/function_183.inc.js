@@ -1,5 +1,11 @@
 
 
+import {Cart2D_organizeMathTree} from '../rc/function_184.inc.js';
+import {Cart2D_evaluateOperation} from '../rc/function_184.inc.js';
+import {Cart2D_compTree} from '../rc/function_184.inc.js';
+
+
+
 // test 11 => because of line 623 of export function_184
 // fixed this bug, but maybe causes other issues...
 export function compareCart2D(right = null, input = null) {
@@ -7,16 +13,14 @@ export function compareCart2D(right = null, input = null) {
     var input_1 = JSON.parse(JSON.stringify(input));
     if (right_1['type'] === 'Cartesian2D' && input_1['type'] === 'Cartesian2D') {
         
-        //fb(right_1, 'right_Cart2D_ahjin');
-        //fb(input_1, 'user_Cart2D_ahjin');
+        
         
         var rightObjs = Cart2D_getInfo(right_1);
         var inputObjs = Cart2D_getInfo(input_1);
-        //fb(rightObjs, 'right_Cart2D_getInfo_ahjin');
-        //fb(inputObjs, 'user_Cart2D_getInfo_ahjin');
-        //print_r(rightObjs);
-        //echo "<br />"; echo "<br />"; 
-        //print_r(inputObjs);
+
+        //console.log(JSON.stringify(rightObjs, null, 4));
+		//console.log(JSON.stringify(inputObjs, null, 4));
+       
         
         if (rightObjs === false || inputObjs === false) {
             return false;
@@ -37,20 +41,22 @@ export function compareCart2D(right = null, input = null) {
 
 export function Cart2D_getInfo(cartObject) {
 	var cartObject_1 = JSON.parse(JSON.stringify(cartObject));
-    if (Array.isArray(cartObject_1) && cartObject_1['type'] === 'Cartesian2D') {
+	//console.log(JSON.stringify(cartObject_1, null, 4));
+    if (typeof cartObject_1['type'] != 'undefined' &&
+		cartObject_1['type'] === 'Cartesian2D') {
 	
 	} else {
 		return false;
 	}
-
+	
     if (cartObject_1['checkFlag'] === false) {
         return false;
 	}
-
+	
 	var objs = [];
 
-	var minX = cartObject_1['bound'][0][0];
-	var maxX = cartObject_1['bound'][0][1];
+	//var minX = cartObject_1['bound'][0][0];
+	//var maxX = cartObject_1['bound'][0][1];
 	for_1:
 	for (var item of cartObject_1['object']) {
         if (item['type'] === 'Regio') {
@@ -260,12 +266,18 @@ export function Cart2D_JStoLatex(JS) {
 	regexp = new RegExp('Math.pow\(([^\(\),]+),([^\(\),]+)\)', 'g');
     temp = match_all(JS, regexp)
     for (var i = 0; i < temp[0].length; i++) {
-        JS = JS.replaceAll(temp[0][i], '(' + temp[1][i] + ')^' + temp[2][i]);
+        JS = JS.replaceAll(
+			temp[0][i], 
+			'(' + temp[1][i] + ')^' + temp[2][i]
+		);
 	}
 	regexp = new RegExp('Math.sqrt\(([^\(\)]+)\)', 'g');
     temp = match_all(JS, regexp);
     for (var i = 0; i < temp[0].length; i++) {
-        JS = JS.replaceAll(temp[0][i], '\\sqrt{' + temp[1][i] + '}');
+        JS = JS.replaceAll(
+			temp[0][i], 
+			'\\sqrt{' + temp[1][i] + '}'
+		);
 	}
 
     return JS;
@@ -314,6 +326,8 @@ export function compareCart2D_region(rightObjs, inputObjs) {
             }
         }
     }
+	inputObjs_1['eqn'] = inputObjs_1['eqn'].filter(Boolean);
+	rightObjs_1['eqn'] = rightObjs_1['eqn'].filter(Boolean);
     if (inputObjs_1['eqn'].length !== 0 || rightObjs_1['eqn'].length !== 0) {
         return false;
     }
@@ -334,6 +348,8 @@ export function compareCart2D_region(rightObjs, inputObjs) {
             }
         }
     }
+
+	newDataFill = newDataFill.filter(Boolean);
     if (newDataFill.length !== 0) {
         return false;
     }
@@ -618,20 +634,18 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 	var rightObjs_1 = JSON.parse(JSON.stringify(rightObjs));
     var inputObjs_1 = JSON.parse(JSON.stringify(inputObjs));
 
-    //print_r(rightObjs);
-    //echo "<br />";  echo "<br />";
-    //print_r(inputObjs);
+ 
     var rightObjsMap = Cart2D_organizeObjs(rightObjs_1);
+	//console.log(JSON.stringify(rightObjsMap, null, 4));
 	if (rightObjsMap === false) {
 		return false;
 	}
 	var inputObjsMap = Cart2D_organizeObjs(inputObjs_1);
+	//console.log(JSON.stringify(inputObjsMap, null, 4));
 	if (inputObjsMap === false) {
 		return false;
 	}
-    //print_r(rightObjsMap);
-    //echo "<br />"; echo "<br />"; 
-    //print_r(inputObjsMap);
+      
     
     var matchedRightObjs = [];
 	var matchedInputObjs = [];
@@ -640,7 +654,7 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 	var remainPts_inputObjs = [];
 
 	//get all types of objs from rightObjs and inputObjs
-	var keys = [...rightObjsMap.keys()].concat([...inputObjsMap.keys]);
+	var keys = Object.keys(rightObjsMap).concat(Object.keys(inputObjsMap));
 	var ava_types = [];
 	for (var key of keys) {
 		var is_unique = true; 
@@ -651,10 +665,10 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 			}
 		}
 		if (is_unique) {
-			ava_types.push(keys);
+			ava_types.push(key);
 		}
 	} 
-
+	
     for (var key of ava_types) {
 		var type_rightObjs = [];
 		var type_inputObjs = [];
@@ -666,15 +680,17 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 		}
 		if (key === 'point') {
 			//if key is point, type_inputObjs would be [obj, obj, ...]
+			//console.log(JSON.stringify(type_rightObjs, null, 4));
+			//console.log(JSON.stringify(type_inputObjs, null, 4));
 			var r_i = Cart2D_subtractPtsFromPts(type_rightObjs, type_inputObjs);
 			var i_r = Cart2D_subtractPtsFromPts(type_inputObjs, type_rightObjs);
 			remainPts_rightObjs = remainPts_rightObjs.concat(r_i);
 			remainPts_inputObjs = remainPts_inputObjs.concat(i_r);
+			//console.log(JSON.stringify(remainPts_rightObjs, null, 4));
+			//console.log(JSON.stringify(remainPts_inputObjs, null, 4));
 		} else {	
 			//key is curve-type, type_inputObjs would be [(array of objs), (array of objs), ...]
-            //print_r(type_rightObjs);
-            //echo "<br />"; echo "<br />"; 
-            //print_r(type_inputObjs);
+
 			for (var rObjArr of type_rightObjs) {
 				var doMatch = false;
 				for (var [i, iObjArr] of type_inputObjs.entries()) {
@@ -683,18 +699,15 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 					}
 					
 					var possiblePts = null;
-					doMatch = compareCart2D_curveObjs(rObjArr, iObjArr, possiblePts);	
+					doMatch = compareCart2D_curveObjs(rObjArr, iObjArr, possiblePts);
+					//console.log(JSON.stringify(rObjArr, null, 4));
+					//console.log(JSON.stringify(iObjArr, null, 4));
+					//console.log(doMatch);
+					//console.log(possiblePts);
 					if (doMatch) { //set the matched input answer to null	
-                        /*print_r(rObjArr);
-                        echo "<br />";
-                        echo "<br />";
-                        print_r(iObjArr);
-                        echo "<br />";
-                        echo "<br />";
-                        echo "<br />";
-                        */
-						matchedRightObjs = matchedRightObjs.concat(rObjArr);
+                      	matchedRightObjs = matchedRightObjs.concat(rObjArr);
 						matchedInputObjs = matchedInputObjs.concat(iObjArr);
+
 						type_inputObjs[i] = null;
 						break;	
 					} else if (possiblePts != null) {
@@ -710,20 +723,15 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 						doMatch = true; //we assume this for further examination
 						break;
                     } else {
-                        /*print_r(rObjArr);
-                        echo "<br />";
-                        echo "<br />";
-                        print_r(iObjArr);
-                        echo "<br />";
-                        echo "<br />";
-                        echo "<br />";
-                        */
+                       
                     }
 				}
-	
-				if(doMatch === false) return false;
+				
+				if(doMatch === false) {
+					return false;
+				}
 			}
-
+			
 			//at this point, type_inputObjs should only have nulls
 			//If not, it means type_inputObjs had extra objs that matched with 
 			//none of the objs in type_rightObjs
@@ -752,7 +760,8 @@ export function compareCart2D_curve(rightObjs, inputObjs) {
 	}
 	remainPts_rightObjs = Cart2D_subtractPtsFromPts(remainPts_rightObjs, intersect);
 	remainPts_inputObjs = Cart2D_subtractPtsFromPts(remainPts_inputObjs, intersect);
-
+	//console.log(JSON.stringify(remainPts_rightObjs, null, 4));
+	//console.log(JSON.stringify(remainPts_inputObjs, null, 4));
 	// unmatched points must exist in each other's graph. otw input is wrong
     remainPts_rightObjs = Cart2D_deletePointsOnGraphs(remainPts_rightObjs, matchedInputObjs);
 	if (remainPts_rightObjs.length > 0) {
@@ -782,16 +791,14 @@ export function Cart2D_organizeObjs(rawObjs) {
 	if (done === false) {
 		return false;
 	}
-    //print_r(objs);
-    //echo "<br />"; echo "<br />";
 	objs = Cart2D_trimDown(objs);
-    //print_r(objs);
-    //echo "<br />"; echo "<br />";
-	return objs;
+    return objs;
 }
 
+import {Relation_LatexToTree} from '../rc/function_144.inc.js';
+
 export function Cart2D_add_mathTree2Objs(objs) {
-	//require('../checkmath.php');
+	
 	for (var [i, obj] of objs.entries()) {
 		if (obj['type'] === 'point') {
 			continue;
@@ -827,34 +834,27 @@ export function Cart2D_trimDown(objs) {
 	var objs_1 = JSON.parse(JSON.stringify(objs));
 	var map = new Object();
 	var numObjs = 0;
-    //print_r(objs);
-    //echo "<br />";  echo "<br />";
+  
     
 	//map each obj by its type i.e. 'point', 'lineCurve' etc
+	map['point'] = [];
+	map['curve'] = [];
 	for (var obj of objs_1) {
 		var key = obj["type"];
 		if (key === "point") {
-			if (typeof map['point'] == 'undefined') {
-				map['point'] = [];
-			}
-			map["point"].push(obj);
+			map['point'].push(obj);
 		} else {
-			if (typeof map['curve'] == 'undefined') {
-				map['cruve'] = [];
-			}
-			map["curve"].push(obj);
+			map['curve'].push(obj);
 
 		}
 	}
 
 	// Delete points on the curves
 	if ("point" in map) {
-        //print_r(map);
 		var me_pts = Cart2D_deletePointsOnGraphs(map["point"], map["curve"]);
 		map["point"] = me_pts; 
 	}
-    //print_r(map);
-    //echo "<br />"; echo "<br />";
+    
 
 	// Combine any duplicate or subset graphs
 	map["curve"] = Cart2D_combineGraphs(map["curve"]);
@@ -920,7 +920,7 @@ export function Cart2D_pointBelong2Bound(pointObj, eqnObj) {
 export function Cart2D_pointBelong2Eqn(pointObj, eqnObj) {
 	var pointObj_1 = JSON.parse(JSON.stringify(pointObj));
 	var eqnObj_1 = JSON.parse(JSON.stringify(eqnObj));
-	//require_once('../checkmath.php');
+	
 	var ptValues = pointObj_1['value'];
 	var mathTree = eqnObj_1['mathTree'];
 	var variableArr = {
@@ -929,6 +929,8 @@ export function Cart2D_pointBelong2Eqn(pointObj, eqnObj) {
 	};
 	return Cart2D_identifyEqWithValue(mathTree, variableArr);
 }
+
+//import {Relation_LatexToTree} from '../rc/function_144.inc.js';
 
 export function Cart2D_identifyEqWithValue(A, valueArr) {
 	var A_1 = JSON.parse(JSON.stringify(A));
@@ -944,12 +946,13 @@ export function Cart2D_identifyEqWithValue(A, valueArr) {
 	}
 
 	var evaluatedEq = Cart2D_evaluateExWithValue(A_1, valueArr_1);
+	
     //if (valueArr['x'] === 3) print_r(evaluatedEq);
     // in the export function powComplex_inLocian(from evaluateEx_new), sin(2π) is not equal to 0, the result is -2.4492935982947E-16, so the export function Relation_compTree outputs false and that causes the right answer marked false.
     for (var [k1, arrEq] of evaluatedEq.entries()) {
         if (k1 > 0) {
             for (var [k2, value] of arrEq.entries()) {
-                if (value.toString().indexOf('E')) {
+                if (value.toString().indexOf('e')) {
                     evaluatedEq[k1][k2] = Math.round(value);
                 }
             }
@@ -958,7 +961,7 @@ export function Cart2D_identifyEqWithValue(A, valueArr) {
    
 	if (evaluatedEq[0] === 'equation') { 
 		// 150818 larwein - 점찍고 함수그린 경우 점이 함수에 포함되는지 계산 이상
-		return (evaluatedEq[1] == evaluatedEq[2] || Cart2D_compTree(evaluatedEq[1],evaluatedEq[2]));	
+		return (JSON.stringify(evaluatedEq[1]) == JSON.stringify(evaluatedEq[2]) || Cart2D_compTree(evaluatedEq[1],evaluatedEq[2]));	
 	} else if (A_1[0] === 'inequality') {
 		return false;
 	}
@@ -967,8 +970,9 @@ export function Cart2D_identifyEqWithValue(A, valueArr) {
 export function Cart2D_evaluateExWithValue(A, valueArr) {
 	var A_1 = JSON.parse(JSON.stringify(A));
 	var valueArr_1 = JSON.parse(JSON.stringify(valueArr));
-	if (gettype(A_1) !== 'array')
+	if (!Array.isArray(A_1)) {
 		return A_1;
+	}
 	
 	var operator = A_1[0];
 	var operandTree = A_1.slice(1);
@@ -1007,10 +1011,9 @@ export function Cart2D_evaluateExWithValue(A, valueArr) {
  */
 export function Cart2D_combineGraphs(curveObjs) {
 	var curveObjs_1 = JSON.parse(JSON.stringify(curveObjs));
-    //print_r(curveObjs);
-    //echo "<br />";  echo "<br />";
+   
 	//an array of arrays of examined objs
-	result = [];
+	var result = [];
 	
 	//group into arrays of equivalent objs
 	for (var obj of curveObjs_1) {
@@ -1024,10 +1027,7 @@ export function Cart2D_combineGraphs(curveObjs) {
 				newArr = resArr;
 				newArr.push(obj);
 				break;
-            } else {
-                //print_r(obj);
-                //echo "<br />"; echo "<br />";
-            }
+            } 
 		}
 
 		if (newId < 0) {
@@ -1036,8 +1036,7 @@ export function Cart2D_combineGraphs(curveObjs) {
 			result[newId] = newArr;
 		}
 	}
-    //print_r(result);
-    //echo "<br />"; echo "<br />";
+    
 
 	//combine bounds for each array of equivalent objs
 	for (var [i, resArr] of result.entries()) {
@@ -1049,12 +1048,8 @@ export function Cart2D_combineGraphs(curveObjs) {
 
 export function Cart2D_combineCurveObjBounds(objArr) {
 	var objArr_1 = JSON.parse(JSON.stringify(objArr));
-    //print_r(objArr);
-    //echo "<br />"; echo "<br />";
-	objArr_1.sort(Cart2D_cmpObjBounds);
-    //print_r(objArr);
-    //echo "<br />"; echo "<br />";
-    
+    objArr_1.sort(Cart2D_cmpObjBounds);
+        
 	var result = [];
 	for (var obj of objArr_1) {
 		if (result.length === 0) {
@@ -1234,8 +1229,11 @@ export function compareCart2D_curveObjs(right, input, possiblePts = null) {
 	if (right_1 == null || input_1 == null) {
 		return false;
 	}	
+	//console.log(JSON.stringify(right_1[0]['mathTree'], null, 4));
+	//console.log(JSON.stringify(input_1[0]['mathTree'], null, 4));
 	//check their values(or mathTree) match
     var doMatch = Cart2D_checkMath(right_1[0]['mathTree'], input_1[0]['mathTree']);
+	
 	if (!doMatch) {
 		return false; //curve eqns are not equivalent
 	}
@@ -1271,7 +1269,7 @@ export function compareCart2D_curveObjs(right, input, possiblePts = null) {
 export function Cart2D_subtractCurves_getPoints(objArr1, objArr2) {
 	var objArr1_1 = JSON.parse(JSON.stringify(objArr1));
 	var objArr2_1 = JSON.parse(JSON.stringify(objArr2));
-	//require_once('../checkmath.php');
+	
 	if (objArr1_1 == null || objArr2_1 == null || 
 		objArr1_1.length === 0 || objArr2_1.length === 0) {
 		return null;
@@ -1382,6 +1380,8 @@ export function Cart2D_evaluateYValue(A, x) {
 	return y[0];
 }
 
+
+import {Relation_compTree} from '../rc/function_169.inc.js';
 // option => ["single", "eqeq", "simp", "simp", 0]
 export function Cart2D_checkMath(right, input) {
 	var right_1 = JSON.parse(JSON.stringify(right));
@@ -1399,9 +1399,10 @@ export function Cart2D_checkMath(right, input) {
     } else {
         treeInput = input_1;
     }
-    //print_r(treeRight);
-    //echo "<br />";  echo "<br />";
-    //print_r(treeInput);
+
+	//console.log(JSON.stringify(treeRight, null, 4));
+	//console.log(JSON.stringify(treeInput, null, 4));
+	
     
     if (treeRight && treeInput) {
 	
@@ -1410,12 +1411,491 @@ export function Cart2D_checkMath(right, input) {
 	}
     var orgRight = Cart2D_organizeMathTree(treeRight);
     var orgInput = Cart2D_organizeMathTree(treeInput);
-    //print_r(orgRight);
-    //echo "<br />";  echo "<br />";
-    //print_r(orgInput);
+	/*
+	console.log(JSON.stringify(orgRight, null, 4));
+	console.log(JSON.stringify(orgInput, null, 4));
+	console.log('..........');
+	*/
     if (orgRight && orgInput) {
         return Relation_compTree(orgRight, orgInput);
 	} else {
         return false;
 	}
+}
+
+
+var object = {
+	"type": "Cartesian2D",
+	"object": [
+	  {
+		"type": "Grid2D",
+		"value": [
+			[
+				-2,
+				-1.5,
+				-1,
+				-0.5,
+				0,
+				0.5,
+				1,
+				1.5,
+				2,
+				2.5,
+				3,
+				3.5,
+				4,
+				4.5,
+				5,
+				5.5,
+				6,
+				6.5,
+				7,
+				7.5,
+				8,
+				8.5,
+				9,
+				9.5,
+				10
+			],
+			[
+				-6,
+				-5.5,
+				-5,
+				-4.5,
+				-4,
+				-3.5,
+				-3,
+				-2.5,
+				-2,
+				-1.5,
+				-1,
+				-0.5,
+				0,
+				0.5,
+				1,
+				1.5,
+				2,
+				2.5,
+				3,
+				3.5,
+				4,
+				4.5,
+				5,
+				5.5,
+				6
+			]
+			]
+		},
+		{
+			"type": "GridLabel2D",
+			"value": [
+			[
+				[
+					-1,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-1"
+					}
+				],
+				[
+					1,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "1"
+					}
+				],
+				[
+					2,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "2"
+					}
+				],
+				[
+					3,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "3"
+					}
+				],
+				[
+					4,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "4"
+					}
+				],
+				[
+					5,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "5"
+					}
+				],
+				[
+					6,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "6"
+					}
+				],
+				[
+					7,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "7"
+					}
+				],
+				[
+					8,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "8"
+					}
+				],
+				[
+					9,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "9"
+					}
+				]
+			],
+			[
+				[
+					-5,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-5"
+					}
+				],
+				[
+					-4,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-4"
+					}
+				],
+				[
+					-3,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-3"
+					}
+				],
+				[
+					-2,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-2"
+					}
+				],
+				[
+					-1,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "-1"
+					}
+				],
+				[
+					-0.42,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "0"
+					}
+				],
+				[
+					1,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "1"
+					}
+				],
+				[
+					2,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "2"
+					}
+				],
+				[
+					3,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "3"
+					}
+				],
+				[
+					4,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "4"
+					}
+				],
+				[
+					5,
+					{
+						"type": "Static",
+						"mode": "math",
+						"value": "5"
+					}
+				]
+			]
+		],
+		"option": {
+		  	"offset": [
+				[
+					false,
+					false
+				],
+				[
+					false,
+					false
+				]
+		  	],
+			"gridLabel": [
+				[
+					-1,
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9
+				],
+				[
+					-5,
+					-4,
+					-3,
+					-2,
+					-1,
+					0,
+					1,
+					2,
+					3,
+					4,
+					5
+				]
+			]
+			}
+		},
+		{
+			"type": "Axis2D",
+			"value": [
+				{
+					"name": {
+						"type": "Static",
+						"mode": "math",
+						"value": "x",
+						"font": {
+							"size": 1
+						},
+						"option": {
+							"rotate": 0
+						}
+					},
+					"visible": true
+				},
+				{
+					"name": {
+						"type": "Static",
+						"mode": "math",
+						"value": "y",
+						"font": {
+							"size": 1
+						},
+						"option": {
+							"rotate": 0
+						}
+					},
+					"visible": true
+				}
+			],
+			"origin": false,
+			"option": {
+				"arrow": [
+					[
+						true,
+						true
+					],
+					[
+						true,
+						true
+					]
+				],
+				"offset": [
+					[
+						false,
+						false
+					],
+					[
+						false,
+						false
+					]
+				]
+			}
+		},
+	  	{
+			"type": "Punctum",
+			"input": false,
+			"coord": [
+				0.5,
+				1
+			],
+			"isFill": true,
+			"selected": false,
+			"selectable": false,
+			"movable": false,
+			"color": 103
+		},
+		{
+			"type": "Punctum",
+			"input": false,
+			"coord": [
+				1,
+				0
+			],
+			"isFill": true,
+			"selected": false,
+			"selectable": false,
+			"movable": false,
+			"color": 103
+		},
+		{
+			"type": "Punctum",
+			"input": false,
+			"coord": [
+				2,
+				-1
+			],
+			"isFill": true,
+			"selected": false,
+			"selectable": false,
+			"movable": false,
+			"color": 103
+		},
+		{
+			"type": "Punctum",
+			"input": false,
+			"coord": [
+				4,
+				-2
+			],
+			"isFill": true,
+			"selected": false,
+			"selectable": false,
+			"movable": false,
+			"color": 103
+		},
+		{
+			"type": "Punctum",
+			"input": false,
+			"coord": [
+				8,
+				-3
+			],
+			"isFill": true,
+			"selected": false,
+			"selectable": false,
+			"movable": false,
+			"color": 103
+		},
+		{
+			"type": "Objectum",
+			"input": true,
+			"mode": "Curve",
+			"eqn": "y=-(Math.log(x)/Math.log(2))",
+			"readex": "y=-(log[x,2,bln[T]])",
+			"latex": "y=-\\log_{2}{x}",
+			"bounded": false,
+			"selected": false,
+			"selectable": "single",
+			"dashed": null,
+			"color": 100,
+			"eqnNew": "y=-(Math.log(x)/Math.log(2))",
+			"eqnType": "Log",
+			"RightAnswer": true
+		}
+	],
+	"bound": [
+		[
+			-2,
+			10
+		],
+		[
+			-6,
+			6
+		]
+	],
+	"menu": [
+	  
+	],
+	"menuOption": {
+		"curveColor": [
+			103
+		],
+		"pointColor": [
+			103
+		],
+		"defaultPosition": "random",
+		"bounded": false,
+		"endPoint": [
+			true,
+			true
+		],
+		"bound": [
+			-5,
+			5
+		]
+	},
+	"size": 1,
+	"locianOptions": {
+		"check": true,
+		"answer": [
+			{
+				"type": "Curve2D",
+				"equation": "y=-(Math.log(x)/Math.log(2))",
+				"style": {
+					"color": {
+						"code": 3,
+						"weight": "normalHard"
+					},
+					"dash": "none",
+					"arrow": true
+				},
+				"domain": {
+					"visible": true
+				},
+				"interaction": {
+					"movable": "logarithmic",
+					"selected": true
+				}
+			}
+		]
+	},
+	"checkFlag": true
 }

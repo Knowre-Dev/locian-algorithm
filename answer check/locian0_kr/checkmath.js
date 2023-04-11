@@ -1227,7 +1227,6 @@ console.log(JSON.stringify(LatexToTree(latex), null, 4));
 
 
 
-
 export function is_equal_tree(tree_1, tree_2) {
     
     var tree_11 = JSON.parse(JSON.stringify(tree_1));

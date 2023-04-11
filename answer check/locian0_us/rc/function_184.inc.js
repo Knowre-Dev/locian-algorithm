@@ -14,19 +14,18 @@ export function Cart2D_organizeMathTree(tree) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     // in Cartesian2D, we use option below
     var option = ["single", "eqeq", "simp", "simp", "0"];
-    
+    //console.log(JSON.stringify(tree_1, null, 4));
     // copy and paste from checkmath.php
     
     option = option.slice(1, 4);
     // step1: organizeMathTree_arrangeSingle
     option = option.slice(1);
     tree_1 = arrangeSingle_decimalMarker(tree_1);
-    //print_r(tree);
-    //echo ("<br />");  echo ("<br />");
+    //console.log(JSON.stringify(tree_1, null, 4));
     
     // step2: organizeMathTree_relationEqeq
     var result = relationEqeq(tree_1, option);
-
+    //console.log(JSON.stringify(tree_1, null, 4));
     return result;
 }
 
@@ -41,7 +40,7 @@ export function arrangeSingle_decimalMarker(tree) {
         var obj_1 = obj.slice(1);
         for (var [k, block] of obj_1.entries()) {
             if (block[0] === 'natural') {
-                if (k === 0 && strlen(block[1]) < 4) {
+                if (k === 0 && block[1].length < 4) {
                     newObj += block[1];
                 } else if (block[1].length === 3) {
                     newObj += block[1];
@@ -55,15 +54,15 @@ export function arrangeSingle_decimalMarker(tree) {
             }
         }
         if (flag_change) {
-            tree = replace(tree, obj, ['natural', newObj]);
+            tree_1 = replace(tree_1, obj, ['natural', newObj]);
         }
     }
-    return tree;
+    return tree_1;
 }
 
 export function searchTypeInMathtree(tree, type, option = 'all', overlap = false, self = true) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
-    var type_1 = JSON.parse(JSON.stringify(tupe));
+    var type_1 = JSON.parse(JSON.stringify(type));
     if (!Array.isArray(tree_1)) {
         return [];
     }
@@ -72,7 +71,7 @@ export function searchTypeInMathtree(tree, type, option = 'all', overlap = false
     var operand = tree_1.slice(1);
 
     if (!Array.isArray(type_1)) {
-        type_1 = array(type_1);
+        type_1 = [type_1];
     }
 
     var result = [];
@@ -104,8 +103,9 @@ export function searchTypeInMathtree(tree, type, option = 'all', overlap = false
                 break;
         }
     } else {
-        for (var subtRee of operand)
+        for (var subTree of operand) {
             result = result.concat(searchTypeInMathtree(subTree, type_1, option, overlap, true));
+        }
     }
 
     if (overlap === false) {
@@ -169,7 +169,7 @@ export function relationEqeq(tree, option) {//postpone
     }
 
     var evaluated = Cart2D_evaluateEx(newTree);
-    //evaluated = evaluateEx_new(newTree);
+    
     var head = evaluated[1][1];
     evaluated = evaluated.slice(1);
     if (head[0] < 0) {
@@ -199,7 +199,7 @@ export function relationEqeq(tree, option) {//postpone
     var newEval = [];
     for (var [k, v] of evaluated.entries()) {
         var eq = v;
-        //lhs = array('fraction',eq[1],head);
+        
        var lhs = [
             (eq[1][0] * head[0] + eq[1][1] * head[1]) / (head[0] * head[0] + head[1] * head[1]),
             (eq[1][1] * head[0] - eq[1][0] * head[1]) / (head[0] * head[0] + head[1] * head[1])
@@ -223,46 +223,63 @@ export function simplifiedEqui(tree, option) {
 
 export function Cart2D_evaluateEx(tree) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
+    //console.log(JSON.stringify(tree_1, null, 4));
+    var newTree = [];
     switch (tree_1[0]) {
         // 160828 larwein - inequality patch
         case 'inequality':
-        if (tree_1[2] === 'gt' || tree_1[2] === 'ge')
-        {
-            newTree = array(
-                'inequality',
-                Cart2D_evaluateEx(array(
-                    'addchain',
-                    array('add',tree[1]),
-                    array('sub',tree[3])
-                )),
-                tree_1[2],
-                array('natural',0)
-            );
-        } else {
-            newTree = [
-                'inequality',
-                Cart2D_evaluateEx([
-                    'addchain',
-                    ['add', tree_1[3]],
-                    ['sub', tree_1[1]]
-                ]),
-                tree_1[2]==='lt' ? 'gt' : 'ge',
-                ['natural', 0]
-            ];
-        }
-        break;
+            if (tree_1[2] === 'gt' || tree_1[2] === 'ge') {
+                newTree = [
+                    'inequality',
+                    Cart2D_evaluateEx(
+                        [
+                            'addchain',
+                            ['add', tree_1[1]],
+                            ['sub', tree_1[3]]
+                        ]  
+                    ),
+                    tree_1[2],
+                    ['natural', 0]
+                    ];
+            } else {
+                newTree = [
+                    'inequality',
+                    Cart2D_evaluateEx(
+                        [
+                            'addchain',
+                            ['add', tree_1[3]],
+                            ['sub', tree_1[1]]
+                        ]
+                    ),
+                    tree_1[2] === 'lt' ? 'gt' : 'ge',
+                    ['natural', 0]
+                ];
+            }
+            break;
 
         default:
-        newTree = ['eval'];
-        newTree.push(Cart2D_evaluateExWithSeed(tree, -2));
-        newTree.push(Cart2D_evaluateExWithSeed(tree, -1));
-        newTree.push(Cart2D_evaluateExWithSeed(tree, 1));
-        newTree.push(Cart2D_evaluateExWithSeed(tree, 2));
-        newTree.push(Cart2D_evaluateExWithSeed(tree, 3));
+            newTree = ['eval'];
+            newTree.push(Cart2D_evaluateExWithSeed(tree_1, -2));
+            newTree.push(Cart2D_evaluateExWithSeed(tree_1, -1));
+            newTree.push(Cart2D_evaluateExWithSeed(tree_1, 1));
+            newTree.push(Cart2D_evaluateExWithSeed(tree_1, 2));
+            newTree.push(Cart2D_evaluateExWithSeed(tree_1, 3));
     }
-
+    //console.log(newTree);
     return newTree;
 }
+/*
+var latex = '-x';
+latex = '\\frac{4}{-4}(x-0)';
+latex = '\\frac{4}{-4}x';
+latex = '(-1) * x'
+latex = 'x';
+latex = '-1';
+latex = '1 * x';
+var tree = Relation_LatexToTree(latex);
+console.log(JSON.stringify(tree, null, 4));
+console.log(Cart2D_evaluateEx(tree));
+*/
 
 export function Cart2D_evaluateExWithSeed(A, seed = 1) {
     var A_1 = JSON.parse(JSON.stringify(A));
@@ -279,15 +296,25 @@ export function Cart2D_evaluateExWithSeed(A, seed = 1) {
     var operand = [];
     for (var each of operandTree) {
         operand.push(Cart2D_evaluateExWithSeed(each, seed));
+        
     }
-    switch(operator) {
-        case 'variable':
-            if (operand.length === 1) {
-                return Cart2D_evaluateVariable(operand[0], seed);
-            } else {
-                return Cart2D_evaluateVariable(operand,seed);
-            }
+    
 
+    
+    switch (operator) {
+        case 'variable':
+            var result;
+            if (operand.length === 1) {
+                result =  Cart2D_evaluateVariable(operand[0], seed);
+            } else {
+                result =  Cart2D_evaluateVariable(operand, seed);
+            }
+            /*
+            console.log(operand);
+            console.log(seed);
+            console.log(result);
+            */
+            return result;
         case 'overline':
         case 'overleftarrow':
         case 'overrightarrow':
@@ -313,20 +340,22 @@ export function Cart2D_evaluateExWithSeed(A, seed = 1) {
             return result;
 
         default:
-            return Cart2D_evaluateOperation(operator,operand);
+            return Cart2D_evaluateOperation(operator, operand);
     }
 }
 
-
+import {match_all} from '../checkmath.js';
+import { Relation_LatexToTree } from './function_144.inc.js';
 
 export function Cart2D_evaluateVariable(variable, seed) {
     // variable with several alphabets. e.g. ABC
     var variable_1 = JSON.parse(JSON.stringify(variable));
+    
     if (Array.isArray(variable_1)) {
         var re = 0;
         var im = 0;
         for (var [k, v] of variable_1.entries()) {
-            if (k>2) {
+            if (k > 2) {
                 break;
             }
             var val = Cart2D_evaluateVariable(v, seed);
@@ -380,6 +409,7 @@ export function Cart2D_evaluateVariable(variable, seed) {
     var shoulder = match[2][0].length;
 
     var ord = variable_1.charCodeAt(0);
+    
     var num;
     if (ord < 128)  {
         num = ord - 64;
@@ -399,10 +429,11 @@ export function Cart2D_evaluateVariable(variable, seed) {
         }
     }
     //*/
+   
     if (seed === 2 || seed === -2) {
         num = primes.length - num;
     }
-    result = num + Math.sqrt(2 * (primes[num]));
+    var result = num + Math.sqrt(2 * (primes[num]));
 
     if (seed < 0) {
         result = -result;
@@ -410,6 +441,7 @@ export function Cart2D_evaluateVariable(variable, seed) {
     if (seed === 3 || seed === -3) {
         result = 1 / result;
     }
+    
     if (shoulder > 0) {
         return [result / shoulder, result - primes[shoulder]];
     } else {
@@ -447,97 +479,116 @@ Values are represented in complex number format
 */
 export function Cart2D_evaluateOperation(operator, operand, seed = null) {
     var operand_1 = JSON.parse(JSON.stringify(operand));
+    
+    var result = [];
     switch(operator) {
         case 'natural':
         case 'decimal':
-            return [parseFloat(operand_1[0]), 0];
-        
+            result = [parseFloat(operand_1[0]), 0];
+            break;
         case 'positive':
         case 'add':
         case 'mul':
-            return operand_1[0];
+            result = operand_1[0];
+            break;
         
         case 'pm':
         case 'addsub':
-            return [0.8 * operand_1[0][0], 1.2 * operand_1[0][1]];
-        
+            result = [0.8 * operand_1[0][0], 1.2 * operand_1[0][1]];
+            break;
         case 'negative':
         case 'sub':
             // ...what case would below be??
+            
             if (Array.isArray(operand_1[0][0]) || Array.isArray(operand_1[0][1])) {
-                return [0, 0];
+                result =  [0, 0];
+                break;
             }
-            return [-operand_1[0][0], -operand_1[0][1]];
-        
+            result = [-operand_1[0][0], -operand_1[0][1]];
+            break;
         case 'addchain':
+            
             var sum = [0, 0];
             for (var term of operand) {
                 sum[0] += (!isNaN(term[0]) ? term[0] : 0);
                 sum[1] += (!isNaN(term[1]) ? term[1] : 0);
                 // if newRe == sum[0] and yet term[0] > 0, then floating point rounding error
+                
             }
-            return sum;
-        
+    
+            
+            result =  sum;
+            break;
         case 'div':
             // division by a complex number z is equivalent to
             // multiplication by its complex conjugate z* divided by its modulus squared
             var modulusSq = operand_1[0][0] * operand_1[0][0] + operand_1[0][1] * operand_1[0][1];
-            return [operand_1[0][0] / modulusSq, -operand_1[0][1] / modulusSq];
+            result = [operand_1[0][0] / modulusSq, -operand_1[0][1] / modulusSq];
         
         case 'mulchain':
+            
             var prod = [1, 0];
             // Complex number multiplication
             // (a+bi)(c+di) = (ac-bd) + (ad+bc)i
+            
             for (var factor of operand_1) {
-                var temp = prod;
+                var temp = JSON.parse(JSON.stringify(prod));
                 prod[0] = temp[0] * factor[0] - temp[1] * factor[1];
                 prod[1] = temp[0] * factor[1] + temp[1] * factor[0];
             }
-            return prod;
-        
+            result = prod;
+            break;
         case 'fraction':
-            if (isNaN(operand_1[0][0]) ||
+           
+            if (typeof operand_1[0] == 'undefined' ||
+                typeof operand_1[1] == 'undefined' ||
+                isNaN(operand_1[0][0]) ||
                 isNaN(operand_1[0][1]) ||
                 isNaN(operand_1[1][0]) ||
                 isNaN(operand_1[1][1])) {
-                return [1, 1];
+                result = [1, 1];
+                break;
             }
             var numerRe = operand_1[0][0];
             var numerIm = operand_1[0][1];
             var denomRe = operand_1[1][0];
             var denomIm = operand_1[1][1];
             var modulusSqDenom = denomRe * denomRe + denomIm * denomIm;
-            return [
+            result = [
                 (numerRe * denomRe + numerIm * denomIm) / modulusSqDenom,
                 (numerIm * denomRe - numerRe * denomIm) / modulusSqDenom
             ];
-        
+            break;
         case 'mfraction': // only real entries assumed
-            return [operand_1[0][0] + operand_1[1][0] / operand_1[2][0], 0];
-        
+            result = [operand_1[0][0] + operand_1[1][0] / operand_1[2][0], 0];
+            break;
         case 'power':
-            return Cart2D_powComplex(operand_1[0], operand_1[1]);
-        
+            result = Cart2D_powComplex(operand_1[0], operand_1[1]);
+            break;
         case 'squareroot':
-            return Cart2D_powComplex(operand_1[0], [0.5, 0]);
-        
+            
+            result = Cart2D_powComplex(operand_1[0], [0.5, 0]);
+            //console.log(operator);
+            //console.log(operand_1);
+            //console.log(result);
+            break;
         case 'nthroot':
             // For a complex number z, we have 1/z = z*/|z|^2,
             // where z* is the complex conjugate of z
             // So z1th root of z2 (i.e., z2^(1/z1)) would be
             // z2^(z1*/|z1|^2)
             var modulusSq = operand_1[0][0] * operand_1[0][0] + operand_1[0][1] * operand_1[0][1];
-            return Cart2D_powComplex(
+            result = Cart2D_powComplex(
                 operand_1[1],
                 [operand[0][0] / modulusSq, -operand_1[0][1] / modulusSq]
             );
-            
+            break;
         case 'absolute':
             var modulus = Math.sqrt(
                 operand_1[0][0] * operand_1[0][0] + operand_1[0][1] * operand_1[0][1]
             );
-            return [modulus, 0];
-        
+            result = [modulus, 0];
+            break;
         case 'rdecimal':
             var intg = operand_1[0];
             var num = operand_1[1].toString()  + (operand_1[2] - operand_1[1]).toString();
@@ -548,14 +599,14 @@ export function Cart2D_evaluateOperation(operator, operand, seed = null) {
             for(var i = 0; i < operand_1[1].length; i++) {
                 denum += '0';
             }
-            return [intg + (parseFloat(num) / parseFloat(denum)), 0];
+            result = [intg + (parseFloat(num) / parseFloat(denum)), 0];
         
         case 'subscript':
-            return [
+            result = [
                 operand_1[0][0] + 2 * operand_1[1][1],
                 operand_1[0][1] + 2 * operand_1[1][0]
             ];
-            
+            break;
         case 'ln':
             var modulus = Math.sqrt(
                 operand_1[0][0] * operand_1[0][0] + operand_1[0][1] * operand_1[0][1]
@@ -566,12 +617,12 @@ export function Cart2D_evaluateOperation(operator, operand, seed = null) {
             return array(log(modulus), 0);
             /*/
             // theta is the argument (angle) from the positive x-axis
-            theta = atan2(operand[0][1], operand[0][0]);
-            return array(log(modulus), theta);
+            var theta = Math.atan2(operand[0][1], operand[0][0]);
+            result = [log(modulus), theta];
             // Note: The return value above implies that
             //          the returned value is really the principal value Log z of the input z=x+iy
             //*/
-        
+            break;
         case 'log':
             var newOperand = [];
             newOperand.puosh(Cart2D_evaluateOperation('ln', [operand_1[0]], seed));
@@ -580,13 +631,13 @@ export function Cart2D_evaluateOperation(operator, operand, seed = null) {
             } else {
                 newOperand.push(Cart2D_evaluateOperation('ln', [[10, 0]], seed));
             }
-            return Cart2D_evaluateOperation('fraction', newOperand, seed);
-        
+            result = Cart2D_evaluateOperation('fraction', newOperand, seed);
+            break;
         case 'summation':
-            if (operand_1[0][0] === 'equation'
-                && operand_1[0][1][0] === 'variable'
-                && operand_1[0][2][0] === 'natural'
-                && operand_1[1][0] === 'natural') {
+            if (operand_1[0][0] === 'equation' && 
+                operand_1[0][1][0] === 'variable'&& 
+                operand_1[0][2][0] === 'natural' && 
+                operand_1[1][0] === 'natural') {
                 var sum = [0, 0];
                 var vari = operand_1[0][1];
                 var min = parseFloat(operand_1[0][2][1]);
@@ -600,14 +651,21 @@ export function Cart2D_evaluateOperation(operator, operand, seed = null) {
                         seed
                     );
                 }
-                return sum;
+                result = sum;
             } else {
-                return null;
+                result = null;
             }
-        
+            break;
         default:
-            return null;
+            result = null;
     }
+    /*
+    console.log(operator);
+    console.log(operand_1);
+    console.log(result);
+    console.log('.............');
+    */
+    return result;
 }
 
 export function Cart2D_powComplex(A, B) {
@@ -624,15 +682,15 @@ export function Cart2D_powComplex(A, B) {
     } else if (A_1[1] == 0 && A_1[0] < 0) { 
         theta = Math.PI;
     } else if (A_1[1] > 0) {
-        theta = Math.acos(A_1[0]/r);
+        theta = Math.acos(A_1[0] / r);
     } else {
         theta = 2 * Math.PI - Math.acos(A_1[0] / r);
     }
     var c = B_1[0];
     var d = B_1[1];
     
-    var newR = Math.pow(r, c)/ Math.exp(d * theta);
-    var newTheta = d *  Math.log(r) + c *theta;
+    var newR = Math.pow(r, c) / Math.exp(d * theta);
+    var newTheta = d * Math.log(r) + c * theta;
         
     return [
         newR * Math.cos(newTheta),
@@ -653,11 +711,8 @@ export function Cart2D_compTree(treeA, treeB) {
             return false;
         }
     }
-  
-    //print_r(treeA);
-    //echo ("<br />");  echo "and";  echo ("<br />");
-    //print_r(treeB);
-    //echo ("<br />");  echo ("<br />");
+    
+   
 
     if (treeA_1[0] === 'anything') {  // it was ==
         treeA_1 = treeB_1;
@@ -666,9 +721,7 @@ export function Cart2D_compTree(treeA, treeB) {
     }
     
     if (treeA_1[0] === treeB_1[0] && treeA_1.length === treeB_1.length) {    
-        //print_r(treeA);
-        //echo ("<br />"); echo ("<br />");
-        //print_r(treeB);
+        
         if (treeA_1[0] === 'eval') { 
             var result = true;
             var num_nullResult = 0;
@@ -689,9 +742,9 @@ export function Cart2D_compTree(treeA, treeB) {
                     AReSci = (v[1][0] - v[2][0]).toExponential(4);
                     BReSci = (treeB_1[k][1][0] - treeB_1[k][2][0]).toExponential(4);
                     AImSci = (v[1][1] - v[2][1]).toExponential(4);
-                    BImSci = (treeB_[k][1][1] - treeB_1[k][2][1]).toExponential(4);
+                    BImSci = (treeB_1[k][1][1] - treeB_1[k][2][1]).toExponential(4);
 
-                    if (parseFloat(ReSci) == -1 * parseFloat(BReSci) && parseFloat(AImSci) == -1 * parseFloat(BImSci)) {
+                    if (parseFloat(AReSci) == -1 * parseFloat(BReSci) && parseFloat(AImSci) == -1 * parseFloat(BImSci)) {
                         BReSci = AReSci;
                         BImSci = AImSci;
                     }
@@ -727,9 +780,7 @@ export function Cart2D_compTree(treeA, treeB) {
             }
         }
     } else {
-        //print_r(treeA);
-        //echo ("<br />"); echo ("<br />");
-        //print_r(treeB);
+        
         return false;
     }
     

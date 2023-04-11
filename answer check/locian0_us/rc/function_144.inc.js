@@ -6,7 +6,10 @@ export function compareRelation_old(right = null, input = null) {
     if (right_1['type'] === 'Relation' && input_1['type'] === 'Relation') {
         var info_right = Relation_old_getInfo(right_1);
         var info_input = Relation_old_getInfo(input_1);
-        
+
+        //console.log(JSON.stringify(info_right, null, 4));
+        //console.log(JSON.stringify(info_input, null, 4));
+       
         var indexArrays = [];
         if (!Relation_set(info_right['set'], info_input['set'], indexArrays)) {
             return false; 
@@ -14,7 +17,7 @@ export function compareRelation_old(right = null, input = null) {
         if (!Relation_arrow(info_right['arrow'], info_input['arrow'], indexArrays)) {
             return false;
         }
-        return false;
+        return true;
     }
 
     return false;
@@ -57,8 +60,8 @@ export function Relation_reArrows(inputArrows, sourceSet, targetSet) {
     var targetSet_1 = JSON.parse(JSON.stringify(targetSet));
     var result = [];
     for (var iarrow of inputArrows_1) {
-        s = iarrow[0];
-        t = iarrow[1];
+        var s = iarrow[0];
+        var t = iarrow[1];
         if (s in sourceSet_1) {
             s = sourceSet_1[s];
         }
@@ -86,11 +89,11 @@ export function Relation_matchArrows(set1, set2) {
     
     for (var a of set1_1) {
         var doMatch = false;
-        for (var b of set2_1) {
+        for (var [i, b] of set2_1.entries()) {
             if (b == null) {
                 continue;
             }
-            doMatch = (a === b);
+            doMatch = (JSON.stringify(a) === JSON.stringify(b));
 
             if (doMatch) {
                 set2_1[i] = null;
@@ -98,7 +101,7 @@ export function Relation_matchArrows(set1, set2) {
             }
         }
 
-        if (doMatch === fakse) {
+        if (doMatch === false) {
             return false;
         }
     }
@@ -106,9 +109,12 @@ export function Relation_matchArrows(set1, set2) {
     return true;
 }
 
+import {Relation_compTree} from '../rc/function_169.inc.js';
+
 export function Relation_set(set_right, set_input, indexArrays) { 
     var set_right_1 = JSON.parse(JSON.stringify(set_right));
     var set_input_1 = JSON.parse(JSON.stringify(set_input));
+    
     if (set_right_1 == null && set_input_1 == null) {
         return true;
     }
@@ -123,27 +129,30 @@ export function Relation_set(set_right, set_input, indexArrays) {
         if (setArray1.length !== set_input_1[k1].length) {
             return false;
         }
-        
+       
         var indexArr = [];
         for (var value1 of setArray1) {
+            
             for (var [k3, value2] of set_input_1[k1].entries()) {
-                if (value1['type'] === value2['type']) {
-                    var value1 = Relation_getValue(value1);
-                    var value2 = Relation_getValue(value2);
-                    if (Relation_compTree(value1['value'], value2['value'])) {
-                        if (typeof value2['index'] != 'undefined') {
-                            indexArr[value2['index']] = value1['index'];
-                        }
-                        delete set_input[k1][k3];
-                        break;
-                    } else if (typeof value1['whitelist'] !== 'undefined') {
-                        for (var w of value1['whitelist']) {
-                            if (Relation_compTree(w, value2['value'])) {
-                                if (typeof value2['index'] != 'undefined') {
-                                    indexArr[value2['index']] = value1['index'];
+                if (typeof value2 != 'undefined') {
+                    if (value1['type'] === value2['type']) {
+                        var value1 = Relation_getValue(value1);
+                        var value2 = Relation_getValue(value2);
+                        if (Relation_compTree(value1['value'], value2['value'])) {
+                            if (typeof value2['index'] != 'undefined') {
+                                indexArr[value2['index']] = value1['index'];
+                            }
+                            delete set_input_1[k1][k3];
+                            break;
+                        } else if (typeof value1['whitelist'] !== 'undefined') {
+                            for (var w of value1['whitelist']) {
+                                if (Relation_compTree(w, value2['value'])) {
+                                    if (typeof value2['index'] != 'undefined') {
+                                        indexArr[value2['index']] = value1['index'];
+                                    }
+                                    delete set_input_1[k1][k3];
+                                    break;
                                 }
-                                delete set_input_1[k1][k3];
-                                break;
                             }
                         }
                     }
@@ -152,6 +161,7 @@ export function Relation_set(set_right, set_input, indexArrays) {
         }
         
         indexArrays[k1] = indexArr;  // [source, target]
+        set_input_1[k1] = set_input_1[k1].filter(Boolean);
         if (set_input_1[k1].length !== 0) {
             return false;
         }
@@ -159,6 +169,8 @@ export function Relation_set(set_right, set_input, indexArrays) {
     
     return true;
 }
+
+import {Relation_getTree} from '../rc/function_169.inc.js';
 
 export function Relation_getValue(jsonArr) {
     var jsonArr_1 = JSON.parse(JSON.stringify(jsonArr));
@@ -194,12 +206,12 @@ export function Relation_old_getInfo(relation) {
     var set = [];
     for (var eachSet of relation_1['set']) {
         var eachElement = [];
-        for (var [k, eachValue] of eachSet['element']) {
+        for (var [k, eachValue] of eachSet['element'].entries()) {
             if (eachValue['type'] === 'Input') {
                 eachElement.push({
                     'type': eachValue['mode'],
                     'value': eachValue['value'],
-                    'whitelist': typeof eachValue['option']['whitelist'] != 'undefined' ? eachValue['option']['whitelist'] : null,
+                    'whitelist': typeof eachValue['option']['whitelist'] != 'undefined' ? eachValue['option']['whitelist'] : [],//null,
                     'lacoType': eachValue['option']['lacoType'],    
                     'index': k 
                 });
@@ -226,15 +238,15 @@ export function Relation_old_getInfo(relation) {
 
 // copy and paste from checkmath.php
 export function Relation_forregex(c) {
-    special = [
-        '\\','/','^','','.','[',']',
+    var special = [
+        '\\','/','^','$','.','[',']',
         '|','(',')','?','*','+','{',
         '-',
         ','
     ];
-    var nc = c.splie('');
+    var nc = c.split('');
     var result = '';
-    for (var c of nc) {
+    for (var v of nc) {
         if (special.includes(v)) {
             result += "\\" + v;
         } else {
@@ -244,17 +256,19 @@ export function Relation_forregex(c) {
     return result;
 }
 
+import {match_all} from '../checkmath.js';
+
 export function Relation_LatexToTree(A, node = null, node_idx = null) {
     var node_1 = JSON.parse(JSON.stringify(node));
     var partL = '@';
     var partR = '#';
-
+    
     A = A.replaceAll(
         new RegExp(
             '\\\\angle[ ]*([a-zA-Z]+)',
             'g'
         ), 
-        '\\angle{1}');
+        '\\angle{$1}');
     A = A.replaceAll(
         new RegExp(
             'm[ ]*\\\\angle',
@@ -264,9 +278,9 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
     // 160906 larwein - trigonometry
     A = A.replaceAll(
         new RegExp(
-            '\\\(sin|cos|tan)[ ]*',
+            '\\\\(sin|cos|tan)[ ]*',
             'g'),
-        '\\\\1');
+        '\\\$1');
 
     var delimeter = '\\';
     var cmdWhitespace = ':';
@@ -339,7 +353,7 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
 
     //pre-process
     //remove whitespace(\:)
-    replace = new Map([
+    var replace = new Map([
         [delimeter + cmdWhitespace, '']
     ]);
     for (var [k, v] of replace.entries()) {
@@ -354,10 +368,13 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         newA = newA.replaceAll(k, v);
     }
     //change all grouping sign to parenthesis
-    newA = strtr(newA,array(
-        signBraceLeft => signParenthesisLeft,
-        signBraceRight => signParenthesisRight
-    ));
+    var replace = new Map([
+        [signBraceLeft, signParenthesisLeft],
+        [signBraceRight, signParenthesisRight]
+    ]);
+    for (var [k, v] of replace.entries()) {
+        newA = newA.replaceAll(k, v);
+    }
     //remove cmd 'left' and 'right' and 'text'
     replace = new Map([
         [delimeter + cmdLeft, ''],
@@ -379,14 +396,14 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
     for (var [k, v] of replace.entries()) {
         newA = newA.replaceAll(k, v);
     }
-
-
+    
+    
     //change mfrac form to mfrac command
     var regex = new RegExp();
     regex = new RegExp(
         "([0-9]+)" + 
         Relation_forregex(delimeter) + 
-        "frac".
+        "frac" +
         Relation_forregex(signParenthesisLeft) +
         "([0-9]+)" +
         Relation_forregex(signParenthesisRight) +
@@ -398,33 +415,34 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         delimeter +
         'mfrac' +
         signParenthesisLeft +
-        '1' +
+        '$1' +
         signParenthesisRight +
         signParenthesisLeft +
-        '2' +
+        '$2' +
         signParenthesisRight +
         signParenthesisLeft +
-        '3' +
+        '$3' +
         signParenthesisRight;
 
     newA = newA.replaceAll(regex, replace);
+    
 
     regex = new RegExp(
         "([_\^])([0-9])",
         'g');
     replace = 
-        '1' + 
+        '$1' + 
         signParenthesisLeft + 
-        '2' +
+        '$2' +
         signParenthesisRight;
 
     newA = newA.replaceAll(regex, replace);
-
+    
     regex = new RegExp(
-        "sqrt\[([1-9]+[0-9]*)\]", 
+        /sqrt\[([1-9]+[0-9]*)\]/, 
         'g');
-    replace = 'nthroot(1)';
-
+    replace = 'nthroot($1)';
+    
     newA = newA.replaceAll(regex, replace);
 
     //change log_ to logbase
@@ -458,43 +476,49 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         "\\(([0-9]+)\\)",
         'g');
     match = match_all(newA, regex);
-    rsort(match[0]);
+    
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
 
-    for (var [k, v] of match[0].entries()) {
-        newA = newA.replaceAll(
-            new RegExp(
-                Relation_forregex(v),
-                'g'),
-            partL + node_idx.toString() + partR,
-        );
-        node_1[node_idx] = [
-            'rdecimal',
-            match[1][k],
-            match[2][k],
-            match[3][k]
-        ];
-        node_idx++;
+        for (var [k, v] of match[0].entries()) {
+            newA = newA.replaceAll(
+                new RegExp(
+                    Relation_forregex(v),
+                    'g'),
+                partL + node_idx.toString() + partR,
+            );
+            node_1[node_idx] = [
+                'rdecimal',
+                match[1][k],
+                match[2][k],
+                match[3][k]
+            ];
+            node_idx++;
+        }
     }
     
     //decimal
     regex = new RegExp(
         "[0-9]*" + 
         Relation_forregex(signDecimaldot) + 
-        "[0-9]+/",
+        "[0-9]+",
         'g');
     match = match_all(newA, regex);
-    match[0].sort().reverse();
+    
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
 
-    for (var v of match[0]) {
-        newA = newA.replaceAll(
-            new RegExp(
-            Relation_forregex(v),
-            'g'),
-            partL + node_idx.toString() +partR);
-        node_1[node_idx] = ['decimal', v];
-        node_idx++;
+        for (var v of match[0]) {
+            newA = newA.replaceAll(
+                new RegExp(
+                Relation_forregex(v),
+                'g'),
+                partL + node_idx.toString() +partR);
+            node_1[node_idx] = ['decimal', v];
+            node_idx++;
+        }
     }
-
+    
     // 160727 larwein - commanatural
     regex = new RegExp(
         "[0-9]+(,[0-9]{3})*(?!" + 
@@ -502,18 +526,20 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         ")",
         "g");
     match = match_all(newA, regex);
-    match[0].sort().reverse();
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
 
-    for (var v of match[0]) {
-        newA = newA.replaceAll(
-            new RegExp(
-                v + 
-                '(?![0-9]*' + 
-                Relation_forregex(partR) + ")",
-                'g'),
-            partL + node_idx.toString() + partR);
-        node_1[node_idx] = ['natural', v.replaceAll(',', '')];
-        node_idx++;
+        for (var v of match[0]) {
+            newA = newA.replaceAll(
+                new RegExp(
+                    v + 
+                    '(?![0-9]*' + 
+                    Relation_forregex(partR) + ")",
+                    'g'),
+                partL + node_idx.toString() + partR);
+            node_1[node_idx] = ['natural', v.replaceAll(',', '')];
+            node_idx++;
+        }
     }
 
     //natural
@@ -523,30 +549,33 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         ")",
         'g');
     match = match_all(newA, regex);
-    match[0].sort().reverse();
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
 
-    for (var v of match[0]) {
-        newA = newA.replaceAll(
-            new RegExp(
-            v + 
-            '(?![0-9]*' + Relation_forregex(partR) +
-            ")",
-            'g'),
-            partL + node_idx.toString() + partR);
-        node_1[node_idx] = ['natural', v];
-        node_idx++;
+        for (var v of match[0]) {
+            newA = newA.replaceAll(
+                new RegExp(
+                v + 
+                '(?![0-9]*' + Relation_forregex(partR) +
+                ")",
+                'g'),
+                partL + node_idx.toString() + partR);
+            node_1[node_idx] = ['natural', v];
+            node_idx++;
+        }
     }
-
+    
+  
     //get cmd
-    for (var [k, v] of cmd.entries()) {
+    for (var [k, v] of Object.entries(cmd)) {
         newA = newA.replaceAll(
             delimeter + k, 
             partL + '0' + v.toString() + partR        
         );
     }
-
+    
     //get cmd_special
-    for (var [k, v] of cmd_special.entries()) {
+    for (var [k, v] of Object.entries(cmd_special)) {
         newA = newA.replaceAll(k, partL + '00' + v.toString() + partR);
     }
 
@@ -556,16 +585,19 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         "([가-힣])",
         'g');
     match = match_all(newA, regex);
-    match[0].sort().reverse();
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
 
-    for (var v of match[0]) {
-        newA = newA.replaceAll(
-            new RegExp(
-                Relation_forregex(v),
-                'g'),
-            partL + node_idx.toString() + partR);
-        node_1[node_idx] = ['variable', v];
-        node_idx++;
+        for (var v of match[0]) {
+            newA = newA.replaceAll(
+                new RegExp(
+                    Relation_forregex(v),
+                    'g'
+                ),
+                partL + node_idx.toString() + partR);
+            node_1[node_idx] = ['variable', v];
+            node_idx++;
+        }
     }
   
     //greek
@@ -578,32 +610,36 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         ")" +
         Relation_forregex(partR) +
         " ?", 
-        'g');
+        'g'
+    );
     match = match_all(newA, regex);
-  
-    for (var v of match[0]) {
-        newA = newA.replaceAll(
-            new RegExp(
-                Relation_forregex(v),
-                'g'),
-            partL + node_idx.toString() + partR);
-        node_1[node_idx] = [
-            'variable',
-            match[1][k] === cmd['pi'].toString() ? 'pi' : 'theta'
-        ];
-        node_idx++;
+    if (typeof match[0] != 'undefined') {
+        for (var v of match[0]) {
+            newA = newA.replaceAll(
+                new RegExp(
+                    Relation_forregex(v),
+                    'g'),
+                partL + node_idx.toString() + partR);
+            node_1[node_idx] = [
+                'variable',
+                match[1][k] === cmd['pi'].toString() ? 'pi' : 'theta'
+            ];
+            node_idx++;
+        }
     }
     //English
     regex = new RegExp(
         "[a-zA-Z][']*",
         'g');
     match = match_all(newA, regex);
-    match[0].sort().reverse();
-  
-    for (var v of match[0]) {
-        newA = newA.replaceAll(v, partL + node_idx.toString() + partR);
-        node_1[node_idx] = ['variable', v];
-        node_idx++;
+    if (typeof match[0] != 'undefined') {
+        match[0].sort().reverse();
+    
+        for (var v of match[0]) {
+            newA = newA.replaceAll(v, partL + node_idx.toString() + partR);
+            node_1[node_idx] = ['variable', v];
+            node_idx++;
+        }
     }
     //get single command (command that has no argument)
     regex = new RegExp(
@@ -619,26 +655,28 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
         " ?",
         'g');
     match = match_all(newA, regex);
-    for (var [k, v] of match[0].entries()) {
-        newA = newA.replaceAll(
-            new RegExp(
-                Relation_forregex(v),
-                'g'),
-            partL + node_idx.toString() + partR);
-        switch (match[1][k]) {
-            case cmd['R'].toString():
-                node_1[node_idx] = ['setname', 'real'];
-                break;
+    if (typeof match[0] != 'undefined') {
+        for (var [k, v] of match[0].entries()) {
+            newA = newA.replaceAll(
+                new RegExp(
+                    Relation_forregex(v),
+                    'g'),
+                partL + node_idx.toString() + partR);
+            switch (match[1][k]) {
+                case cmd['R'].toString():
+                    node_1[node_idx] = ['setname', 'real'];
+                    break;
 
-            case cmd['varnothing'].toString():
-                node_1[node_idx] = ['setname', 'empty'];
-                break;
+                case cmd['varnothing'].toString():
+                    node_1[node_idx] = ['setname', 'empty'];
+                    break;
 
-            case cmd['infty'].toString():
-                node_1[node_idx] = ['infinity'];
-                break;
+                case cmd['infty'].toString():
+                    node_1[node_idx] = ['infinity'];
+                    break;
+            }
+            node_idx++;
         }
-        node_idx++;
     }
     //get grouping
     var oldA = '';
@@ -661,32 +699,33 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             "])",
             'g');
         match = match_all(newA, regex);
-
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.toString() + partR
-            );
-            var tempTree = Relation_LatexToTree(
-                match[2][k],
-                node_1,
-                node_idx
-            );
-            if (match[1][k] === '(' && match[3][k] === ')' && tempTree[0] === 'array') {
-                tempTree[0] = 'tuple';
-            } else if (tempTree.length === 3 && tempTree[0] === 'array') {
-                tempTree = [
-                    'interval',
-                    match[1][k],
-                    tempTree[1],
-                    tempTree[2],
-                    match[3][k]
-                ];
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR
+                );
+                var tempTree = Relation_LatexToTree(
+                    match[2][k],
+                    node_1,
+                    node_idx
+                );
+                if (match[1][k] === '(' && match[3][k] === ')' && tempTree[0] === 'array') {
+                    tempTree[0] = 'tuple';
+                } else if (tempTree.length === 3 && tempTree[0] === 'array') {
+                    tempTree = [
+                        'interval',
+                        match[1][k],
+                        tempTree[1],
+                        tempTree[2],
+                        match[3][k]
+                    ];
+                }
+                node_1[node_idx] = tempTree;
+                node_idx++;
             }
-            node_1[node_idx] = tempTree;
-            node_idx++;
         }
-  
+        
         //get binary operation (super,subscription)
         regex = new RegExp(
             Relation_forregex(partL) + 
@@ -698,19 +737,21 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             "])" +
             Relation_forregex(partL) +
             "([1-9][0-9]*)" +
-            Relation_forregex(partR) +
+            Relation_forregex(partR),
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.toString() + partR);
-            node_1[node_idx] = [
-                match[2][k] === '^' ? 'power' : 'subscript',
-                node_1[match[1][k]],
-                node_1[match[3][k]]
-            ];
-            node_idx++;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR);
+                node_1[node_idx] = [
+                    match[2][k] === '^' ? 'power' : 'subscript',
+                    node_1[match[1][k]],
+                    node_1[match[3][k]]
+                ];
+                node_idx++;
+            }
         }
         //get command no arg
 
@@ -752,75 +793,77 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             Relation_forregex(partR),
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newAl.replaceAll(
-                v,
-                partL + node_idx.toString() + partR);
-            var typeName;
-            switch(match[1][k]) {
-                case cmd['sqrt'].toString():
-                    typeName = 'squareroot';
-                    break;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR);
+                var typeName;
+                switch(match[1][k]) {
+                    case cmd['sqrt'].toString():
+                        typeName = 'squareroot';
+                        break;
 
-                case cmd['abs'].toString():
-                    typeName = 'absolute';
-                    break;
+                    case cmd['abs'].toString():
+                        typeName = 'absolute';
+                        break;
 
-                case cmd['overline'].toString():
-                    typeName = 'overline';
-                    break;
+                    case cmd['overline'].toString():
+                        typeName = 'overline';
+                        break;
 
-                case cmd['overrightarrow'].toString():
-                    typeName = 'overrightarrow';
-                    break;
+                    case cmd['overrightarrow'].toString():
+                        typeName = 'overrightarrow';
+                        break;
 
-                case cmd['overleftarrow'].toString():
-                    typeName = 'overleftarrow';
-                    break;
+                    case cmd['overleftarrow'].toString():
+                        typeName = 'overleftarrow';
+                        break;
 
-                case cmd['overleftrightarrow'].toString():
-                    typeName = 'overleftrightarrow';
-                    break;
+                    case cmd['overleftrightarrow'].toString():
+                        typeName = 'overleftrightarrow';
+                        break;
 
-                case cmd['mangle'].toString():
-                    typeName = 'mangle';
-                    break;
+                    case cmd['mangle'].toString():
+                        typeName = 'mangle';
+                        break;
 
-                case cmd['angle'].toString():
-                    typeName = 'angle';
-                    break;
+                    case cmd['angle'].toString():
+                        typeName = 'angle';
+                        break;
+                    
+                    case cmd['widearc'].toString():
+                        typeName = 'arc';
+                        break;
+
+                    case cmd['arc'].toString():
+                        typeName = 'arc';
+                        break;
+
+                    case cmd['angle'].toString():
+                        typeName = 'angle';
+                        break;
+
+                    case cmd['sin'].toString():
+                        typeName = 'sine';
+                        break;
+
+                    case cmd['cos'].toString():
+                        typeName = 'cosine';
+                        break;
+
+                    case cmd['tan'].toString():
+                        typeName = 'tangent';
+                        break;
+                }
+                node_1[node_idx] = [
+                    typeName,
+                    node_1[match[2][k]]
+                ];
+                node_idx++;
                 
-                case cmd['widearc'].toString():
-                    typeName = 'arc';
-                    break;
-
-                case cmd['arc'].toString():
-                    typeName = 'arc';
-                    break;
-
-                case cmd['angle'].toString():
-                    typeName = 'angle';
-                    break;
-
-                case cmd['sin'].toString():
-                    typeName = 'sine';
-                    break;
-
-                case cmd['cos'].toString():
-                    typeName = 'cosine';
-                    break;
-
-                case cmd['tan'].toString():
-                    typeName = 'tangent';
-                    break;
+                node_idx++;
             }
-            node_1[node_idx] = [
-                typeName,
-                node_1[match[2][k]]
-            ];
-            node_idx++;
-            
-            node_idx++;
         }
         //get command 2 arg
         regex = new RegExp(
@@ -840,18 +883,21 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             Relation_forregex(partR),
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.toString() + partR
-            );
-            node_1[node_idx] = [
-                match[1][k] === cmd['frac'].toString() ? 'fraction' : 'nthroot',
-                node_1[match[2][k]],
-                node_1[match[3][k]]
-            ];
-            node_idx++;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR
+                );
+                node_1[node_idx] = [
+                    match[1][k] === cmd['frac'].toString() ? 'fraction' : 'nthroot',
+                    node_1[match[2][k]],
+                    node_1[match[3][k]]
+                ];
+                node_idx++;
+            }
         }
+        
         //get command 3 arg
         regex = new RegExp(
             Relation_forregex(partL) +
@@ -871,18 +917,20 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             Relation_forregex(partR),
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.toString() + partR
-            );
-            node_1[node_idx] = array(
-                'mfraction',
-                node_1[match[2][k]],
-                node_1[match[3][k]],
-                node_1[match[4][k]]
-            );
-            node_idx++;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR
+                );
+                node_1[node_idx] = array(
+                    'mfraction',
+                    node_1[match[2][k]],
+                    node_1[match[3][k]],
+                    node_1[match[4][k]]
+                );
+                node_idx++;
+            }
         }
         //get export function
     }
@@ -909,17 +957,19 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             ")*)",
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replace(
-                v,
-                partL + node_idx.toString()+ partR
-            );
-            node_1[node_idx] = array[
-                'log',
-                Relation_sub_LatexToTree(match[3][k], node_1, node_idx),
-                node_1[match[2][k]]
-            ];
-            node_idx++;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replace(
+                    v,
+                    partL + node_idx.toString()+ partR
+                );
+                node_1[node_idx] = [
+                    'log',
+                    Relation_sub_LatexToTree(match[3][k], node_1, node_idx),
+                    node_1[match[2][k]]
+                ];
+                node_idx++;
+            }
         }
         //get special lv1 command 1 arg
         regex = new RegExp(
@@ -938,16 +988,18 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             ")*)",
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0]) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.toString() + partR
-            );
-            node_1[node_idx] = [
-                match[1][k] === cmd_special['log'].toString() ? 'log' : 'ln',
-                Relation_sub_LatexToTree(match[2][k], node_1, node_idx)
-            ];
-            node_idx++;
+        if (typeof match[0] != 'undefined') {    
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.toString() + partR
+                );
+                node_1[node_idx] = [
+                    match[1][k] === cmd_special['log'].toString() ? 'log' : 'ln',
+                    Relation_sub_LatexToTree(match[2][k], node_1, node_idx)
+                ];
+                node_idx++;
+            }
         }
     }
     oldA = '';
@@ -974,33 +1026,39 @@ export function Relation_LatexToTree(A, node = null, node_idx = null) {
             ")*)",
             'g');
         match = match_all(newA, regex);
-        for (var [k, v] of match[0].entries()) {
-            newA = newA.replaceAll(
-                v,
-                partL + node_idx.partR
-            );
-            node_1[node_idx] = [
-                'summation',
-                node_1[match[2][k]],
-                node_1[match[3][k]],
-                Relation_sub_LatexToTree(match[4][k], node_1, node_idx)
-            ];
-            node_idx++;
+        if (typeof match[0] != 'undefined') {
+            for (var [k, v] of match[0].entries()) {
+                newA = newA.replaceAll(
+                    v,
+                    partL + node_idx.partR
+                );
+                node_1[node_idx] = [
+                    'summation',
+                    node_1[match[2][k]],
+                    node_1[match[3][k]],
+                    Relation_sub_LatexToTree(match[4][k], node_1, node_idx)
+                ];
+                node_idx++;
+            }
         }
     }
     //construct tree
+    
     var result = Relation_sub_LatexToTree(newA, node_1, node_idx);
-
+    
     return result;
 }
+
+//var latex = 'y=-2(x-(-1))^2+(0)';
+//console.log(JSON.stringify(Relation_LatexToTree(latex), null, 4));
 
 export function Relation_sub_LatexToTree(newA, node, node_idx) {
     var node_1 = JSON.parse(JSON.stringify(node));
     var partL = '@';
     var partR = '#';
-
+    
     var delimeter = '\\';
- 
+    
     var cmd = {
         'pi': 1,
         'theta': 2,
@@ -1036,7 +1094,7 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         'circ': 25,
         'R': 26
     };
- 
+    
     var signComma = ',';
 
     var signPlus = '+';
@@ -1046,26 +1104,36 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
     var signLessthan = '<';
     var signRatio = ':';
     var regex = new RegExp();
+    /*
     regex = new RegExp(
         Relation_forregex(partL) +
         "([1-9][0-9]*)" +
         Relation_forregex(partR),
         'g');
-    match = match_all(newA, regex);
+        */
+    regex = new RegExp(
+        '^' + 
+        Relation_forregex(partL) +
+        '([1-9][0-9]*)' +
+        Relation_forregex(partR) +
+        '$',
+        'g');
+    var match = match_all(newA, regex);
+    if (typeof match[1] != 'undefined') {
+        if (match[1].length === 1) {
+            return node_1[match[1][0]];
 
-    if (match[1].length === 1) {
-        return node_1[match[1][0]];
-
+        }
     }
     // array
     var arr = newA.split(signComma);
     if (arr.length > 1) {
         var result = ['array'];
         for (var v of arr)
-            result.push(Relation_sub_LatexToTree(v, node_1,node_idx));
+            result.push(Relation_sub_LatexToTree(v, node_1, node_idx));
         return result;
     }
-
+    
     // inequality
     regex = new RegExp( 
         Relation_forregex(partL) +
@@ -1075,7 +1143,7 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         cmd['ge'].toString() +
         "|" +
         cmd['lt'].toString() +
-        "|".
+        "|" +
         cmd['le'].toString() +
         ")" +
         Relation_forregex(partR) +
@@ -1112,7 +1180,7 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         }
         return result;
     }
-
+    
     regex = new RegExp(
         Relation_forregex(partL) +
         "0" +
@@ -1130,10 +1198,15 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
     }
  
     arr = newA.split(signEquation);
+    
     if (arr.length !== 1) {
+        //console.log(arr);
+        //console.log(JSON.stringify(node_1, null, 4));
+        
         var result = ['equation'];
-        for (var v of arr)
+        for (var v of arr) {
             result.push(Relation_sub_LatexToTree(v, node_1, node_idx));
+        }
         return result;
     }
 
@@ -1145,16 +1218,17 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         }
         return result;
     } 
- 
+    
     regex = new RegExp(
         "(" +
         Relation_forregex(partL) +
         '0' +
         cmd['circ'].toString() +
         Relation_forregex(partR) +
-        " ?",
+        " ?" + 
         ")",
-        'g');
+        'g'
+    );
     arr = newA.split(regex);
     if (arr.length !== 1) {
         var result = ['composition'];
@@ -1166,7 +1240,7 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
 
     //addchain
     regex = new RegExp(
-        "(".
+        "(" + 
         Relation_forregex(signPlus) +
         "|" +
         Relation_forregex(signMinus) +
@@ -1177,11 +1251,15 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         Relation_forregex(partR) +
         " ?" +
         ")",
-        'g');
+        'g'
+    );
+    
     arr = newA.split(regex);
-    if (arr.lenght !== 1) {
+    
+    if (arr.length !== 1) {
         var result = [];
         for (var i = 0; i < arr.length; i += 2) {
+            
             if (i === 0 && arr[i] === '') {
             
             } else if (i === 0) {
@@ -1229,7 +1307,8 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         ")" +
         Relation_forregex(partR) +
         " ?",
-        'g');
+        'g'
+    );
     arr = newA.split(regex);
     if (arr.length !== 1) {
         var result = ['mulchain'];
@@ -1261,7 +1340,8 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         ")" +
         Relation_forregex(partR) +
         " ?",
-        'g');
+        'g'
+    );
     arr = newA.split(regex);
     if (arr.length !== 1) {
         var result = ['mulchain'];
@@ -1278,7 +1358,8 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
         Relation_forregex(partL) +
         "([1-9][0-9]*)" +
         Relation_forregex(partR),
-        'g');
+        'g'
+    );
     match = match_all(newA, regex);
     var result = [];
     if (match[0].length > 1) {
@@ -1291,3 +1372,102 @@ export function Relation_sub_LatexToTree(newA, node, node_idx) {
     }
     return result;
 }
+
+var object = {
+    "type": "Relation",
+    "input": true,
+    "height": "short",
+    "set": [
+        {
+            "name": {
+                "type": "Static",
+                "mode": "null"
+            },
+            "element": [
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "3\\times 4"
+                },
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "2\\times 6"
+                },
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "2\\times 4"
+                }
+            ],
+            "width": 210
+        },
+        {
+            "name": {
+                "type": "Static",
+                "mode": "null"
+            },
+            "element": [
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "4\\times 2"
+                },
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "4\\times 3"
+                },
+                {
+                    "type": "Static",
+                    "mode": "math",
+                    "value": "6\\times 2"
+                }
+            ],
+            "width": 210
+        }
+    ],
+    "relation": [
+        {
+            "name": {
+                "type": "Static",
+                "mode": "null"
+            },
+            "value": [
+                {
+                    "source": 0,
+                    "target": 1,
+                    "color": 1,
+                    "arrow": [
+                        false,
+                        true
+                    ]
+                },
+                {
+                    "source": 1,
+                    "target": 2,
+                    "color": 1,
+                    "arrow": [
+                        false,
+                        true
+                    ]
+                },
+                {
+                    "source": 2,
+                    "target": 0,
+                    "color": 1,
+                    "arrow": [
+                        false,
+                        true
+                    ]
+                }
+            ],
+            "width": 100
+        }
+    ],
+    "option": {
+        "border": true,
+        "setName": false,
+        "relationName": false
+    }
+} 

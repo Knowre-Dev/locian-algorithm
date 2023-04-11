@@ -1,12 +1,11 @@
-
+import {organizeAnswerObj} from '../rc/functions.js';
 
 export function compareGridChart(right = null, input = null) { 
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_GridChart_ahjin');
-    //fb(input_1, 'user_GridChart_ahjin');
     
-    return TRUE;
+    
+    return true;
 }
 
 export function GridChart_getAnswer(object, answer, checktypeDefault) {
@@ -16,7 +15,6 @@ export function GridChart_getAnswer(object, answer, checktypeDefault) {
     organizeAnswerObj(object_1['labels']['x']['customLabel'], answer, checktypeDefault);
     organizeAnswerObj(object_1['labels']['y']['customLabel'], answer, checktypeDefault);
     
-    //fb(object_1, object_1['type'] + 'ahjin');
     
     return object_1;
 }

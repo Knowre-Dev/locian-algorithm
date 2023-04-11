@@ -1,13 +1,15 @@
+import {organizeAnswerObj} from '../rc/functions.js';
 
-
-export function Tree_getAnswer(right = null, input = null) {
+export function compareChart(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Chart_ahjin');
-    //fb(input_1, 'user_Chart_ahjin');
+    
     
     return true;
 }
+
+
+
 
 export function Chart_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
