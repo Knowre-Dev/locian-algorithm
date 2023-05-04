@@ -78,18 +78,20 @@ export function compareCartesian2D(right = null, input = null) {
 
 export function Cartesian2D_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-   
-    
-     for (var e of object_1['elements']) {
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Cartesian2D') {
+        return object_1;
+    }
+    if (typeof object_1['elements'] == 'undefined') {
+        return object_1;
+    }
+    for (var e of object_1['elements']) {
         if (e['type'] === 'Label2D') {
-        
-        organizeAnswerObj(e['label'], answer, checktypeDefault);
+            organizeAnswerObj(e['label'], answer, checktypeDefault_1);
         } else if (e['type'] === 'Trig') {
-        
-        organizeAnswerObj(e, answer, checktypeDefault);
+            organizeAnswerObj(e, answer, checktypeDefault_1);
         } else if (e['type'] === 'Image2D') {
-        
-        organizeAnswerObj(e, answer, checktypeDefault);
+            organizeAnswerObj(e, answer, checktypeDefault_1);
         }
          
     }

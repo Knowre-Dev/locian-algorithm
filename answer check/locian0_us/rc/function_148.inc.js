@@ -37,9 +37,11 @@ export function compareDropzone(right = null, input = null) {
 
 export function Dropzone_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    if (JSON.stringify(object_1) === '{}' || object_1['type'] != 'Dropzone') {
+        return false;
+    }
     if (typeof object_1['locianOptions']['check'] != 'undefined' && 
         object_1['locianOptions']['check']) {
-        //fb(object_1, object_1['type'] +'Aihua');
     }
     
     return object_1;

@@ -13,7 +13,7 @@ export class Laco {
     _instance = null;
     _before = [];
 
-    _sinod = [];
+    _sinod = new Object();
 
     constructor() { 
 

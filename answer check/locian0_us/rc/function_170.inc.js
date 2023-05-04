@@ -91,7 +91,7 @@ export function compareStack(right = null, input = null) {
 
 export function Stack_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+
     return object_1;
 }
 

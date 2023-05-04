@@ -35,7 +35,7 @@ export function compareChartGraph(right = null, input = null) {
 
 export function ChartGraph_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
     
     return object_1;
 }

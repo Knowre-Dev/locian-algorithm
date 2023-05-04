@@ -40,20 +40,24 @@ export function compareMultipleChoice(right = null, input = null) {
 
 export function MultipleChoice_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'MultipleChoice') {
+        return object_1;
+    }
     var keys = object_1['answer'];
     if (!Array.isArray(keys)) {
         keys = [keys];
     }
     
-    if (keys) {
+    if (keys.length != 0) {
         for (var [k, choice] of object_1['choices'].entries()) {
-            if (k, keys.includes(k)) {
-                organizeAnswerObj(choice, answer, checktypeDefault);
+            if (keys.includes(k.toString())) {
+                organizeAnswerObj(choice, answer, checktypeDefault_1);
             }
         }
     }
 
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     
     return object_1;
 }

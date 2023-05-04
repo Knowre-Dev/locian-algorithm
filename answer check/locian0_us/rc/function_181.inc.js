@@ -3,14 +3,16 @@ import {organizeAnswerObj} from '../rc/functions.js';
 export function compareLattice(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Lattice_ahjin');
-    //fb(input_1, 'user_Lattice_ahjin');
+    
 
     return true;
 }
 
 export function Lattice_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Lattice') {
+        return object_1;
+    }
     if (object_1['value'][0][0]['object']['type'] === 'Select') {
         Lattice_SelectInLattice(object, answer, checktypeDefault);
     } else if (object_1['value'][0][0]['type'] === 'Select') {
@@ -27,20 +29,24 @@ export function Lattice_getAnswer(object, answer, checktypeDefault) {
         }
     }
     
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     return object_1;
 }
 
 export function Lattice_SelectInLattice(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Lattice') {
+        return object_1;
+    }
     var selectValue = [];
     for (var [k, row] of object_1['value'].entries()) {
         if (row[0]['object']['type'] === 'Select' && row[0]['object']['value'].length === 1) {
             selectValue.push(k);
-            organizeAnswerObj(row[1]['object'], answer, checktypeDefault);
+            organizeAnswerObj(row[1]['object'], answer, checktypeDefault_1);
         } else if (row[0]['type'] === 'Select' && row[0]['value'].length === 1) {
             selectValue.push(k);
-            organizeAnswerObj(row[1], answer, checktypeDefault);
+            organizeAnswerObj(row[1], answer, checktypeDefault_1);
         }
     }
     var select = {
@@ -49,7 +55,7 @@ export function Lattice_SelectInLattice(object, answer, checktypeDefault) {
         'value': selectValue
     };
     
-    organizeAnswerObj(select, answer, checktypeDefault);
+    organizeAnswerObj(select, answer, checktypeDefault_1);
 }
 
 

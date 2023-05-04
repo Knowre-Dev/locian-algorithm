@@ -13,16 +13,23 @@ output:
 *****************************************/
 
 export function organizeAnswerObj(object, answer, checktypeDefault = null) {
+    if (typeof object == 'undefined' || typeof object != 'object') {
+        return;
+    }
     var object_1 = JSON.parse(JSON.stringify(object));
-   
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
     var laco = new Laco();
     var lacoSinod = laco.getSinod();
-
-	if (Array.isArray(object_1) && typeof object_1['type'] != 'undefined') {
-        if ([...lacoSinod.keys()].includes(object_1['type'])) {
-            var o = lacoSinod[object_1['type']][1](object_1, answer, checktypeDefault);
+    if (typeof object_1 == 'undefined' || typeof object_1 != 'object') {
+        return;
+    }
+	if (typeof object_1['type'] != 'undefined') {
+        if (Object.keys(lacoSinod).includes(object_1['type'])) {
+            var o = lacoSinod[object_1['type']][1](object_1, answer, checktypeDefault_1);
             if (o) {
-                //fb([object_1, o], 'Laco Sinod Get - '.object_1['type']);
+                if (typeof answer[object_1['type']] == 'undefined') {
+                    answer[object_1['type']] = [];
+                }
                 answer[object_1['type']].push(o);
             }
 
@@ -34,44 +41,59 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                 case 'Chart':
                     if (typeof object_1['answer'] != 'undefined') {
                         for (var a of object_1['answer']) {
+                            if (typeof answer['ChartGraph'] == 'undefined') {
+                                answer['ChartGraph'] = [];
+                            }
                             answer['ChartGraph'].push(a);
                         }
                     } else {
-                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
                     }
-                    organizeAnswerObj(object_1['grid'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['grid'], answer, checktypeDefault_1);
                     return;
 
                 case 'GridChart':
-                    organizeAnswerObj(object_1['labels']['x']['values'], answer, checktypeDefault);
-                    organizeAnswerObj(object_1['labels']['y']['values'], answer, checktypeDefault);
-                    organizeAnswerObj(object_1['labels']['x']['customLabel'], answer, checktypeDefault);
-                    organizeAnswerObj(object_1['labels']['y']['customLabel'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['labels']['x']['values'], answer, checktypeDefault_1);
+                    organizeAnswerObj(object_1['labels']['y']['values'], answer, checktypeDefault_1);
+                    organizeAnswerObj(object_1['labels']['x']['customLabel'], answer, checktypeDefault_1);
+                    organizeAnswerObj(object_1['labels']['y']['customLabel'], answer, checktypeDefault_1);
                     return;
 
                 case 'Dropzone':
-                    //fb(object_1['locianOptions'], 'loption');
                     if (object_1['locianOptions']['check']) {
                         if (typeof object_1['answer'] != 'undefined') {
                             var temp = [];
                             for (var e of object_1['answer']) {
                                 temp.push(e);
                             }
+                            if (typeof answer[object_1['type']] == 'undefined') {
+                                answer[object_1['type']] = [];
+                            }
                             answer[object_1['type']].push(temp);
+                            if (typeof answer['DropzoneSet'] == 'undefined') {
+                                answer['DropzoneSet'] = [];
+                            }
                             answer['DropzoneSet'].push(object_1['answerSet']);
                         } else {
                             var temp = [];
                             for (var e of object_1['elements']) {
                                 temp.push(e['elements'][0]);
                             }
+                            if (typeof answer[object_1['type']]) {
+                                answer[object_1['type']] = [];
+                            }
                             answer[object_1['type']].push(temp);
                         }
                     }
-                    //fb(object, answer['Dropzone']);
-                    return;
-
+                    
                 case 'ChartGraph':
+                    if (typeof object_1['data'] == 'undefined') {
+                        return;
+                    }
                     for (var d of object_1['data']) {
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(d);
                     }
                     return;
@@ -84,6 +106,9 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                                 temp.push(object_1['answer'][k]);
                             }
                         }
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(temp);
                     } else {
                         var temp = [];
@@ -92,37 +117,59 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                                 temp.push(object_1[m]);
                             }
                         }
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(temp);
                     }
                     return;
 
                 case 'MultipleChoice':
-                    var tempanswer = Array.isArray(object_1['answer']) ? ![null, undefined, 0, '', '0'].includes(object_1['answer']) ? object_1['answer'] : [-1] : object_1['answer'];
+                    //console.log(object_1['answer']);
+                    var tempanswer = Array.isArray(object_1['answer']) ? object_1['answer'].length != 0 ? object_1['answer'] : [-1] : object_1['answer'];
+                    
+                    if (typeof answer[object_1['type']] == 'undefined') {
+                        answer[object_1['type']] = [];
+                    }
+                    
                     answer[object_1['type']].push(tempanswer);
                     for (var ta of tempanswer) {
-                        organizeAnswerObj(object_1['choices'][ta], answer, checktypeDefault);
+                        organizeAnswerObj(object_1['choices'][ta], answer, checktypeDefault_1);
                     }
-                    //fb(object_1, answer[object_1['type']]);
                     return;
 
                 case 'SingleChoice':
+                    
                     var tempanswer = Array.isArray(object_1['answer']) ? typeof object_1['answer'][0] != 'undefined' ? object['answer'][0] : -1 : object['answer'];
+                    if (typeof answer[object_1['type']] == 'undefined') {
+                        answer[object_1['type']] = [];
+                    }
+                    
                     answer[object_1['type']].push(tempanswer);
-                    organizeAnswerObj(object_1['choices'][tempanswer], answer, checktypeDefault);
-                    //fb(object_1, answer[object_1['type']]);
+                    organizeAnswerObj(object_1['choices'][tempanswer], answer, checktypeDefault_1);
                     return;
 
                 case 'SelectBox':
+                    if (typeof answer[object_1['type']] == 'undefined') {
+                        answer[object_1['type']] = [];
+                    }
                     if (object_1['multiple']) {
+                        
                         answer[object_1['type']].push(
-                            Array.isArray(object_1['answer']) ? ![null, undefined, 0, '', '0'].includes(object_1['answer']) ? object_1['answer'] : [-1] : object_1['answer']
+                            Array.isArray(object_1['answer']) ? object_1['answer'].length != 0 ? object_1['answer'] : [-1] : object_1['answer']
+                            /*
+                            Array.isArray(object_1['answer']) ? ![null, undefined, 0, '', '0', []].includes(object_1['answer']) ? object_1['answer'] : [-1] : object_1['answer']
+                            */
                         );
-                        //fb(object, answer[object['type']]);
+                        
                     } else {
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(
                             Array.isArray(object_1['answer']) ? typeof object_1['answer'][0] != 'undefined' ? object_1['answer'][0] : -1 : object_1['answer']
                         );
-                        //fb(object, answer[object['type']]);
+                        
                     }
                     return;
 
@@ -130,44 +177,44 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                 case 'Span':
                 case 'Tree':
                 case 'Grid':
-                    organizeAnswerObj(object_1['value'],answer,checktypeDefault);
+                    organizeAnswerObj(object_1['value'], answer, checktypeDefault_1);
                     return 0;
 
                 case 'Cases':
-                    organizeAnswerObj(object_1['cases'], answer, checktypeDefault);
-                    organizeAnswerObj(object_1['conditions'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['cases'], answer, checktypeDefault_1);
+                    organizeAnswerObj(object_1['conditions'], answer, checktypeDefault_1);
                     return;
 
                 case 'Box':
                 case 'TitleBox':
                 case 'TableCellBox':
-                    organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
                     return 0;
 
                 case 'Table':
-                    organizeAnswerObj(object_1['cells'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['cells'], answer, checktypeDefault_1);
                     return 0;
                 
                 case 'Lattice':
                     if (object_1['value'][0][0]['object']['type'] === 'Select') {
-                        _organizeAnswerObjFromSelectInLattice(object_1, answer, checktypeDefault);
-                    } else if(object_1['value'][0][0]['type'] === 'Select')
-                        _organizeAnswerObjFromSelectInLattice(object_1, answer, checktypeDefault);
-                    else
-                        organizeAnswerObj(object_1['value'], answer, checktypeDefault);
+                        _organizeAnswerObjFromSelectInLattice(object_1, answer, checktypeDefault_1);
+                    } else if (object_1['value'][0][0]['type'] === 'Select') {
+                        _organizeAnswerObjFromSelectInLattice(object_1, answer, checktypeDefault_1); 
+                    } else {
+                        organizeAnswerObj(object_1['value'], answer, checktypeDefault_1);
+                    }
                     return 0;
 
                 case 'Layer':
                     if (typeof object_1['elements'] != 'undefined') {
-                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
                     }   
                 case 'Directional':
-                    organizeAnswerObj(object_1['source'], answer, checktypeDefault);
-                    organizeAnswerObj(object_1['target'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['source'], answer, checktypeDefault_1);
+                    organizeAnswerObj(object_1['target'], answer, checktypeDefault_1);
                     return 0;
 
                 case 'MathInput':
-                    //fb('mathinput');
                     if (typeof object_1['content'] != 'undefined') {
                         object_1['value'] = object_1['content'];
                     }
@@ -194,7 +241,7 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                         'order': order
                     };
 
-                    if (checktypeDefault !== null) {
+                    if (checktypeDefault_1 !== null) {
                         if (typeof object_1['option']['checktype'] != 'undefined') {
                             objArray['checktype'] = object_1['option']['checktype'];    
                         } else if (typeof object_1['option']['answerType'] != 'undefined') { // 150322   larwein - post_process    
@@ -225,7 +272,7 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                                     break;
                             }
                         } else {
-                            objArray['checktype'] = checktypeDefault[object_1['mode']];
+                            objArray['checktype'] = checktypeDefault_1[object_1['mode']];
                         }
 
                     }
@@ -243,27 +290,36 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                     if (typeof object_1['option']['blacklist'] != 'undefined') {
                         objArray['blacklist'] = object_1['option']['blacklist'];
                     }
-
+                    if (typeof answer[object_1['mode']] == 'undefined') {
+                        answer[object_1['mode']] = [];
+                    }
+                    if (typeof answer[object_1['mode']] == 'undefined') {
+                        answer[object_1['mode']] = [];
+                    }
                     answer[object_1['mode']].push(objArray);
                         
                     return 0;
 
                 case 'Partial':
-                    if (typeof object_1['elements']) {
-                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+                    if (typeof object_1['elements'] != 'undefined') {
+                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
                     } else {
-                        organizeAnswerObj(object_1['object'], answer, checktypeDefault);
+                        organizeAnswerObj(object_1['object'], answer, checktypeDefault_1);
                     }
                     return 0;
 
                 case 'Select':
-                    if (typeof object_1['option']['order']) {
+                    if (typeof object_1['option'] != 'undefined' && 
+                        typeof object_1['option']['order'] != 'undefined') {
                         order = object_1['option']['order'];
                     }
                     if (typeof object_1['order'] != 'undefined') {
                         order = object_1['order'];
                     } else {
                         order = '0';
+                    }
+                    if (typeof answer['select'] != 'undefined') {
+                        answer['select'] = [];
                     }
                     answer['select'].push(
                         {
@@ -281,7 +337,8 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                     var objArray = {
                         'value': _organizeAnswerObjFromRelation(object_1)
                     };
-                    if (typeof object_1['option']['order']) {
+                    if (typeof object_1['option'] != 'undefined' &&
+                        typeof object_1['option']['order'] != 'undefined') {
                         objArray['order'] = object_1['option']['order'];
                     }
                     if (typeof object_1['order'] != 'undefined') {
@@ -289,13 +346,16 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                     } else {
                         objArray['order'] = '0';
                     }
-                    if (checktypeDefault != null) {
+                    if (checktypeDefault_1 != null) {
                         if (typeof object_1['option']['checktype'] != 'undefined') {
                             objArray['checktype'] = object_1['option']['checktype'];
                         } else {
-                            objArray['checktype'] = checktypeDefault['relation'];
+                            objArray['checktype'] = checktypeDefault_1['relation'];
                         }
                     }        
+                    if (typeof answer['relation'] == 'undefined') {
+                        answer['relation'] = [];
+                    }
                     answer['relation'].push(objArray);
                     return 0;
 
@@ -308,14 +368,16 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                         'value': _organizeAnswerObjFromNumberLine(object)
                     };
                     objArray['order'] = '0';
-                    if (checktypeDefault != null) {
+                    if (checktypeDefault_1 != null) {
                         if (typeof object_1['option']['checktype'] != 'undefined') {
                             objArray['checktype'] = object_1['option']['checktype'];
                         } else {
-                            objArray['checktype'] = checktypeDefault['cart2d'];
+                            objArray['checktype'] = checktypeDefault_1['cart2d'];
                         }
                     }
-
+                    if (typeof answer['cart2d'] == 'undefined') {
+                        answer['cart2d'] = [];
+                    }
                     answer['cart2d'].push(objArray);
                     return 0;
 
@@ -328,41 +390,57 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                         'value': _organizeAnswerObjFromCoordPlane(object_1)
                     };
                     objArray['order'] = 0;
+                    if (typeof answer['cart2d'] == 'undefined') {
+                        answer['cart2d'] = [];
+                    }
                     answer['cart2d'].push(objArray);
                     return 0;
                     
 
                 case 'MultiRegion2D':
-                    organizeAnswerObj(object_1['regions'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['regions'], answer, checktypeDefault_1);
 
                 case 'Partition1D':
                 case 'Point2D':
                 case 'Region2D':
-                    if (object_1['locianOptions']['check']) {
+                    if (typeof object_1['locianOptions'] != 'undefined' && 
+                        typeof object_1['locianOptions']['check'] != 'undefined' &&object_1['locianOptions']['check']) {
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(object_1);
                     }
                     return 0;
 
                 case 'Curve2D':
-                    if (
+                    if (typeof object_1['locianOptions'] != 'undefined' && 
+                        typeof object_1['locianOptions']['check'] != 'undefined' &&
                         object_1['locianOptions']['check'] && 
                         object_1['equation'].indexOf('Math.sin') == -1 &&
                         object_1['equation'].indexOf('Math.cos') == -1 &&
                         object_1['equation'].indexOf('Math.tan') == -1
                     ) {
+                        if (typeof answer[object_1['type']] == 'undefined') {
+                            answer[object_1['type']] = [];
+                        }
                         answer[object_1['type']].push(object_1);
                     }
                     return 0;
 
                 case 'Cartesian1D':
-                    organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+                    organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
                     return 0;
 
                 case 'Cartesian2D':
                     // new Sinod Cartesian2D
                     if ('Grid2D' == object_1['grid']['type']) {
-                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
-                        if (object_1['locianOptions']['elementsAdded']) {
+                        organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
+                        if (typeof object_1['locianOptions'] != 'undefined' &&
+                            typeof object_1['locianOptions']['elementsAdded'] != 'undefined' && 
+                            object_1['locianOptions']['elementsAdded']) {
+                            if (typeof answer[object_1['type']] == 'undefined') {
+                                answer[object_1['type']] = [];
+                            }
                             answer[object_1['type']].push(
                                 {
                                     'elements': object_1['elements'] ? object_1['elements'] : [],
@@ -389,14 +467,16 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                         objArray['order'] = '0';
                     }
 
-                    if (checktypeDefault != null) {
+                    if (checktypeDefault_1 != null) {
                         if (typeof object_1['option']['checktype'] != 'undefined') {
                             objArray['checktype'] = object_1['option']['checktype'];
                         } else {
-                            objArray['checktype'] = checktypeDefault['cart2d'];
+                            objArray['checktype'] = checktypeDefault_1['cart2d'];
                         }
                     }        
-
+                    if (typeof answer['cart2d'] == 'undefined') {
+                        answer['cart2d'] = [];
+                    }
                     answer['cart2d'].push(objArray);
                     return 0;
 
@@ -414,6 +494,9 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
                     } else {
                         objArray['order'] = '0';
                     }
+                    if (typeof answer['geo2dselect'] == 'undefined') {
+                        answer['geo2dselect'] = [];
+                    }
                     answer['geo2dselect'].push(objArray);
                     return 0;
 
@@ -423,7 +506,7 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
         }
 	} else if (Array.isArray(object_1)) {
 		for (var item of object_1) {
-			organizeAnswerObj(item, answer, checktypeDefault);
+			organizeAnswerObj(item, answer, checktypeDefault_1);
         }
 		return 0;
 	} else {
@@ -434,7 +517,7 @@ export function organizeAnswerObj(object, answer, checktypeDefault = null) {
 function _organizeAnswerObjFromGeometry2DSelect(geoObject) {
     var geoObject_1 = JSON.parse(JSON.stringify(geoObject));
 
-    if (Array.isArray(geoObject_1) && geoObject_1['type'] === 'Geometry2D') {
+    if (typeof geoObject_1 == 'object' && geoObject_1['type'] === 'Geometry2D') {
     
     } else {
         return false;
@@ -460,7 +543,7 @@ function _organizeAnswerObjFromGeometry2DSelect(geoObject) {
 function _organizeAnswerObjFromRelation(relationObject) {
     
     var relationObject_1 = JSON.parse(JSON.stringify(relationObject));
-    if (Array.isArray(relationObject_1) && relationObject_1['type'] === 'Relation') {
+    if (typeof relationObject_1  == 'object' && relationObject_1['type'] === 'Relation') {
 
     } else {
         return false;
@@ -468,34 +551,38 @@ function _organizeAnswerObjFromRelation(relationObject) {
 
 
     var elementSets = [];
-    for (var eachSetObject of relationObject_1['set']) {
-        var eachElementSet = [];
-        for (var [k, elementObject] of eachSetObject['element'].entries()) {
-            if (elementObject['type'] === 'Input') {
-                eachElementSet.push(
-                    {
-                        'type': elementObject['mode'],
-                        'value': elementObject['value'],
-                        'index': k
-                    }
-                );
+    if (typeof relationObject_1['set'] != 'undefined') {
+        for (var eachSetObject of relationObject_1['set']) {
+            var eachElementSet = [];
+            for (var [k, elementObject] of eachSetObject['element'].entries()) {
+                if (elementObject['type'] === 'Input') {
+                    eachElementSet.push(
+                        {
+                            'type': elementObject['mode'],
+                            'value': elementObject['value'],
+                            'index': k
+                        }
+                    );
+                }
             }
+            elementSets.push(eachElementSet);
         }
-        elementSets.push(eachElementSet);
     }
 
     var arrowSets = [];
-    for (var eachRelationObject of relationObject_1['relation']) {
-        var eachArrowSet = [];
-        for (var arrowObject of eachRelationObject['value']) {
-            eachArrowSet.push(
-                [
-                    arrowObject['source'],
-                    arrowObject['target']
-                ]
-            );
+    if (typeof relationObject_1['relation'] != 'undefined') {
+        for (var eachRelationObject of relationObject_1['relation']) {
+            var eachArrowSet = [];
+            for (var arrowObject of eachRelationObject['value']) {
+                eachArrowSet.push(
+                    [
+                        arrowObject['source'],
+                        arrowObject['target']
+                    ]
+                );
+            }
+            arrowSets.push(eachArrowSet);
         }
-        arrowSets.push(eachArrowSet);
     }
 
     return {
@@ -506,7 +593,7 @@ function _organizeAnswerObjFromRelation(relationObject) {
 
 function _organizeAnswerObjFromNumberLine(nlineObject) {
     var nlineObject_1 = JSON.parse(JSON.stringify(nlineObject));
-	if (Array.isArray(nlineObject_1) && nlineObject_1['type'] === 'NumberLine') {
+	if (typeof nlineObject_1 == 'object' && nlineObject_1['type'] === 'NumberLine') {
 
     } else {
         return false;
@@ -554,7 +641,7 @@ function _organizeAnswerObjFromNumberLine(nlineObject) {
                         eqn.push(
                             {
                                 "type": "ineq",
-                                "value": 'y=x+'.k,
+                                "value": 'y=x+' + k.toString(),
                                 "dash": true
                             }
                         );
@@ -603,7 +690,7 @@ function _organizeAnswerObjFromNumberLine(nlineObject) {
 
 function _organizeAnswerObjFromCoordPlane(cplaneObject) {
     var cplaneObject_1 = JSON.parse(JSON.stringify(cplaneObject));
-	if (Array.isArray(cplaneObject_1) && cplaneObject_1['type'] === 'CoordPlane') {
+	if (typeof cplaneObject_1 == 'object' && cplaneObject_1['type'] === 'CoordPlane') {
 
     } else {
         return false;
@@ -688,15 +775,15 @@ function _organizeAnswerObjFromCoordPlane(cplaneObject) {
 
 function _organizeAnswerObjFromCartesian2D(cartObject) {
     var cartObject_1 = JSON.parse(JSON.stringify(cartObject));
-	if (Array.isArray(cartObject_1) && cartObject_1['type'] === 'Cartesian2D') {
+	if (typeof cartObject_1 == 'object' && cartObject_1['type'] === 'Cartesian2D') {
 
     } else {
         return false;
     }
 	var objs = [];
 
-	var minX = cartObject_1['bound'][0][0];
-	var maxX = cartObject['bound'][0][1];
+	//var minX = cartObject_1['bound'][0][0];
+	//var maxX = cartObject['bound'][0][1];
 
     for_1:
 	for (var item of cartObject_1['object']) {
@@ -948,18 +1035,20 @@ function JStoLatex(JS) {
 }
 
 
-export function _organizeAnswerObjFromSelectInLattice(object, answer,checktypeDefault) {
+export function _organizeAnswerObjFromSelectInLattice(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+
     var selectValue = [];
     for (var [k, row] of object_1['value'].entries()) {
         if (row[0]['object']['type'] === 'Select' && 
             row[0]['object']['value'].length === 1) {
             selectValue.push(k);
-            organizeAnswerObj(row[1]['object'],answer,checktypeDefault);
+            organizeAnswerObj(row[1]['object'], answer, checktypeDefault_1);
         } else if (row[0]['type'] === 'Select' && 
             row[0]['value'].length === 1) {
             selectValue.push(k);
-            organizeAnswerObj(row[1],answer,checktypeDefault);
+            organizeAnswerObj(row[1], answer, checktypeDefault_1);
         }
     }
     answer['select'].push(

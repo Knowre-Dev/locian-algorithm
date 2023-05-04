@@ -13,16 +13,19 @@ export function compareChart(right = null, input = null) {
 
 export function Chart_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Chart') {
+        return object_1;
+    }
     if (typeof object_1['answer'] != 'undefined') {
         for (var a of object_1['answer']) {
             answer['ChartGraph'].push(a);
         }
     } else {
-        organizeAnswerObj(object_1['elements'], answer, checktypeDefault);
+        organizeAnswerObj(object_1['elements'], answer, checktypeDefault_1);
     }
-    organizeAnswerObj(object_1['grid'], answer, checktypeDefault);
+    organizeAnswerObj(object_1['grid'], answer, checktypeDefault_1);
     
-    //fb(object_1, object_1['type'] + 'Aihua');
-    
+   
     return object_1;
 }

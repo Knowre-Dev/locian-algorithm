@@ -32,6 +32,7 @@ export function compareImage2D(right = null, input = null) {
 
 export function Image2D_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
     
     
     return object_1;

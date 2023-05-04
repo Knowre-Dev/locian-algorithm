@@ -3,19 +3,22 @@ import {organizeAnswerObj} from '../rc/functions.js';
 export function compareBox(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Box_ahjin');
-    //fb(input_1, 'user_Box_ahjin');
+    
 
     return true;
 }
 
 export function Box_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Box') {
+        return object_1;
+    }
     for (var element of object_1['elements']) {
-        organizeAnswerObj(element, answer, checktypeDefault);
+        organizeAnswerObj(element, answer, checktypeDefault_1);
     }
     
-    //fb(object_1, object_1['type'] + 'Aihua');
+   
     
     return object_1;
 }

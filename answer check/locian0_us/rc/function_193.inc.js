@@ -53,16 +53,19 @@ export function compareTrig(right = null, input = null) {
 
 export function Trig_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Trig') {
+        return object_1;
+    }
     
      for (var e of object_1['needles']) {
         if (typeof e['degreeContent'] != 'undefined' && e['degreeContent'].length > 0) {
-            organizeAnswerObj(e['degreeContent']['element'], answer, checktypeDefault);
+            organizeAnswerObj(e['degreeContent']['element'], answer, checktypeDefault_1);
         } else if (typeof e['radianContent'] != 'undefined' && e['radianContent'].length > 0) {
-            organizeAnswerObj(e['radianContent']['element'], answer, checktypeDefault);
+            organizeAnswerObj(e['radianContent']['element'], answer, checktypeDefault_1);
         } else if (typeof e['contents'] != 'undefined') {
             for (var ee of e['contents']) {
-                organizeAnswerObj(ee, answer, checktypeDefault);
+                organizeAnswerObj(ee, answer, checktypeDefault_1);
             }
         }
     }

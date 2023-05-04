@@ -37,11 +37,15 @@ export function compareSingleChoice(right = null, input = null) {
 
 export function SingleChoice_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'SingleChoice') {
+        return object_1;
+    }
     // 내부의 요소가 다른 오브젝트 유형으로 정답 체크 필요할 때, 
     // 정답 전체의 레퍼런스를 받아서 organizeAnswerObj() 로 넘길 것
 
-    var tempanswer = Array.isArray(object_1['answer']) ? typeof object_1['answer'][0] != 'undefined' ? object_1['answer'][0] : -1 : object_1['answer'];
-    organizeAnswerObj(object_1['choices'][tempanswer], answer, checktypeDefault);
+    var tempanswer = Array.isArray(object_1['answer']) ? typeof object_1['answer'][0] != 'undefined' ? parseInt(object_1['answer'][0]) : -1 : parseInt(object_1['answer']);
+    organizeAnswerObj(object_1['choices'][tempanswer], answer, checktypeDefault_1);
 
     
     

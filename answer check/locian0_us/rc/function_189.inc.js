@@ -41,14 +41,18 @@ export function compareDotPlot1D(right = null, input = null) {
 }
 
 export function DotPlot1D_getAnswer(object, answer, checktypeDefault) {
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
     var object_1 = JSON.parse(JSON.stringify(object));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'DotPlot1D') {
+        return object_1;
+    }
     if (typeof object_1['stacks'] != 'undefined') {
         for (var stack of object_1['stacks']) {
-            organizeAnswerObj(stack, answer, checktypeDefault);
+            organizeAnswerObj(stack, answer, checktypeDefault_1);
         }
     }
     
-    //fb(object_1, object_1['type'] + 'Aihua');
+
     
     return object_1;
 }

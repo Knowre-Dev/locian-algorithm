@@ -607,6 +607,8 @@ var partition1d = {
 }
 
 
+var table = {"type":"Table","cells":[[{"type":"TableCellBox","elements":[{"type":"Blank"}],"align":{"hor":"center","ver":"baseline"},"color":{"code":-1}},{"type":"TableCellBox","elements":[{"type":"Math","content":"-3+3x=4x-1","wrap":false,"whiteSpaces":true,"innerPadding":false}],"align":{"hor":"left","ver":"baseline"},"color":{"code":-1}}],[{"type":"TableCellBox","elements":[{"type":"Math","content":"\\implies","wrap":false,"whiteSpaces":true,"innerPadding":false}],"align":{"hor":"center","ver":"baseline"},"color":{"code":-1}},{"type":"TableCellBox","elements":[{"type":"Math","content":"-3+3\\left(-2\\right)=4\\left(-2\\right)-1","wrap":false,"whiteSpaces":true,"innerPadding":false}],"align":{"hor":"left","ver":"baseline"},"color":{"code":-1}}],[{"type":"TableCellBox","elements":[{"type":"Math","content":"\\implies","wrap":false,"whiteSpaces":true,"innerPadding":false}],"align":{"hor":"center","ver":"baseline"},"color":{"code":-1}},{"type":"TableCellBox","elements":[{"type":"Math","content":"-9=-9","wrap":false,"whiteSpaces":true,"innerPadding":false}],"align":{"hor":"left","ver":"baseline"},"color":{"code":-1}}]],"size":{"width":0},"dynamic":true}
+
 
 var tree = {
     "type": "Tree",
@@ -925,248 +927,250 @@ var trig = {
                     "font": {
                         "color": {
                             "text": {
-                                "code":0}
+                                "code": 0
                             }
                         }
-                    },
-                    "offset": 0.8
-                },
-                "radianContent": [],
-                "coordContent": []
-            },
-            {
-                "type": "TrigNeedle",
-                "degree": 60,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 0.8
+            },
+            "radianContent": [],
+            "coordContent": []
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 60,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 60,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "60\\degree",
-                        "font": {
-                            "color": {
-                                "text": {
-                                    "code": 0
-                                }
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 60,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "60\\degree",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code": 0
                             }
                         }
-                    },
-                    "offset": 0.8
-                },
-                "radianContent": [],
-                "coordContent": []
-            },
-            {
-                "type": "TrigNeedle",
-                "degree": 90,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 0.8
+            },
+            "radianContent": [],
+            "coordContent": []
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 90,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 87,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "90\\degree",
-                        "font": {
-                            "color": {
-                                "text": {
-                                    "code": 0
-                                }
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 87,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "90\\degree",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code": 0
                             }
                         }
-                    },
-                    "offset": 0.8
-                },
-                "radianContent": [],
-                "coordContent": []
-            },
-            {
-                "type": "TrigNeedle",
-                "degree": 30,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 0.8
+            },
+            "radianContent": [],
+            "coordContent": []
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 30,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 27,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": [],
-                "radianContent": [],
-                "coordContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "\\left(\\frac{\\sqrt{3}}{2}, \\space \\frac{1}{2}\\right)",
-                        "font": {
-                            "color": {
-                                "text": {
-                                    "code":
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 27,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": [],
+            "radianContent": [],
+            "coordContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "\\left(\\frac{\\sqrt{3}}{2}, \\space \\frac{1}{2}\\right)",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code":
                                     0
-                                }
                             }
                         }
-                    },
-                    "offset": 1.1
-                }
-            },
-            {
-                "type": "TrigNeedle",
-                "degree": 45,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 1.1
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 45,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 45,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": [],
-                "radianContent": [],
-                "coordContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "\\left(\\frac{\\sqrt{2}}{2}, \\space \\frac{\\sqrt{2}}{2}\\right)",
-                        "font": {
-                            "color": {
-                                "text": {
-                                    "code": 0
-                                }
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 45,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": [],
+            "radianContent": [],
+            "coordContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "\\left(\\frac{\\sqrt{2}}{2}, \\space \\frac{\\sqrt{2}}{2}\\right)",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code": 0
                             }
                         }
-                    },
-                    "offset": 1.1
-                }
-            },
-            {
-                "type": "TrigNeedle",
-                "degree": 60,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 1.1
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 60,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 65,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": [],
-                "radianContent": [],
-                "coordContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "\\left(\\frac{1}{2}, \\space \\frac{\\sqrt{3}}{2}\\right)",
-                        "font": {
-                            "color": {
-                                "text": {
-                                    "code": 0
-                                }
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 65,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": [],
+            "radianContent": [],
+            "coordContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "\\left(\\frac{1}{2}, \\space \\frac{\\sqrt{3}}{2}\\right)",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code": 0
                             }
                         }
-                    },
-                    "offset": 1.15
-                }
-            },
-            {
-                "type": "TrigNeedle", 
-                "degree": 0,
-                "style": {
-                    "stroke-width": 0,
-                    "color": {
-                        "code": 0,
-                        "weight": "normalMedium"
                     }
                 },
-                "pointer": {
-                    "pointerType": "point"
+                "offset": 1.15
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 0,
+            "style": {
+                "stroke-width": 0,
+                "color": {
+                    "code": 0,
+                    "weight": "normalMedium"
                 }
             },
-            {
-                "type": "TrigNeedle",
-                "degree": 3,
-                "style": {
-                    "stroke-width": 2.5,
-                    "color": {
-                        "code": -1
-                    }
-                },
-                "degreeContent": [],
-                "radianContent": [],
-                "coordContent": {
-                    "element": {
-                        "type": "Math",
-                        "content": "\\left(1, \\space 0\\right)",
-                        "font": {
-                            "color": {
-                                "text":{ "code": 0
+            "pointer": {
+                "pointerType": "point"
+            }
+        },
+        {
+            "type": "TrigNeedle",
+            "degree": 3,
+            "style": {
+                "stroke-width": 2.5,
+                "color": {
+                    "code": -1
+                }
+            },
+            "degreeContent": [],
+            "radianContent": [],
+            "coordContent": {
+                "element": {
+                    "type": "Math",
+                    "content": "\\left(1, \\space 0\\right)",
+                    "font": {
+                        "color": {
+                            "text": {
+                                "code": 0
                             }
                         }
                     }
@@ -1218,6 +1222,108 @@ var trig = {
     "step": 1,
     "degree": {
         "start": 0,
-        "end":360 
+        "end": 360
     }
 }
+
+
+
+
+var object = {
+    "type": "Relation",
+    "input": true,
+    "height": "short",
+    "set": [
+      {
+        "name": {
+          "type": "Static",
+          "mode": "null"
+        },
+        "element": [
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "3\\times 4"
+          },
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "2\\times 6"
+          },
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "2\\times 4"
+          }
+        ],
+        "width": 210
+      },
+      {
+        "name": {
+          "type": "Static",
+          "mode": "null"
+        },
+        "element": [
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "4\\times 2"
+          },
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "4\\times 3"
+          },
+          {
+            "type": "Static",
+            "mode": "math",
+            "value": "6\\times 2"
+          }
+        ],
+        "width": 210
+      }
+    ],
+    "relation": [
+      {
+        "name": {
+          "type": "Static",
+          "mode": "null"
+        },
+        "value": [
+          {
+            "source": 0,
+            "target": 1,
+            "color": 1,
+            "arrow": [
+              false,
+              true
+            ]
+          },
+          {
+            "source": 1,
+            "target": 2,
+            "color": 1,
+            "arrow": [
+              false,
+              true
+            ]
+          },
+          {
+            "source": 2,
+            "target": 0,
+            "color": 1,
+            "arrow": [
+              false,
+              true
+            ]
+          }
+        ],
+        "width": 100
+      }
+    ],
+    "option": {
+      "border": true,
+      "setName": false,
+      "relationName": false
+    }
+  }

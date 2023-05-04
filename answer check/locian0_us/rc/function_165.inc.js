@@ -50,10 +50,13 @@ export function compareCartesian1D(right = null, input = null) {
 
 export function Cartesian1D_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-   
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Cartesian1D') {
+        return object_1;
+    }
     
     for (var e of object_1['elements']) {
-        organizeAnswerObj(e, answer, checktypeDefault);
+        organizeAnswerObj(e, answer, checktypeDefault_1);
     }
     
     return object_1;

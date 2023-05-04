@@ -17,7 +17,7 @@ export function compareSelectBox(right = null, input = null) {
 
 export function SelectBox_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     
     return object_1;
 }

@@ -3,15 +3,20 @@ import {organizeAnswerObj} from '../rc/functions.js';
 export function compareTable(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_Table_ahjin');
-    //fb(input_1, 'user_Table_ahjin');
-
-    return TRUE;
+    
+    return true;
 }
 
 export function Table_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    if (typeof object_1['locianOptions'] != 'undefined' && typeof object_1['locianOptions']['type'] != 'undefined' && object_1['locianOptions']['type'] === 'Stack' && typeof object['locianOptions']['willAllow'] != 'undefined') {
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Table') {
+        return object_1;
+    }
+    if (typeof object_1['locianOptions'] != 'undefined' && 
+        typeof object_1['locianOptions']['type'] != 'undefined' && 
+        object_1['locianOptions']['type'] === 'Stack' && 
+        typeof object['locianOptions']['willAllow'] != 'undefined') {
         var willAllow = object_1['locianOptions']['willAllow'];
         
         var objArr = [];
@@ -20,7 +25,7 @@ export function Table_getAnswer(object, answer, checktypeDefault) {
                 if (cell['elements'][0]['type'] === 'Stack') {
                     objArr = objArr.concat(cell['elements']);
                 } else {
-                    organizeAnswerObj(cell['elements'], answer, checktypeDefault);
+                    organizeAnswerObj(cell['elements'], answer, checktypeDefault_1);
                 }
             }
         }
@@ -46,7 +51,7 @@ export function Table_getAnswer(object, answer, checktypeDefault) {
                 if (cell['elements'][0]['type'] === 'Stack') {
                     objArr = objArr.concat(cell['elements']);
                 } else {
-                    organizeAnswerObj(cell['elements'], answer, checktypeDefault);
+                    organizeAnswerObj(cell['elements'], answer, checktypeDefault_1);
                 }
             }
         }
@@ -76,14 +81,13 @@ export function Table_getAnswer(object, answer, checktypeDefault) {
                         
                         answer['Shade'] = [shade];
                     } else {
-                        organizeAnswerObj(element, answer, checktypeDefault);
+                        organizeAnswerObj(element, answer, checktypeDefault_1);
                     }
                 }
             }
         }
     }    
     
-    //fb(object_1, object_1['type'] + 'Aihua');
     return object_1;
 }
 

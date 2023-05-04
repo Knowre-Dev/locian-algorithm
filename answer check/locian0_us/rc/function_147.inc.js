@@ -41,7 +41,7 @@ export function Clock_getInfo(clockObj) {
 
 export function Clock_getAnswer(object) {
     var object_1 = JSON.parse(JSON.stringify(object));
-    //fb(object_1, object_1['type'] + 'Aihua');
+    
     return object_1;
 }
 

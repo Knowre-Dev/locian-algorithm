@@ -1,9 +1,7 @@
 function compareTableCellBox(right = null, input = null) {
     var right_1 = JSON.parse(JSON.stringify(right));
     var input_1 = JSON.parse(JSON.stringify(input));
-    //fb(right_1, 'right_TableCellBox_ahjin');
-    //fb(input_1, 'user_TableCellBox_ahjin');
-
+    
     return true;
 }
 

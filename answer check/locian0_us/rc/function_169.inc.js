@@ -87,17 +87,21 @@ export function compareRelation(right = null, input = null) {
 
 export function Relation_getAnswer(object, answer, checktypeDefault) {
     var object_1 = JSON.parse(JSON.stringify(object));
+    var checktypeDefault_1 = JSON.parse(JSON.stringify(checktypeDefault));
+    if (typeof object_1['type'] == 'undefined' || object_1['type'] != 'Relation') {
+        return object_1;
+    }
     if (typeof object_1['sets'] != 'undefined') { // classic sinod
         for (var eachSet of object_1['sets']) {
             for (var set of eachSet['elements']) {
-                organizeAnswerObj(set, answer, checktypeDefault);
+                organizeAnswerObj(set, answer, checktypeDefault_1);
                 
             }
         }
     } else { // old sinod
         for (var eachSet of object_1['set']) {
             for (var set of eachSet['element']) {
-                organizeAnswerObj(set, answer, checktypeDefault);
+                organizeAnswerObj(set, answer, checktypeDefault_1);
                 
             }
         }
