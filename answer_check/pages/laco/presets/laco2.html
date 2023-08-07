@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web form</title>
+    </head>
+    <style>
+        .preset {
+        color: black;
+        background-color: white;
+        width: 600px;
+        height: 800px;
+        padding: 10px;
+        border: 5px solid black;
+        margin: 10px;
+      }
+     
+      </style>
+    <body>
+        <h1>
+            <input type="text" placeholder="p-name">
+            <button type = "submit">create</button>
+            <button type = "submit">delete</button>
+        </h1>
+        <div class="preset">
+            <div>
+                <input type="text" placeholder= 'input'>
+                <input type="text" placeholder= 'option'>
+            </div>
+            <div id = 'presets'>
+                <div id = 'preset_1'>
+                    <input type="text" placeholder="name">
+                    <input type="text" placeholder = "option">
+                    <input type = 'checkbox' checked = 'checked'>
+                    <label>apply</label>
+                    <button type = "button" onclick = "insert('preset_1')">insert function</button>
+                    <div>
+                        <textarea id = 'comment_1' placeholder = 'comment'></textarea>
+                    </div>
+                    
+                </div>
+                
+
+            </div>
+        </div>
+        
+    </body>
+    <script>
+        function popup_save() {
+           
+        }
+
+        function popup_delete() {
+
+        }
+
+        
+        
+        function insert(id) {
+            var count = 0;
+            var div = document.createElement('div');
+            div.id = id + '1';
+            
+            var name = document.createElement('input');
+            name.type = 'text';
+            name.placeholder = 'name';
+            div.appendChild(name);
+            var option = document.createElement('input');
+            option.type = 'text';
+            option.placeholder = 'option'
+            div.appendChild(option);
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = 'checked';
+            div.appendChild(checkbox);
+            var label = document.createElement('label');
+            
+            
+            
+            label.innerText = 'apply';
+            div.appendChild(label);
+            var button = document.createElement('button');
+            button.innerText = 'delete';
+            button.addEventListener('click', function() {
+                div.remove();
+            });
+            div.appendChild(button);
+            var button = document.createElement('button');
+            button.innerText = 'insert function';
+            button.addEventListener('click', function() {insert(div.id)});
+            div.appendChild(button);
+            var comment = document.createElement('div');
+            var comment_content = document.createElement('textarea');
+            comment_content.placeholder = 'comment_' + div.id;
+            comment.appendChild(comment_content);
+            div.appendChild(comment);
+            var func = document.getElementById(id);
+            if (func.nextSibling) {
+                func.parentNode.insertBefore(div, func.nextSibling);
+            } else {
+                func.parentNode.appendChild(div);
+            } 
+            
+            
+        }
+
+
+    </script>
+    
+   
+    
+
+    
+    
+    <style>
+        textarea{
+            vertical-align: top;
+        }
+        save{
+            vertical-align: top;
+        }
+        delete{
+            vertical-align: top;
+        }
+    </style>
+
+
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web form</title>
+</head>
+<style>
+  .functions {
+  color: black;
+  background-color: white;
+  width: 200px;
+  height: 800px;
+  padding: 10px;
+  border: 5px solid black;
+  margin: 10px;
+}
+.info {
+  color: black;
+  background-color: white;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+  border: 5px solid black;
+  margin: 10px;
+}
+</style>
+<body>
+    <h1>
+        Functions
+        <button type = 'button' onclick = 'create()'>create</button>
+    </h1>
+    <div id='functions' class = 'functions'>
+        <div id = 'function_1'>
+            <button type = 'button'>f-name</button>
+           
+        </div>
+    </div>
+    <div class = 'info'>
+        <p>
+            function info
+        </p>
+    </div>
+    
+</body>
+<script>
+    
+    
+   
+    
+   
+    function create() {
+        var functions = document.getElementById('functions');
+        var func = document.createElement('div');
+        var name = document.createElement('button');
+        name.class = 'name';
+        name.innerText = 'f-name';
+        func.appendChild(name); 
+          
+        functions.appendChild(func); 
+        
+    }
+
+ 
+
+    
+    
+
+    
+    
+    
+</script>
+
+
+</html>

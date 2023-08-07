@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web form</title>
+    </head>
+
+    <body>
+        <h1>Function</h1>
+        <div>
+            <button type = "button" onclick =>save</button>
+        </div>
+        <div>
+            <span id = 'name_input'>
+                <input type="text" placeholder= 'name'>
+            </span>
+            <button type = "button" onclick = 'add_input()'>+</button>
+            <button type = "button" onclick = 'delete_input()'>-</button>
+            <script>
+                var name_input = document.getElementById('name_input');
+                var name_input_count = 0;
+                function add_input() {
+                    name_input_count++;
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = 'name_input_'.concat(name_input_count.toString());
+                    name_input.appendChild(input);    
+                }
+        
+                function delete_input() {
+                    var id = 'name_input_'.concat(name_input_count.toString());
+                    var input = document.getElementById(id);
+                    input.remove()
+                    name_input_count--;
+                }
+            </script>
+        </div>
+        <div>
+            <input type="text" placeholder= 'input'>
+            <input type="text" placeholder= 'option'>
+        </div>
+        <div>
+            <button type = "button" onclick = 'add_function()'>add function</button>
+            <script>
+                
+                function add_function() {
+                    var functions = document.getElementById('functions');
+                    var div = document.createElement('div');
+                    var name = document.createElement('input');
+                    name.placeholder = 'name'
+                    div.appendChild(name);
+                    //div.appendChild(space);
+                    var plus = document.createElement('button');
+                    plus.innerText = '+';
+                    div.appendChild(plus);
+                    var minus = document.createElement('button');
+                    minus.innerText = '-';
+                    div.appendChild(minus);
+                    var text = document.createElement('input');
+                    text.type = 'text';
+                    text.placeholder = 'option'
+                    div.appendChild(text);
+                    var checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = 'checked';
+                    div.appendChild(checkbox);
+                    var label = document.createElement('label');
+                    
+                    
+                    
+                    label.innerText = 'apply';
+                    div.appendChild(label);
+                    var button = document.createElement('button');
+                    button.innerText = 'delete';
+                    div.appendChild(button);
+                    var button = document.createElement('button');
+                    button.innerText = 'add comment';
+                    div.appendChild(button);
+                    functions.appendChild(div);
+                }
+            </script>
+        </div>
+        <div id = 'functions'>
+            <div id = 'function'>
+                <span id = 'function_input'>
+                    <input type="text" placeholder="name">
+                </span>
+                <button type = "button" onclick = 'add_input_function()'>+</button>
+                <button type = "button" onclick = 'delete_input_function()'>-</button>
+                
+                <input type="text" placeholder = "option">
+                <input type = 'checkbox' checked = 'checked'>
+                <label>apply</label>
+                <button type = "button" onclick = 'delete_function()'>delete</button>
+                
+                
+                <button type = "button" onclick = 'add_comment()'>add comment</button>
+                <div id='comment'>
+                </div>
+                
+            </div>
+            <script>
+                var function_input = document.getElementById('function_input');
+                var function_input_count = 0;
+                function add_input_function() {
+                    function_input_count++;
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = 'function_input_'.concat(function_input_count.toString());
+                    function_input.appendChild(input);    
+                }
+        
+                function delete_input_function() {
+                    var id = 'function_input_'.concat(function_input_count.toString());
+                    var input = document.getElementById(id);
+                    input.remove()
+                    function_input_count--;
+                }
+            </script>
+            <script>
+       
+                function delete_function() {
+                    var func = docunent.getElementById('function');
+                    func.remove();
+                } 
+            </script>
+            <script>
+        
+                var space = document.createTextNode("\u00a0\u00a0\u00a0");
+        
+                var comment = document.getElementById('comment');
+                var comment_count = 0;
+               
+                function add_comment() {
+                    
+                    if (comment_count >= 1) {
+                        return
+                    }
+                    var comment_content = document.createElement('div');
+                    comment_content.id = 'comment_content';
+                    comment_count++;
+                    comment_content.appendChild(space);
+                    var textarea = document.createElement('textarea');
+                    textarea.placeholder = 'comment';
+                    comment_content.appendChild(textarea);
+                    var delete_1 = document.createElement('button');
+                    delete_1.class = 'delete';
+                    delete_1.setAttribute('onclick', 'delete_comment()');
+                    delete_1.innerText = 'delete';
+                    comment_content.appendChild(delete_1);
+                    comment.appendChild(comment_content);
+                    
+                }
+                function delete_comment() {
+                    var comment_content = document.getElementById('comment_content');
+                    if (comment_count >= 1) {
+                        comment_count--;
+                    }
+                    comment_content.remove();
+                    
+                    
+                }
+            </script>
+        </div>
+    </body>
+
+    
+   
+    
+
+    
+    
+    <style>
+        textarea{
+            vertical-align: top;
+        }
+        save{
+            vertical-align: top;
+        }
+        delete{
+            vertical-align: top;
+        }
+    </style>
+
+
+
+</html>

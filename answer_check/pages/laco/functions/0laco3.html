@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web form</title>
+</head>
+<style>
+    .tests {
+    color: black;
+    background-color: white;
+    width: 500px;
+    height: 800px;
+    padding: 10px;
+    border: 5px solid black;
+    margin: 10px;
+  }
+ 
+  </style>
+<body>
+    <h1>
+        Tests
+        <button type = 'button' onclick = 'create()'>create</button>
+    </h1>
+    <script>
+        var test_count = 2;
+        function create() {
+            var tests = document.getElementById('tests');
+            var div = document.createElement('div');
+            div.id = 'test_' + test_count.toString();
+            var test = document.createElement('button');
+            test.type = 'button';
+            test.innerText = 'test';
+            div.appendChild(test);
+            var right = document.createElement('input');
+            right.type = 'text';
+            right.placeholder = 'right';
+            div.appendChild(right);
+            var answer = document.createElement('input');
+            answer.type = 'text';
+            answer.placeholder = 'answer';
+            div.appendChild(answer);
+            var delete_1 = document.createElement('button');
+            delete_1.type = 'button';
+            delete_1.innerText = 'delete';
+            div.appendChild(delete_1);
+            tests.appendChild(div);
+            test_count++;
+        }
+    </script>
+    <div id = 'tests' class = 'tests'>
+        <div id = 'test_1'>
+            <button type = "button" onclick = >test</button>
+            <input type="text" placeholder = "right">
+            <input type="text" placeholder = 'answer'>
+            <button type = "button" onclick =>delete</button>
+        </div>
+    </div>
+    
+</body>
+</html>
