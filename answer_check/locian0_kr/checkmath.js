@@ -1239,18 +1239,16 @@ function: compare two trees
 input: treeA - tree, treeB - tree
 ouput: true, false
 */
-function compareMathTree(treeA, treeB) {
-    var treeA_1 = JSON.stringify(JSON.parse(treeA));
-    var treeB_1 = JSON.stringify(JSON.parse(treeB));
-    //$debugFLAG = FALSE;
+export function compareMathTree(treeA, treeB) {
+    var treeA_1 = JSON.parse(JSON.stringify(treeA));
+    var treeB_1 = JSON.parse(JSON.stringify(treeB));
+    
     if (typeof treeA_1 !== typeof treeB_1) {
-        //if ($debugFLAG) {echo'a!';echo var_dump($treeA);echo var_dump($treeB);}
         return false;
     } else if (!Array.isArray(treeA_1)) {
         if (JSON.stringify(treeA_1) === JSON.stringify(treeB_1)) {
             return true;
         } else {
-           //if ($debugFLAG) echo'b!';
             return false;
         }
     }
@@ -1263,8 +1261,6 @@ function compareMathTree(treeA, treeB) {
 
     if (treeA_1[0] === treeB_1[0] && treeA_1.length === treeB_1.length) {
         if (treeA_1[0] === 'eval') {
-            //fb('eval treeA', $treeA);
-            //fb('eval treeB', $treeB);
             var result = true;
             var num_nullResult = 0;
             for (var [k, v] of treeA_1.entries()) {
@@ -1321,21 +1317,18 @@ function compareMathTree(treeA, treeB) {
         } else {
             treeA_1 = treeA_1.slice(1);
             treeB_1 = treeB_1.slice(1);
-            for (var [k, v] of treeA_1.entries())
-            {
+            for (var [k, v] of treeA_1.entries()) {
                 if (compareMathTree(v, treeB_1[k])) {
                 
                 } else {
-                    //if ($debugFLAG) {echo'd!';echo print_r($treeA);}
-                    return false;
+                   return false;
                 }
             }
         }
     } else {
-        //if ($debugFLAG) echo'e!';
         return false;
     }
-    return false;
+    return true;
 }
 
 /*

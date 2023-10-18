@@ -8,8 +8,11 @@ export function mulCommutative(tree) {
     return tree_1;
 }
 
+
+
+
 /*
-import {LatexToTree, match_all} from '../checkmath.js';
+import {LatexToTree, compareMathTree} from '../checkmath.js';
 var latex_1 = 'a\/b*c';
 var tree_1 = LatexToTree(latex_1)
 var tree_11 = mulCommutative(tree_1);

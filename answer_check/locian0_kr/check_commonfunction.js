@@ -32,6 +32,7 @@ role:
 input:
 output:
 ***********************************************************/
+/*
 function compareOrderedAnswerArray(A, B, type)
 {
 	$function = 'check'.$type.'_one';
@@ -112,3 +113,4 @@ function compareOrderedAnswerArray(A, B, type)
 
 	}
 }
+*/

@@ -22,7 +22,7 @@ import {mulAssociative} from '../rc/function_157.inc.js';
 
 
 
-function no_simp_frac(tree = null) {
+export function no_simp_frac(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco()
     tree_1 = tree_1 ? tree_1 : laco.parse('3x-y+0+1a-0+\frac{1}{2}x');
@@ -55,7 +55,7 @@ function no_simp_frac(tree = null) {
     return tree_1;
 }
 
-/*
+
 import {LatexToTree, match_all} from '../checkmath.js';
 var latex_1 = '0.5x';
 var latex_2 = '\\frac{1}{2}x';
@@ -68,4 +68,3 @@ var result_2 = JSON.stringify(tree_21, null, 4);
 console.log(result_1 == result_2);
 console.log(result_1);
 console.log(result_2);
-*/

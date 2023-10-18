@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web form</title>
+    </head>
+    <style>
+        .content {
+            display: grid;
+            grid-template-columns: 400px 600px 600px
+        }
+    </style>
+    <style>
+        .presets {
+        color: black;
+        background-color: white;
+        width: 300px;
+        height: 800px;
+        padding: 10px;
+        border: 5px solid black;
+        margin: 10px;
+      }
+      .info {
+        color: black;
+        background-color: white;
+        width: 300px;
+        height: 100px;
+        padding: 10px;
+        border: 5px solid black;
+        margin: 10px;
+      }
+    </style>
+    <style>
+        
+        .preset {
+            color: black;
+            background-color: white;
+            width: 500px;
+            height: 800px;
+            padding: 10px;
+            border: 5px solid black;
+            margin: 10px;
+        }
+
+        textarea{
+            vertical-align: top;
+        }
+        save{
+            vertical-align: top;
+        }
+        delete{
+            vertical-align: top;
+        }
+    </style>
+    <style>
+        .tests {
+        color: black;
+        background-color: white;
+        width: 500px;
+        height: 800px;
+        padding: 10px;
+        border: 5px solid black;
+        margin: 10px;
+      }
+     
+      </style>
+      
+    <body>
+        
+        
+        <div class = 'content'>
+            <div class = 'left'>
+                <h1>
+                    Presets 
+                    <button type = 'button' onclick = 'create_preset()'>create</button>
+                </h1>
+                <div>
+                    <input type="text" placeholder= 'search'>
+                </div>
+                <div id='presets' class = 'presets'>
+                    <div  id = 'preset_1'>
+                        <button type = 'button' onclick = "load_preset('preset_1')">p-name_1</button>
+                    </div>
+                    
+                </div>
+                <div class = 'preset_info'>
+                    <p>
+                        preset info
+                    </p>
+                </div>
+
+            </div>
+            <div class="center">
+                <h1>
+                    <input type="text" id = 'name' placeholder="p-name_1" value = 'p-name_1'>
+                    <button type = "button" id = 'save' onclick = 'save_preset("preset_1")' >save</button>
+                    <button type = "button" id = 'delete' onclick = 'delete_preset("preset_1")'>delete</button>
+                </h1>
+            
+                <div class = 'preset' id = 'preset'>
+                    <div id = 'func_1'>
+                        <select id = 'type_1' onchange= "type_change(this, 'function_1')">
+                            <option value = 'type'>type</option>
+                            <option value="allow">allow</option>
+                            <option value="simplify">simplify</option>
+                            <option value="convert">convert</option>
+                            <option value="eliminate">eliminate</option>
+                            <option value="decompose">decompose</option>
+                            <option value="identity">identity</option>
+                            <option value="shift">shift</option>
+                            <option value="factorize">factorize</option>
+                            <option value="multiply">multiply</option>
+                            <option value="complete">complete</option>
+                            <option value="evaluate">evalutate</option>
+                            <option value="organize">organize</option>
+                            <option value="calcuate">calcuate</option>
+                            <option value="expand">expand</option>
+                        </select>
+                        
+                        <select id="function_1">
+                            <option>function</option>
+                        </select>
+
+                        <input type="text" id = 'option_1' placeholder = "option" value = ''>
+                        <input type = 'checkbox' id = 'apply_1' checked>
+                        <label>apply</label>
+                        <button type = "button" onclick = "insert('func_1')">insert</button>
+                        <div>
+                            <textarea id = 'comment_1' placeholder = 'comment' value = ''></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class  = 'right'>
+                <h1>
+                    Tests
+                    <button type = 'button' onclick = 'create_test()'>create</button>
+                </h1>
+                <div id = 'tests' class = 'tests'>
+                    <div id = 'test_1'>
+                        <button type = "button" onclick = >test</button>
+                        <input type="text" placeholder = "right">
+                        <input type="text" placeholder = 'answer'>
+                        <button type = "button" onclick = 'test_1.remove()'>delete</button>
+                    </div>
+                </div>
+            </div>
+        
+
+        </div>
+        <script> 
+            var data = {
+                name: 'p-name_1',
+                functions: [
+                    {
+                        type: 'type',
+                        function: 'function',
+                        option: '',
+                        apply: true,
+                        comment: ''
+                    }
+                ]
+            };
+            localStorage.setItem('preset_1', JSON.stringify(data));
+
+            var preset_count = 2;
+            function create_preset() {
+               
+                var presets = document.getElementById('presets');
+                var preset = document.createElement('div');
+                var preset_id = 'preset_' + preset_count.toString();
+                var name = document.createElement('button');
+                name.id = preset_id;
+                
+                name.innerText = 'p-name_'+ preset_count.toString();
+                name.onclick = function() {
+                    load_preset(preset_id);
+                };
+                preset.appendChild(name); 
+
+                presets.appendChild(preset); 
+                
+
+                document.getElementById('name').value = name.innerText;
+                document.getElementById('type_1').value = 'type';
+                document.getElementById('function_1').value = 'function';
+                document.getElementById('option_1').value = '';
+                document.getElementById('apply_1').checked = true;
+                document.getElementById('comment_1').value = '';
+
+
+
+                var data = {
+                    name: name.innerText,
+                    functions: [
+                        {
+                            type: 'type',
+                            function: 'function',
+                            option: '',
+                            apply: true,
+                            comment: ''
+                        }
+                    ]
+                };
+                localStorage.setItem(name.id, JSON.stringify(data));
+                
+
+                preset_count++;
+            }        
+            
+            
+            function load_preset(preset_id) {
+                var preset = document.getElementById('preset');
+
+                var preset_loaded = JSON.parse(localStorage.getItem(preset_id));
+                var preset_button = document.getElementById(preset_id);
+                preset_button.children.innerText = preset_loaded.name;
+                document.getElementById('name').value = preset_loaded.name;
+                document.getElementById('save').onclick = function() {
+                    save_preset(preset_id);
+                };
+                document.getElementById('delete').onclick = function() {
+                    delete_preset(preset_id);
+                };
+
+                var preset = document.getElementById('preset');
+                while (preset.firstChild) {
+                    preset.removeChild(preset.firstChild);
+                }
+
+               
+                var types = ["allow", "simplify", "convert", "eliminate", "decompose",    "identity","shift", "factorize", "multiply", "complete", "evaluate", "organize","calcuate", "expand"];
+                var func_count = 1;
+                for (var func of preset_loaded.functions) {
+                    var div = document.createElement('div');
+                    div.id = 'func_' + func_count.toString();
+
+                    var select = document.createElement('select');
+                    select.id = 'type_' + func_count.toString(); 
+                    var function_id = 'function_' + func_count.toString();
+                    select.onchange = function() {
+                        type_change(this, function_id);
+                    };
+
+                    var option = document.createElement('option');
+                    option.innerText = 'type';
+                    select.appendChild(option);
+                    for (var type of types) {
+                        
+                        var option = document.createElement('option');
+                        option.value = type;
+                        option.innerText = type;
+                        if (type == func.type) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    }
+                     
+                    div.appendChild(select);      
+
+                    var select = document.createElement('select');
+                    select.id = function_id;
+                    var functions = type_function(func.type, func.function);
+                    for (var v of functions) {
+                        var opt = document.createElement("option");
+                        opt.value = v;
+                        if (func.functino == v) {
+                            opt.selected = true;
+                        }
+                        opt.innerText = v;
+                        select.appendChild(opt);
+                    }	
+                    div.appendChild(select);
+                    
+                    
+
+                    var input = document.createElement('input');
+                    input.id = 'option_' + func_count.toString();
+                    input.type = 'text';
+                    input.placeholder = 'option'
+                    input.value = func.option;
+                    div.appendChild(input);
+                    
+                    var checkbox = document.createElement('input');
+                    checkbox.id = 'apply_' + func_count.toString();
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = func.apply;
+                    div.appendChild(checkbox);
+                    
+                    var label = document.createElement('label');
+                    label.innerText = 'apply';
+                    div.appendChild(label);
+                    if (func_count > 1) {
+                        var button = document.createElement('button');
+                        button.innerText = 'delete';
+                        button.onclick = function() {
+                            div.remove();
+                        };
+                        div.appendChild(button);
+                    }
+
+                    var button = document.createElement('button');
+                    button.innerText = 'insert';
+                    button.onclick = function() {
+                        insert(div.id)
+                    };
+                    div.appendChild(button);
+
+                    var comment = document.createElement('div');
+                    comment.id = 'comment_' + func_count.toString()
+                    var comment_content = document.createElement('textarea');
+                    comment_content.placeholder = 'comment';
+                    comment_content.value = func.comment;
+                    comment.appendChild(comment_content);
+                    div.appendChild(comment);
+                    preset.appendChild(div);
+                    func_count++;
+                }
+
+                
+            }
+            
+
+            function save_preset(preset_id) {
+                var preset = document.getElementById('preset');
+                document.getElementById(preset_id).children[0].innerText = document.getElementById('name').value;
+                var functions = [];
+                var func_count = 1;
+                for (var func of preset.children) {
+                    var comment;
+                    if (func_count == 1) {
+                        comment = func.children[6].children[0].value
+                    } else {
+                        comment = func.children[7].children[0].value
+                    }
+                    var function_1 = {
+                            type: func.children[0].value,
+                            function: func.children[1].value,
+                            option: func.children[2].value,
+                            apply: func.children[3].value,
+                            comment: comment
+                    }
+                    functions.push(function_1);
+                    func_count++;
+                }
+
+                var data = {
+                    name: document.getElementById('name').value,
+                    functions: functions,
+                };
+                localStorage.setItem(preset_id, JSON.stringify(data));
+                
+            }
+
+            function delete_preset(preset_id) {
+                document.getElementById(preset_id).remove();
+            }
+
+            var function_count = 2;
+            function insert(id) {
+                
+                var div = document.createElement('div');
+                div.id = 'func_' + function_count.toString();
+                 
+
+                var select = document.createElement('select');
+                select.id = 'type_' + function_count.toString(); 
+                var function_id = 'function_' + function_count.toString();
+                select.onchange = function() {
+                    type_change(this, function_id);
+                };
+                
+                var types = ["allow", "simplify", "convert", "eliminate", "decompose",    "identity","shift", "factorize", "multiply", "complete", "evaluate", "organize","calcuate", "expand"];
+
+                var option = document.createElement('option');
+                option.innerText = 'type';
+                select.appendChild(option);
+                for (var type of types) {
+                    var option = document.createElement('option');
+                    option.value = type;
+                    option.innerText = type;
+                    select.appendChild(option);
+                }      
+                div.appendChild(select);      
+
+                var select = document.createElement('select');
+                select.id = function_id;
+                var option = document.createElement('option');
+                option.innerText = 'function';
+                select.appendChild(option);
+                div.appendChild(select);
+                
+
+                var input = document.createElement('input');
+                input.id = 'option_' + function_count.toString();
+                input.type = 'text';
+                input.placeholder = 'option'
+                div.appendChild(input);
+                
+                var checkbox = document.createElement('input');
+                checkbox.id = 'apply_' + function_count.toString();
+                checkbox.type = 'checkbox';
+                checkbox.checked = true;
+                div.appendChild(checkbox);
+                
+                var label = document.createElement('label');
+                label.innerText = 'apply';
+                div.appendChild(label);
+                
+                var button = document.createElement('button');
+                button.innerText = 'delete';
+                button.onclick = function() {
+                    div.remove();
+                };
+                div.appendChild(button);
+
+                var button = document.createElement('button');
+                button.innerText = 'insert';
+                button.onclick = function() {
+                    insert(div.id)
+                };
+                div.appendChild(button);
+
+                var comment = document.createElement('div');
+                comment.id = 'comment_' + function_count.toString()
+                var comment_content = document.createElement('textarea');
+                comment_content.placeholder = 'comment';
+                comment.appendChild(comment_content);
+                div.appendChild(comment);
+                
+                var func = document.getElementById(id);
+                if (func.nextSibling) {
+                    func.parentNode.insertBefore(div, func.nextSibling);
+                } else {
+                    func.parentNode.appendChild(div);
+                } 
+                
+                function_count++;
+                
+            }
+
+
+
+            function type_change(type, id) {
+                var function_type = ['function'];
+                var function_allow = ['곱셈결합법칙', 'addSssociative', 'mulCommutative', 'addCommutative', 'allCommutative', 'allAssociative', 'sub_mulCommutative', 'mulAssociative', 'sub_addFactored', 'setAssociative', 'setCommutative'];
+                var function_simplify = ['fracExpress', 'fracNegative', 'fracSimp', 'fracComplex', 'fracSimInt', 'fracSimpVar', 'addFactorNegative', 'addAdjacentSigns', 'mfracEquiv', 'powBaseSort', 'mulConstCal', 'powerOne', 'sub_addFactorNegative', 'exprSimpConst'];
+                var function_convert = ['fracDecimal', 'fracMfrac', 'rdecToFrac', 'addPolyZero', 'mulZero', 'intervalSetNot', 'mulToNega', 'fracCombine', 'makeOneSideOfEqIneqZero', 'expToFrac', 'rootToExp', 'nthrootToSuqareroot', 'addNegaToSub'];
+                var function_eliminate = ['negParenthesis', 'posiSign', 'addNegative', 'eqMulNeg', 'decElimZero', 'natElimZero', 'ineqNulNeg'];
+                var function_decompose = ['fracSeparation', 'powDecompose', 'mulPowSeparation', 'powerFrac', 'mulFracSeparation'];
+                var function_identity = ['addIdentity', 'mulIdentity', 'divIdentity', 'fracIdentity', 'powIdentity', 'allIdentity', 'decIdentity'];
+                var function_shift = ['varReverserShift', 'varReverse', 'eqIdentity', 'ineqIdentity'];
+                var function_factorize = ['addFactoredForm', 'powAddFactoredForm', 'addFactoredFormVar'];
+                var function_multiply = ['eqMulProp', 'mulAllSidesByCommonDenom', 'eqIneqDivPi'];
+                var function_complete = ['ineqSetNot'];
+                var function_evaluate = ['evaluateEx_new'];
+                var function_organize = ['groupLikeVariableTerms'];
+                var function_calcuate = ['fracPlusMinus'];
+                var function_expand = ['solParenthesis'];
+                        
+
+                var target = document.getElementById(id);
+
+                var d;
+                if (type.value == 'type') {
+                    d = function_type; 
+                } else if (type.value == "allow") {
+                    d = function_allow;
+                } else if (type.value == "simplify") {
+                    d = function_simplify;
+                } else if (type.value == "convert") {
+                    d = function_convert;
+                } else if (type.value == "eliminate") {
+                    d = function_eliminate;
+                } else if (type.value == "decompose") {
+                    d = function_decompose;
+                } else if (type.value == "identity") {
+                    d = function_identity;
+                } else if (type.value == "shift") {
+                    d = function_shift;
+                } else if (type.value == "factorize") {
+                    d = function_factorize;
+                } else if (type.value == "multiply") {
+                    d = function_multiply;
+                } else if (type.value == "complete") {
+                    d = function_complete;
+                } else if (type.value == "evaluate") {
+                    d = function_evaluate;
+                } else if (type.value == "organize") {
+                    d = function_organize;
+                } else if (type.value == "calcuate") {
+                    d = function_calcuate;
+                } else if (type.value == "expand") {
+                    d = function_expand;
+                }
+                        
+                target.options.length = 0;
+
+                for (var v of d) {
+                    var opt = document.createElement("option");
+                    opt.value = v;
+                    opt.innerText = v;
+                    target.appendChild(opt);
+                }	
+            }
+
+            function type_function(type, func) {
+                var function_type = ['function'];
+                var function_allow = ['곱셈결합법칙', 'addSssociative', 'mulCommutative', 'addCommutative', 'allCommutative', 'allAssociative', 'sub_mulCommutative', 'mulAssociative', 'sub_addFactored', 'setAssociative', 'setCommutative'];
+                var function_simplify = ['fracExpress', 'fracNegative', 'fracSimp', 'fracComplex', 'fracSimInt', 'fracSimpVar', 'addFactorNegative', 'addAdjacentSigns', 'mfracEquiv', 'powBaseSort', 'mulConstCal', 'powerOne', 'sub_addFactorNegative', 'exprSimpConst'];
+                var function_convert = ['fracDecimal', 'fracMfrac', 'rdecToFrac', 'addPolyZero', 'mulZero', 'intervalSetNot', 'mulToNega', 'fracCombine', 'makeOneSideOfEqIneqZero', 'expToFrac', 'rootToExp', 'nthrootToSuqareroot', 'addNegaToSub'];
+                var function_eliminate = ['negParenthesis', 'posiSign', 'addNegative', 'eqMulNeg', 'decElimZero', 'natElimZero', 'ineqNulNeg'];
+                var function_decompose = ['fracSeparation', 'powDecompose', 'mulPowSeparation', 'powerFrac', 'mulFracSeparation'];
+                var function_identity = ['addIdentity', 'mulIdentity', 'divIdentity', 'fracIdentity', 'powIdentity', 'allIdentity', 'decIdentity'];
+                var function_shift = ['varReverserShift', 'varReverse', 'eqIdentity', 'ineqIdentity'];
+                var function_factorize = ['addFactoredForm', 'powAddFactoredForm', 'addFactoredFormVar'];
+                var function_multiply = ['eqMulProp', 'mulAllSidesByCommonDenom', 'eqIneqDivPi'];
+                var function_complete = ['ineqSetNot'];
+                var function_evaluate = ['evaluateEx_new'];
+                var function_organize = ['groupLikeVariableTerms'];
+                var function_calcuate = ['fracPlusMinus'];
+                var function_expand = ['solParenthesis'];
+
+                var d;
+                if (type == 'type') {
+                    d = function_type; 
+                } else if (type == "allow") {
+                    d = function_allow;
+                } else if (type == "simplify") {
+                    d = function_simplify;
+                } else if (type == "convert") {
+                    d = function_convert;
+                } else if (type == "eliminate") {
+                    d = function_eliminate;
+                } else if (type == "decompose") {
+                    d = function_decompose;
+                } else if (type == "identity") {
+                    d = function_identity;
+                } else if (type == "shift") {
+                    d = function_shift;
+                } else if (type == "factorize") {
+                    d = function_factorize;
+                } else if (type == "multiply") {
+                    d = function_multiply;
+                } else if (type == "complete") {
+                    d = function_complete;
+                } else if (type == "evaluate") {
+                    d = function_evaluate;
+                } else if (type == "organize") {
+                    d = function_organize;
+                } else if (type == "calcuate") {
+                    d = function_calcuate;
+                } else if (type == "expand") {
+                    d = function_expand;
+                }
+                return d;
+               
+            }
+
+           
+
+
+
+            var test_count = 2;
+            function create_test() {
+                var tests = document.getElementById('tests');
+                var div = document.createElement('div');
+                div.id = 'test_' + test_count.toString();
+                var test = document.createElement('button');
+                test.type = 'button';
+                test.innerText = 'test';
+                div.appendChild(test);
+                var right = document.createElement('input');
+                right.type = 'text';
+                right.placeholder = 'right';
+                div.appendChild(right);
+                var answer = document.createElement('input');
+                answer.type = 'text';
+                answer.placeholder = 'answer';
+                div.appendChild(answer);
+                var delete_1 = document.createElement('button');
+                delete_1.type = 'button';
+                delete_1.innerText = 'delete';
+                delete_1.onclick = function() {
+                    div.remove();
+                };
+                div.appendChild(delete_1);
+                tests.appendChild(div);
+                test_count++;
+            }
+
+            
+        </script>
+        
+        
+     
+        
+    </body>
+     
+    
+        
+       
+    
+    
+
+    
+    
+    
+
+
+
+</html>

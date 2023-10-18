@@ -98,13 +98,13 @@ export function getVarName(variable) {
     return varname;
 
 }
-
+/*
 import {LatexToTree} from '../checkmath.js';
 var latex_1 = '\\sin{3}';
 var tree_1 = LatexToTree(latex_1);
 var tree_11 = evaluateEx_new(tree_1);
 console.log(JSON.stringify(tree_11, null, 4));
-
+*/
 /*
 Routine mostly copied from checkmath.php
 

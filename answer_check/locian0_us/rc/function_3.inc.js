@@ -9,7 +9,6 @@ export function mulCommutative(tree) {
 }
 
 
-/*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';
 var func = mulCommutative;
 var latex1 = '\\frac{a}{3}a(z-y)(-10)2';
@@ -21,4 +20,3 @@ var tree21 = func(tree2);
 console.log(is_equal_tree(tree11, tree21));
 console.log(JSON.stringify(tree11, null, 4));
 console.log(JSON.stringify(tree21, null, 4));
-*/

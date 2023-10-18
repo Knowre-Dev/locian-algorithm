@@ -7,6 +7,8 @@
 import {LatexToTree} from '../checkmath.js';
 
 
+
+
 export class Laco {
     _logs = [];
     _tree = [];
@@ -66,16 +68,16 @@ export class Laco {
         
         var args = [...arguments];
         var func = args.shift();
-
+        
         if (typeof func === 'function') {
             this._tree = func.apply(null, [this._tree].concat(args));
             
         } else {
-            this.getInstance().log('ERROR : '+ func.toString() +' doesn\'t exist.', false);
+            this.getInstance().log('ERROR : '+ func.name +' doesn\'t exist.', false);
         }
 
         if (JSON.stringify(this._before) != JSON.stringify(this._tree)) {
-            this.getInstance().log('changed by ' + func.toString());
+            this.getInstance().log('changed by ' + func.name);
         }
 
         this._before = this._tree;
@@ -221,3 +223,12 @@ export class Laco {
 
 }
 
+function func() {
+
+}
+/*
+var funcs = [];
+funcs['func'] = func;
+
+console.log(funcs['func'].name);
+*/
