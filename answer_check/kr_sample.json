@@ -1,0 +1,3057 @@
+[
+  {
+    "id": 51,
+    "data": [
+      {
+        "answer": "\\mfrac[2]{1}{3}",
+        "ianswer": "\\frac{7}{3}",
+        "result": 1
+      },
+      {
+        "answer": "\\mfrac[2]{1}{3}",
+        "ianswer": "\\mfrac[1]{4}{3}",
+        "result": 0
+      },
+      {
+        "answer": "\\mfrac[2]{1}{3}",
+        "ianswer": "\\frac{14}{6}",
+        "result": 1
+      },
+      {
+        "answer": "0.3",
+        "ianswer": "\\frac{3}{10}",
+        "result": 1
+      },
+      {
+        "answer": "0.4",
+        "ianswer": "\\frac{6}{15}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "\\frac{216}{432}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{7}{3}",
+        "ianswer": "\\mfrac[1]{4}{3}",
+        "result": 0
+      },
+      {
+        "answer": "0.05",
+        "ianswer": "0.050",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\frac{4}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{2}",
+        "ianswer": "2.0",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\mfrac[1]{2}{2}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": ".5",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "\\frac{1}{4}\\times 2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{2}{4}",
+        "ianswer": "\\frac{1}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\mfrac[1]{2}{4}",
+        "ianswer": "\\frac{12}{8}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\frac{2}{1}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\frac{4}{2}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\mfrac[1]{2}{2}",
+        "result": 0
+      },
+      {
+        "answer": "1",
+        "ianswer": "1.0",
+        "result": 1
+      },
+      {
+        "answer": "x",
+        "ianswer": "x",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "0.5",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "data": [
+      {
+        "answer": "\\frac{2}{5}",
+        "ianswer": "0.4",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "\\frac{2}{4}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{2}",
+        "ianswer": "2.0",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{2}",
+        "ianswer": "\\frac{2}{1}",
+        "result": 1
+      },
+      {
+        "answer": "\\mfrac[9]{3}{5}",
+        "ianswer": "\\frac{48}{5}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "2",
+        "result": 1
+      },
+      {
+        "answer": "1",
+        "ianswer": "1.0",
+        "result": 0
+      },
+      {
+        "answer": "0.20",
+        "ianswer": "0.2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{0.20}{7}",
+        "ianswer": "\\frac{0.2}{7}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\frac{2}{1}",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "data": [
+      {
+        "answer": ".5",
+        "ianswer": "0.5",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "0.5",
+        "result": 0
+      },
+      {
+        "answer": "0.5",
+        "ianswer": "0.500",
+        "result": 1
+      },
+      {
+        "answer": "1.5x",
+        "ianswer": "\\frac{3}{2}x",
+        "result": 0
+      },
+      {
+        "answer": "2.460",
+        "ianswer": "2.46",
+        "result": 1
+      },
+      {
+        "answer": "-1+2.5",
+        "ianswer": "2.5-1",
+        "result": 1
+      },
+      {
+        "answer": "42.0",
+        "ianswer": "42",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "data": [
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "0.5",
+        "result": 0
+      },
+      {
+        "answer": "1",
+        "ianswer": "1",
+        "result": 1
+      },
+      {
+        "answer": "(a+b)(2x+y)",
+        "ianswer": "(a+b)(2x+y)",
+        "result": 1
+      },
+      {
+        "answer": "0",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "BTR",
+        "ianswer": "BRT",
+        "result": 0
+      },
+      {
+        "answer": "0",
+        "ianswer": "1",
+        "result": 0
+      },
+      {
+        "answer": "(x-3)(x-8)<0",
+        "ianswer": "(x-3)(x-8)\\lt 0",
+        "result": 1
+      },
+      {
+        "answer": "2x+2",
+        "ianswer": "2x+2",
+        "result": 1
+      },
+      {
+        "answer": "IENCPR",
+        "ianswer": "RIENCP",
+        "result": 0
+      },
+      {
+        "answer": "\\\\text{A}\\\\text{B}\\\\text{C}",
+        "ianswer": "\\\\text{A}\\\\text{C}\\\\text{B}",
+        "result": 0
+      },
+      {
+        "answer": "G",
+        "ianswer": "g",
+        "result": 0
+      },
+      {
+        "answer": "-2-2",
+        "ianswer": "(-2)-2",
+        "result": 1
+      },
+      {
+        "answer": "(-2)+(-2)",
+        "ianswer": "-2+(-2)",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "data": [
+      {
+        "answer": "xyz-xy",
+        "ianswer": "x(yz-y)",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{x+y}{2}",
+        "ianswer": "-\\frac{x}{2}-\\frac{y}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{12}{x}+\\frac{1}{2}",
+        "ianswer": "\\frac{x+24}{2x}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{7a}{6}+2",
+        "ianswer": "2+\\frac{7}{6}a",
+        "result": 1
+      },
+      {
+        "answer": "x>\\frac{-a+9}{5}",
+        "ianswer": "1.8-0.2a\\<x",
+        "result": 1
+      },
+      {
+        "answer": "Ax^2+(2A-3)x-6",
+        "ianswer": "Ax^2+2Ax-3x-6",
+        "result": 0
+      },
+      {
+        "answer": "0.6",
+        "ianswer": "\\frac{3}{5}",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{12}{x}",
+        "ianswer": "\\frac{-12}{x}",
+        "result": 1
+      },
+      {
+        "answer": "2^2",
+        "ianswer": "4",
+        "result": 0
+      },
+      {
+        "answer": "-\\frac{a}{3}",
+        "ianswer": "\\frac{-a}{3}",
+        "result": 1
+      },
+      {
+        "answer": "3ab",
+        "ianswer": "ab3",
+        "result": 0
+      },
+      {
+        "answer": "x<-2",
+        "ianswer": "-2>x",
+        "result": 1
+      },
+      {
+        "answer": "2x+4=6",
+        "ianswer": "x+2=3",
+        "result": 0
+      },
+      {
+        "answer": "-3x=-6",
+        "ianswer": "x=2",
+        "result": 0
+      },
+      {
+        "answer": "-1<-x<5",
+        "ianswer": "-5<x<1",
+        "result": 0
+      },
+      {
+        "answer": "3ab^2",
+        "ianswer": "3b^2a",
+        "result": 1
+      },
+      {
+        "answer": "3(b^2)a",
+        "ianswer": "(b^2)3(a)",
+        "result": 0
+      },
+      {
+        "answer": "-3xy",
+        "ianswer": "-3yx",
+        "result": 1
+      },
+      {
+        "answer": "0.1x^2",
+        "ianswer": "x^2(0.1)",
+        "result": 0
+      },
+      {
+        "answer": "2(a-b)x",
+        "ianswer": "2x(-b+a)",
+        "result": 1
+      },
+      {
+        "answer": "2(a-b)x",
+        "ianswer": "2x(-b+a)",
+        "result": 1
+      },
+      {
+        "answer": "-2(x^2)y^3",
+        "ianswer": "-2(y^3)x^2",
+        "result": 1
+      },
+      {
+        "answer": "-c(a+b)",
+        "ianswer": "-(b+a)c",
+        "result": 1
+      },
+      {
+        "answer": "5(c+d)(a+b)",
+        "ianswer": "5(a+b)(d+c)",
+        "result": 1
+      },
+      {
+        "answer": "-(a+b)",
+        "ianswer": "-(b+a)",
+        "result": 1
+      },
+      {
+        "answer": "xy(y+z)",
+        "ianswer": "y(z+y)x",
+        "result": 1
+      },
+      {
+        "answer": "-3a+2b",
+        "ianswer": "2b-3a",
+        "result": 1
+      },
+      {
+        "answer": "-3a+2b",
+        "ianswer": "-3a+b\\times 2",
+        "result": 0
+      },
+      {
+        "answer": "xy^2-x(y+z)",
+        "ianswer": "x(y^2)-(z+y)x",
+        "result": 1
+      },
+      {
+        "answer": "xy^2-x(y+z)",
+        "ianswer": "-(z+y)x+(y^2)x",
+        "result": 1
+      },
+      {
+        "answer": "-ab+0.1xy",
+        "ianswer": "-ba+0.1xy",
+        "result": 1
+      },
+      {
+        "answer": "7x^2(x+y)z",
+        "ianswer": "zx^2(y+x)7",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{b}{ac}",
+        "ianswer": "\\frac{b}{ca}",
+        "result": 1
+      },
+      {
+        "answer": "-(a+b)+2(a-b)c",
+        "ianswer": "-(a+b)+2c(-b+a)",
+        "result": 1
+      },
+      {
+        "answer": "3a-\\frac{b}{c}",
+        "ianswer": "-\\frac{b}{c}+3a",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3x}{4+y}",
+        "ianswer": "\\frac{3x}{y+4}",
+        "result": 1
+      },
+      {
+        "answer": "4a(x+y)",
+        "ianswer": "a(x+y)4",
+        "result": 0
+      },
+      {
+        "answer": "-\\frac{5}{2}-\\frac{3}{4}",
+        "ianswer": "(-0.75)+(-2.5)",
+        "result": 1
+      },
+      {
+        "answer": "-2x-4x",
+        "ianswer": "-6x",
+        "result": 0
+      },
+      {
+        "answer": "100x-50",
+        "ianswer": "50(2x -1)",
+        "result": 1
+      },
+      {
+        "answer": "3\\times 4",
+        "ianswer": "4\\times 3",
+        "result": 1
+      },
+      {
+        "answer": "6\\pi h+18\\pi ",
+        "ianswer": "18\\pi +6\\pi h",
+        "result": 1
+      },
+      {
+        "answer": "(ab)^2",
+        "ianswer": "a^2b^2",
+        "result": 0
+      },
+      {
+        "answer": "(ab)^2+1",
+        "ianswer": "a^2b^2+1",
+        "result": 0
+      },
+      {
+        "answer": "a+b+c",
+        "ianswer": "b+a+c",
+        "result": 1
+      },
+      {
+        "answer": "5-2a-2b",
+        "ianswer": "5-2(a+b)",
+        "result": 0
+      },
+      {
+        "answer": "x^2+(-y-b)x+3",
+        "ianswer": "x^2-(y+b)x+3",
+        "result": 1
+      },
+      {
+        "answer": "-b-y",
+        "ianswer": "-(b+y)",
+        "result": 1
+      },
+      {
+        "answer": "2+(-b-y)",
+        "ianswer": "2-(b+y)",
+        "result": 1
+      },
+      {
+        "answer": "(-b-y)+2",
+        "ianswer": "-(b+y)+2",
+        "result": 1
+      },
+      {
+        "answer": "x^2-(b+c)x+3",
+        "ianswer": "x^2+(-b-c)x+3",
+        "result": 1
+      },
+      {
+        "answer": "2(k+2)x",
+        "ianswer": "(2k+4)x",
+        "result": 1
+      },
+      {
+        "answer": "2(k+2)x+x^2",
+        "ianswer": "(2k+4)x+x^2",
+        "result": 1
+      },
+      {
+        "answer": "2a+6",
+        "ianswer": "2(a+3)",
+        "result": 1
+      },
+      {
+        "answer": "-4xy-4y",
+        "ianswer": "-4y(x+1)",
+        "result": 1
+      },
+      {
+        "answer": "4xy+4y",
+        "ianswer": "4(x+1)y",
+        "result": 1
+      },
+      {
+        "answer": "4xy+4y",
+        "ianswer": "4(xy+y)",
+        "result": 0
+      },
+      {
+        "answer": "a(a+2)",
+        "ianswer": "a^2+2a",
+        "result": 1
+      },
+      {
+        "answer": "\\alpha ^2+\\beta ^2",
+        "ianswer": "\\beta ^2+\\alpha ^2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2(x+y)}{5}",
+        "ianswer": "\\frac{2x+2y}{5}",
+        "result": 0
+      },
+      {
+        "answer": "(-a+4)x^2+5x+(-b-1)y",
+        "ianswer": "(-a+4)x^2+5x-(b+1)y",
+        "result": 1
+      },
+      {
+        "answer": "(-a+4)x^2+5x+(-b-1)y=0",
+        "ianswer": "(-a+4)x^2+5x-(b+1)y=0",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3}{20}x+\\frac{1}{10}y",
+        "ianswer": "0.15x+0.1y",
+        "result": 1
+      },
+      {
+        "answer": "6x+5y+(-5x-6y)i",
+        "ianswer": "5y+6x+(-5x-6y)i",
+        "result": 1
+      },
+      {
+        "answer": "5x-6y",
+        "ianswer": "-6y+5x",
+        "result": 1
+      },
+      {
+        "answer": "6x-5y+(-5x-6y)i",
+        "ianswer": "-5y+6x+(-5x-6y)i",
+        "result": 1
+      },
+      {
+        "answer": "2x-3y+(-3x-2y)i",
+        "ianswer": "-3y+2x+(-3x-2y)i",
+        "result": 1
+      },
+      {
+        "answer": "(-3y+2x)+(-3x-2y)i",
+        "ianswer": "2x-3y+(-3x-2y)i",
+        "result": 1
+      },
+      {
+        "answer": "(a-2b)+(-6a+b)i",
+        "ianswer": "-2b+a+(-6a+b)i",
+        "result": 1
+      },
+      {
+        "answer": "(2a-2b)+(8a+2b)i",
+        "ianswer": "-2b+2a+(8a+2b)i",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{6}(a+10)",
+        "ianswer": "\\frac{a+10}{6}",
+        "result": 1
+      },
+      {
+        "answer": "(1+2a)y+x",
+        "ianswer": "x+(1+2a)y",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{-k+2}{k-1}",
+        "ianswer": "-\\frac{k-2}{k-1}",
+        "result": 1
+      },
+      {
+        "answer": "(2a-2b)+(8a+2b)i",
+        "ianswer": "2(a-b)+(8a+2b)i",
+        "result": 0
+      },
+      {
+        "answer": "(2a+2b)+(8a+2b)i",
+        "ianswer": "2a+2b+2(4a+b)i",
+        "result": 1
+      },
+      {
+        "answer": "ax^3-3ax^2",
+        "ianswer": "ax^2(x-3)",
+        "result": 1
+      },
+      {
+        "answer": "ax(b-3)",
+        "ianswer": "abx-3ax",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{3}(x-1)",
+        "ianswer": "\\frac{4(x-1)}{3}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{3}x+\\frac{4}{3}",
+        "ianswer": "\\frac{4(x+1)}{3}",
+        "result": 0
+      },
+      {
+        "answer": "t^2-(2a-4)t+a^2-7",
+        "ianswer": "t^2-2(a-2)t+a^2-7",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{4}{3}x+\\frac{4}{3}",
+        "ianswer": "\\frac{4}{3}(x+1)",
+        "result": 0
+      },
+      {
+        "answer": "29x+(5a+10)y",
+        "ianswer": "29x+5(a+2)y",
+        "result": 1
+      },
+      {
+        "answer": "5x^2-10x-40",
+        "ianswer": "5(x^2-2x-8)",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{3}{8}(5-a)",
+        "ianswer": "\\frac{-3(5-a)}{8}",
+        "result": 1
+      },
+      {
+        "answer": "\\sqrt{10}+\\sqrt{5}",
+        "ianswer": "\\sqrt{5}+\\sqrt{10}",
+        "result": 1
+      },
+      {
+        "answer": "x^2+(-2a+4)x+10",
+        "ianswer": "x^2-(2a-4)x+10",
+        "result": 1
+      },
+      {
+        "answer": "-5ab+\\frac{1}{2}a",
+        "ianswer": "\\frac{1}{2}a-5ab",
+        "result": 1
+      },
+      {
+        "answer": "-5ab+\\frac{1}{2}a",
+        "ianswer": "\\frac{1}{2}a-5ab",
+        "result": 1
+      },
+      {
+        "answer": "1+2\\\\tan{x}",
+        "ianswer": "2\\\\tan{x}+1",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{16}{3}\\pi ",
+        "ianswer": "\\mfrac[5]{1}{3}\\pi ",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2(x+1)}{x-1}",
+        "ianswer": "\\frac{2x+2}{x-1}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{2a^2}{3}",
+        "ianswer": "\\frac{2}{3}a^2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1-2+x}{3}",
+        "ianswer": "\\frac{1+(-2)+x}{3}",
+        "result": 1
+      },
+      {
+        "answer": "5t-\\frac{5}{3}",
+        "ianswer": "\\frac{15t-5}{3}",
+        "result": 1
+      },
+      {
+        "answer": "3x^2-2x+6",
+        "ianswer": "(x^2+3x+2)+(2x^2-5x+4)",
+        "result": 0
+      },
+      {
+        "answer": "6(2+\\sqrt{5})",
+        "ianswer": "12+6\\sqrt{5}",
+        "result": 1
+      },
+      {
+        "answer": "3\\pi +30",
+        "ianswer": "3(\\pi +10)",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{3-a}{3}x-\\frac{1}{3}b",
+        "ianswer": "\\frac{a-3}{3}x-\\frac{1}{3}b",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{m-2}{n}x-\\frac{6}{n}",
+        "ianswer": "\\frac{2-m}{n}x-\\frac{6}{n}",
+        "result": 1
+      },
+      {
+        "answer": "72 \\pi+12\\pi h",
+        "ianswer": "\\pi 12(6+h)",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{n+2}{n+1}",
+        "ianswer": "1+\\frac{1}{n+1}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{x^2}",
+        "ianswer": "(\\frac{1}{x})^2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{6}+\\frac{12}{m}",
+        "ianswer": "\\frac{m+72}{6m}",
+        "result": 1
+      },
+      {
+        "answer": "\\pi 10x+32\\pi ",
+        "ianswer": "10x\\pi +32\\pi ",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{a^2b^2}",
+        "ianswer": "\\frac{1}{b^2a^2}",
+        "result": 1
+      },
+      {
+        "answer": "f'(1)",
+        "ianswer": "f'(1)",
+        "result": 1
+      },
+      {
+        "answer": "\\nthroot[]{2}",
+        "ianswer": "\\sqrt{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\nthroot[]{n+1}",
+        "ianswer": "\\sqrt{1+n}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3}{2}x+\\frac{6}{2}",
+        "ianswer": "\\frac{3}{2}(x+1)",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{b^2+c^2-a^2}{2bc}",
+        "ianswer": "\\frac{b^2+c^2-a^2}{2cb}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a^2+b^2-c^2}{2ba}",
+        "ianswer": "\\frac{a^2+b^2-c^2}{2ab}",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{1}{2}x-4",
+        "ianswer": "\\frac{-1}{2}x-4",
+        "result": 1
+      },
+      {
+        "answer": "(-2)x+6",
+        "ianswer": "2(3-x)",
+        "result": 0
+      },
+      {
+        "answer": "3a^2b",
+        "ianswer": "3ba^2",
+        "result": 1
+      },
+      {
+        "answer": "-12x^3y",
+        "ianswer": "(-12)yx^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{50}{3}\\pi 25\\sqrt{3}",
+        "ianswer": "\\frac{100\\pi -150\\sqrt{3}}{6}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{50}{3}\\pi -25\\sqrt{3}",
+        "ianswer": "\\frac{50\\pi -75\\sqrt{3}}{3}",
+        "result": 1
+      },
+      {
+        "answer": "-12xy^2",
+        "ianswer": "-12y^2x",
+        "result": 1
+      },
+      {
+        "answer": "-3a^3b",
+        "ianswer": "-3ba^3",
+        "result": 1
+      },
+      {
+        "answer": "12\\times x\\times y",
+        "ianswer": "x\\times 12\\times y",
+        "result": 0
+      },
+      {
+        "answer": "-5x+(3-a)y+4",
+        "ianswer": "-5x+3y-ay+4",
+        "result": 0
+      },
+      {
+        "answer": "12x^2y+8xy^2",
+        "ianswer": "4xy(3x+2y)",
+        "result": 1
+      },
+      {
+        "answer": "2y(4x+3)",
+        "ianswer": "8xy+6y",
+        "result": 1
+      },
+      {
+        "answer": "6x^4y",
+        "ianswer": "6yx^4",
+        "result": 1
+      },
+      {
+        "answer": "(-2)-(-2)",
+        "ianswer": "-2-(-2)",
+        "result": 1
+      },
+      {
+        "answer": "5(2x-4)",
+        "ianswer": "10x-20",
+        "result": 0
+      },
+      {
+        "answer": "2+3x",
+        "ianswer": "3+2x",
+        "result": 0
+      },
+      {
+        "answer": "10(9-a)",
+        "ianswer": "90-10a",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{9}{2}+3\\sqrt{3}",
+        "ianswer": "\\frac{3(3+2\\sqrt{3})}{2}",
+        "result": 0
+      },
+      {
+        "answer": "a^2-4a",
+        "ianswer": "a(a-4)",
+        "result": 1
+      },
+      {
+        "answer": "2\\sqrt{3}\\pi +\\sqrt{6}\\pi ",
+        "ianswer": "(2\\sqrt{3}+\\sqrt{6})\\pi ",
+        "result": 1
+      },
+      {
+        "answer": "(2-12a)+(3a+6)\\sqrt{2}",
+        "ianswer": "(3a+6)\\sqrt{2}+(2-12a)",
+        "result": 1
+      },
+      {
+        "answer": "x+(y+z)",
+        "ianswer": "x+y+z",
+        "result": 1
+      },
+      {
+        "answer": "(k^2+3k-4)x^2-4x+1",
+        "ianswer": "-4x+1+(k^2+3k-4)x^2",
+        "result": 1
+      },
+      {
+        "answer": "(-2a+2)x",
+        "ianswer": "2(1-a)x",
+        "result": 1
+      },
+      {
+        "answer": "a^2b",
+        "ianswer": "ba^2",
+        "result": 1
+      },
+      {
+        "answer": "2y(3x+y+1)",
+        "ianswer": "6xy+2y^2+2y",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{5-5\\sqrt{2}}{2}",
+        "ianswer": "\\frac{5}{2}(1-\\sqrt{2}}",
+        "result": 0
+      },
+      {
+        "answer": "6a^3b+12a^2b",
+        "ianswer": "6a^2b(a+2)",
+        "result": 1
+      },
+      {
+        "answer": "ab+\\frac{1}{4ab^2}",
+        "ianswer": "\\frac{4a^2b^3+1}{4ab^2}",
+        "result": 1
+      },
+      {
+        "answer": "(a-3)x=-2-\\frac{1}{2}b",
+        "ianswer": "ax-3x=-2-\\frac{1}{2}b",
+        "result": 1
+      },
+      {
+        "answer": "(-2a+2)x-8",
+        "ianswer": "2(1-a)x-8",
+        "result": 1
+      },
+      {
+        "answer": "4\\pm 2\\sqrt{-a+5}",
+        "ianswer": "4\\pm 2\\sqrt{5-a}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{-m+2}{n}x+\\frac{12}{n}",
+        "ianswer": "-\\frac{m-2}{n}x+\\frac{12}{n}",
+        "result": 1
+      },
+      {
+        "answer": "(2-a)x=-4-2b",
+        "ianswer": "(2-a)x=-2(b+2)",
+        "result": 1
+      },
+      {
+        "answer": "(2-a)x=-4-2b",
+        "ianswer": "(2-a)x=-2(b+2)",
+        "result": 1
+      },
+      {
+        "answer": "(3-a)x=3",
+        "ianswer": "3=(3-a)x",
+        "result": 1
+      },
+      {
+        "answer": "a+4=0",
+        "ianswer": "1+3+a=0",
+        "result": 0
+      },
+      {
+        "answer": "2(x-2)",
+        "ianswer": "2x-4",
+        "result": 1
+      },
+      {
+        "answer": "(-k+3)\\sqrt{6}",
+        "ianswer": "(-k)\\sqrt{6}+3\\sqrt{6}",
+        "result": 1
+      },
+      {
+        "answer": "7a^3b-14ab",
+        "ianswer": "7ab(a^2-2)",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "data": [
+      {
+        "answer": "\\frac{1}{2}",
+        "ianswer": "\\frac{2}{4}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{4}{2}",
+        "ianswer": "2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{4}",
+        "ianswer": "0.25",
+        "result": 0
+      },
+      {
+        "answer": "\\mfrac[1]{1}{2}",
+        "ianswer": "\\frac{3}{2}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{x}{2}",
+        "ianswer": "\\frac{2x}{4}",
+        "result": 0
+      },
+      {
+        "answer": "-\\frac{a+b}{2}",
+        "ianswer": "-(\\frac{a}{2}+\\frac{b}{2})",
+        "result": 1
+      },
+      {
+        "answer": "0",
+        "ianswer": "1",
+        "result": 0
+      },
+      {
+        "answer": "0",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "1",
+        "ianswer": "0",
+        "result": 0
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "data": [
+      {
+        "answer": "xy-x",
+        "ianswer": "x(y-1)",
+        "result": 1
+      },
+      {
+        "answer": "x(y-1)",
+        "ianswer": "xy-x",
+        "result": 1
+      },
+      {
+        "answer": "x^2\\times y^3",
+        "ianswer": "x^2y^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3}{5}",
+        "ianswer": "0.6",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{3}{5}",
+        "ianswer": "-0.6",
+        "result": 1
+      },
+      {
+        "answer": "+10.5",
+        "ianswer": "\\frac{21}{2}",
+        "result": 1
+      },
+      {
+        "answer": "0.1x",
+        "ianswer": "\\frac{1}{10}x",
+        "result": 1
+      },
+      {
+        "answer": "100\\pi -50",
+        "ianswer": "5(20\\pi -10)",
+        "result": 0
+      },
+      {
+        "answer": "100-50\\pi",
+        "ianswer": "50(2-\\pi )",
+        "result": 1
+      },
+      {
+        "answer": "0",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "6\\pi h+15\\pi ",
+        "ianswer": "15\\pi +6\\pi h",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a+10}{6}",
+        "ianswer": "\\frac{1}{6}(a+10)",
+        "result": 1
+      },
+      {
+        "answer": "717",
+        "ianswer": "717.0",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{15}{4}",
+        "ianswer": "3.75",
+        "result": 1
+      },
+      {
+        "answer": "\\sqrt{\\frac{1}{2}}",
+        "ianswer": "\\sqrt{0.5}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\sqrt{4}",
+        "result": 0
+      },
+      {
+        "answer": "2+\\sqrt{3}",
+        "ianswer": "\\sqrt{3}+2",
+        "result": 1
+      },
+      {
+        "answer": "9",
+        "ianswer": "9",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3}{2}",
+        "ianswer": "\\mfrac[1]{1}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{16}{3}\\pi ",
+        "ianswer": "\\mfrac[5]{1}{3}\\pi ",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{26}{28}",
+        "ianswer": "\\frac{13}{14}",
+        "result": 0
+      },
+      {
+        "answer": "3\\sqrt{5}",
+        "ianswer": "3\\sqrt{5}1",
+        "result": 0
+      },
+      {
+        "answer": ".1",
+        "ianswer": "0.1",
+        "result": 0
+      },
+      {
+        "answer": "\\nthroot[]{a^{n+2}}",
+        "ianswer": "\\sqrt{a^{2+n}}",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{1}{2}x",
+        "ianswer": "\\frac{-1}{2}x",
+        "result": 1
+      },
+      {
+        "answer": "6\\pi -9\\sqrt{3}",
+        "ianswer": "\\frac{6\\pi -9\\sqrt{3}}{1}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{50\\pi }{3}-25\\sqrt{3}",
+        "ianswer": "\\frac{100\\pi -150\\sqrt{3}}{6}",
+        "result": 0
+      },
+      {
+        "answer": "(6-3a)x=3",
+        "ianswer": "3(2-a)x=3",
+        "result": 0
+      },
+      {
+        "answer": "5",
+        "ianswer": "",
+        "result": 0
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "data": [
+      {
+        "answer": "ABC",
+        "ianswer": "CBA",
+        "result": 1
+      },
+      {
+        "answer": "A",
+        "ianswer": "A",
+        "result": 1
+      },
+      {
+        "answer": "ABC",
+        "ianswer": "BCA",
+        "result": 0
+      },
+      {
+        "answer": "bhr",
+        "ianswer": "brh",
+        "result": 0
+      },
+      {
+        "answer": "O\\times C\\times A",
+        "ianswer": "OAC",
+        "result": 0
+      },
+      {
+        "answer": "G'D",
+        "ianswer": "DG'",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "data": [
+      {
+        "answer": "ABCD",
+        "ianswer": "CABC",
+        "result": 0
+      },
+      {
+        "answer": "ABCD",
+        "ianswer": "CBAD",
+        "result": 1
+      },
+      {
+        "answer": "ㄱㄴ",
+        "ianswer": "ㄴㄱ",
+        "result": 1
+      },
+      {
+        "answer": "ABCD",
+        "ianswer": "BCDA",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "data": [
+      {
+        "answer": "\\mfrac[1]{1}{2}",
+        "ianswer": "\\mfrac[1]{5}{10}",
+        "result": 1
+      },
+      {
+        "answer": "\\mfrac[2]{3}{4}",
+        "ianswer": "\\mfrac[1]{7}{4}",
+        "result": 0
+      },
+      {
+        "answer": "\\mfrac[1]{1}{2}",
+        "ianswer": "",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "data": [
+      {
+        "answer": "3(x-4)(x-6)",
+        "ianswer": "(x-4)(3x-18)",
+        "result": 0
+      },
+      {
+        "answer": "-(x+1)(3x-2)",
+        "ianswer": "(-1-x)(3x-2)",
+        "result": 1
+      },
+      {
+        "answer": "(x+2)^2",
+        "ianswer": "(2+x)^2",
+        "result": 1
+      },
+      {
+        "answer": "(-3)(a-4)^2",
+        "ianswer": "-(a-4)^2\\times 3",
+        "result": 1
+      },
+      {
+        "answer": "x(x+1)(x-1)",
+        "ianswer": "(x^2+x)(x-1)",
+        "result": 0
+      },
+      {
+        "answer": "(5a-2)^2",
+        "ianswer": "(2-5a)^2",
+        "result": 1
+      },
+      {
+        "answer": "4(2x-1)^2",
+        "ianswer": "(4x-2)^2",
+        "result": 0
+      },
+      {
+        "answer": "4\\times (2x+1)^2",
+        "ianswer": "(4x+2)^2",
+        "result": 0
+      },
+      {
+        "answer": "2(2x+4)^2",
+        "ianswer": "8(x+2)^2",
+        "result": 0
+      },
+      {
+        "answer": "ab(a^2-b)",
+        "ianswer": "a(a^3b-b^2)",
+        "result": 0
+      },
+      {
+        "answer": "(-3)(2x+4)^2",
+        "ianswer": "-12(x+2)^2",
+        "result": 0
+      },
+      {
+        "answer": "50(2x-1)",
+        "ianswer": "5(20x-10)",
+        "result": 0
+      },
+      {
+        "answer": "-a(a+1)",
+        "ianswer": "-a^2-a",
+        "result": 0
+      },
+      {
+        "answer": "(\\frac{1}{2}a+\\frac{1}{3}b)(\\frac{1}{2}a-\\frac{1}{3}b)",
+        "ianswer": "(\\frac{a}{2}+\\frac{b}{3})(\\frac{a}{2}-\\frac{b}{3})",
+        "result": 1
+      },
+      {
+        "answer": "(x+\\frac{5}{3}y)(x-\\frac{5}{3}y)",
+        "ianswer": "(x+\\frac{5y}{3})(-\\frac{5y}{3}+x)",
+        "result": 1
+      },
+      {
+        "answer": "(a+b+c)(a^2+b^2+c^2-ab-bc-ca)",
+        "ianswer": "(a+b+c)(a^2-ab-ac+b^2-bc+c^2)",
+        "result": 1
+      },
+      {
+        "answer": "(a+b+3c)(a^2-ab-3ac+b^2-3bc+9c^2)",
+        "ianswer": "(a+b+3c)(a^2+b^2+9c^2-ab-3bc-3ca)",
+        "result": 1
+      },
+      {
+        "answer": "(x+y+2z)(x^2+y^2+4z^2-xy-2yz-2zx)",
+        "ianswer": "(x+y+2z)(x^2-xy-2xz+y^2-2yz+4z^2)",
+        "result": 1
+      },
+      {
+        "answer": "(x+y+2z)(x^2+y^2+4z^2-xy-2yz-2zx)",
+        "ianswer": "(x+y+2z)(x^2+y^2+4z^2-xy-2yz-2xz)",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{1}{3}x+4y)(\\frac{1}{3}x-4y)",
+        "ianswer": "(\\frac{x}{3}+4y)(-4y+\\frac{x}{3})",
+        "result": 1
+      },
+      {
+        "answer": "4xy+6x^2y",
+        "ianswer": "xy(4x+3x)",
+        "result": 0
+      },
+      {
+        "answer": "-(x-1)(2x-1)",
+        "ianswer": "(1-x)(2x-1)",
+        "result": 1
+      },
+      {
+        "answer": "-x(3x-2)",
+        "ianswer": "x(2-3x)",
+        "result": 1
+      },
+      {
+        "answer": "-7x(1+2y)",
+        "ianswer": "7x(-1-2y)",
+        "result": 1
+      },
+      {
+        "answer": "-3(x+y)(x-y)",
+        "ianswer": "3(x+y)(-x+y)",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "data": [
+      {
+        "answer": "x\\lt4",
+        "ianswer": "4\\gtx",
+        "result": 1
+      },
+      {
+        "answer": "x\\lt\\frac{1}{2}",
+        "ianswer": "0.5\\gtx",
+        "result": 1
+      },
+      {
+        "answer": "a=12",
+        "ianswer": "12=a",
+        "result": 1
+      },
+      {
+        "answer": "b=2\\neq",
+        "ianswer": "2\\neq b",
+        "result": 0
+      },
+      {
+        "answer": "x\\gt\\frac{a-b}{2}",
+        "ianswer": "\\frac{a}{2}-\\frac{b}{2}\\ltx",
+        "result": 1
+      },
+      {
+        "answer": "x\\gt\\frac{9-a}{5}",
+        "ianswer": "1.8-\\frac{a}{5}\\ltx",
+        "result": 1
+      },
+      {
+        "answer": "x=5",
+        "ianswer": "x=3+2",
+        "result": 0
+      },
+      {
+        "answer": "a<3",
+        "ianswer": "3>a",
+        "result": 1
+      },
+      {
+        "answer": "-2\\le a<\\frac{3}{2}",
+        "ianswer": "\\frac{3}{2}>a\\ge -2",
+        "result": 1
+      },
+      {
+        "answer": "-2<a\\le 3",
+        "ianswer": "3\\ge a>-2",
+        "result": 1
+      },
+      {
+        "answer": "-3<x<2",
+        "ianswer": "2>x>-3",
+        "result": 1
+      },
+      {
+        "answer": "x\\ge -\\frac{11}{4}",
+        "ianswer": "-2.75\\le x",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2}{3}<a<\\frac{5}{2}",
+        "ianswer": "\\frac{2}{3}<a<2.5",
+        "result": 1
+      },
+      {
+        "answer": "5=2x+3x",
+        "ianswer": "3x+2x=5",
+        "result": 1
+      },
+      {
+        "answer": "7(1-2x)=4(3-x)",
+        "ianswer": "7-14x=12-4x",
+        "result": 0
+      },
+      {
+        "answer": "5x+8(12-x)<90",
+        "ianswer": "96-3x<90",
+        "result": 0
+      },
+      {
+        "answer": "-a+b=0",
+        "ianswer": "a-b=0",
+        "result": 0
+      },
+      {
+        "answer": "x<\\frac{7}{10}-\\frac{a}{10}",
+        "ianswer": "x<\\frac{7}{10}-\\frac{1}{10}a",
+        "result": 1
+      },
+      {
+        "answer": "x\\le \\frac{1}{5}a+\\frac{3}{5}",
+        "ianswer": "x\\le \\frac{a+3}{5}",
+        "result": 1
+      },
+      {
+        "answer": "x\\le \\frac{-a+7}{3}",
+        "ianswer": "x\\le -\\frac{a-7}{3}",
+        "result": 1
+      },
+      {
+        "answer": "x\\le \\frac{-a+7}{3}",
+        "ianswer": "x\\le -\\frac{a-7}{3}",
+        "result": 1
+      },
+      {
+        "answer": "x\\le \\frac{8-2a}{9}",
+        "ianswer": "x\\le -\\frac{2a-8}{9}",
+        "result": 1
+      },
+      {
+        "answer": "-\\frac{1}{2}",
+        "ianswer": "-0.5",
+        "result": 1
+      },
+      {
+        "answer": "b\\ge 0.5",
+        "ianswer": "\\frac{1}{2}\\le b",
+        "result": 1
+      },
+      {
+        "answer": "b\\neq2",
+        "ianswer": "2\\neqb",
+        "result": 1
+      },
+      {
+        "answer": "(-a-3)x=b-5",
+        "ianswer": "-ax-3x=b-5",
+        "result": 0
+      },
+      {
+        "answer": "(a-3)x=-2-\\frac{1}{2}b",
+        "ianswer": "ax-3x=2-\\frac{1}{2}b",
+        "result": 0
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "data": [
+      {
+        "answer": "가",
+        "ianswer": "나",
+        "result": 0
+      },
+      {
+        "answer": "가나",
+        "ianswer": "가나",
+        "result": 1
+      },
+      {
+        "answer": "0",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "3\\lt x",
+        "ianswer": "x\\gt 3",
+        "result": 1
+      },
+      {
+        "answer": "3>x",
+        "ianswer": "3\\gt x",
+        "result": 1
+      },
+      {
+        "answer": "3x+32+y",
+        "ianswer": "x+2x+\\frac{64}{2}+2y-y",
+        "result": 1
+      },
+      {
+        "answer": "x>-30",
+        "ianswer": "X<\\frac{l3}{42}",
+        "result": 0
+      },
+      {
+        "answer": "500(12-x)+800x\\le 9000",
+        "ianswer": "500x+800(12-x)\\le 9000",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{3}{1}",
+        "ianswer": "3\\frac{4}{1}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{2}{a+2}<x",
+        "ianswer": "\\frac{4}{a+1}<x",
+        "result": 0
+      },
+      {
+        "answer": "x\\le \\frac{5}{2a}",
+        "ianswer": "x<-\\frac{3}{a}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{2}<x\\le \\frac{20}{3}",
+        "ianswer": "\\frac{20}{3}\\ge x>0.5",
+        "result": 1
+      },
+      {
+        "answer": "1<x<3",
+        "ianswer": "3>x>1",
+        "result": 1
+      },
+      {
+        "answer": "1\\le \\frac{x}{2}+3\\le 3.4",
+        "ianswer": "\\frac{17}{5}\\ge 0.5x+3\\ge 1",
+        "result": 1
+      },
+      {
+        "answer": "-0.2<0.5x+1<\\frac{3}{2}",
+        "ianswer": "1.5>\\frac{x+2}{2}>-\\frac{1}{5}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a}{3}<2x+4\\le \\frac{4}{3}a+5",
+        "ianswer": "\\frac{4a}{3}+5\\ge 2(x+2)> \\frac{1}{3}a",
+        "result": 1
+      },
+      {
+        "answer": "0<\\frac{1}{2}x<\\frac{3}{5}x-3",
+        "ianswer": "\\frac{3x-15}{5}>0.5x>0",
+        "result": 1
+      },
+      {
+        "answer": "0<x<1",
+        "ianswer": "1<x<0",
+        "result": 0
+      },
+      {
+        "answer": "0<x<\\frac{1}{2}",
+        "ianswer": "\\frac{1}{2}>x",
+        "result": 0
+      },
+      {
+        "answer": "0<x+1<\\frac{1}{2}",
+        "ianswer": "0.5>x-1>0",
+        "result": 0
+      },
+      {
+        "answer": "1\\le \\frac{x}{2}\\le 5",
+        "ianswer": "1\\ge \\frac{x}{2}\\ge 5",
+        "result": 0
+      },
+      {
+        "answer": "9>3x",
+        "ianswer": "x<3",
+        "result": 1
+      },
+      {
+        "answer": "x^2-5x=3",
+        "ianswer": "y^2-5y=3",
+        "result": 0
+      },
+      {
+        "answer": "xy=3",
+        "ianswer": "xy=5",
+        "result": 0
+      },
+      {
+        "answer": "(x-3)^2+(y+4)^2=25",
+        "ianswer": "x^2-6x+y^2+8x=25",
+        "result": 0
+      },
+      {
+        "answer": "(x+5)^{2}+(y-2)^{2}=4",
+        "ianswer": "0=",
+        "result": 0
+      },
+      {
+        "answer": "\\left|-10\\right|",
+        "ianswer": "\\left|-7-3\\right|",
+        "result": 1
+      },
+      {
+        "answer": "-10",
+        "ianswer": "-3-7",
+        "result": 1
+      },
+      {
+        "answer": "y=x",
+        "ianswer": "y+3=2x+3-x",
+        "result": 1
+      },
+      {
+        "answer": "y=x+1",
+        "ianswer": "x=y-1",
+        "result": 1
+      },
+      {
+        "answer": "4x",
+        "ianswer": "x+3x",
+        "result": 1
+      },
+      {
+        "answer": "y=x+1",
+        "ianswer": "x=y+1",
+        "result": 0
+      },
+      {
+        "answer": "y-8=17(x+8)",
+        "ianswer": "y=17(x+8)+8",
+        "result": 1
+      },
+      {
+        "answer": "y=\\frac{12}{x}",
+        "ianswer": "xy=12",
+        "result": 1
+      },
+      {
+        "answer": "y+3=6(x-5)",
+        "ianswer": "y-9=6(x-7)",
+        "result": 1
+      },
+      {
+        "answer": "y=2x",
+        "ianswer": "2y=4x",
+        "result": 1
+      },
+      {
+        "answer": "y\\ge x+2",
+        "ianswer": "x\\le y-2",
+        "result": 1
+      },
+      {
+        "answer": "y\\ge x+2",
+        "ianswer": "x\\ge y-2",
+        "result": 0
+      },
+      {
+        "answer": "z\\ge 0",
+        "ianswer": "[0,\\infty)",
+        "result": 0
+      },
+      {
+        "answer": "\\sin A",
+        "ianswer": "\\sin{A}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{9-\\sqrt(313)}{-2}",
+        "ianswer": "-\\frac{9}{2}+\\frac{\\sqrt(313)}{2}",
+        "result": 1
+      },
+      {
+        "answer": "1 \\pm",
+        "ianswer": "1",
+        "result": 0
+      },
+      {
+        "answer": "x+2x-3x",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "x+2x-3x",
+        "ianswer": "0x",
+        "result": 1
+      },
+      {
+        "answer": "y=4x",
+        "ianswer": "\\frac{y}{x}=4",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3\\pm \\sqrt{13}}{-2}",
+        "ianswer": "\\frac{-3\\pm \\sqrt{13}}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3\\pm \\sqrt{13}}{-2}",
+        "ianswer": "-\\frac{3\\pm \\sqrt{13}}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\pm \\frac{\\sqrt{13}}{2}",
+        "ianswer": "\\frac{\\pm \\sqrt{13}}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{e}{f}=\\frac{3}{4}",
+        "ianswer": "\\frac{f}{e}=\\frac{4}{3}",
+        "result": 1
+      },
+      {
+        "answer": "y=6x-33",
+        "ianswer": "y+3=6(x-5)",
+        "result": 1
+      },
+      {
+        "answer": "-6x+y=-33",
+        "ianswer": "y+3=6(x-5)",
+        "result": 1
+      },
+      {
+        "answer": "3x-4y=5",
+        "ianswer": "-6x+8y=-10",
+        "result": 1
+      },
+      {
+        "answer": "f(x)=3x+2",
+        "ianswer": "fx=3x+2",
+        "result": 1
+      },
+      {
+        "answer": "y=\\frac{12}{x}",
+        "ianswer": "2yx=24",
+        "result": 1
+      },
+      {
+        "answer": "\\left|x-y\\right|",
+        "ianswer": "\\left|y-x\\right|",
+        "result": 1
+      },
+      {
+        "answer": "\\left|-3\\right|",
+        "ianswer": "3",
+        "result": 1
+      },
+      {
+        "answer": "x^2",
+        "ianswer": "x*x",
+        "result": 1
+      },
+      {
+        "answer": "x^2-6x+9",
+        "ianswer": "(x-3)^2",
+        "result": 1
+      },
+      {
+        "answer": "x=4",
+        "ianswer": "\\frac{3}{\\frac{3}{4}}=x",
+        "result": 1
+      },
+      {
+        "answer": "x+y",
+        "ianswer": "x+y+",
+        "result": 0
+      },
+      {
+        "answer": "x+y",
+        "ianswer": "x+y-",
+        "result": 0
+      },
+      {
+        "answer": "\\nthroot{5}{a^4}",
+        "ianswer": "a^{\\frac{4}{5}}",
+        "result": 1
+      },
+      {
+        "answer": "847.6",
+        "ianswer": "847+\\frac{3}{5}",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "2.00",
+        "result": 1
+      },
+      {
+        "answer": "-3",
+        "ianswer": "\\frac{-3}{1}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{256}{1280}",
+        "ianswer": "\\frac{1}{5}",
+        "result": 1
+      },
+      {
+        "answer": "2x+2\\left(45\\right)",
+        "ianswer": "2x+90",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{c}{a+b}",
+        "ianswer": "\\frac{1}{\\frac{a}{c}+\\frac{b}{c}}",
+        "result": 1
+      },
+      {
+        "answer": "\\left(9^{8}\\right)^{3}",
+        "ianswer": "9^{24}",
+        "result": 1
+      },
+      {
+        "answer": "\\nthroot{5}{a^3}",
+        "ianswer": "a^{\\frac{3}{5}}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{s-1}{3-s}",
+        "ianswer": "-\\frac{s-1}{s-3}",
+        "result": 1
+      },
+      {
+        "answer": "x+\\left(x+1\\right)+\\left(x+2\\right)+\\left(x+3\\right)=-46",
+        "ianswer": "4x+6=-46",
+        "result": 1
+      },
+      {
+        "answer": "3x+3y-3x",
+        "ianswer": "3x+3y-3y",
+        "result": 0
+      },
+      {
+        "answer": "9",
+        "ianswer": "\\sqrt{81}",
+        "result": 1
+      },
+      {
+        "answer": "x\\sqrt{x}",
+        "ianswer": "x^{\\frac{3}{2}}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{12}{7}",
+        "ianswer": "\\frac{1}{\\frac{1}{3}+\\frac{1}{4}}",
+        "result": 1
+      },
+      {
+        "answer": "1=\\frac{50xy}{3y+2x}",
+        "ianswer": "\\frac{100}{\\frac{1}{4x}+\\frac{1}{6y}}=24",
+        "result": 1
+      },
+      {
+        "answer": "10(x+2)+10(x+4)-10(x+3)=5(2x+6)",
+        "ianswer": "\\frac{x+2}{5}+\\frac{x+4}{5}-\\frac{x+3}{5}=\\frac{2x+6}{10}",
+        "result": 0
+      },
+      {
+        "answer": "6x+4y",
+        "ianswer": "3x+2y+2y+3x",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}bh",
+        "ianswer": "\\frac{bh}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2}{5}\\cdot x\\cdot \\frac{3}{4}",
+        "ianswer": "\\frac{3x}{10}",
+        "result": 1
+      },
+      {
+        "answer": "x=6",
+        "ianswer": "x\\cdot 7=42",
+        "result": 1
+      },
+      {
+        "answer": "0.22\\cdot h",
+        "ianswer": "\\frac{11h}{50}",
+        "result": 1
+      },
+      {
+        "answer": "36=\\left(x+y\\right)\\left(9\\right)",
+        "ianswer": "x+y=4",
+        "result": 1
+      },
+      {
+        "answer": "6.39b+6.99c+7.16h",
+        "ianswer": "6(b+c+h)+0.39b+0.99c+1.16h",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{7}{a+2}",
+        "ianswer": "7(a+2)^{-1}",
+        "result": 1
+      },
+      {
+        "answer": "2\\left(5\\right)+2x\\geq 10",
+        "ianswer": "x\\geq 0",
+        "result": 1
+      },
+      {
+        "answer": "0.75x\\leq 3",
+        "ianswer": "x\\leq 4",
+        "result": 1
+      },
+      {
+        "answer": "15+2x\\leq 25",
+        "ianswer": "x\\leq 5",
+        "result": 1
+      },
+      {
+        "answer": "21\\cdot \\left(\\frac{\\sqrt{2}}{2}\\right)^{n-1}",
+        "ianswer": "\\frac{21}{\\sqrt{2^{n-1}}}",
+        "result": 1
+      },
+      {
+        "answer": "2^n",
+        "ianswer": "2\\cdot 2^{n-1}",
+        "result": 1
+      },
+      {
+        "answer": "x\\leq 20",
+        "ianswer": "\\frac{x}{4}\\leq 5",
+        "result": 1
+      },
+      {
+        "answer": "1150\\leq 12g+550\\leq 1450",
+        "ianswer": "50\\leq g\\leq 75",
+        "result": 1
+      },
+      {
+        "answer": "19",
+        "ianswer": "2+4+6+7",
+        "result": 1
+      },
+      {
+        "answer": "y=580\\cdot 1.03^{t}",
+        "ianswer": "\\frac{y}{1.08^{t}}=580",
+        "result": 0
+      },
+      {
+        "answer": "1.03^t",
+        "ianswer": "1.03^t",
+        "result": 1
+      },
+      {
+        "answer": "1.03^t",
+        "ianswer": "1.08^t",
+        "result": 0
+      },
+      {
+        "answer": "A=500\\cdot 1.01^{4t}",
+        "ianswer": "A=500\\cdot 1.04060401^{t}",
+        "result": 1
+      },
+      {
+        "answer": "A=500\\cdot 1.01^{4t}",
+        "ianswer": "A=500\\cdot (1.01^4)^{t}",
+        "result": 1
+      },
+      {
+        "answer": "S=750\\cdot 0.5^{\\frac{x}{30}}",
+        "ianswer": "S=750\\cdot 2^{-\\frac{x}{30}}",
+        "result": 0
+      },
+      {
+        "answer": "20.5x+57.3\\cdot 2",
+        "ianswer": "205x+573\\cdot 2",
+        "result": 0
+      },
+      {
+        "answer": "20.5x+57.3\\cdot 2",
+        "ianswer": "\\frac{205x+573\\cdot 2}{10}",
+        "result": 1
+      },
+      {
+        "answer": "5^{x+1}",
+        "ianswer": "5\\left(5\\right)^{x}",
+        "result": 1
+      },
+      {
+        "answer": "5^{1+x}",
+        "ianswer": "7^x",
+        "result": 0
+      },
+      {
+        "answer": "y=4x",
+        "ianswer": "y=\\frac{4}{1}x",
+        "result": 1
+      },
+      {
+        "answer": "2x=22",
+        "ianswer": "5x=55",
+        "result": 1
+      },
+      {
+        "answer": "y-60=\\frac{3}{2}\\left(x-30\\right)",
+        "ianswer": "y=\\frac{3}{2}x+15",
+        "result": 1
+      },
+      {
+        "answer": "4x^2+10x+6",
+        "ianswer": "\\left(2x+5\\right)+\\left(-3x^{2}+8x+2\\right)+\\left(7x^{2}-1\\right)",
+        "result": 1
+      },
+      {
+        "answer": "3^{24}",
+        "ianswer": "\\frac{9^{24}}{3^{24}}",
+        "result": 1
+      },
+      {
+        "answer": "2x^{2}\\left(x-1\\right)^{2}",
+        "ianswer": "2\\left(x^2-x\\right)^{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}\\pi r^{2}",
+        "ianswer": "\\left(2\\pi r^2\\right)^{-1}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{2}\\pi r^{2}",
+        "ianswer": "\\pi",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{x^{9}y^{6}}{xy}",
+        "ianswer": "x^{8}y^{5}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a^{5}}{a^{2}}",
+        "ianswer": "a^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a^{5}}{a^{2}}",
+        "ianswer": "a^{5}a^{-2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{b^{8}}{b^{5}}",
+        "ianswer": "b^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{c^{2}}",
+        "ianswer": "c^{-2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3\\sqrt{5}}{5}",
+        "ianswer": "\\frac{3}{\\sqrt{5}}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{3\\sqrt{5}}{5}",
+        "ianswer": "3\\cdot 5^{-\\frac{1}{2}}",
+        "result": 1
+      },
+      {
+        "answer": "\\left(x-h\\right)^{2}+\\left(y-k\\right)^{2}",
+        "ianswer": "x^2-2xh+h^2+y^2-2ky+k^2",
+        "result": 1
+      },
+      {
+        "answer": "y=\\frac{x^{2}}{5}-\\frac{3}{5}",
+        "ianswer": "y=\\frac{x^{2}-3}{5}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{x}{2}+\\frac{1}{2}",
+        "ianswer": "\\frac{x+1}{2}",
+        "result": 1
+      },
+      {
+        "answer": "-2\\pm \\sqrt{x-5}",
+        "ianswer": "-2\\pm \\left(x-5\\right)^{\\frac{1}{2}}",
+        "result": 1
+      },
+      {
+        "answer": "\\log_{2}{32}",
+        "ianswer": "5",
+        "result": 0
+      },
+      {
+        "answer": "y=10\\left(1.5\\right)^{x}",
+        "ianswer": "y=10\\left(1+0.5\\right)^{x}",
+        "result": 1
+      },
+      {
+        "answer": "2x^{2}+2x+3+\\frac{6}{x-1}",
+        "ianswer": "\\frac{2x^{3}+x+3}{x-1}",
+        "result": 1
+      },
+      {
+        "answer": "x^4-4x^3-20x^2+104x-105",
+        "ianswer": "\\left(x+5\\right)\\left(x-3\\right)\\left(x-3+\\sqrt{2}\\right)\\left(x-3-\\sqrt{2}\\right)",
+        "result": 1
+      },
+      {
+        "answer": "y-3=\\frac{4}{3}\\left(x-8\\right)",
+        "ianswer": "y+1=\\frac{4}{3}\\left(x-5\\right)",
+        "result": 1
+      },
+      {
+        "answer": "24\\cdot \\left(\\frac{1}{2}\\right)^{4-1}",
+        "ianswer": "24\\cdot 2^{-3}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{12500}{1.05^{5}}",
+        "ianswer": "12500\\cdot 1.05^{-5}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+        "ianswer": "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+        "result": 1
+      },
+      {
+        "answer": "y=50\\left(0.9\\right)^{x}",
+        "ianswer": "y=50\\left(0.7\\right)^{x}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+        "ianswer": "\\frac{n}{2}\\left(a_{2}+a_{n}\\right)",
+        "result": 0
+      },
+      {
+        "answer": "x=2",
+        "ianswer": "x=\\frac{(\\frac{4}{2})^{3}+4}{6}",
+        "result": 1
+      },
+      {
+        "answer": "(3+2)x<5",
+        "ianswer": "(3+2){x<4}x<5",
+        "result": 0
+      },
+      {
+        "answer": "3\\lt x",
+        "ianswer": "x\\gt 3",
+        "result": 1
+      },
+      {
+        "answer": "x-2\\le 4x-14",
+        "ianswer": "4\\le x",
+        "result": 1
+      },
+      {
+        "answer": "9>3x",
+        "ianswer": "x<3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}<x\\le \\frac{20}{3}",
+        "ianswer": "\\frac{20}{3}\\ge x>0.5",
+        "result": 1
+      },
+      {
+        "answer": "1<x<3",
+        "ianswer": "3>x>1",
+        "result": 1
+      },
+      {
+        "answer": "1\\le \\frac{x}{2}+3\\le 3.4",
+        "ianswer": "\\frac{17}{5}\\ge 0.5x+3\\ge 1",
+        "result": 1
+      },
+      {
+        "answer": "-0.2<0.5x+1<\\frac{3}{2}",
+        "ianswer": "1.5>\\frac{x+2}{2}>-\\frac{1}{5}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{a}{3}<2x+4\\le \\frac{4}{3}a+5",
+        "ianswer": "\\frac{4a}{3}+5\\ge 2(x+2)> \\frac{1}{3}a",
+        "result": 1
+      },
+      {
+        "answer": "0<\\frac{1}{2}x<\\frac{3}{5}x-3",
+        "ianswer": "\\frac{3x-15}{5}x>0.5x>0",
+        "result": 0
+      },
+      {
+        "answer": "0<\\frac{1}{2}x<\\frac{3}{5}x-3",
+        "ianswer": "\\frac{3x-15}{5}>0.5x>0",
+        "result": 1
+      },
+      {
+        "answer": "-3-7",
+        "ianswer": "-10",
+        "result": 1
+      },
+      {
+        "answer": "2x+3<5",
+        "ianswer": "x<1",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{x}{3}+\\frac{1}{3}+\\frac{x}{3}\\le 1",
+        "ianswer": "x\\le 1",
+        "result": 1
+      },
+      {
+        "answer": "ㄱ",
+        "ianswer": "ㄴ",
+        "result": 0
+      },
+      {
+        "answer": "ㄱ",
+        "ianswer": "ㄱ",
+        "result": 1
+      },
+      {
+        "answer": "가",
+        "ianswer": "각",
+        "result": 0
+      },
+      {
+        "answer": "+3",
+        "ianswer": "3",
+        "result": 1
+      },
+      {
+        "answer": "33\\le 3(x+4)\\le 42",
+        "ianswer": "11\\le (x+4)\\le 14",
+        "result": 1
+      },
+      {
+        "answer": "18\\le 2(6+x)\\le 22",
+        "ianswer": "18\\le 12+2x\\le 22",
+        "result": 1
+      },
+      {
+        "answer": "41+x\\le 3(9+x)",
+        "ianswer": "x\\ge 7",
+        "result": 1
+      },
+      {
+        "answer": "2(x+1)\\ge 5",
+        "ianswer": "x\\ge \\frac{3}{2}",
+        "result": 1
+      },
+      {
+        "answer": "(x+1)+2",
+        "ianswer": "x+3",
+        "result": 1
+      },
+      {
+        "answer": "30-x\\ge 3(6+x)",
+        "ianswer": "30-x\\ge 18+3x",
+        "result": 1
+      },
+      {
+        "answer": "30-x\\ge 3(6+x)",
+        "ianswer": "12\\ge 4x",
+        "result": 1
+      },
+      {
+        "answer": "30-x\\ge 3(6+x)",
+        "ianswer": "3\\ge x",
+        "result": 1
+      },
+      {
+        "answer": "2(3+x)\\ge 16",
+        "ianswer": "6+2x\\ge 16",
+        "result": 1
+      },
+      {
+        "answer": "2(3+x)\\ge 16",
+        "ianswer": "2x\\ge 10",
+        "result": 1
+      },
+      {
+        "answer": "2(3+x)\\ge 16",
+        "ianswer": "x\\ge 5",
+        "result": 1
+      },
+      {
+        "answer": "4000\\le 150(25-x)+200x\\le 4500",
+        "ianswer": "4000\\le 3750+50x\\le 4500",
+        "result": 1
+      },
+      {
+        "answer": "(-a+2)x^2+4x-(b+1)y+1=0",
+        "ianswer": "(-a+2)x^2+4x+(-b-1)y+1=0",
+        "result": 1
+      },
+      {
+        "answer": "150\\le 2(30+x)\\le 220",
+        "ianswer": "45\\le x\\le 80",
+        "result": 1
+      },
+      {
+        "answer": "x^2+y^2-5x+5y=0",
+        "ianswer": "(x-\\frac{5}{2})^2+(y+\\frac{5}{2})^{2}=\\frac{25}{2}",
+        "result": 1
+      },
+      {
+        "answer": "3\\le x\\le 5",
+        "ianswer": "3\\le x<5",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{2x+3}{x+2}",
+        "ianswer": "1+\\frac{x+1}{x+2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2x+3}{x+3}",
+        "ianswer": "1+\\frac{1}{\\frac{x+2}{1+x}}",
+        "result": 0
+      },
+      {
+        "answer": "0.6h",
+        "ianswer": "000.6h",
+        "result": 1
+      },
+      {
+        "answer": "n(n-1)(n-2)",
+        "ianswer": "n\\times (n-1)(n-2)",
+        "result": 1
+      },
+      {
+        "answer": "n(n+1)(n+2)",
+        "ianswer": "n\\times (n+1)\\times (n+2)",
+        "result": 1
+      },
+      {
+        "answer": "n(n-1)(n-2)(n-3)",
+        "ianswer": "n^4-6n^3+11n^2-6n",
+        "result": 1
+      },
+      {
+        "answer": "n(n-1)(n-2)",
+        "ianswer": "n^3-3n^2+2n",
+        "result": 1
+      },
+      {
+        "answer": "n(n-1)(n-2)(n-3)",
+        "ianswer": "(n^2-3n)(n^2-3n+2)",
+        "result": 1
+      },
+      {
+        "answer": "(n-1)(n-2)\\times (n-3)",
+        "ianswer": "(n-1)(n-2)(n-3)",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{n(n-1)(n-2)}{6}",
+        "ianswer": "\\frac{(n-1)n\\times (n-2)}{6}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2(4n-1)(2n-1)}{2}",
+        "ianswer": "\\frac{(4n-1)(4n-2)}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{(2n+2)(2n+1)}{2}",
+        "ianswer": "\\frac{(2(n+1))(2n+1)}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{(2n+1)\\times 2n}{2}",
+        "ianswer": "2n^2+n",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{(2n+2)(2n+1)}{2}",
+        "ianswer": "\\frac{2(n+1)(2n+1)}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{(4n-1)(4n-2)}{2}",
+        "ianswer": "\\frac{2(2n-1)(4n-1)}{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{n(n-1)(n-2)}{6}",
+        "ianswer": "\\frac{n(n-1)\\times (n-2)}{6}",
+        "result": 1
+      },
+      {
+        "answer": "(n-1)(n-2)\\times (n-3)",
+        "ianswer": "(n-1)(n-2)(n-3)",
+        "result": 1
+      },
+      {
+        "answer": "n(n-1)(n-2)(n-3)",
+        "ianswer": "n^4-6n^3+11n^2-6n",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\sqrt{4}",
+        "result": 1
+      },
+      {
+        "answer": "(6+x)^2=4(6-x)^2",
+        "ianswer": "x^2-20x+36=0",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}a-\\frac{5}{2}=0",
+        "ianswer": "a=5",
+        "result": 1
+      },
+      {
+        "answer": "AF",
+        "ianswer": "af",
+        "result": 0
+      },
+      {
+        "answer": "3x^2-2x+6",
+        "ianswer": "(x^2+3x+2)+(2x^2-5x+4)",
+        "result": 1
+      },
+      {
+        "answer": "6+3x^2-2x",
+        "ianswer": "(x^2+3x+2)+(2x^2-5x+4)",
+        "result": 1
+      },
+      {
+        "answer": "2^(-4)",
+        "ianswer": "4^(-2)",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{b}{a^3}",
+        "ianswer": "a^{-3}b",
+        "result": 1
+      },
+      {
+        "answer": "(\\log_{4}{8})^{2}",
+        "ianswer": "2",
+        "result": 0
+      },
+      {
+        "answer": "x-1=0",
+        "ianswer": "x=1",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{x}{4t}+\\frac{y}{2t}=1",
+        "ianswer": "y=-\\frac{1}{2}x+2t",
+        "result": 1
+      },
+      {
+        "answer": "2",
+        "ianswer": "\\nthroot[3]{8}",
+        "result": 1
+      },
+      {
+        "answer": "x^2+y^2=4",
+        "ianswer": "\\sqrt{x^2+y^2}=2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{-1}{2}x",
+        "ianswer": "-\\frac{1}{2}x",
+        "result": 1
+      },
+      {
+        "answer": "2x-2\\le x+2k",
+        "ianswer": "x+2k\\ge 2(x-1)",
+        "result": 1
+      },
+      {
+        "answer": "8^n",
+        "ianswer": "2^{3n}",
+        "result": 1
+      },
+      {
+        "answer": "125xy \\le \\frac{25}{3}xy\\le 200y",
+        "ianswer": "15\\le x\\le 24",
+        "result": 0
+      },
+      {
+        "answer": "125\\pi \\le \\frac{25}{3}\\pi x\\le 200\\pi ",
+        "ianswer": "15\\le x\\le 24",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2}a-\\frac{23}{4}=0",
+        "ianswer": "\\frac{1}{2}a=\\frac{23}{4}",
+        "result": 1
+      },
+      {
+        "answer": "360\\pi < 12\\pi x< 480\\pi ",
+        "ianswer": "30<x<40",
+        "result": 1
+      },
+      {
+        "answer": "\\left(x^{2a}\\right)^{5=A^5}",
+        "ianswer": "\\left(x^{2a}\\right)^{5=A^5}",
+        "result": 1
+      },
+      {
+        "answer": "1\\pm 2",
+        "ianswer": "1\\mp 2",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{x}{3}+1",
+        "ianswer": "x\\div 3+1",
+        "result": 1
+      },
+      {
+        "answer": "3(x-\\frac{2}{5})",
+        "ianswer": "3x-\\frac{6}{5}",
+        "result": 1
+      },
+      {
+        "answer": "9-8p>0",
+        "ianswer": "(-3)^2-4\\times 1\\times 2p>0",
+        "result": 1
+      },
+      {
+        "answer": "9-8p> 0",
+        "ianswer": "(3)^2-4\\times 1\\times 2p> 0",
+        "result": 1
+      },
+      {
+        "answer": "3^2",
+        "ianswer": "(-3)^2",
+        "result": 1
+      },
+      {
+        "answer": "x-\\frac{1}{5}x",
+        "ianswer": "\\frac{4}{5}x",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{\\frac{13a}{40}}{260+x}",
+        "ianswer": "\\frac{13}{40}a\\div (260+x)",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "data": [
+      {
+        "answer": "07",
+        "ianswer": "7",
+        "result": 1
+      },
+      {
+        "answer": "00102",
+        "ianswer": "1020",
+        "result": 0
+      },
+      {
+        "answer": "0",
+        "ianswer": "1",
+        "result": 0
+      },
+      {
+        "answer": "0",
+        "ianswer": "00",
+        "result": 1
+      },
+      {
+        "answer": "0",
+        "ianswer": "0",
+        "result": 1
+      },
+      {
+        "answer": "010a",
+        "ianswer": "10a",
+        "result": 1
+      },
+      {
+        "answer": "010a + 20b",
+        "ianswer": "20b + 10a",
+        "result": 0
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "data": [
+      {
+        "answer": "(\\frac{1}{4})^3",
+        "ianswer": "\\frac{1^3}{4^3}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1^3}{4^3}",
+        "ianswer": "\\frac{1}{4^3}",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{2}{3})^3",
+        "ianswer": "\\frac{2^3}{3^3}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2^3\\times 5^2}",
+        "ianswer": "\\frac{1}{2^3}\\times \\frac{1}{5^2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2^3\\times 5^2}",
+        "ianswer": "(\\frac{1}{2})^3\\times (\\frac{1}{5})^2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2^3}{7^3}",
+        "ianswer": "(\\frac{2}{7})^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2^3\\times 5^2}",
+        "ianswer": "\\frac{1}{5^2}\\times \\frac{1^2}{2^3}",
+        "result": 1
+      },
+      {
+        "answer": "a^2\\times b^3",
+        "ianswer": "b^3\\times a^2",
+        "result": 1
+      },
+      {
+        "answer": "x^2+y^3",
+        "ianswer": "y^3+x^2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{2^2\\times 3^2}",
+        "ianswer": "\\frac{1}{3^2}\\times \\frac{1}{2^2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{3^2}",
+        "ianswer": "(\\frac{1}{3})^2",
+        "result": 1
+      },
+      {
+        "answer": "x\\times y^2",
+        "ianswer": "y^2\\times x",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{3^2\\times 7}",
+        "ianswer": "\\frac{1}{7}\\times \\frac{1}{3^2}",
+        "result": 1
+      },
+      {
+        "answer": "3^2\\times 5^2",
+        "ianswer": "(5\\times 3)^2",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{2}{3})^2\\times (\\frac{5}{7})^2",
+        "ianswer": "\\frac{5^2}{7^2}\\times \\frac{2^2}{3^2}",
+        "result": 1
+      },
+      {
+        "answer": "3^3\\times 5\\times 7^2",
+        "ianswer": "7^2\\times 3^3\\times 5",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{1}{3})^3\\times (\\frac{5}{7})^2\\times (\\frac{11}{13})^2",
+        "ianswer": "\\frac{1}{3^3}\\times (\\frac{11}{13})^2\\times (\\frac{5}{7})^2",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{3}{5})^3\\times (\\frac{1}{2})^3",
+        "ianswer": "\\frac{1}{2^3}\\times (\\frac{3}{5})^3",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2^4\\times 5^2}{3^4\\times 7^2}",
+        "ianswer": "\\frac{2^4\\times 5^2}{3^4\\times 7^2}",
+        "result": 1
+      },
+      {
+        "answer": "(\\frac{2}{3})^4\\times (\\frac{5}{7})^2",
+        "ianswer": "\\frac{2^4\\times 5^2}{3^4\\times 7^2}",
+        "result": 1
+      },
+      {
+        "answer": "2^2\\times 3^2",
+        "ianswer": "9\\times 4",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{1}{3\\times 5\\times 7^2}",
+        "ianswer": "\\frac{1}{3}\\times \\frac{1}{5}\\times \\frac{1}{7^2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{3\\times 5\\times 7^2}",
+        "ianswer": "\\frac{1}{3}\\times \\frac{1}{5}\\times (\\frac{1}{7})^2",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "data": [
+      {
+        "answer": "\\frac{5}{3}",
+        "ianswer": "\\frac{10}{6}",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "data": [
+      {
+        "answer": "A\\cup B",
+        "ianswer": "B\\cup A",
+        "result": 1
+      },
+      {
+        "answer": "A\\cap B",
+        "ianswer": "B\\cap A",
+        "result": 1
+      },
+      {
+        "answer": "A^C\\cup B^C",
+        "ianswer": "B^C\\cup A^C",
+        "result": 1
+      },
+      {
+        "answer": "A",
+        "ianswer": "A",
+        "result": 1
+      },
+      {
+        "answer": "X\\cap Y\\cap Z",
+        "ianswer": "Y\\cap X\\cap Z",
+        "result": 1
+      },
+      {
+        "answer": "B^C",
+        "ianswer": "B^C",
+        "result": 1
+      },
+      {
+        "answer": "a\\cap b",
+        "ianswer": "A\\cap B",
+        "result": 0
+      },
+      {
+        "answer": "A\\cap (B\\cap C)",
+        "ianswer": "(C\\cap B)\\cap A",
+        "result": 1
+      },
+      {
+        "answer": "(A\\cap B)\\cap C",
+        "ianswer": "A\\cap (B\\cap C)",
+        "result": 1
+      },
+      {
+        "answer": "A\\cup B\\cup C",
+        "ianswer": "A\\cup (B\\cup C)",
+        "result": 1
+      },
+      {
+        "answer": "A\\cup (B\\cap C)",
+        "ianswer": "(A\\cup B)\\cap C",
+        "result": 0
+      },
+      {
+        "answer": "(A\\cup B)\\cap (A\\cup C)",
+        "ianswer": "(B\\cup A)\\cap (C\\cup A)",
+        "result": 1
+      },
+      {
+        "answer": "(A\\cup B)\\cap (A\\cup C)",
+        "ianswer": "(C\\cup A)\\cap (B\\cup A)",
+        "result": 1
+      },
+      {
+        "answer": "A^C\\cap B\\cup C^C",
+        "ianswer": "B\\cup C^C\\cap A",
+        "result": 0
+      },
+      {
+        "answer": "(A\\cup B)^C",
+        "ianswer": "(B\\cup A)^C",
+        "result": 1
+      },
+      {
+        "answer": "A^C",
+        "ianswer": "A^c",
+        "result": 0
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "data": [
+      {
+        "answer": "\\nthroot[n+1]{a^{n+2}}",
+        "ianswer": "a^{1+\\frac{1}{n+1}}",
+        "result": 0
+      },
+      {
+        "answer": "\\frac{b^2}{a}",
+        "ianswer": "a^{-1}b^2",
+        "result": 1
+      },
+      {
+        "answer": "a^{-6}b^4",
+        "ianswer": "\\frac{b^4}{a^6}",
+        "result": 1
+      },
+      {
+        "answer": "a^{0.5}",
+        "ianswer": "a^{\\frac{1}{2}}",
+        "result": 1
+      },
+      {
+        "answer": "a^{\\frac{1}{2}}",
+        "ianswer": "\\sqrt{a}",
+        "result": 1
+      },
+      {
+        "answer": "(a+a^(-1))(a-a^(-1))",
+        "ianswer": "(a+\\frac{1}{a})(a-\\frac{1}{a})",
+        "result": 1
+      },
+      {
+        "answer": "a^2b",
+        "ianswer": "ba^2",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{a^6b^2}",
+        "ianswer": "\\frac{1}{b^2a^6}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{b^3}{a^6}",
+        "ianswer": "b^3a^{-6}",
+        "result": 1
+      },
+      {
+        "answer": "-a^{-6}b^{-2}",
+        "ianswer": "-\\frac{1}{b^2a^6}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{a^2b^6}",
+        "ianswer": "\\frac{1}{b^6a^2}",
+        "result": 1
+      },
+      {
+        "answer": "\\nthroot[]{2}",
+        "ianswer": "\\sqrt{2}",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{2}{3\\nthroot{3}{x}}",
+        "ianswer": "\\frac{2}{3}x^(-\\frac{1}{3})",
+        "result": 1
+      },
+      {
+        "answer": "\\frac{1}{3\\times \\nthroot{3}{(x-2)^2}}",
+        "ianswer": "\\frac{1}{3\\nthroot{3}{(x-2)^2}}",
+        "result": 1
+      },
+      {
+        "answer": "24-6=18",
+        "ianswer": "24-18=6",
+        "result": 0
+      },
+      {
+        "answer": "1+(-2)",
+        "ianswer": "1-2",
+        "result": 1
+      },
+      {
+        "answer": "11.6-(-2.3)",
+        "ianswer": "11.6+2.3",
+        "result": 1
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "data": [
+      {
+        "answer": "(b+c)a^2+(b^2+c^2+2bc)a+b^2c+bc^2",
+        "ianswer": "(b+c)a^2+(b^2+c^2+2bc)a+b^2c+c^2b",
+        "result": 1
+      },
+      {
+        "answer": "(b+c)a^2+(b^2+c^2+2bc)a+b^2c+bc^2",
+        "ianswer": "a^2(b+c)+a(b^2+c^2+2bc)+b^2c+bc^2",
+        "result": 1
+      },
+      {
+        "answer": "(b+c)a^2+(b^2-c^2)a+b^2c-bc^2",
+        "ianswer": "(b+c)a^2+(b^2-c^2)a+cb^2-bc^2",
+        "result": 1
+      },
+      {
+        "answer": "(y-z)x^2+(-y^2+z^2)x+y^2z-yz^2",
+        "ianswer": "x^2(y-z)+x(z^2-y^2)+yz(y-z)",
+        "result": 0
+      },
+      {
+        "answer": "x^2+y^2",
+        "ianswer": "a",
+        "result": 0
+      },
+      {
+        "answer": "2(x-2)x",
+        "ianswer": "2x(2-x)",
+        "result": 0
+      },
+      {
+        "answer": "-x(a-3)",
+        "ianswer": "-1\\times (a-3)x",
+        "result": 1
+      }
+    ]
+  }
+]
