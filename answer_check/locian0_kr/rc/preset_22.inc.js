@@ -13,7 +13,7 @@ import {eqMulNeg} from '../rc/function_73.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 
-function no_decimal(tree = null) {
+export function no_decimal(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco()
 

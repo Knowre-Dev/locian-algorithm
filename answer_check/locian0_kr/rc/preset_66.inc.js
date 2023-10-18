@@ -9,7 +9,7 @@ import {mulFracSeparation} from '../rc/function_123.inc.js';
 import {sub_mulCommutative} from '../rc/function_126.inc.js';
 
 
-function 거듭제곱꼴만_가능(tree = null) {
+export function 거듭제곱꼴만_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {addNegaToSub} from '../rc/function_204.inc.js';
 
-function 고정(tree = null) {
+export function 고정(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

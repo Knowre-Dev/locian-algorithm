@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {varReverseShift} from '../rc/function_63.inc.js';
 
-function 역순밀림_가능(tree = null) {
+export function 역순밀림_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

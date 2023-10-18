@@ -19,7 +19,7 @@ import {decIdentity} from '../rc/function_86.inc.js';
 
 
 
-function set_bounds(tree = null, variable = ['anything', 'x']) {
+export function set_bounds(tree = null, variable = ['anything', 'x']) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

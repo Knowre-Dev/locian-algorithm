@@ -19,7 +19,7 @@ import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {decIdentity} from '../rc/function_86.inc.js';
 
 
-function no_identities(tree = null) {
+export function no_identities(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco()
     tree_1 = tree_1 ? tree_1 : laco.parse('3x+y+0+1a-0+\\frac{1}{2}x');

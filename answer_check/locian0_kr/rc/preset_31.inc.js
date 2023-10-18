@@ -16,7 +16,7 @@ import {rdecToFrac} from '../rc/function_78.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 
-function equiv_equations(tree = null) {
+export function equiv_equations(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

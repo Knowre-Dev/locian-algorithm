@@ -34,7 +34,7 @@ import {expToFrac} from '../rc/function_187.inc.js';
 import {eqIneqDivPi} from '../rc/function_202.inc.js';
 
 
-function 모두가능(tree = null, variable = ['anything', 'x']) {
+export function 모두가능(tree = null, variable = ['anything', 'x']) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     //tree_1 = $tree ? : laco.parse('ba+3xy+\overline{SCEAG});;
@@ -194,7 +194,7 @@ function 모두가능(tree = null, variable = ['anything', 'x']) {
 
 
 /*
-function 모두가능(tree_1 = null) {
+export function 모두가능(tree_1 = null) {
     tree_1 = laco.initialize(tree_1);
         laco.apply(evaluateEx);
         laco.finalize();

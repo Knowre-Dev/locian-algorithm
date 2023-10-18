@@ -11,7 +11,7 @@ import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {addFactoredFormVar} from '../rc/function_117.inc.js';
 
-function 기약분수만_가능(tree = null) {
+export function 기약분수만_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);    

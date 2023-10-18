@@ -22,7 +22,7 @@ import {expToFrac} from '../rc/function_187.inc.js';
 import {rootToExp} from '../rc/function_188.inc.js';
 import {nthrootToSquareroot} from '../rc/function_191.inc.js';
 
-function 식간단히_지수유리수(tree = null) {
+export function 식간단히_지수유리수(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);  

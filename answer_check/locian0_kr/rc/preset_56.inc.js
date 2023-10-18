@@ -20,7 +20,7 @@ import {sub_addFactorNegative} from '../rc/function_130.inc.js';
 import {sub_addFactored} from '../rc/function_162.inc.js';
 import {nthrootToSquareroot} from '../rc/function_191.inc.js';
 
-function 식_간단히(tree = null) {
+export function 식_간단히(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {mulCommutative} from '../rc/function_46.inc.js';
 
-function 곱셈_교환법칙(tree =  null) {
+export function 곱셈_교환법칙(tree =  null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();;
     laco.initialize(tree_1);

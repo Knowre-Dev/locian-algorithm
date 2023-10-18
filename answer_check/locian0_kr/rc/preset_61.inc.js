@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {mfracEquiv} from '../rc/function_110.inc.js';
 
-function 대분수_가능(tree = null) {
+export function 대분수_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('\mfrac[1]{1}{2}');

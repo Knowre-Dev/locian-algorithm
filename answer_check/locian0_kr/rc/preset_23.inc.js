@@ -1,6 +1,6 @@
 import {Laco} from '../libs/common.inc.js';
 
-function same(tree = null) {
+export function same(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     
