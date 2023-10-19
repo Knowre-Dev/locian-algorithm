@@ -1,0 +1,3747 @@
+[
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{1}{5}\\cdot 3",
+		"inswer" : "\\left(-\\frac{1}{5}\\right)\\cdot3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-5\\cdot 3",
+		"inswer" : "\\left(-5\\right)\\cdot3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{(a+b-c)}{d}",
+		"inswer" : "\\frac{a}{d}+\\frac{b}{d}-\\frac{c}{d}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "0.50x",
+		"inswer" : "\\frac{1}{2}x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "a+b-0",
+		"inswer" : "b-(-a)+0",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{\\frac{x\\sqrt{2}}{2}}{x}",
+		"inswer" : "\\frac{x\\sqrt{2}}{2x}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(a*b)(c*(d*e))",
+		"inswer" : "abcde",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3(t+1)",
+		"inswer" : "3t+3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "y=\\frac{k}{x}",
+		"inswer" : "xy=k",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(x-a)^2",
+		"inswer" : "(x-a)(x-a)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{a}{b}x(x-c)",
+		"inswer" : "\\frac{ax(x-c)}{b}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{a}{b}x(x-c)(x-d)",
+		"inswer" : "\\frac{ax(x-c)}{b}(x-d)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{a}{b}x(x-c)",
+		"inswer" : "-\\frac{ax(x-c)}{b}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "5^{-x}",
+		"inswer" : "5^{-1x}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{24x-15}{-3}",
+		"inswer" : "\\frac{-24x+15}{3}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "a^{2}(x-\\frac{b}{a})^{2}",
+		"inswer" : "(ax-b)^{2}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{x-2}{2}",
+		"inswer" : "\\frac{x}{2}-1",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{x-2a}{a}",
+		"inswer" : "\\frac{x}{a}-2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{a}{c}\\pm \\frac{bi}{c}",
+		"inswer" : "\\frac{a\\pm bi}{c}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{4-12}{8}",
+		"inswer" : "-1",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-x(x-7)",
+		"inswer" : "(-x)(x-7)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{-s+1}{\\m\\\\angle{ABC}-3}",
+		"inswer" : "\\frac{s-1}{3-\\m\\\\angle{CBA}}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{4-3i}{5}",
+		"inswer" : ".8-.6i",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "m\\angle{ABC}",
+		"inswer" : "m\\angle{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "5x-3y=x-0",
+		"inswer" : "-5x+3y=0-x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\pm4",
+		"inswer" : "\\pm4+0",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{a}{2b}",
+		"inswer" : "-\\frac{0.5a}{b}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{15y}{2x^2}",
+		"inswer" : "7.5\\frac{y}{x^2}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{7\\pmi\\sqrt(35)}{6}",
+		"inswer" : "\\frac{7\\pmi\\sqrt(35)}{-6}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3\\gtx\\ge 0",
+		"inswer" : "[0,\\infty)",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{5}{4}",
+		"inswer" : "1\\frac{1}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3(x-1)(5x+1)",
+		"inswer" : "(3(x-1))*(5x+1)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3\\frac{1}{2}",
+		"inswer" : "3.5",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-0.375",
+		"inswer" : "-.375",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{-x}{y}-\\frac{a}{-b}",
+		"inswer" : "-\\frac{x}{y}+\\frac{a}{b}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{-5}{7}x-\\frac{1}{7}",
+		"inswer" : "-\\frac{5}{7}x-\\frac{1}{7}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "96+m\\angle{ABC}",
+		"inswer" : "96+m\\angle{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{-1}{1}x",
+		"inswer" : "-x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\arc{ABC}",
+		"inswer" : "\\widearc{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "y=\\frac{-1}{4}x-\\frac{5}{4}",
+		"inswer" : "y=-\\frac{1}{4}x-\\frac{5}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{-9\\pm\\sqrt(313)}{2}",
+		"inswer" : "-\\frac{9}{2}\\pm\\frac{\\sqrt(313)}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "113500\\\\sqrt{3}-1440\\\\pi",
+		"inswer" : "113500\\\\sqrt{3}-1440\\\\pi",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\mangle{ABC}",
+		"inswer" : "\\mangle{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{h^2}{4}\\pi",
+		"inswer" : "\\pi(\\frac{h}{2})^2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-1(-2x+5y)=3",
+		"inswer" : "-1(-2x+5y=3)",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "7sf",
+		"inswer" : "-7s(-f)",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "28s+7sf",
+		"inswer" : "28s-(-7sf)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "1000",
+		"inswer" : "1000.5",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "1+10=3+4",
+		"inswer" : "10+1=3+4",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2+9=8+3",
+		"inswer" : "9+2=3+8",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{2(2-x)}{x(x-1)}",
+		"inswer" : "\\frac{2(x-2)}{x(x-1)}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "9\\div(21+6)",
+		"inswer" : "\\frac{9}{21+6}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "c\\divb\\diva",
+		"inswer" : "\\frac{c}{b}\\diva",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2-4-6+5",
+		"inswer" : "-6-4+2+5",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{12}{4-6}",
+		"inswer" : "12\\div{4-6}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(3+2){x<5}",
+		"inswer" : "a",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(-4)(-7)+5",
+		"inswer" : "-4(-7)+5",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\pm\\frac{4\\sqrt{2}}{3}",
+		"inswer" : "\\frac{\\pm4\\sqrt{2}}{3}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\left|-3\\right|",
+		"inswer" : "\\left|3\\right|",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "x^2-5x=3",
+		"inswer" : "y^2-5y=3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "41+x\\le 3(9+x)",
+		"inswer" : "x\\ge 7",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\nthroot{5}{x^3}",
+		"inswer" : "\\nthroot{5}{x}^3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(-10)*(10)",
+		"inswer" : "(-10)*(10)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "4*(n-a)^2",
+		"inswer" : "4*(a-n)^2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "5(-x+2)",
+		"inswer" : "-5(x-2)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(x-4)(x-2)",
+		"inswer" : "(x-2)(-x+4)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\left|\\frac{1}{3}\\right|",
+		"inswer" : "\\frac{1}{3}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "1*2",
+		"inswer" : "2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "8^n",
+		"inswer" : "8n",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2^2",
+		"inswer" : "2*2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2^3",
+		"inswer" : "2*2*2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3^2",
+		"inswer" : "3*3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "12",
+		"inswer" : "2*2*3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2^2*3",
+		"inswer" : "2*2*3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2^2*3^2",
+		"inswer" : "2*2*2*3",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "(x+2)(x+2)",
+		"inswer" : "(x+2)^2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "log_{2}{4}",
+		"inswer" : "2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln_3",
+		"inswer" : "2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "6!",
+		"inswer" : "2*3*4*5*6",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3+5+6",
+		"inswer" : "14",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "a(x+y)",
+		"inswer" : "ax+ay",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "log_{2}{4}",
+		"inswer" : "2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log_{4}{64}",
+		"inswer" : "\\log_464",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log_{c}{100}=0.2",
+		"inswer" : "\\log_c100=0.2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log_{10}{1,000}=3",
+		"inswer" : "\\log1000=3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log_23",
+		"inswer" : "\\log23",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{y}=x",
+		"inswer" : "\\log_ey=x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "sin{x}",
+		"inswer" : "\\sin{90\\dg}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\pi}",
+		"inswer" : "0",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "y=\\sin{x}",
+		"inswer" : "y=\\cos{x}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log{\\left(x^{2}+x\\right)}",
+		"inswer" : "\\log\\left(x^2+x\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{\\log{5}}{\\log{4}}",
+		"inswer" : "\\frac{\\log5}{\\log4}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\log{\\frac{m}{n}}",
+		"inswer" : "\\log\\frac{m}{n}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{x}=\\ln{2}",
+		"inswer" : "\\ln x=\\ln2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{x}=\\ln{2}",
+		"inswer" : "\\log_ex=\\ln2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "x=e^{\\ln{2}}",
+		"inswer" : "x=2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{x}=\\ln{11}",
+		"inswer" : "\\ln x=\\ln11",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{5}+\\ln{x}=\\ln{5x}",
+		"inswer" : "\\ln5+\\ln x=\\ln5x",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\ln{5x}",
+		"inswer" : "\\ln5x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\cos^{2}{\\theta }",
+		"inswer" : "\\left(\\cos\\theta\\right)^2",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\left(-x\\right)}",
+		"inswer" : "\\sin-x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\left(-\\pi \\right)}",
+		"inswer" : "\\sin-\\pi",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{2x}",
+		"inswer" : "\\sin2x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\left(-2x\\right)}",
+		"inswer" : "\\sin-2x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\frac{1}{2}x}",
+		"inswer" : "\\sin\\frac{1}{2}x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\left(\\theta +\\pi \\right)}",
+		"inswer" : "\\sin\\theta+\\pi",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{\\left(-2\\left(\\theta +\\pi \\right)\\right)}",
+		"inswer" : "\\sin-2\\left(\\theta+\\pi\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\sin{2x}+\\cos{\\left(-y\\right)}",
+		"inswer" : "\\sin2x+\\cos-y",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{\\sin{x}}{\\cos{x}}",
+		"inswer" : "\\frac{\\sin x}{\\cos x}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\tan{x}\\cos{x}",
+		"inswer" : "\\tan x\\cos x",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-xm",
+		"inswer" : "x(-m)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-7\\cdot \\left(-2\\right)\\cdot \\left(-1\\right)",
+		"inswer" : "-1\\left(-7\\right)\\cdot\\left(-2\\right)",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-2x",
+		"inswer" : "-x2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-h^5m^6p^3",
+		"inswer" : "-m^6p^3h^5",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(-3)*2",
+		"inswer" : "-2*(-3)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(-3)*2",
+		"inswer" : "(-3)*(-2)",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "150\\div 50",
+		"inswer" : "\\frac{150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "37-34=150\\div 50",
+		"inswer" : "37-34=\\frac{150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "150\\div 50=37-34",
+		"inswer" : "\\frac{150}{50}=37-34",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{6}{2}=2+1",
+		"inswer" : "6\\div2=2+1",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3*4=36\\div3",
+		"inswer" : "36\\div3=4*3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{16}{100}",
+		"inswer" : "\\frac{4}{50}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3=150\\div50",
+		"inswer" : "3=\\frac{150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "20+10=150\\div 50",
+		"inswer" : "20+10=\\frac{150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "34-37=(-150)\\div 50",
+		"inswer" : "34-37=\\frac{-150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "10+5=\\frac{45}{3}",
+		"inswer" : "10+5=45\\div3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "4+12\\div4",
+		"inswer" : "4+\\frac{12}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "34-37=-(150\\div 50)",
+		"inswer" : "34-37=-(\\frac{150}{50})",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(37-34)=-150\\div 50",
+		"inswer" : "-(37-34)=\\frac{-150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(34-37)=150\\div 50",
+		"inswer" : "-(34-37)=\\frac{150}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "3*4=\\frac{36}{3}",
+		"inswer" : "36\\div3=4*3",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-\\frac{1}{5}\\div 3",
+		"inswer" : "-\\frac{1}{5}*\\frac{1}{3}",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2(3x+4)",
+		"inswer" : "6x+8",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "2*6",
+		"inswer" : "12",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "-(x-y)=-(a\\divb)",
+		"inswer" : "-(x-y)=-(\\frac{a}{b})",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "x=2*(150\\div 3)",
+		"inswer" : "x=\\frac{150}{3}*2",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "x-(-i)",
+		"inswer" : "x+i",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "a(x+b)",
+		"inswer" : "ax+ab",
+		"result" : 0
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "150\\div 50=37-34",
+		"inswer" : "\\frac{150}{50}=37-34",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "ab+\\frac{1}{4ab^2}",
+		"inswer" : "\\frac{4a^2b^3+1}{4ab^2}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "\\frac{a\\sin{\\text{G}}}{g}",
+		"inswer" : "\\frac{a\\sin G}{g}",
+		"result" : 1
+	},
+	{
+		"id" : 1,
+		"name" : "Simplified",
+		"answer" : "a\\sin{\\text{G}}",
+		"inswer" : "a\\sin G",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{3}{1}",
+		"inswer" : "\\frac{6}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "1/(x-1)",
+		"inswer" : "2/(2x-2)",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{27}{3}",
+		"inswer" : "\\frac{3}{1}",
+		"result" : 0
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{25}{10}",
+		"inswer" : "\\frac{15}{6}",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "3",
+		"inswer" : "\\frac{3}{1}",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{2}{4}",
+		"inswer" : "0.5",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{27}{9}",
+		"inswer" : "3",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{7}{2}",
+		"inswer" : "3\\frac{1}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 2,
+		"name" : "No Simp Frac",
+		"answer" : "\\frac{12}{10}",
+		"inswer" : "1\\frac{1}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "\\frac{-125}{100}",
+		"inswer" : "-1.25",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "\\frac{4}{1}",
+		"inswer" : "\\frac{-4}{-1}",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "1+10=3+4",
+		"inswer" : "10+1=3+4",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "2+9=8+3",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "9+2=3+8",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "9+2=8+3",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "3+8=2+9",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "8+3=2+9",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "3+8=9+2",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=3+8",
+		"inswer" : "8+3=9+2",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2+9=8+3",
+		"inswer" : "9+2=8+3",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "(-10)*(-10)",
+		"inswer" : "-10*(-10)",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "1.20",
+		"inswer" : "1.2",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "\\left|\\frac{1}{3}\\right|",
+		"inswer" : "\\frac{1}{3}",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "5+0",
+		"inswer" : "5",
+		"result" : 0
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "2(-6)",
+		"inswer" : "-12",
+		"result" : 0
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "[-2,\\text{ }1)",
+		"inswer" : "\\left[-2,1\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "[-2,1)",
+		"inswer" : "\\left[-2,1\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "\\frac{0}{3}",
+		"inswer" : "0",
+		"result" : 0
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "0",
+		"inswer" : "0*8",
+		"result" : 0
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "4",
+		"inswer" : "4*1",
+		"result" : 0
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "4*10",
+		"inswer" : "4.0*10",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "3250.00",
+		"inswer" : "3,250",
+		"result" : 1
+	},
+	{
+		"id" : 3,
+		"name" : "No Identities",
+		"answer" : "\\frac{1}{2}",
+		"inswer" : "\\frac{50}{100}",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "0.5x",
+		"inswer" : "\\frac{1}{2}x",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "-0.375",
+		"inswer" : "-.375",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "\\frac{5}{4}",
+		"inswer" : "1\\frac{1}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "0.\\overline{3}",
+		"inswer" : ".\\overline{3}",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "3x",
+		"inswer" : "-\\frac{-3x}{1}",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "\\frac{7}{2}",
+		"inswer" : "3\\frac{1}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "\\frac{2}{1}",
+		"inswer" : "2",
+		"result" : 1
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "0.5",
+		"inswer" : "0.50",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "2.0",
+		"inswer" : "2",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "3250.00",
+		"inswer" : "3250.0000",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "\\frac{2}{4}",
+		"inswer" : "\\frac{1}{2}",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "3",
+		"inswer" : "\\frac{6}{2}",
+		"result" : 0
+	},
+	{
+		"id" : 4,
+		"name" : "No Decimal",
+		"answer" : "\\frac{1}{10}",
+		"inswer" : "0.1",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "3x+4",
+		"inswer" : "3x+4",
+		"result" : 1
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "3x+4",
+		"inswer" : "4+3x",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "0.50x",
+		"inswer" : "\\frac{1}{2}x",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "3\\div1",
+		"inswer" : "\\frac{3}{1}",
+		"result" : 1
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "3",
+		"inswer" : "\\frac{3}{1}",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "x^1",
+		"inswer" : "x",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "2x",
+		"inswer" : "2(x)",
+		"result" : 1
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "2x",
+		"inswer" : "2*x",
+		"result" : 1
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "2",
+		"inswer" : "2*1",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "3",
+		"inswer" : "3.0",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "4+2",
+		"inswer" : "2+4",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "xyz",
+		"inswer" : "1xy",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "xy",
+		"inswer" : "yx",
+		"result" : 0
+	},
+	{
+		"id" : 6,
+		"name" : "Same",
+		"answer" : "\\sin\\frac{1}{2}(x+1)",
+		"inswer" : "\\sin\\frac{1}{2}x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=x",
+		"inswer" : "y+3=2x+3-x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=x+1",
+		"inswer" : "x=y-1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "4x",
+		"inswer" : "x+3x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=x+1",
+		"inswer" : "x=y+1",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-8=17(x+8)",
+		"inswer" : "y=17(x+8)+8",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\frac{12}{x}",
+		"inswer" : "xy=12",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y+3=6(x-5)",
+		"inswer" : "y-9=6(x-7)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=2x",
+		"inswer" : "2y=4x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y\\ge x+2",
+		"inswer" : "x\\le y-2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y\\ge x+2",
+		"inswer" : "x\\ge y-2",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "z\\ge 0",
+		"inswer" : "[0,\\infty)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\sin A",
+		"inswer" : "\\sin{A}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{9-\\sqrt(313)}{-2}",
+		"inswer" : "-\\frac{9}{2}+\\frac{\\sqrt(313)}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1 \\pm",
+		"inswer" : "1",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x+2x-3x",
+		"inswer" : "0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x+2x-3x",
+		"inswer" : "0x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=4x",
+		"inswer" : "\\frac{y}{x}=4",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{3\\pm \\sqrt{13}}{-2}",
+		"inswer" : "\\frac{-3\\pm \\sqrt{13}}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{3\\pm \\sqrt{13}}{-2}",
+		"inswer" : "-\\frac{3\\pm \\sqrt{13}}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\pm \\frac{\\sqrt{13}}{2}",
+		"inswer" : "\\frac{\\pm \\sqrt{13}}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{e}{f}=\\frac{3}{4}",
+		"inswer" : "\\frac{f}{e}=\\frac{4}{3}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=6x-33",
+		"inswer" : "y+3=6(x-5)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-6x+y=-33",
+		"inswer" : "y+3=6(x-5)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3x-4y=5",
+		"inswer" : "-6x+8y=-10",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "f(x)=3x+2",
+		"inswer" : "fx=3x+2",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\frac{12}{x}",
+		"inswer" : "2yx=24",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\left|x-y\\right|",
+		"inswer" : "\\left|y-x\\right|",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\left|-3\\right|",
+		"inswer" : "3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x^2",
+		"inswer" : "x*x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x^2-6x+9",
+		"inswer" : "(x-3)^2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x=4",
+		"inswer" : "\\frac{3}{\\frac{3}{4}}=x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x+y",
+		"inswer" : "x+y+",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x+y",
+		"inswer" : "x+y-",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\nthroot{5}{a^4}",
+		"inswer" : "a^{\\frac{4}{5}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "847.6",
+		"inswer" : "847+\\frac{3}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2",
+		"inswer" : "2.00",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-3",
+		"inswer" : "\\frac{-3}{1}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{256}{1280}",
+		"inswer" : "\\frac{1}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x+2\\left(45\\right)",
+		"inswer" : "2x+90",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{c}{a+b}",
+		"inswer" : "\\frac{1}{\\frac{a}{c}+\\frac{b}{c}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\left(9^{8}\\right)^{3}",
+		"inswer" : "9^{24}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\nthroot{5}{a^3}",
+		"inswer" : "a^{\\frac{3}{5}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{s-1}{3-s}",
+		"inswer" : "-\\frac{s-1}{s-3}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x+\\left(x+1\\right)+\\left(x+2\\right)+\\left(x+3\\right)=-46",
+		"inswer" : "4x+6=-46",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "z+3y-3x+3x",
+		"inswer" : "3x+3y-3y+z",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "9",
+		"inswer" : "\\sqrt{81}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x\\sqrt{x}",
+		"inswer" : "x^{\\frac{3}{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{12}{7}",
+		"inswer" : "\\frac{1}{\\frac{1}{3}+\\frac{1}{4}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1=\\frac{50xy}{3y+2x}",
+		"inswer" : "\\frac{100}{\\frac{1}{4x}+\\frac{1}{6y}}=24",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "10(x+2)+10(x+4)-10(x+3)=5(2x+6)",
+		"inswer" : "\\frac{x+2}{5}+\\frac{x+4}{5}-\\frac{x+3}{5}=\\frac{2x+6}{10}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "6x+4y",
+		"inswer" : "3x+2y+2y+3x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{1}{2}bh",
+		"inswer" : "\\frac{bh}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{2}{5}\\cdot x\\cdot \\frac{3}{4}",
+		"inswer" : "\\frac{3x}{10}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x=6",
+		"inswer" : "x\\cdot 7=42",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "0.22\\cdot h",
+		"inswer" : "\\frac{11h}{50}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "36=\\left(x+y\\right)\\left(9\\right)",
+		"inswer" : "x+y=4",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "6.39b+6.99c+7.16h",
+		"inswer" : "6(b+c+h)+0.39b+0.99c+1.16h",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{7}{a+2}",
+		"inswer" : "7(a+2)^{-1}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2\\left(5\\right)+2x\\geq 10",
+		"inswer" : "x\\geq 0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "0.75x\\leq 3",
+		"inswer" : "x\\leq 4",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "15+2x\\leq 25",
+		"inswer" : "x\\leq 5",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "21\\cdot \\left(\\frac{\\sqrt{2}}{2}\\right)^{n-1}",
+		"inswer" : "\\frac{21}{\\sqrt{2^{n-1}}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2^n",
+		"inswer" : "2\\cdot 2^{n-1}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x\\leq 20",
+		"inswer" : "\\frac{x}{4}\\leq 5",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1150\\leq 12g+550\\leq 1450",
+		"inswer" : "50\\leq g\\leq 75",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "19",
+		"inswer" : "2+4+6+7",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=580\\cdot 1.03^{t}",
+		"inswer" : "\\frac{y}{1.08^{t}}=580",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1.03^t",
+		"inswer" : "1.03^t",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1.03^t",
+		"inswer" : "1.08^t",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "A=500\\cdot 1.01^{4t}",
+		"inswer" : "A=500\\cdot 1.04060401^{t}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "A=500\\cdot 1.01^{4t}",
+		"inswer" : "A=500\\cdot (1.01^4)^{t}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "S=750\\cdot 0.5^{\\frac{x}{30}}",
+		"inswer" : "S=750\\cdot 2^{-\\frac{x}{30}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "20.5x+57.3\\cdot 2",
+		"inswer" : "205x+573\\cdot 2",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "20.5x+57.3\\cdot 2",
+		"inswer" : "\\frac{205x+573\\cdot 2}{10}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "5^{x+1}",
+		"inswer" : "5\\left(5\\right)^{x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "5^{1+x}",
+		"inswer" : "7^x",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=4x",
+		"inswer" : "y=\\frac{4}{1}x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x=22",
+		"inswer" : "5x=55",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-60=\\frac{3}{2}\\left(x-30\\right)",
+		"inswer" : "y=\\frac{3}{2}x+15",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "4x^2+10x+6",
+		"inswer" : "\\left(2x+5\\right)+\\left(-3x^{2}+8x+2\\right)+\\left(7x^{2}-1\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3^{24}",
+		"inswer" : "\\frac{9^{24}}{3^{24}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x^{2}\\left(x-1\\right)^{2}",
+		"inswer" : "2\\left(x^2-x\\right)^{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{1}{2}\\pi r^{2}",
+		"inswer" : "\\left(2\\pi r^2\\right)^{-1}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{1}{2}\\pi r^{2}",
+		"inswer" : "\\pi",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{x^{9}y^{6}}{xy}",
+		"inswer" : "x^{8}y^{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{a^{5}}{a^{2}}",
+		"inswer" : "a^3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{a^{5}}{a^{2}}",
+		"inswer" : "a^{5}a^{-2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{b^{8}}{b^{5}}",
+		"inswer" : "b^3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{1}{c^{2}}",
+		"inswer" : "c^{-2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{3\\sqrt{5}}{5}",
+		"inswer" : "\\frac{3}{\\sqrt{5}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{3\\sqrt{5}}{5}",
+		"inswer" : "3\\cdot 5^{-\\frac{1}{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\left(x-h\\right)^{2}+\\left(y-k\\right)^{2}",
+		"inswer" : "x^2-2xh+h^2+y^2-2ky+k^2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\frac{x^{2}}{5}-\\frac{3}{5}",
+		"inswer" : "y=\\frac{x^{2}-3}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{x}{2}+\\frac{1}{2}",
+		"inswer" : "\\frac{x+1}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-2\\pm \\sqrt{x-5}",
+		"inswer" : "-2\\pm \\left(x-5\\right)^{\\frac{1}{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{2}{32}",
+		"inswer" : "5",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=10\\left(1.5\\right)^{x}",
+		"inswer" : "y=10\\left(1+0.5\\right)^{x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x^{2}+2x+3+\\frac{6}{x-1}",
+		"inswer" : "\\frac{2x^{3}+x+3}{x-1}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x^4-4x^3-20x^2+104x-105",
+		"inswer" : "\\left(x+5\\right)\\left(x-3\\right)\\left(x-3+\\sqrt{2}\\right)\\left(x-3-\\sqrt{2}\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-3=\\frac{4}{3}\\left(x-8\\right)",
+		"inswer" : "y+1=\\frac{4}{3}\\left(x-5\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "24\\cdot \\left(\\frac{1}{2}\\right)^{4-1}",
+		"inswer" : "24\\cdot 2^{-3}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{12500}{1.05^{5}}",
+		"inswer" : "12500\\cdot 1.05^{-5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+		"inswer" : "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=50\\left(0.9\\right)^{x}",
+		"inswer" : "y=50\\left(0.7\\right)^{x}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{n}{2}\\left(a_{1}+a_{n}\\right)",
+		"inswer" : "\\frac{n}{2}\\left(a_{2}+a_{n}\\right)",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x=2",
+		"inswer" : "x=\\frac{(\\frac{4}{2})^{3}+4}{6}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "(3+2)x<5",
+		"inswer" : "(3+2){x<4}x<5",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3\\lt x",
+		"inswer" : "x\\gt 3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x-2\\le 4x-14",
+		"inswer" : "4\\le x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "9>3x",
+		"inswer" : "x<3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{1}{2}<x\\le \\frac{20}{3}",
+		"inswer" : "\\frac{20}{3}\\ge x>0.5",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1<x<3",
+		"inswer" : "3>x>1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "1\\le \\frac{x}{2}+3\\le 3.4",
+		"inswer" : "\\frac{17}{5}\\ge 0.5x+3\\ge 1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-0.2<0.5x+1<\\frac{3}{2}",
+		"inswer" : "1.5>\\frac{x+2}{2}>-\\frac{1}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{a}{3}<2x+4\\le \\frac{4}{3}a+5",
+		"inswer" : "\\frac{4a}{3}+5\\ge 2(x+2)> \\frac{1}{3}a",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "0<\\frac{1}{2}x<\\frac{3}{5}x-3",
+		"inswer" : "\\frac{3x-15}{5}x>0.5x>0",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "0<\\frac{1}{2}x<\\frac{3}{5}x-3",
+		"inswer" : "\\frac{3x-15}{5}>0.5x>0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-3-7",
+		"inswer" : "-10",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{x}{3}+\\frac{1}{3}+\\frac{x}{3}\\le 1",
+		"inswer" : "x\\le 1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3\\le x\\le 5",
+		"inswer" : "3\\le x\\lt 5",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2(x+3)",
+		"inswer" : "2x+6",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3>1\\ge 0",
+		"inswer" : "3>1\\ge 0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\nthroot{5}{x^3}",
+		"inswer" : "(\\nthroot{5}{x})^3",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\sqrt{(x-330)^2}",
+		"inswer" : "x-330",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{x^2-1}{x-1}",
+		"inswer" : "x+1",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{x^2-2}{x-\\sqrt{2}}",
+		"inswer" : "x+\\sqrt{2}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-2=-(x+8)",
+		"inswer" : "y+6=-x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-8=-\\frac{8}{9}(x+5)",
+		"inswer" : "y-0=-\\frac{8}{9}(x-4)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-0=4(x+2)",
+		"inswer" : "y-8=4(x-0)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "4x",
+		"inswer" : "4(x-0)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "x",
+		"inswer" : "x-0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y-5.02=-\\frac{101}{275}(x-4)",
+		"inswer" : "y-3=-\\frac{101}{275}(x-9.5)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{4}{x}+6y",
+		"inswer" : "(4\\div x)+6y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-3^x",
+		"inswer" : "y=3^x",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=6^x",
+		"inswer" : "y=-6^x",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=8^x",
+		"inswer" : "y=-8^x",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{9}{2}x^{2}+6x-2=0",
+		"inswer" : "9x^{2}+12x-4=0",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "5(-x+2)",
+		"inswer" : "-5(x-2)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\frac{1}{4}\\left|x\\right|",
+		"inswer" : "y=\\left|\\frac{1}{4}*x\\right|",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=3\\left|x\\right|",
+		"inswer" : "\\frac{y}{3}=\\left|x\\right|",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "a\\frac{1-(r)^{n}}{1-r}",
+		"inswer" : "\\frac{a-a(r)^{n}}{1-r}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "a\\frac{1-(r)^{n}}{1-r}",
+		"inswer" : "\\frac{a(1-(r)^{n})}{1-r}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "a_{1}\\frac{1-(r)^{n}}{1-r}",
+		"inswer" : "\\frac{a_{1}(1-(r)^{n})}{1-r}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "a_{1}\\frac{1-(r)^{n}}{1-r}",
+		"inswer" : "\\frac{a_{1}-a_{1}(r)^{n}}{1-r}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "14+7x=7(x+2)",
+		"inswer" : "25",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x-2-2x+2",
+		"inswer" : "1",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2x+4y=2",
+		"inswer" : "2x+4y-2=0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\nthroot{3}{x}",
+		"inswer" : "x^{\\frac{1}{3}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\nthroot{10}{2}-1",
+		"inswer" : "2^{\\frac{1}{10}}-1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-\\nthroot{10}{2}-1",
+		"inswer" : "-2^{\\frac{1}{10}}-1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "8n",
+		"inswer" : "8^n",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "8n",
+		"inswer" : "n^8",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "8a",
+		"inswer" : "8_{a}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\sin{30}",
+		"inswer" : "\\sin{\\frac{60}{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\left(\\frac{2}{5}\\right)^{x+1}-3",
+		"inswer" : "y=\\left(\\frac{2}{5}\\right)^{x}-3",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\left(\\frac{2}{5}\\right)^{x+1}+3",
+		"inswer" : "y=\\left(\\frac{2}{5}\\right)^{x}+3",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\left(\\frac{2}{5}\\right)^{x+1}",
+		"inswer" : "\\left(\\frac{2}{5}\\right)^{x}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\left(\\frac{1}{2}\\right)^{x+5}-4",
+		"inswer" : "y=\\left(\\frac{1}{2}\\right)^{x+6}-4",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\left(\\frac{1}{3}\\right)^{x+3}+6",
+		"inswer" : "y=\\left(\\frac{1}{3}\\right)^{x+4}+6",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "log_{2}{4}",
+		"inswer" : "2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\sin{\\pi}",
+		"inswer" : "0",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "2\\sin{\\frac{\\pi}{6}}",
+		"inswer" : "1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin{x}",
+		"inswer" : "y=\\cos{x}",
+		"result" : 0
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log{\\left(CX\\right)}",
+		"inswer" : "\\log_{10}\\left(XC\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log{\\left(x+1\\right)}+\\log{\\left(x-1\\right)}",
+		"inswer" : "\\log\\left(x^2-1\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{3}{\\frac{2}{5}}",
+		"inswer" : "\\log_3\\frac{2}{5}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{3}{\\frac{2}{5}}",
+		"inswer" : "\\log_30.4",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{3}{\\frac{2}{5}}",
+		"inswer" : "\\log_3\\left(\\frac{2}{5}\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{3}{\\frac{2}{5}}",
+		"inswer" : "\\log_32-\\log_35",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log{\\frac{2}{7}}",
+		"inswer" : "\\log_{10}\\frac{2}{7}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\ln{\\left(5x\\right)}",
+		"inswer" : "\\ln5x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin{x}",
+		"inswer" : "y=\\sin{x-2\\pi}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin{x}",
+		"inswer" : "y=\\cos{x-\\frac{\\pi}{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\cos{\\frac{\\pi}{2}}",
+		"inswer" : "\\sin{0}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=a^{x}",
+		"inswer" : "x=\\log_{a}{y}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\log_{12}{\\frac{1}{2}}",
+		"inswer" : "\\log_{12}\\frac{1}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\ln{\\frac{1}{2}}",
+		"inswer" : "\\ln\\frac{1}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-\\sin{x}",
+		"inswer" : "y=\\sin{-x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\cos{x}",
+		"inswer" : "y=\\cos{-x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\tan{x}",
+		"inswer" : "y=-\\tan{-x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-3\\sin{\\frac{1}{2}\\theta }+2",
+		"inswer" : "y=-3\\sin\\frac{1}{2}\\theta+2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-3\\sin{\\frac{1}{2}\\theta }+2",
+		"inswer" : "y=-3\\sin\\left(\\frac{1}{2}\\theta\\right)+2",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin{\\left(-x\\right)}+\\cos{\\left(-x\\right)}",
+		"inswer" : "y=-\\sin x+\\cos x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "-\\sin{x}",
+		"inswer" : "\\sin-x",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\cos{-x}",
+		"inswer" : "\\cosx",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\sin{-x}",
+		"inswer" : "-\\sinx",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "\\frac{\\sin{x}}{\\cos{x}}",
+		"inswer" : "\\frac{\\sin x}{\\cos x}",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-\\tan \\frac{1}{3}\\left(x+\\frac{\\pi }{2}\\right)-1",
+		"inswer" : "y=-\\tan \\frac{1}{3}(x+\\frac{\\pi }{2})-1",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-2\\sin{\\frac{1}{2}\\theta }",
+		"inswer" : "y=-2\\sin\\left(\\frac{1}{2}\\theta\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=-2\\sin{\\frac{1}{2}\\theta }",
+		"inswer" : "-2\\sin\\left(\\frac{1}{2}\\theta\\right)=y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin{\\frac{x}{2}}",
+		"inswer" : "\\sin\\left(\\frac{x}{2}\\right)=y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin\\left(x+\\pi\\right)",
+		"inswer" : "\\sin\\left(x+\\pi\\right)=y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin2\\left(x+\\pi\\right)",
+		"inswer" : "\\sin2\\left(x+\\pi\\right)=y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "y=\\sin\\left(2\\left(x+\\pi\\right)\\right)",
+		"inswer" : "\\sin\\left(2\\left(x+\\pi\\right)\\right)=y",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "3,400,000",
+		"inswer" : "3400000.00",
+		"result" : 1
+	},
+	{
+		"id" : 7,
+		"name" : "Equivalent",
+		"answer" : "0<\\sin\\frac{1}{2}(x+1)",
+		"inswer" : "",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "a\\gt b\\gt x",
+		"inswer" : "x\\lt b\\lt a",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : ".1\\gt x\\gt .5",
+		"inswer" : "\\frac{1}{2}\\lt x\\lt \\frac{1}{10}",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "3xy+\\frac{\\overline{CDA}}{2}\\ge 3-bac",
+		"inswer" : "3-abc\\le 3xy+\\frac{1}{2}\\overline{ADC}",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "ABC",
+		"inswer" : "CBA",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "ASDF",
+		"inswer" : "DSAF",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "a=b",
+		"inswer" : "b=a",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "\\frac{4}{6}",
+		"inswer" : "\\frac{2}{3}",
+		"result" : 0
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "\\left|3\\right|",
+		"inswer" : "\\left|1\\pm2\\right|",
+		"result" : 0
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "3.\\overline{4}",
+		"inswer" : "3.\\overline{4}",
+		"result" : 1
+	},
+	{
+		"id" : 8,
+		"name" : "Test Larwein",
+		"answer" : "\\sin{A}\\cos30\\tan(30+x)",
+		"inswer" : "\\sin   A\\cos{30}\\tan{(30+x)}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "2+y-3x",
+		"inswer" : "-3x+y+2",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(-x-1)(x-2)(a+3)",
+		"inswer" : "(x+1)(3+a)(-x+2)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{a}{d}+\\frac{b}{d}-\\frac{c}{d}",
+		"inswer" : "\\frac{(a+b-c)}{d}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{1}{2}x",
+		"inswer" : "0.5x",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "b+a-0",
+		"inswer" : "a+b",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{x\\sqrt{2}}{2x}",
+		"inswer" : "\\frac{\\frac{x\\sqrt{2}}{2}}{x}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "abcde",
+		"inswer" : "(a*b)(c*(d*e))",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "3t+3",
+		"inswer" : "3(t+1)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "xy=k",
+		"inswer" : "y=\\frac{k}{x}",
+		"result" : 0
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(x-a)(x-a)",
+		"inswer" : "(x-a)^{2}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{a(-x)(x-c)}{b}",
+		"inswer" : "\\frac{a}{b}(-x)(x-c)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{ax(x-c)}{b}(x-d)",
+		"inswer" : "\\frac{a}{b}x(x-c)(x-d)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{ax(x-c)}{-b}",
+		"inswer" : "-\\frac{a}{b}x(x-c)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "5^{-1x}",
+		"inswer" : "5^{-x}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{-24x+16}{3}",
+		"inswer" : "-\\frac{24x-16}{3}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(2x-b)^{2}",
+		"inswer" : "4(x-\\frac{b}{2})^{2}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{x}{a}-1",
+		"inswer" : "\\frac{x-a}{a}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{x}{a}-2",
+		"inswer" : "\\frac{x-2a}{a}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{a\\pmbi}{c}",
+		"inswer" : "\\frac{a}{c}\\pm\\frac{bi}{c}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(x-2+(i+y))",
+		"inswer" : "(x-(2-(i+y)))",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{\\frac{a}{b}}{c}",
+		"inswer" : "\\frac{a}{bc}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{\\frac{a}{b}}{\\frac{c}{\\frac{d}{e}}}",
+		"inswer" : "\\frac{ad}{bce}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(\\frac{x}{2}+4c-2b)",
+		"inswer" : "(\\frac{x}{2}-2b+4c)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(x-1)(a-x)(xy-x+y+2)",
+		"inswer" : "-(x-1)(x-a)(xy-x+y+2)",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{a}{b}+c=-d",
+		"inswer" : "d=-\\frac{a}{b}-c",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{-7+\\sqrt{449}}{2}",
+		"inswer" : "-\\frac{7}{2}+\\frac{\\sqrt{449}}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "-\\frac{5-\\sqrt{221}}{2}",
+		"inswer" : "\\frac{-5+\\sqrt{221}}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{a}{b}+10+35+4*5+5cd+\\sqrt{x}",
+		"inswer" : "\\frac{a}{b}+10+35+4*5+5cd+\\sqrt{x}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{-7\\pm\\sqrt{35}}{-6}",
+		"inswer" : "\\frac{7\\pm\\sqrt{35}}{6}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{5}{2}(2x+14)(x+2)",
+		"inswer" : "\\frac{5(2x+14)(x+2)}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "3x^3+x^2-0x-0",
+		"inswer" : "3x^3+x^2+0x+0",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "(x+2)(x+2)(x+2)",
+		"inswer" : "(x+2)^{3}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "-2(2x+3)",
+		"inswer" : "-4x-6",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "5x+\\frac{-6x^2-18x-5}{x^3+6}",
+		"inswer" : "5x-\\frac{6x^2+18x+5}{x^3+6}",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "x-\\frac{1}{2}",
+		"inswer" : "(x-\\frac{1}{2)}",
+		"result" : 0
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "55\\sqrt(5)+5",
+		"inswer" : "5(11\\sqrt(5)+1)",
+		"result" : 0
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "\\frac{-4x}{7}-1",
+		"inswer" : "-\\frac{4}{7}x-1",
+		"result" : 1
+	},
+	{
+		"id" : 10,
+		"name" : "jjee",
+		"answer" : "0x+3",
+		"inswer" : "3",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "\\frac{-3}{4}*x^2+2*x+3",
+		"inswer" : "-\\frac{3}{4}*x^2+2*x+3",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "\\frac{9}{2}x^{2}+6x-2=0",
+		"inswer" : "9x^{2}+12x-4=0",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "9x^{2}+12x-4=0",
+		"inswer" : "18x^{2}+24x-8=0",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "2x^{2}+4x+9=0",
+		"inswer" : "x^{2}(2)+4x+9=0",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "y=\\frac{1}{2}x^{2}+x+1",
+		"inswer" : "y=0.5x^{2}+x+1",
+		"result" : 1
+	},
+	{
+		"id" : 11,
+		"name" : "Standard Form",
+		"answer" : "2x-3y=4",
+		"inswer" : "2x=4+3y",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2x(4x-y)",
+		"inswer" : "8x^2-2xy",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "(x-1)(x+1)",
+		"inswer" : "(x^2-1)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "(2x-a)(x-b)(-x+c)",
+		"inswer" : "-2(x-\\frac{a}{2})(x-b)(x-c)",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "(x^2-x)",
+		"inswer" : "x(x-1)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "5F-160",
+		"inswer" : "5(F-32)",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "-3+3(3^n)",
+		"inswer" : "-3(1-3^n)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "ab",
+		"inswer" : "ba",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "3(1-3^n)",
+		"inswer" : "3-3(3^n)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "3-3(3^n)",
+		"inswer" : "3(1-3^n)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2-2(3^n)",
+		"inswer" : "2(1-3^n)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2(1-3^n)",
+		"inswer" : "2-2(3^n)",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "3(1-x)",
+		"inswer" : "3-3x",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "3-3x",
+		"inswer" : "3(1-x)",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "x(1-y)",
+		"inswer" : "x-xy",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2(x^2+3)",
+		"inswer" : "2x^2+6",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2(x+y)",
+		"inswer" : "2x+2y",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "\\frac{3}{4}(x+y)",
+		"inswer" : "\\frac{3}{4}x+\\frac{3}{4}y",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2(\\frac{3}{2}x+6)",
+		"inswer" : "3x+12",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "5(2x+1)",
+		"inswer" : "10x+5",
+		"result" : 1
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "2x-5",
+		"inswer" : "2(x-\\frac{5}{2})",
+		"result" : 0
+	},
+	{
+		"id" : 12,
+		"name" : "Simp Distribute",
+		"answer" : "x-(2-i)",
+		"inswer" : "x-2+i",
+		"result" : 1
+	},
+	{
+		"id" : 13,
+		"name" : "Poly Division",
+		"answer" : "2x+3",
+		"inswer" : "2x+3",
+		"result" : 1
+	},
+	{
+		"id" : 14,
+		"name" : "Equiv Equations",
+		"answer" : "y=x+1",
+		"inswer" : "x=y-1",
+		"result" : 1
+	},
+	{
+		"id" : 14,
+		"name" : "Equiv Equations",
+		"answer" : "3x",
+		"inswer" : "4x-x",
+		"result" : 1
+	},
+	{
+		"id" : 14,
+		"name" : "Equiv Equations",
+		"answer" : "2x+4y=6z",
+		"inswer" : "3x+6y=9z",
+		"result" : 1
+	},
+	{
+		"id" : 15,
+		"name" : "Geometry Polygon",
+		"answer" : "ABCD",
+		"inswer" : "ACDB",
+		"result" : 0
+	},
+	{
+		"id" : 15,
+		"name" : "Geometry Polygon",
+		"answer" : "ABCD",
+		"inswer" : "DABC",
+		"result" : 1
+	},
+	{
+		"id" : 15,
+		"name" : "Geometry Polygon",
+		"answer" : "ABCD",
+		"inswer" : "CDAB",
+		"result" : 1
+	},
+	{
+		"id" : 15,
+		"name" : "Geometry Polygon",
+		"answer" : "ABCD",
+		"inswer" : "BADC",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "ABCD",
+		"inswer" : "DCBA",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\overline{AB}",
+		"inswer" : "\\overline{BA}",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\mangle{ABC}",
+		"inswer" : "\\mangle{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\arc{CBA}",
+		"inswer" : "\\arc{ABC}",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\overline{ABC}",
+		"inswer" : "\\overline{CBA}",
+		"result" : 1
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "p",
+		"inswer" : "P",
+		"result" : 0
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\arc{ABC}",
+		"inswer" : "\\arc{BCA}",
+		"result" : 0
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "\\mangle{ABC}",
+		"inswer" : "\\mangle{B}",
+		"result" : 0
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "ABCD",
+		"inswer" : "ACDB",
+		"result" : 0
+	},
+	{
+		"id" : 16,
+		"name" : "Geometry Angle",
+		"answer" : "ABC",
+		"inswer" : "abc",
+		"result" : 0
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "\\R",
+		"inswer" : "x<\\infty",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "4\\lex\\lt16",
+		"inswer" : "4\\ley\\lt16",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "y\\le3",
+		"inswer" : "(-\\infty,3]",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "(-\\infty,\\infty)",
+		"inswer" : "-\\infty\\lty\\lt\\infty",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "x\\ge0",
+		"inswer" : "[0,\\infty)",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "s>0",
+		"inswer" : "0\\lts\\lt\\infty",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "y>2",
+		"inswer" : "(2,\\infty)",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "[2,7)",
+		"inswer" : "2\\lex<7",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "0\\lex<\\infty",
+		"inswer" : "[0,\\infty)",
+		"result" : 1
+	},
+	{
+		"id" : 17,
+		"name" : "Set Bounds",
+		"answer" : "[-2,\\text{ }1)",
+		"inswer" : "\\left[-2,1\\right)",
+		"result" : 1
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\frac{2\\pm\\sqrt{200}}{4}",
+		"inswer" : "\\frac{2\\pm10\\sqrt{2}}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\frac{4}{2x\\sqrt{72}}",
+		"inswer" : "\\frac{4}{12x\\sqrt{2}}",
+		"result" : 1
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\sqrt{100}",
+		"inswer" : "10",
+		"result" : 0
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\sqrt{0}",
+		"inswer" : "0",
+		"result" : 0
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\sqrt{0}",
+		"inswer" : "\\sqrt{5-5}",
+		"result" : 0
+	},
+	{
+		"id" : 50,
+		"name" : "Root Simp",
+		"answer" : "\\sqrt{12}",
+		"inswer" : "2\\sqrt{3}",
+		"result" : 1
+	},
+	{
+		"id" : 54,
+		"name" : "Mixed Frac",
+		"answer" : "3\\frac{1}{2}",
+		"inswer" : "3\\frac{2}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 54,
+		"name" : "Mixed Frac",
+		"answer" : "3\\frac{4}{4}",
+		"inswer" : "4",
+		"result" : 1
+	},
+	{
+		"id" : 54,
+		"name" : "Mixed Frac",
+		"answer" : "104\\frac{1}{2}",
+		"inswer" : "\\frac{418}{4}",
+		"result" : 0
+	},
+	{
+		"id" : 54,
+		"name" : "Mixed Frac",
+		"answer" : "104\\frac{1}{2}",
+		"inswer" : "104\\frac{2}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 68,
+		"name" : "No Mixed Frac",
+		"answer" : "1\\frac{3}{4}",
+		"inswer" : "\\frac{7}{4}",
+		"result" : 0
+	},
+	{
+		"id" : 68,
+		"name" : "No Mixed Frac",
+		"answer" : "\\frac{1}{2}",
+		"inswer" : "\\frac{2}{4}",
+		"result" : 0
+	},
+	{
+		"id" : 68,
+		"name" : "No Mixed Frac",
+		"answer" : "2",
+		"inswer" : "\\frac{2}{1}",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y=x",
+		"inswer" : "y+3=2x+3-x",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y=x+1",
+		"inswer" : "x=y-1",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "4x",
+		"inswer" : "x+3x",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y=x+1",
+		"inswer" : "x=y+1",
+		"result" : 0
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y-8=17(x+8)",
+		"inswer" : "y=17(x+8)+8",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y=12/x",
+		"inswer" : "xy=12",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y+3=6(x-5)",
+		"inswer" : "y-9=6(x-7)",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y=2x",
+		"inswer" : "2y=4x",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y\\ge x+2",
+		"inswer" : "x\\le y-2",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "y\\ge x+2",
+		"inswer" : "x\\ge y-2",
+		"result" : 0
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "x\\ge 0",
+		"inswer" : "[0, \\infty)",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "\\sin A",
+		"inswer" : "\\sin{A}",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "\\frac{9-\\sqrt(313)}{-2}",
+		"inswer" : "-\\frac{9}{2}+\\frac{\\sqrt(313)}{2}",
+		"result" : 1
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "1\\pm",
+		"inswer" : "1",
+		"result" : 0
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "(3+2){x<4}x<5",
+		"inswer" : "(3+2)x<5",
+		"result" : 0
+	},
+	{
+		"id" : 69,
+		"name" : "Equivalent_Backup",
+		"answer" : "2x-2=2(x-1)",
+		"inswer" : "",
+		"result" : 0
+	},
+	{
+		"id" : 71,
+		"name" : "Test_Eugene",
+		"answer" : "\\log3",
+		"inswer" : "\\log{3}",
+		"result" : 1
+	},
+	{
+		"id" : 71,
+		"name" : "Test_Eugene",
+		"answer" : "\\log_{3}{4}",
+		"inswer" : "\\log_{3}{4}",
+		"result" : 1
+	},
+	{
+		"id" : 71,
+		"name" : "Test_Eugene",
+		"answer" : "\\log A",
+		"inswer" : "\\log{A}",
+		"result" : 1
+	},
+	{
+		"id" : 71,
+		"name" : "Test_Eugene",
+		"answer" : "\\ln A",
+		"inswer" : "\\ln{A}",
+		"result" : 1
+	},
+	{
+		"id" : 74,
+		"name" : "test_jy",
+		"answer" : "\\cos\\frac{1}{3}(x+\\frac{\\pi }{2})",
+		"inswer" : "\\tan\\frac{1}{2}{x",
+		"result" : 1
+	}
+]
