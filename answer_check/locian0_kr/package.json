@@ -17,7 +17,6 @@
     "roots": [
       "./__tests__/"
     ],
-    "testPathIgnorePatterns": ["json"],
     "transform": {},
     "transformIgnorePatterns": [
       "/node_modules/"
