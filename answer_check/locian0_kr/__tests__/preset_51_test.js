@@ -1,7 +1,7 @@
 
 import {LatexToTree, compareMathTree} from "../checkmath.js";
 import {분수와소수} from "../rc/preset_51.inc.js";
-import json from "./us_json_function";
+import json from "./kr_json_preset";
 
 var data;
 for (var item of json) {

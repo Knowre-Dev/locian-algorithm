@@ -1653,6 +1653,17 @@
         "result": 1
       }
     ]
+  },
+  {
+    "id": 56,
+    "name": "기약분수만_가능",
+    "data": [
+      {
+        "answer": "xyz-xy",
+        "inswer": "x(yz-y)",
+        "result": 1
+      }
+    ]
   }
 ]
 

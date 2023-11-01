@@ -1,7 +1,7 @@
 
 import {LatexToTree, compareMathTree} from "../checkmath.js";
 import {equiv_equations} from "../rc/preset_31.inc.js";
-import json from "./us_json_function";
+import json from "./kr_json_preset";
 
 var data;
 for (var item of json) {
