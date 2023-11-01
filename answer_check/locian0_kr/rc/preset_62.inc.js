@@ -11,7 +11,7 @@ import {mulConstCal} from '../rc/function_113.inc.js';
 import {mulToNega} from '../rc/function_114.inc.js';
 import {sub_mulCommutative} from '../rc/function_126.inc.js';
 
-function 인수분해꼴(tree = null) {
+export function 인수분해꼴(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

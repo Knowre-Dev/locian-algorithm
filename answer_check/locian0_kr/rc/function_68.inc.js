@@ -25,3 +25,15 @@ export function powDecomposition(tree) {
     return tree_1;
 }
 
+/*
+import {LatexToTree, compareMathTree} from '../checkmath.js';
+        var tree1 = LatexToTree('x^2');
+        var tree2 = LatexToTree('x\\times x');
+        var tree11 = powDecomposition(tree1);
+        var tree21 = powDecomposition(tree2);
+        var result1 = JSON.stringify(tree11, null, 4);
+        var result2 = JSON.stringify(tree21, null, 4);
+        console.log(compareMathTree(result1, result2));
+        console.log(JSON.stringify(tree11, null, 4));
+        console.log(JSON.stringify(tree21, null, 4));
+*/

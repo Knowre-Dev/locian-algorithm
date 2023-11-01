@@ -70,7 +70,7 @@ export function solParenthesis(tree = null) {
                                 merge = ['mulchain'];
                                 if (Array.isArray(f) && Array.isArray(a)) {
                                     var flag1;
-                                    if (JSSON.stringify(f[0]) == JSON.stringify(a[0])) {
+                                    if (JSON.stringify(f[0]) == JSON.stringify(a[0])) {
                                         flag1 = 'add';
                                     } else {
                                         flag1 = 'sub';

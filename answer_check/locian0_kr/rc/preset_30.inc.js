@@ -12,7 +12,7 @@ import {addPolyZero} from '../rc/function_80.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {decIdentity} from '../rc/function_86.inc.js';
 
-function poly_division(tree = null) {
+export function poly_division(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

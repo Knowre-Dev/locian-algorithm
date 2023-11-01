@@ -14,7 +14,7 @@ import {eqMulNeg} from '../rc/function_73.inc.js';
 import {rdecToFrac} from '../rc/function_78.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 
-function test_larwein(tree =  null) {
+export function test_larwein(tree =  null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     tree_1 = tree_1 ? tree_1 : laco.parse('3,200x+6,400,123y-m\angle{30}');

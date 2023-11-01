@@ -5,7 +5,7 @@ import {posiSign} from '../rc/function_51.inc.js';
 import {allAssociative, allCommutative} from '../rc/function_67.inc.js';
 import {decElimZero} from '../rc/function_79.inc.js';
 
-function 소수만가능(tree = null) {
+export function 소수만가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('\frac{3}{2}x');

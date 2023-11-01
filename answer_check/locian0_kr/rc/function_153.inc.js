@@ -26,10 +26,10 @@ export function fracCombine(tree) {
         }
         var denom = array2ChainTree(denomArr);
         var find = findGCF(denom);
-        
+       
         if (JSON.stringify(find['sym']) != JSON.stringify([])) {
             var denom_arr = [];
-            for (var [k, f] of find.entries()) {
+            for (var [k, f] of Object.entries(find)) {
                 if (k == 'const'){
                     denom_arr.push(['mul', f]);
                 } else {
@@ -70,7 +70,7 @@ export function fracCombine(tree) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '1+\\frac{1}{2}';
+var latex_1 = '(x-\\frac{5}{2})^2+(y+\\frac{5}{2})^{2}=\\frac{25}{2}';
 var tree_1 = LatexToTree(latex_1);
 var tree_11 = fracCombine(tree_1);
 var result_1 = JSON.stringify(tree_11, null, 4);

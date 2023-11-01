@@ -9,7 +9,7 @@ export function mulToExp(tree = null) {
             for (var term of tree_1) {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
-                        if (!term[1][1] in power) {
+                        if (!power.hasOwnProperty(term[1][1])) {
                             power[term[1][1]] = [];
                         }
                         power[term[1][1]].push(term[1]); 
@@ -22,7 +22,7 @@ export function mulToExp(tree = null) {
                     varNum.push(term);
                 }
             }
-            for (var [k, v] of power.entries()) {
+            for (var [k, v] of Object.entries(power)) {
                 if (v.length > 1){
                     varNum.push(['mul', ['power', v[0], ['natural', (v.length).toString()]]]);
                 } else {

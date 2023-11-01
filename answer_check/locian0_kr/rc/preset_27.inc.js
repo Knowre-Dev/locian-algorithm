@@ -19,7 +19,7 @@ import {addPolyZero} from '../rc/function_80.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 
 
-function jjee(tree = null) {
+export function jjee(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     tree_1 = tree_1 ? tree_1 : laco.parse('2+y-3x');

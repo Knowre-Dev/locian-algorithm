@@ -13,7 +13,7 @@ import {fracSimpVar} from '../rc/function_77.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 
-function 분수와소수(tree = null) {
+export function 분수와소수(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('\frac{3}{2}x');

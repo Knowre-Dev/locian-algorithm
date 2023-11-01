@@ -1,4 +1,4 @@
-export function intervalSetNot(tree, vari = ['variable', 'x']) {
+export function intervalSetNot(tree, vari = ['anything', 'x']) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     if (Array.isArray(tree_1)) {
         var operator = tree_1.shift();
@@ -41,4 +41,17 @@ export function intervalSetNot(tree, vari = ['variable', 'x']) {
     }
     return tree_1;
 }
+/*
+import {LatexToTree, compareMathTree, is_equal_tree} from "../checkmath.js";
 
+var tree_1 = LatexToTree("4\\gt\\pi\\gt2");
+var tree_2 = LatexToTree("(2,4)");
+tree_1 = intervalSetNot(tree_1);
+tree_2 = intervalSetNot(tree_2);
+var result_1 = JSON.stringify(tree_1, null, 4);
+var result_2 = JSON.stringify(tree_2, null, 4);
+var result = compareMathTree(tree_1, tree_2);
+console.log(result);
+console.log(result_1);
+console.log(result_2);
+*/

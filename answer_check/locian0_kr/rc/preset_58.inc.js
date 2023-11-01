@@ -15,7 +15,7 @@ import {addFactoredFormVar} from '../rc/function_117.inc.js';
 import {sub_mulCommutative} from '../rc/function_126.inc.js';
 import {nthrootToSquareroot} from '../rc/function_191.inc.js';
 
-function 기약분수_소수_가능(tree = null) {
+export function 기약분수_소수_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     //   tree_1 = $tree ?: laco.parse('x(yz-y)');

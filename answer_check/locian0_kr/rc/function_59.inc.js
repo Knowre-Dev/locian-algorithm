@@ -19,7 +19,7 @@ export function powIdentity(tree) {
     }
     return tree_1;
 }
-
+/*
 import {LatexToTree, compareMathTree} from '../checkmath.js';
         var tree1 = LatexToTree('x^2');
         var tree2 = LatexToTree('x');
@@ -30,3 +30,4 @@ import {LatexToTree, compareMathTree} from '../checkmath.js';
         console.log(compareMathTree(result1, result2));
         console.log(JSON.stringify(tree11, null, 4));
         console.log(JSON.stringify(tree21, null, 4));
+*/

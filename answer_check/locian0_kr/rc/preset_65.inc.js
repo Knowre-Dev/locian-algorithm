@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {natElimZero} from '../rc/function_119.inc.js';
 
-function 자연수만_가능(tree = null) {
+export function 자연수만_가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

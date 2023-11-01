@@ -13,7 +13,7 @@ import {decElimZero} from '../rc/function_79.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {sub_addFactorNegative} from '../rc/function_130.inc.js';
 
-function 등식_좌우변경가능(tree = null) {
+export function 등식_좌우변경가능(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

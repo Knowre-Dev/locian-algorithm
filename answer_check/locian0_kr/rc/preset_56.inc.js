@@ -20,26 +20,20 @@ import {sub_addFactorNegative} from '../rc/function_130.inc.js';
 import {sub_addFactored} from '../rc/function_162.inc.js';
 import {nthrootToSquareroot} from '../rc/function_191.inc.js';
 
-function 식_간단히(tree = null) {
+export function 식_간단히(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);
     laco.apply(ineqIdentity);
     laco.apply(eqIdentity);
     laco.apply(nthrootToSquareroot);
-    
-    laco.apply(sub_addFactorNegative);
-    
+    //laco.apply(sub_addFactorNegative);
     laco.apply(fracDecimal);
     //laco.apply(fracNegative);
     laco.apply(fracExpress);
-    
     laco.apply(sub_mulCommutative);
-    
     laco.apply(addCommutative);
-    
     laco.apply(sub_addFactored); 
-    
     laco.apply(fracNegative);
     laco.apply(fracSeparation);       
     laco.apply(addCommutative);        
@@ -58,7 +52,10 @@ function 식_간단히(tree = null) {
     laco.apply(fracNegative);
     laco.apply(addFactoredFormVar);  
     laco.apply(addFactoredForm); 
-    laco.apply(sub_mulCommutative);           
+    laco.apply(sub_mulCommutative);
+    laco.apply(ineqIdentity);
+    laco.apply(eqIdentity);      
+
     tree_1 = laco.finalize();
        
     
@@ -67,8 +64,8 @@ function 식_간단히(tree = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '6a^3b+12a^2b';
-var latex_2 = '6a^2b(a+2)';
+var latex_1 = '7a^3b-14ab';
+var latex_2 = '7ab(a^2-2)';
 var tree_1 = LatexToTree(latex_1);
 var tree_2 = LatexToTree(latex_2);
 var tree_11 =  식_간단히(tree_1);

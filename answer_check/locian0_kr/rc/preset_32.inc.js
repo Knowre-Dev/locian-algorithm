@@ -2,7 +2,7 @@ import {Laco} from '../libs/common.inc.js';
 
 import {varReverseShift} from '../rc/function_63.inc.js';
 
-function geometry_polygon(tree = null) {
+export function geometry_polygon(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

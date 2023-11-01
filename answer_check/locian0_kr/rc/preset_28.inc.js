@@ -18,7 +18,7 @@ import {mulZero} from '../rc/function_82.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {decIdentity} from '../rc/function_86.inc.js';
 
-function standard_form(tree = null) {
+export function standard_form(tree = null) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var laco = new Laco();
     laco.initialize(tree_1);

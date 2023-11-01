@@ -3,6 +3,7 @@ export function evaluateEx_new(tree) {
     if (validMathTree(tree_1) == false) {
         return tree_1;
     }
+    
     switch (tree_1[0]) {
         // 160828 larwein - inequality patch
         case 'inequality':
@@ -55,6 +56,7 @@ export function evaluateEx_new(tree) {
             var seedArr = [-2, -1, 1, 2, 3];
             for (var seed of seedArr) {
                 var evalresult = evaluateExWithSeed(tree_1, seed);
+                
                 // If the value is too large for numerical evaluation
                 // so that any of the five substitutions produce INF or NAN,
                 // then just return the original tree
@@ -82,7 +84,7 @@ export function evaluateEx_new(tree) {
 }
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = 'x\\div 3+1';
+var latex_1 = 'x^{2a}';
 var tree_1 = LatexToTree(latex_1);
 var tree_11 = evaluateEx_new(tree_1);
 console.log(JSON.stringify(tree_11, null, 4));
@@ -117,6 +119,7 @@ no matter where in the tree traversal does the substitution occur
 export function evaluateExWithSeed(tree, seed = 1, lookupTable = new Object()) {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     var lookupTable_1 = JSON.parse(JSON.stringify(lookupTable));
+    
     if (!Array.isArray(tree_1)) {
         return tree_1;
     }
@@ -138,7 +141,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = new Object()) {
         var varname = getVarName(variable);
         var is_included = false;
         for (var v of varNames) {
-            if (JSON.stringify(v) == JSON.stringify(varmane)) {
+            if (JSON.stringify(v) == JSON.stringify(varname)) {
                 is_included = true;
             }
         }
@@ -165,7 +168,8 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = new Object()) {
     var rangeWidth = 10;
     var bound = rangeWidth / 2;
     
-    if (lookupTable_1.length == 0) {
+    if (Object.keys(lookupTable_1).length == 0) {
+        
         for (var varname of varNames) {
             var newZ = [];
             switch (varname) {
@@ -238,16 +242,18 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = new Object()) {
     
     
     for (var subtree of operandTree) {
+        
         operand.push(evaluateExWithSeed(subtree, seed, lookupTable_1));
     }
+
     
     // By the recursion above, we are guaranteed that
     // ALL subexpressions have been evaluated into numerical values
     switch(operator) {
         case 'variable':
             //case 'subscript': // commented out; evaluateOperation() already handles this well
-            
             return evaluateVariable([operator].concat(operand), lookupTable_1);
+            
             // Note: The function above has been edited to take in the whole tree as 1st arg
             //          rather than just the operand without operator at front
         case 'overline':
@@ -292,6 +298,7 @@ Values are represented in complex number format
 export function evaluateOperation(operator, operand, seed = null, lookupTable = new Object()) {
     var operand_1 = JSON.parse(JSON.stringify(operand));
     var lookupTable_1 = JSON.parse(JSON.stringify(lookupTable));
+    
     switch(operator) {
         case 'natural':
         case 'decimal':
@@ -329,6 +336,7 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             var prod = [1, 0];
             // Complex number multiplication
             // (a+bi)(c+di) = (ac-bd) + (ad+bc)i
+            
             for (var factor of operand_1) {
                 var temp = JSON.parse(JSON.stringify(prod));
                 prod[0] = temp[0] * factor[0] - temp[1] * factor[1];
@@ -415,8 +423,9 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             //*/
         
         case 'log':
+            
             var newOperand = [];
-            newOperand.push(evaluateOperation('ln', [operand_[0]], seed, lookupTable_1));
+            newOperand.push(evaluateOperation('ln', [operand_1[0]], seed, lookupTable_1));
             if (typeof operand_1[1] != 'undefined') {
                 newOperand.push(evaluateOperation('ln', [operand_1[1]], seed, lookupTable_1));
             } else {
@@ -491,6 +500,8 @@ a lookup table constructed at evaluateExWithSeed(),
 which is passed as an argument
 */
 export function evaluateVariable(variable, lookupTable = new Object()) {
+
+    
     
     var variable_1 = JSON.parse(JSON.stringify(variable));
     var lookupTable_1 = JSON.parse(JSON.stringify(lookupTable));
@@ -499,7 +510,7 @@ export function evaluateVariable(variable, lookupTable = new Object()) {
     /*//
     varname = is_array(variable) ? ('(' . implode(variable) . ')') : variable;
     //*/
-    var keys = Object.keys(lookupTable_1.keys);
+    var keys = Object.keys(lookupTable_1);
     var is_included = false;
     for (var v of keys) {
         if (JSON.stringify(v) == JSON.stringify(varname)) {
