@@ -45,7 +45,7 @@ export function 기약분수_소수_가능(tree = null) {
     return tree_1;
 }
 
-
+/*
 import {LatexToTree} from '../checkmath.js';
 var latex_1 = '\\frac{50\\pi }{3}-25\\sqrt{3}';
 var latex_2 = '\\frac{100\\pi -150\\sqrt{3}}{6}';
@@ -58,3 +58,4 @@ var result_2 = JSON.stringify(tree_21, null, 4);
 console.log(result_1 == result_2);
 console.log(result_1);
 console.log(result_2);
+*/

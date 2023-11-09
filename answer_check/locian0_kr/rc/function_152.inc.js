@@ -531,6 +531,7 @@ Copied mostly from checkmath.php,
 with comments added by epark
 */
 export function powComplex_inLocian(A, B) {  
+   
     var A_1 = JSON.parse(JSON.stringify(A));
     var B_1 = JSON.parse(JSON.stringify(B));
     if (A_1[0] == 0 && A_1[1] == 0) {
@@ -570,13 +571,14 @@ export function powComplex_inLocian(A, B) {
 
     var newR = Math.pow(r, c) / Math.exp(d * theta);
     
-    var newTheta = d * Math.log(r) + c * theta;
+    var newTheta = (d * Math.log(r) + c * theta) % (2 * Math.PI);
     
     var result = [
         newR * Math.cos(newTheta),
         newR * Math.sin(newTheta)
     ];
     
+
     
     return result;
 }
@@ -685,6 +687,7 @@ export function array2ChainTree(arr, evalNumeric = false) {
                 nonnumericArr.push([term[0], subtree]);
             }
         }
+        //console.log(JSON.stringify(numericArr, null, 4))
         var numRes = array2ChainTree(numericArr);
         arr_1 = nonnumericArr;
         if (numRes.length > 0) {
@@ -726,9 +729,10 @@ export function array2ChainTree(arr, evalNumeric = false) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '1\\pm 2';
+var latex_1 = '3^2';
 var tree_1 = LatexToTree(latex_1);
-var tree_11 = array2ChainTree(tree_1.slice(1), true);
+tree_1 = [['mul', tree_1]];
+var tree_11 = array2ChainTree(tree_1, true);
 console.log(JSON.stringify(tree_11, null, 4))
 */
 
@@ -1033,8 +1037,14 @@ export function evalNumericValues_mulChain(operand) {
     tree = fracSimpInt(tree);
     return tree;
 }
-
-
+/*
+import {LatexToTree} from '../checkmath.js';
+var latex_1 = '(-3)^2';
+var tree_1 = LatexToTree(latex_1);
+var tree_11 = evalNumericValues_power(tree_1.slice(1));
+var result1 = JSON.stringify(tree_11, null, 4);
+console.log(result1);
+*/
 
 /*
 Helper function for evalNumericValues(tree) for power tree
@@ -1490,8 +1500,10 @@ export function isNumeric(tree, excNegative = false, recursive = false) {
         powIsNumeric = powIsNumeric && isNumeric(tree_1[1], excNegative, recursive);
         powIsNumeric = powIsNumeric && isNumeric(tree_1[2], excNegative, recursive);
     } else {
-        fracIsNumeric = fracIsNumeric && tree_1[1][0] == 'natural' && tree_1[2][0] == 'natural';
-        powIsNumeric = powIsNumeric && tree_1[1][0] == 'natural' && tree_1[2][0] == 'natural';
+        
+        fracIsNumeric = fracIsNumeric && tree[1][0] == 'natural' && tree[2][0] == 'natural';
+        powIsNumeric = powIsNumeric && (tree[1][0] == 'natural' || (tree[1][0] == 'negative' && tree[1][1][0] == 'natural')) && tree[2][0] == 'natural';
+
         /*//
         // The following change has been undone as of 20180823
         // RATIONALE: If we consider fractional exponents as simple numerical expression
@@ -1514,9 +1526,13 @@ export function isNumeric(tree, excNegative = false, recursive = false) {
     
     return ['natural', 'decimal', 'rdecimal'].includes(tree_1[0]) || fracIsNumeric || powIsNumeric;
 }
-
-
-
+/*
+import {LatexToTree} from '../checkmath.js';
+var latex_1 = '(-3)^2';
+var tree_1 = LatexToTree(latex_1);
+var tree_11 = isNumeric(tree_1, false, false);
+console.log(JSON.stringify(tree_11, null, 4))
+*/
 
 
 

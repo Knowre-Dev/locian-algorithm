@@ -53,8 +53,11 @@ export function exprSimpConst(tree = null) {
             return fracMfrac(oldtree);
         case 'negative': // fin
             // Possible output type: ANYTHING
+            
             var subresult = exprSimpConst(tree_1[0]);
             if (subresult[0] == 'negative') {
+                
+            
                 return subresult[1];
             }
             newOperand.push(subresult);
@@ -179,6 +182,7 @@ export function exprSimpConst(tree = null) {
             var basetree = exprSimpConst(tree_1[0]);
             var expotree = exprSimpConst(tree_1[1]);
             
+            
             // If the original expotree is a fraction with even denominator,
             // the result must work with the absolute value of the original base
             // So make a flag variable to store that info
@@ -198,6 +202,7 @@ export function exprSimpConst(tree = null) {
             // Remember, ((x^(2k-1))^2)^(1/2) == |x|^(2k-1), not x
             // Reflect this by modifying basetree as applicable
             var cons = findGCF(expotree, ['natural', '2'])['const'];
+           
             var oddExpoFlag = JSON.stringify(cons) == JSON.stringify(['natural', '1']);
             if (expotree[0] == 'natural' && oddExpoFlag && evenRootFlag)
                 basetree = ['absolute', basetree];
@@ -224,6 +229,8 @@ export function exprSimpConst(tree = null) {
             }
             
             var newtree = array2ChainTree(mtermArr, true);
+            
+            
             newtree = divFrac(newtree);
             // Remove any power of 1 before returning
             newtree = powIdentity(newtree);
@@ -243,8 +250,9 @@ export function exprSimpConst(tree = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '1\\pm 2';
+var latex_1 = '(-3)^2';
 var tree_1 = LatexToTree(latex_1);
+
 var tree_11 = exprSimpConst(tree_1);
 var result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);

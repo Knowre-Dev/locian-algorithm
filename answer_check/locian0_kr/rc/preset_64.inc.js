@@ -68,7 +68,6 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     laco.apply(solParenthesis);
     //console.log(JSON.stringify(laco.finalize(), null, 4));
     laco.apply(fracExpress);
-    
     laco.apply(fracSimp);
     
     
@@ -117,9 +116,9 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     laco.apply(mulAllSidesByCommonDenom);
     
     laco.apply(solParenthesis);
-    //console.log(JSON.stringify(laco.finalize(), null, 4));
+    
     laco.apply(exprSimpConst);
-    //console.log(JSON.stringify(laco.finalize(), null, 4));  
+      
     laco.apply(mulAssociative);
     laco.apply(fracSimp);
     
@@ -163,7 +162,7 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     // Step 7. Add infinity notations to any inequality
     //            This must be the last transformation step
     //            to ensure that infinity notations are placed where expected
-    //console.log(JSON.stringify(laco.finalize(), null, 4));
+    
     
     laco.apply(ineqSetNot, variable);
     //console.log(JSON.stringify(laco.finalize(), null, 4));
@@ -204,14 +203,14 @@ function 모두가능(tree_1 = null) {
 }
 */
 /*
-import {LatexToTree, is_equal_tree} from '../checkmath.js';
-var latex_1 = '\\frac{x}{3}+1';
-var latex_2 = 'x\\div 3+1';
+import {LatexToTree, compareMathTree} from '../checkmath.js';
+var latex_1 = '9-8p>0';
+var latex_2 = '(-3)^2-4\\times 1\\times 2p>0';
 var tree_1 = LatexToTree(latex_1);
 var tree_2 = LatexToTree(latex_2);
 var tree_11 = 모두가능(tree_1);
 var tree_21 = 모두가능(tree_2);
-console.log(is_equal_tree(tree_11, tree_21));
+console.log(compareMathTree(tree_11, tree_21));
 var result_1 = JSON.stringify(tree_11, null, 4);
 var result_2 = JSON.stringify(tree_21, null, 4);
 console.log(result_1);
@@ -219,7 +218,7 @@ console.log(result_2);
 */
 /*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';
-var latex_1 = 'x\\div 3+1';
+var latex_1 = '(-3)^2-4\\times 1\\times 2p>0';
 var tree_1 = LatexToTree(latex_1);
 var tree_11 = 모두가능(tree_1);
 var result_1 = JSON.stringify(tree_11, null, 4);

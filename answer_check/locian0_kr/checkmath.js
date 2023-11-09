@@ -1252,14 +1252,17 @@ export function compareMathTree(treeA, treeB) {
             return false;
         }
     }
-
+    
     if (treeA_1[0] == 'anything') {
         treeA_1 = treeB_1;
-    } else if (treeB[0] == 'anything') {
+        
+    } else if (treeB_1[0] == 'anything') {
         treeB_1 = treeA_1;
+        
     }
-
+    
     if (treeA_1[0] === treeB_1[0] && treeA_1.length === treeB_1.length) {
+       
         if (treeA_1[0] === 'eval') {
             var result = true;
             var num_nullResult = 0;
@@ -1315,6 +1318,7 @@ export function compareMathTree(treeA, treeB) {
         } else if (treeA_1.length === 1) {
             return true;
         } else {
+            
             treeA_1 = treeA_1.slice(1);
             treeB_1 = treeB_1.slice(1);
             for (var [k, v] of treeA_1.entries()) {
