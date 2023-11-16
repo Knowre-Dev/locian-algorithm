@@ -4,23 +4,24 @@ export function fracSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();  
-    var newOperand = [];
+    let operator = tree_1.shift();  
+    let newOperand = [];
     if (operator === 'fraction') {
-        var num = fracSimpInt(tree_1[0]);
-        var den = fracSimpInt(tree_1[1]);
-        var intNum;
-        var intDen;
+        let num = fracSimpInt(tree_1[0]);
+        let den = fracSimpInt(tree_1[1]);
+        let intNum;
+        let intDen;
+        let narrNum = [];
         if (num[0] === 'natural') {
             intNum = parseInt(num[1]);
             
         } else if (num[0] === 'mulchain') {
-            var arrNum = [];
-            var narrNum = [];
-            var num_1 = num.slice(1);
-            for (var term of num_1) {
+            let arrNum = [];
+            //let narrNum = [];
+            let num_1 = num.slice(1);
+            for (let term of num_1) {
                 if (term[0] === 'mul' && term[1][0] === 'natural') {
                     arrNum.push(parseInt(term[1][1]));
                 } else {
@@ -33,7 +34,7 @@ export function fracSimpInt(tree) {
                 intNum = arrNum[0];
             } else {
                 intNum = 1;
-                for (var v of arrNum) {
+                for (let v of arrNum) {
                     intNum *= v;
                 }
                 
@@ -41,14 +42,14 @@ export function fracSimpInt(tree) {
         } else {
             intNum = 1;
         }
-        var arrDen = [];    
-        var narrDen = [];
+        let arrDen = [];    
+        let narrDen = [];
         
         if (den[0] === 'natural') {
             intDen = parseInt(den[1]);
         } else if (den[0] === 'mulchain') {
-            var den_1 = den.slice(1);
-            for (var term of den_1) {
+            let den_1 = den.slice(1);
+            for (let term of den_1) {
                 if (term[0] === 'mul' && term[1][0] === 'natural') {
                     arrDen.push(parseInt(term[1][1]));
                 } else {
@@ -61,7 +62,7 @@ export function fracSimpInt(tree) {
                 intDen = arrDen[0];
             } else {
                 intDen = 1;
-                for (var v of arrDen) {
+                for (let v of arrDen) {
                     intDen *= v;
                 }
             }
@@ -69,9 +70,9 @@ export function fracSimpInt(tree) {
             intDen = 1;
         }
         
-        var gcf = EuclidAlg(intNum, intDen);
-        var newNum = (intNum/gcf).toString();
-        var newDen = (intDen/gcf).toString();
+        let gcf = EuclidAlg(intNum, intDen);
+        let newNum = (intNum/gcf).toString();
+        let newDen = (intDen/gcf).toString();
         
         if (num[0] === 'natural') {
             newOperand.push(['natural', newNum]);
@@ -110,7 +111,7 @@ export function fracSimpInt(tree) {
             newOperand.push(den);
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(fracSimpInt(v));
         }
     }
@@ -121,7 +122,7 @@ export function fracSimpInt(tree) {
 
 export function EuclidAlg(A, B) {
     while (B !== 0) {
-        var temp = B;
+        let temp = B;
         B = A % B;
         A = temp;
     }

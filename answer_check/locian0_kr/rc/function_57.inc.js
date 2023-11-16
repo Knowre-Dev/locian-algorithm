@@ -4,11 +4,11 @@ export function divIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mulchain') {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             if (v[0] !== 'div' || v[1][0] !== 'natural' || v[1][1] !== '1') {
                 newOperand.push(v);
             }
@@ -19,7 +19,7 @@ export function divIdentity(tree) {
             newOperand = newOperand[0][1];
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(divIdentity(v));
         }
     }

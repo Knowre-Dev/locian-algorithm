@@ -5,9 +5,9 @@ export function eqMulNeg(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'equation' && 
         (tree_1[0][0] === 'negative' || (tree_1[0][0] === 'addchain' && tree_1[0][1][0] === 'sub'))) {
         if (tree_1[0][0] === 'negative') {

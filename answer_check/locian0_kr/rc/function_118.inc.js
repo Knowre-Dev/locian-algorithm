@@ -4,24 +4,24 @@ export function absToMul(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     
     if (operator === 'absolute') {
         if (tree_1[0][0] === 'variable') {
             newOperand = tree_1;
         } else if (tree_1[0][0] === 'negative' 
             && tree_1[0][1][0] === 'variable'){
-            var ntree = tree_1[0];
+            let ntree = tree_1[0];
             ntree.shift();
             newOperand = ntree;
         } else if (tree_1[0][0] === 'mulchain'){
-            var ntree = tree_1[0];
+            let ntree = tree_1[0];
             ntree.shift();
-            var vari = [];
-            var nat = [];
-            for (var nt of ntree) {
+            let vari = [];
+            let nat = [];
+            for (let nt of ntree) {
                 if (nt[1][0] === 'negative') {
                     if (nt[1][1][0] === 'variable') {
                         vari.push([nt[0], nt[1][1]]);
@@ -40,14 +40,14 @@ export function absToMul(tree = null) {
                 newOperand.push(['mulchain'].concat(vari));
             } else {
                 if (vari.length === 1) {
-                    var abs_arr = [vari[0][0], ['absolute', vari[0][1]]];
-                    var mul_arr = nat.concat([abs_arr]);
+                    let abs_arr = [vari[0][0], ['absolute', vari[0][1]]];
+                    let mul_arr = nat.concat([abs_arr]);
                     operator = 'mulchain';
                     newOperand = mul_arr;
                 } else {
-                    var mul1 = ['mulchain'].concat(vari);
-                    var abs_arr = ['mul', ['absolute', mul1]];
-                    var mul_arr = nat.concat([abs_arr]);
+                    let mul1 = ['mulchain'].concat(vari);
+                    let abs_arr = ['mul', ['absolute', mul1]];
+                    let mul_arr = nat.concat([abs_arr]);
                     operator = 'mulchain';
                     newOperand = mul_arr;                       
                 }
@@ -60,7 +60,7 @@ export function absToMul(tree = null) {
             newOperand = tree_1;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(absToMul(v));
         }
     }

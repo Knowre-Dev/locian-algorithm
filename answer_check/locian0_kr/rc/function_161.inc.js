@@ -4,22 +4,22 @@ export function divFrac(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mulchain') {
-        for (var k = 0; k < tree_1.length; k++) {
+        for (let k = 0; k < tree_1.length; k++) {
             if (k === 0) {
                 newOperand.push(tree_1[k]);
             } else if (tree_1[k][0] === 'div' && (newOperand[newOperand.length - 1])[0] === 'mul') {
-                var num = divFrac(newOperand.pop()[1]);
-                var denum = divFrac(tree_1[k][1]);
+                let num = divFrac(newOperand.pop()[1]);
+                let denum = divFrac(tree_1[k][1]);
                 if (tree_1.length === 2) {
                     operator = 'fraction';
                     newOperand.push(num);
                     newOperand.push(denum);
                 } else {
-                    var tempArr = ['fraction'].concat([num, denum]);
+                    let tempArr = ['fraction'].concat([num, denum]);
                     newOperand.push(['mul'].concat([tempArr]));
                 }
             } else {
@@ -31,7 +31,7 @@ export function divFrac(tree) {
             newOperand = newOperand.shift()[1];
         }
     } else {
-        for (var [k, arr] of tree_1.entries()) {
+        for (let [k, arr] of tree_1.entries()) {
             newOperand.push(divFrac(arr));
            
         }

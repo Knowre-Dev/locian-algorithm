@@ -4,10 +4,10 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'interval') {
         operator = 'inequality';
         newOperand = [
@@ -38,7 +38,7 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
             ];
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(intervalSetNot(v));
         }
     }
@@ -49,13 +49,13 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
 /*
 import {LatexToTree, compareMathTree, is_equal_tree} from "../checkmath.js";
 
-var tree_1 = LatexToTree("4\\gt\\pi\\gt2");
-var tree_2 = LatexToTree("(2,4)");
+let tree_1 = LatexToTree("4\\gt\\pi\\gt2");
+let tree_2 = LatexToTree("(2,4)");
 tree_1 = intervalSetNot(tree_1);
 tree_2 = intervalSetNot(tree_2);
-var result_1 = JSON.stringify(tree_1, null, 4);
-var result_2 = JSON.stringify(tree_2, null, 4);
-var result = compareMathTree(tree_1, tree_2);
+let result_1 = JSON.stringify(tree_1, null, 4);
+let result_2 = JSON.stringify(tree_2, null, 4);
+let result = compareMathTree(tree_1, tree_2);
 console.log(result);
 console.log(result_1);
 console.log(result_2);

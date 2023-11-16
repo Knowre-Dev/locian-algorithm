@@ -25,13 +25,13 @@ export function rearrangeTreeAdd(A, B) {
         return 0;
         
     }
-    var A_1 = _.cloneDeep(A);
-    var B_1 = _.cloneDeep(B);
-    var operatorA = A_1[0];
-    var operatorB = B_1[0];
-    var operandA = A_1.splice(1);
-    var operandB = B_1.splice(1);    
-    var opflag = ['add', 'sub', 'addsub', 'subadd'].includes(operatorA);
+    let A_1 = _.cloneDeep(A);
+    let B_1 = _.cloneDeep(B);
+    let operatorA = A_1[0];
+    let operatorB = B_1[0];
+    let operandA = A_1.splice(1);
+    let operandB = B_1.splice(1);    
+    let opflag = ['add', 'sub', 'addsub', 'subadd'].includes(operatorA);
     if (operatorA > operatorB && !opflag) {
         return 1;
     } 
@@ -49,8 +49,8 @@ export function rearrangeTreeAdd(A, B) {
     if (operandA.length < operandB.length) {
         return -1;
     } 
-    for (var [k, v] of operandA.entries()) {
-        var temp = rearrangeTreeEq(v, operandB[k]);
+    for (let [k, v] of operandA.entries()) {
+        let temp = rearrangeTreeEq(v, operandB[k]);
         if (temp === 0) {
             continue;
         } else {

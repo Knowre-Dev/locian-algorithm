@@ -6,18 +6,18 @@ export function addFactor(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'addchain') {
         // extract all constant coefficents (not in denominator)
-        var consArr = [];
-        for (var addterm of tree_1) {
+        let consArr = [];
+        for (let addterm of tree_1) {
             if (addterm[1][0] === 'mulchain') {
-                var con = ['natural', '1'];
-                var syms = [];
-                var addterm_1 = addterm[1].slice(1);
-                for (var [km, multerm] of addterm_1.entries()) {
+                let con = ['natural', '1'];
+                let syms = [];
+                let addterm_1 = addterm[1].slice(1);
+                for (let [km, multerm] of addterm_1.entries()) {
                     if (multerm[0] === 'mul') {
                         if (multerm[1][0] === 'variable') {
                             syms.push(multerm);
@@ -31,10 +31,10 @@ export function addFactor(tree) {
                 }
             } else if (addterm[1][0] === 'fraction') {
                 if (addterm[1][1][0] === 'mulchain') {
-                    var con = ['natural', '1'];
-                    var syms = [];      
-                    var addterm_11 = addterm[1][1].slice(1);
-                    for (var multerm of addterm_11) {
+                    let con = ['natural', '1'];
+                    let syms = [];      
+                    let addterm_11 = addterm[1][1].slice(1);
+                    for (let multerm of addterm_11) {
                         if (multerm[0] === 'mul') {
                             if (multerm[1][0] === 'variable') {
                                 syms.push(multerm);
@@ -52,25 +52,25 @@ export function addFactor(tree) {
         
         // divide each term by the constant coefficients
         if (consArr.length !== 0) {
-            var con;
+            let con;
             if (consArr.length === 1) {
                 con = consArr[0][1];
             } else {
-                var lcm = parseInt(consArr[0][1][1]);
-                for (var term of consArr) {
+                let lcm = parseInt(consArr[0][1][1]);
+                for (let term of consArr) {
                     lcm = (lcm * parseInt(term[1][1]))/EuclidAlg(lcm, parseInt(term[1][1]));
                 }
                 con = ['natural', lcm.toString()];
             }
             
-            var newAdd = ['addchain'];
-            for (var addterm of tree_1) {                
+            let newAdd = ['addchain'];
+            for (let addterm of tree_1) {                
                 if (addterm[1][0] === 'fraction') {
                     if (addterm[1][2][0] !== 'mulchain') {
                         addterm[1][2] = ['mulchain', ['mul', addterm[1][2]]];
                     }
-                    var den = addterm[1][2].concat(consArr);
-                    var frac = ['fraction', addterm[1][1], den];
+                    let den = addterm[1][2].concat(consArr);
+                    let frac = ['fraction', addterm[1][1], den];
                     newAdd.push([addterm[0], fracSimpInt(frac)]);
                 } else {
                     newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1], con])]);
@@ -83,7 +83,7 @@ export function addFactor(tree) {
             newOperand = tree_1;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(v);
         }
     }

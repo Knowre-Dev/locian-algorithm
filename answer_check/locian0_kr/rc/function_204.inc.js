@@ -6,11 +6,11 @@ export function addNegaToSub(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'addchain') {
-        for (var [k, v] of tree_1.entries()) {
+        for (let [k, v] of tree_1.entries()) {
             
             if (k === 0) {
                 if (v[0] === 'add' && v[1][0] === 'negative') {
@@ -25,7 +25,7 @@ export function addNegaToSub(tree = null) {
             }
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(addNegative(v));
         }
     }
@@ -37,12 +37,12 @@ export function addNegaToSub(tree = null) {
 
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
-var latex_1 = '(+2)+2';
-var latex_2 = '+2+2';
-var tree1 = addNegaToSub(LatexToTree(latex_1));
-var tree2 = addNegaToSub(LatexToTree(latex_2));
-var result1 = JSON.stringify(tree1, null, 4);
-var result2 = JSON.stringify(tree2, null, 4);
+let latex_1 = '(+2)+2';
+let latex_2 = '+2+2';
+let tree1 = addNegaToSub(LatexToTree(latex_1));
+let tree2 = addNegaToSub(LatexToTree(latex_2));
+let result1 = JSON.stringify(tree1, null, 4);
+let result2 = JSON.stringify(tree2, null, 4);
 console.log(result1 === result2);
 console.log(JSON.stringify(tree1, null, 4));
 console.log(JSON.stringify(tree2, null, 4));

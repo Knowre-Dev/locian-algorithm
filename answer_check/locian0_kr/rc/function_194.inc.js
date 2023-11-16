@@ -4,13 +4,13 @@ export function mulToExp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mulchain') {
-        var power = new Object();
-        var varNum = [];
-        for (var term of tree_1) {
+        let power = new Object();
+        let varNum = [];
+        for (let term of tree_1) {
             if (term[0] === 'mul') {
                 if (term[1][0] === 'variable') {
                     if (!power.hasOwnProperty(term[1][1])) {
@@ -26,7 +26,7 @@ export function mulToExp(tree = null) {
                 varNum.push(term);
             }
         }
-        for (var [k, v] of Object.entries(power)) {
+        for (let v of Object.values(power)) {
             if (v.length > 1){
                 varNum.push(['mul', ['power', v[0], ['natural', (v.length).toString()]]]);
             } else {
@@ -40,7 +40,7 @@ export function mulToExp(tree = null) {
             newOperand = varNum;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(mulToExp(v));
         }
     }

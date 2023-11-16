@@ -5,33 +5,33 @@ export function rdecToFrac(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'rdecimal') {
         if (tree_1[1] === '') {
-            var int = tree_1[0];
-            var rdec = tree_1[2];
-            var num;
-            var mul;
+            let int = tree_1[0];
+            let rdec = tree_1[2];
+            let num;
+            let mul;
             if (int === '0') {
                 num = parseInt(rdec);
             } else {
                 mul = parseInt(int) * Math.pow(10, rdec.length) + parseInt(rdec);
                 num = mul - parseInt(int);
             }
-            var den = (9 * Math.pow(10, rdec.length - 1)).toString();
+            let den = (9 * Math.pow(10, rdec.length - 1)).toString();
             
-            var frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
+            let frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
             operator = frac.shift();
             newOperand = frac;
         } else {
-            var int = tree_1[0];
-            var dec = tree_1[1];
-            var rdec = tree_1[2];
-            var mul;
-            var num
+            let int = tree_1[0];
+            let dec = tree_1[1];
+            let rdec = tree_1[2];
+            let mul;
+            let num
             if (int === '0') {
                 mul = parseInt(dec) * Math.pow(10, rdec.length) + parseInt(rdec);
                 num = mul - parseInt(dec);
@@ -39,14 +39,14 @@ export function rdecToFrac(tree) {
                 mul = parseInt(int + dec)* Math.pow(10, rdec.length) + parseInt(rdec);
                 num = mul - parseInt(int + dec);
             }
-            var den = (9 * Math.pow(10, rdec.length + dec.length - 1)).toString();
+            let den = (9 * Math.pow(10, rdec.length + dec.length - 1)).toString();
             
-            var frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
+            let frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
             operator = frac.shift();
             newOperand = frac;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(rdecToFrac(v));
         }
     }
@@ -56,12 +56,12 @@ export function rdecToFrac(tree) {
 }
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '0.\\overline{2}';
-var latex_2 = '0.1\\overline{2}';
-var tree_1 = rdecToFrac(LatexToTree(latex_1));
-var tree_2 = rdecToFrac(LatexToTree(latex_2));
-var result_1 = JSON.stringify(tree_1, null, 4);
-var result_2 = JSON.stringify(tree_2, null, 4);
+let latex_1 = '0.\\overline{2}';
+let latex_2 = '0.1\\overline{2}';
+let tree_1 = rdecToFrac(LatexToTree(latex_1));
+let tree_2 = rdecToFrac(LatexToTree(latex_2));
+let result_1 = JSON.stringify(tree_1, null, 4);
+let result_2 = JSON.stringify(tree_2, null, 4);
 console.log(result_1 === result_2);
 console.log(JSON.stringify(tree_1, null, 4));
 console.log(JSON.stringify(tree_2, null, 4));

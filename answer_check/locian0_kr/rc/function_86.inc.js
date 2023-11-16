@@ -4,10 +4,10 @@ export function decIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'decimal') {
         if (tree_1[0].substr(0, 1) === '.') {
             newOperand.push('0' + tree_1[0]);
@@ -23,7 +23,7 @@ export function decIdentity(tree) {
             newOperand = tree_1;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(decIdentity(v));
         }
     }

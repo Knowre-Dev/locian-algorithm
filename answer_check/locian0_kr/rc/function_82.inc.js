@@ -5,13 +5,13 @@ export function mulZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mulchain') {
-        var zero = false;
-        for (var term of tree_1) {
+        let zero = false;
+        for (let term of tree_1) {
             if (checkZeroEquiv(term[1])) {
                 zero = true;
             }
@@ -23,7 +23,7 @@ export function mulZero(tree) {
             newOperand = tree_1;
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(mulZero(v));
         }
     }

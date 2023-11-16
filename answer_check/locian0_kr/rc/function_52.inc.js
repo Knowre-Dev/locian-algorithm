@@ -6,18 +6,18 @@ export function fracMfrac(tree) {
         return tree;
     }
     
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
-        var num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
-        var den = tree_1[2];
+        let num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
+        let den = tree_1[2];
 
-        var operator = 'fraction';
+        operator = 'fraction';
         newOperand.push(num);
         newOperand.push(den);
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(fracMfrac(v));
         }
     }
@@ -27,9 +27,9 @@ export function fracMfrac(tree) {
 }
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '\\mfrac[1]{7}{3}';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = fracMfrac(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let latex_1 = '\\mfrac[1]{7}{3}';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = fracMfrac(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(JSON.stringify(tree_11, null, 4));
 */

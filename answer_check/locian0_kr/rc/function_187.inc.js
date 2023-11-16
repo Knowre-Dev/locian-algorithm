@@ -4,12 +4,12 @@ export function expToFrac(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'power') {
         if (tree_1[1][0] === 'negative') {
-            var newPower = tree_1[1][1];                
+            let newPower = tree_1[1][1];                
             //밑이 분수일 경우
             if (tree_1[0][0] === 'fraction') { 
                 if (tree_1[0][1][0] === 'natural' && tree_1[0][1][1] === '1') {
@@ -41,7 +41,7 @@ export function expToFrac(tree = null) {
         }
         
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(expToFrac(v));
         }
     }
@@ -53,13 +53,13 @@ export function expToFrac(tree = null) {
 }
 
 export function fracFirst(tree) {
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'mulchain') {
-        var frac = [];
-        var other = [];
-        for (var v of tree_1) {
+        let frac = [];
+        let other = [];
+        for (let v of tree_1) {
             if (v[0] === 'mul' && v[1][0] === 'fraction') {
                 frac.push(v);
             }else{

@@ -9,28 +9,28 @@ export function fracSeparation(tree) {
         return tree;
     }
 
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'fraction' && tree_1[0][0] === 'addchain') {
-        var top = addFactoredForm(tree_1[0]);
-        var base = addFactoredForm(tree_1[1]);
+        let top = addFactoredForm(tree_1[0]);
+        let base = addFactoredForm(tree_1[1]);
         
-        var merge = ['fraction'].concat([top, base]);
-        var simple1 = fracSimp(merge);
-        var simple2 = fracSimpVar(merge);
-        var simple;
+        let merge = ['fraction'].concat([top, base]);
+        let simple1 = fracSimp(merge);
+        let simple2 = fracSimpVar(merge);
+        let simple;
         if (JSON.stringify(simple1) === JSON.stringify(merge) && JSON.stringify(simple2) === JSON.stringify(merge)) {
             simple = true;
         } else {
             simple = false;
         }
         operator = 'addchain';
-        var den = fracSeparation(tree_1[1]);
-        var term_0 = tree_1[0].slice(1);
-        for (var term of term_0) {   
-            var sign;      
-            var nden;       
+        let den = fracSeparation(tree_1[1]);
+        let term_0 = tree_1[0].slice(1);
+        for (let term of term_0) {   
+            let sign;      
+            let nden;       
             if (den[0] === 'negative') {
                 if (term[0] === 'add') {
                     sign = 'sub';
@@ -59,7 +59,7 @@ export function fracSeparation(tree) {
                      
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(fracSeparation(v));
         }
     }

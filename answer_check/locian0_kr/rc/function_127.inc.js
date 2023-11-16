@@ -4,15 +4,15 @@ export function ineqRearrange(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     
     if (operator === 'inequality') {          
         if (tree_1[0][0] === 'negative') {
-            var temp = [];
-            var tree_2 = tree_1.reverse();
-            for (var v of tree_2) {
+            let temp = [];
+            let tree_2 = tree_1.reverse();
+            for (let v of tree_2) {
                 if (Array.isArray(v)) {
                     if (v[0] === 'negative') {
                         temp.push(v[1]);

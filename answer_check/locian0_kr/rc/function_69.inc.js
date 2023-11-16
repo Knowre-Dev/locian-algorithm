@@ -4,14 +4,14 @@ export function fracComplex(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var numArr = [];
-    var denArr = [];
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let numArr = [];
+    let denArr = [];
+    let newOperand = [];
     if (operator === 'fraction') {
-        var num = fracComplex(tree_1[0]);
-        var den = fracComplex(tree_1[1]);
+        let num = fracComplex(tree_1[0]);
+        let den = fracComplex(tree_1[1]);
         if (num[0] === 'fraction') {
             numArr.push(num[1]);
             denArr.push(num[2]);
@@ -25,20 +25,20 @@ export function fracComplex(tree) {
             denArr.push(den);
         }
         
-        var newNum = [];
+        let newNum = [];
         if (numArr.length > 1) {
             newNum = ['mulchain'];
-            for (var term of numArr) {
+            for (let term of numArr) {
                 newNum.push(['mul', term]);
             }
         } else {
             newNum = numArr[0];
         }
         
-        var newDen = [];
+        let newDen = [];
         if (denArr.length > 1) {
             newDen = ['mulchain'];
-            for (var term of denArr) {
+            for (let term of denArr) {
                 newDen.push(['mul', term]);
             }
         } else {
@@ -46,7 +46,7 @@ export function fracComplex(tree) {
         }
         newOperand = [newNum, newDen];
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(fracComplex(v));
         }
     }

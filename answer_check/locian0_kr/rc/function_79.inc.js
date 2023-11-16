@@ -4,12 +4,12 @@ export function decElimZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'decimal') {
-        var decArr = tree_1[0].split('');
+        let decArr = tree_1[0].split('');
         
         while (decArr[decArr.length-1] === '0') {
             decArr.splice(-1);
@@ -19,10 +19,10 @@ export function decElimZero(tree) {
             operator = 'natural';
             decArr.splice(-1);
         }
-        var dec = decArr.join('');
+        let dec = decArr.join('');
         newOperand.push(dec);
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(decElimZero(v));
         }
     }

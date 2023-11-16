@@ -12,28 +12,28 @@ export function fracCombine(tree) {
     if (!Array.isArray(tree) || tree.length < 1) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1[0];
-    var operand = tree_1.slice(1);
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1[0];
+    let operand = tree_1.slice(1);
     if (operator === 'addchain') {
     
-        var denomArr = findDenominators(tree_1, true);
+        let denomArr = findDenominators(tree_1, true);
         if (denomArr.length === 0) {
             return [operator].concat(operand);
         }
-        for (var [k, d] of denomArr.entries()) {
+        for (let [k, d] of denomArr.entries()) {
             denomArr[k] = ['mul', d];
         }
-        var denom = array2ChainTree(denomArr);
-        var find = findGCF(denom);
+        let denom = array2ChainTree(denomArr);
+        let find = findGCF(denom);
        
         if (JSON.stringify(find['sym']) !== JSON.stringify([])) {
-            var denom_arr = [];
-            for (var [k, f] of Object.entries(find)) {
+            let denom_arr = [];
+            for (let [k, f] of Object.entries(find)) {
                 if (k === 'const'){
                     denom_arr.push(['mul', f]);
                 } else {
-                    for (var f1 of f) {
+                    for (let f1 of f) {
                         denom_arr.push(['mul', f1]);
                     }               
                 }         
@@ -41,23 +41,23 @@ export function fracCombine(tree) {
             denom = ['mulchain'].concat(denom_arr);
         }    
         
-        var newOperand = [];
-        for (var term of operand) {
-            var op = term[0];
-            var subtree = term[1];
+        let newOperand = [];
+        for (let term of operand) {
+            let op = term[0];
+            let subtree = term[1];
             
-            var newN = multFactor(subtree, ['mul', denom], true);
+            let newN = multFactor(subtree, ['mul', denom], true);
             // Some postprocessing before adding to newOperand
             newN = mulAssociative(newN);
             newN = mulIdentity(newN);
             newOperand.push([op, newN]);
         }
         
-        var newtree = array2ChainTree(newOperand);
+        let newtree = array2ChainTree(newOperand);
         return ['fraction', newtree, denom];
     } else {
-        var newOperand = [];
-        for (var subtree of operand) {
+        let newOperand = [];
+        for (let subtree of operand) {
             newOperand.push(fracCombine(subtree));
         }
         operand = newOperand;
@@ -70,9 +70,9 @@ export function fracCombine(tree) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '(x-\\frac{5}{2})^2+(y+\\frac{5}{2})^{2}=\\frac{25}{2}';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = fracCombine(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let latex_1 = '(x-\\frac{5}{2})^2+(y+\\frac{5}{2})^{2}=\\frac{25}{2}';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = fracCombine(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */

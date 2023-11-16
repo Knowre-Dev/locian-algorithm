@@ -4,28 +4,28 @@ export function varReverseShift(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
 
-    for (var [k, v] of tree_1.entries()) {
+    for (let [k, v] of tree_1.entries()) {
         tree_1[k] = varReverseShift(v, types, operator);
     }
 
     if (operator === 'mulchain' && types.includes(parent)) {
-        var vars = [];
+        let vars = [];
 
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             if (v[0] === 'mul' && v[1][0] === 'variable' && v.length === 2) {
                 vars.push(v[1][1]);
             } else {
                 return [operator].concat(tree_1);
             }
         }
-        var vars_1 = _.cloneDeep(vars);
+        let vars_1 = _.cloneDeep(vars);
         vars_1.sort();
-        var min = vars_1[0];
-        var k = Object.keys(vars).find(key => vars[key] === min);
-        var result = [];
+        let min = vars_1[0];
+        let k = Object.keys(vars).find(key => vars[key] === min);
+        let result = [];
 
         if (((typeof vars[k-1] !== 'undefined') ? vars[k-1] : vars[vars.length-1]) 
             < ((typeof vars[k+1] !== 'undefined') ? vars[k+1] : vars[0])) {
@@ -33,8 +33,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
             vars = vars.reverse();
         }
 
-        for (var [k, v] of [[k, vars.length], [0, k]].entries()) {
-            for (var i = v[0]; i < v[1]; i++) {
+        for (let v of [[k, vars.length], [0, k]]) {
+            for (let i = v[0]; i < v[1]; i++) {
                 result.push(['mul', ['variable', vars[i]]]);
             }
         }

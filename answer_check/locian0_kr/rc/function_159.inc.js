@@ -7,16 +7,16 @@ export function mulAllSidesByCommonDenom(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var newOperand = [];
-    var operator = tree_1.shift();
+    let tree_1 = _.cloneDeep(tree);
+    let newOperand = [];
+    let operator = tree_1.shift();
     if (operator === 'equation' || operator === 'inequality') {
         // Remove any complex fractions
         //tree = fracComplex(tree); Gurantee this instead by precondition (better performance)
         
         // Initialize array to store product of all denominators in each side
-        var denomArr = [];
-        for (var [k, subtree] of tree_1.entries()) {
+        let denomArr = [];
+        for (let [k, subtree] of tree_1.entries()) {
             // Find all unique denominators in this subtree
             // Make sure to pass the third arg as TRUE
             // to get absolute values of all denominators (in case of any negative denominators)
@@ -27,16 +27,16 @@ export function mulAllSidesByCommonDenom(tree = null) {
             if (denomArr[k].length === 0) {
                 denomArr[k] = ['natural', '1'];
             } else {
-                var prod = [];
-                for (var dd of denomArr[k])
+                let prod = [];
+                for (let dd of denomArr[k])
                     prod.push(['mul', dd]);
                 denomArr[k] = array2ChainTree(prod, true);
             }
         }
         
         // Calculate the common denominator to multiply on all sides of the equation
-        var commonD = [];
-        for (var denom of denomArr) {
+        let commonD = [];
+        for (let denom of denomArr) {
             commonD.push(['mul', denom]);
         }
         commonD = array2ChainTree(commonD, true);
@@ -47,14 +47,14 @@ export function mulAllSidesByCommonDenom(tree = null) {
         if (JSON.stringify(commonD) === JSON.stringify(['natural', '1'])) {
             newOperand = tree_1;
         } else {
-            for (var side of tree_1) {
+            for (let side of tree_1) {
                 if (JSON.stringify(side) === JSON.stringify(['natural', '0'])) {
                     newOperand.push(side);
                 } else if (side[0] === 'addchain') {
-                    var termArr = [];
-                    var side_1 = side.slice(1);
-                    for (var aterm of side_1) {
-                        var newTree;
+                    let termArr = [];
+                    let side_1 = side.slice(1);
+                    for (let aterm of side_1) {
+                        let newTree;
                         if (JSON.stringify(aterm[1]) === JSON.stringify(['natural', '1'])) {
                             newTree = commonD;
                         } else if (JSON.stringify(aterm[1]) === JSON.stringify(['negative', ['natural', '1']])) {
@@ -69,7 +69,7 @@ export function mulAllSidesByCommonDenom(tree = null) {
                     }
                     newOperand.push(array2ChainTree(termArr));
                 } else {
-                    var newSide = multFactor(side, ['mul', commonD]);
+                    let newSide = multFactor(side, ['mul', commonD]);
                     if (isNumeric(side) && isNumeric(commonD))
                         newSide = evalNumericValues(newSide);
                     newOperand.push(newSide);
@@ -87,8 +87,8 @@ export function mulAllSidesByCommonDenom(tree = null) {
 /*
 
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '\\frac{x4}{4}=\\frac{2y}{3}';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = mulAllSidesByCommonDenom(tree_1);
+let latex_1 = '\\frac{x4}{4}=\\frac{2y}{3}';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = mulAllSidesByCommonDenom(tree_1);
 console.log(JSON.stringify(tree_11, null, 4));
 */

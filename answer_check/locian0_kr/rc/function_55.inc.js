@@ -5,11 +5,11 @@ export function addIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'addchain') {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             if (!(v[1][0] === 'natural' && v[1][1] === '0')) {
                 newOperand.push(v);
             }
@@ -33,7 +33,7 @@ export function addIdentity(tree) {
             }
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(addIdentity(v));
         }
     }

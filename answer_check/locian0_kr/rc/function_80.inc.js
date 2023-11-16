@@ -4,12 +4,12 @@ export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'addchain') {
-        for (var term of tree_1) {
+        for (let term of tree_1) {
             if (term[0] === 'sub') {
                 if (checkZeroEquiv(term[1])) {
                     newOperand.push(['add', term[1]]);
@@ -21,7 +21,7 @@ export function addPolyZero(tree) {
             }
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(addPolyZero(v));
         }
     }
@@ -31,19 +31,20 @@ export function addPolyZero(tree) {
 }
 
 export function checkZeroEquiv(tree) {
-    var tree_1 = _.cloneDeep(tree);
-    var result = false
-    if (!Array.isArray(tree_1)) {
+    
+    let result = false
+    if (!Array.isArray(tree)) {
         return result;
     }
-    var operator = tree_1.shift();
-    var result = false;
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    
     switch (operator) {
         case 'fraction':
             result = checkZeroEquiv(tree_1[0]);
             break;
         case 'mulchain':
-            for (var term of tree_1[0]) {
+            for (let term of tree_1[0]) {
                 if (term[0] === 'natural' && term[1] === '0') {
                     result = true;
                 }

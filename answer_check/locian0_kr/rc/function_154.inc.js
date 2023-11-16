@@ -32,9 +32,9 @@ export function exprSimpConst(tree = null) {
     if (!Array.isArray(tree) || tree.length === 0) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     switch (operator) {
         case 'infinity': // fin
         case 'natural': // fin
@@ -68,7 +68,7 @@ export function exprSimpConst(tree = null) {
             // Possible output types:
             // absolute,
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
-            subresult = exprSimpConst(tree_1[0]);
+            var subresult = exprSimpConst(tree_1[0]);
             if (subresult[0] === 'negative') {
                 subresult = subresult[1];
             }
@@ -90,8 +90,8 @@ export function exprSimpConst(tree = null) {
                 newtree = exprSimpConst(newtree);
                 return newtree;
             }
-            var numer = exprSimpConst(tree_1[0]);
-            var denom = exprSimpConst(tree_1[1]);
+            let numer = exprSimpConst(tree_1[0]);
+            let denom = exprSimpConst(tree_1[1]);
             tree_1 = [operator, numer, denom];
             tree_1 = fracComplex(tree_1);
             tree_1 = fracNegative(tree_1);
@@ -101,8 +101,8 @@ export function exprSimpConst(tree = null) {
         case 'nthroot':
         case 'squareroot':
             // rootN is the n in nth root (e.g., 2 for square root, 3 for a cubic root)
-            var rootN;
-            var radicand;
+            let rootN;
+            let radicand;
             if (operator === 'squareroot') {
                 rootN = ['natural', '2'];
                 radicand = exprSimpConst(tree_1[0]);
@@ -133,9 +133,9 @@ export function exprSimpConst(tree = null) {
             tree_1 = tree_1.slice(1);
             var termArr = [];
         
-            for (var term of tree_1) {
-                var op = term[0];
-                var subtree = exprSimpConst(term[1]);
+            for (let term of tree_1) {
+                let op = term[0];
+                let subtree = exprSimpConst(term[1]);
                 if (subtree[0] === 'negative') {
                     if (op === 'add') {
                         op = 'sub';
@@ -156,10 +156,10 @@ export function exprSimpConst(tree = null) {
             tree_1 = mulAssociative(tree_1);
             tree_1 = tree_1.slice(1);
             var termArr = [];
-            var sign = 1;
-            for (var term of tree_1) {
-                var op = term[0];
-                var subtree = exprSimpConst(term[1]);
+            let sign = 1;
+            for (let term of tree_1) {
+                let op = term[0];
+                let subtree = exprSimpConst(term[1]);
                 // Take all negative signs out to the front
                 if (Array.isArray(subtree)) {
                     if (subtree[0] === 'negative') {
@@ -180,16 +180,16 @@ export function exprSimpConst(tree = null) {
         case 'power':
             // Possible output types:
             // negative, fraction, squareroot, power
-            var basetree = exprSimpConst(tree_1[0]);
+            let basetree = exprSimpConst(tree_1[0]);
             var expotree = exprSimpConst(tree_1[1]);
             
             
             // If the original expotree is a fraction with even denominator,
             // the result must work with the absolute value of the original base
             // So make a flag variable to store that info
-            var evenRootFlag = false;
+            let evenRootFlag = false;
             if (expotree[0] === 'fraction') {
-                var gcfArr = findGCF(expotree[2], ['natural', '2']);
+                let gcfArr = findGCF(expotree[2], ['natural', '2']);
                 evenRootFlag = JSON.stringify(gcfArr['const']) === JSON.stringify(['natural', '2']);
             }
             
@@ -202,13 +202,13 @@ export function exprSimpConst(tree = null) {
             }
             // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
             // Reflect this by modifying basetree as applicable
-            var cons = findGCF(expotree, ['natural', '2'])['const'];
+            let cons = findGCF(expotree, ['natural', '2'])['const'];
            
-            var oddExpoFlag = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
+            let oddExpoFlag = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
             if (expotree[0] === 'natural' && oddExpoFlag && evenRootFlag)
                 basetree = ['absolute', basetree];
             
-            var mtermArr = [];
+            let mtermArr = [];
             // Convert fraction to division just to make coding easier
             // 
             // The if statement below is omitted out (epark 20180830)
@@ -220,9 +220,9 @@ export function exprSimpConst(tree = null) {
                 basetree = ['mulchain', ['mul', basetree[1]], ['div', basetree[2]]];
             //*/
             if (basetree[0] === 'mulchain') {
-                var basetree_1 = basetree.slice(1);
-                for (var term of basetree_1) {
-                    var subtree = exprSimpConst(['power', term[1], expotree]);
+                let basetree_1 = basetree.slice(1);
+                for (let term of basetree_1) {
+                    let subtree = exprSimpConst(['power', term[1], expotree]);
                     mtermArr.push([term[0], subtree]);
                 }
             } else {
@@ -238,7 +238,7 @@ export function exprSimpConst(tree = null) {
             //newtree = mulIdentity(newtree);
             return newtree;
         default:
-            for (var v of tree_1) {
+            for (let v of tree_1) {
                 newOperand.push(exprSimpConst(v));
             }
     }
@@ -251,10 +251,10 @@ export function exprSimpConst(tree = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '(-3)^2';
-var tree_1 = LatexToTree(latex_1);
+let latex_1 = '(-3)^2';
+let tree_1 = LatexToTree(latex_1);
 
-var tree_11 = exprSimpConst(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let tree_11 = exprSimpConst(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */

@@ -4,15 +4,15 @@ export function rootSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'squareroot' && tree_1[0][0] === 'natural') {
-        var factors = pfactor(parseInt(tree_1[0][1]));
+        let factors = pfactor(parseInt(tree_1[0][1]));
         
-        var inside = 1;
-        var outside = 1;
-        for (var [factor, power] of factors.entries()) {
+        let inside = 1;
+        let outside = 1;
+        for (let [factor, power] of factors.entries()) {
             if (power === undefined) {
                 continue;
             }
@@ -37,10 +37,10 @@ export function rootSimpInt(tree) {
             newOperand.push(['mul', ['squareroot', ['natural', inside.toString()]]]);
         }
     } else if (operator === 'mulchain') {
-        var cons = [];
-        for (var term of tree_1) {
+        let cons = [];
+        for (let term of tree_1) {
             if (term[0] === 'mul' && term[1][0] === 'squareroot') {
-                var nroot = rootSimpInt(term[1]);
+                let nroot = rootSimpInt(term[1]);
                 if (nroot[0] === 'natural') {
                     cons.push(['mul', nroot]);
                 } else if (nroot[0] === 'mulchain') {
@@ -58,9 +58,9 @@ export function rootSimpInt(tree) {
         if (cons.length === 1) {
             newOperand.unshift(cons[0]);
         } else if (cons.length > 1) {
-            var num = 1;
-            var den = 1;
-            for (var term of cons) {
+            let num = 1;
+            let den = 1;
+            for (let term of cons) {
                 if (term[1][0] === 'natural') {
                     num *= parseInt(term[1][1]);
                 } else if (term[1][0] === 'fraction') {
@@ -68,7 +68,7 @@ export function rootSimpInt(tree) {
                     den *= parseInt(term[1][2][1]);
                 }
             }
-            var mul = [];
+            let mul = [];
             if (den === 1) {
                 mul = ['mul', ['natural', num.toString()]];
             } else {
@@ -77,7 +77,7 @@ export function rootSimpInt(tree) {
             newOperand.unshift(mul);
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(rootSimpInt(v));
         }
     }
@@ -88,13 +88,13 @@ export function rootSimpInt(tree) {
 
 export function pfactor(n) {
     // max_n = 2^31-1 = 2147483647
-    var d = 2;
-    var factors = [];
-    var dmax = Math.floor(Math.sqrt(n));
-    var sieve = [];
+    let d = 2;
+    let factors = [];
+    let dmax = Math.floor(Math.sqrt(n));
+    let sieve = [];
     sieve.fill(1, 1, dmax);
     do {
-        var r = false;
+        let r = false;
         while (n % d === 0) {
             if (!(d in factors)) {
                 factors[d] = 0;
@@ -107,7 +107,7 @@ export function pfactor(n) {
             dmax = Math.floor(Math.sqrt(n));
         }
         if (n > 1) {
-            for (var i = d; i <= dmax; i += d) {
+            for (let i = d; i <= dmax; i += d) {
                 sieve[i] = 0;
             }
             do {

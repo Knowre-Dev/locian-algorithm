@@ -4,16 +4,16 @@ export function varReverse(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    //var types_1 = _.cloneDeep(types);
-    var operator = tree_1.shift();
-    for (var [k, v] of tree_1.entries()) {
+    let tree_1 = _.cloneDeep(tree);
+    //let types_1 = _.cloneDeep(types);
+    let operator = tree_1.shift();
+    for (let [k, v] of tree_1.entries()) {
         tree_1[k] = varReverse(v, types, operator);
     }
     if (operator === 'mulchain' && types.includes(parent)) {
-        var vars = [];
+        let vars = [];
 
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             if (v[0] === 'mul' && v[1][0] === 'variable' && v.length === 2) {
                 vars.push(v[1][1]);
             } else {
@@ -25,9 +25,9 @@ export function varReverse(tree, types = [null], parent = null) {
             vars = vars.reverse();
         }
 
-        var result = [];
+        let result = [];
 
-        for (var v of vars) {
+        for (let v of vars) {
             result.push(['mul', ['variable', v]]);
         }
 
@@ -42,9 +42,9 @@ export function varReverse(tree, types = [null], parent = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = 'BCA';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = varReverse(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let latex_1 = 'BCA';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = varReverse(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */

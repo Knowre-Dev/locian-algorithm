@@ -6,11 +6,11 @@ export function ineqMulNeg(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
     if (operator === 'inequality') {
-        var flag;
+        let flag;
         if (tree_1[0][0] === 'negative') {
             newOperand.push(tree_1[0][1]);              
             flag = true;
@@ -22,7 +22,7 @@ export function ineqMulNeg(tree = null) {
             flag = false;
         }  
         if (flag === true) {
-            for (var i = 1; i < tree_1.length; i++) {
+            for (let i = 1; i < tree_1.length; i++) {
                 if (i % 2 !== 0) {
                     if (tree_1[i] === 'gt') {
                         newOperand.push('lt');
@@ -61,17 +61,17 @@ export function ineqMulNegUS(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var nOperands = tree_1.length;
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let nOperands = tree_1.length;
+    let newOperand = [];
     if (operator !== 'inequality') {
         newOperand = tree_1;           
     } else {
         if (JSON.stringify(tree_1[0]) === JSON.stringify(['natural', '0'])) {
-            //var indZero = 0;
-            var tree_2 = tree_1.slice(1);
-            for (var subtree of tree_2) {
+            //let indZero = 0;
+            let tree_2 = tree_1.slice(1);
+            for (let subtree of tree_2) {
                 // If you see any nonnegative argument,
                 // just return the whole tree as it was before
                 if (Array.isArray(subtree) && 
@@ -81,9 +81,9 @@ export function ineqMulNegUS(tree) {
                 }
             }
         } else if (JSON.stringify(tree_1[nOperands - 1]) === JSON.stringify(['natural', '0'])) {
-            //var indZero = nOperands - 1;
-            var tree_2 = tree_1.slice(0, -1);
-            for (var subtree of tree_2) {
+            //let indZero = nOperands - 1;
+            let tree_2 = tree_1.slice(0, -1);
+            for (let subtree of tree_2) {
                 if (Array.isArray(subtree) && 
                     (subtree[0] !== 'negative' &&
                         !(subtree[0] === 'addchain' && subtree[1][0] === 'sub'))) {
@@ -94,7 +94,7 @@ export function ineqMulNegUS(tree) {
             return [operator].concat(tree_1);   
         }
         
-        for (var subtree of tree_1) {
+        for (let subtree of tree_1) {
             if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
                 newOperand.push(subtree);
             } else {
@@ -129,15 +129,15 @@ export function ineqMulNegUS(tree) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '-ab<0';
-var latex_2 = '-ab<0';
-var tree_1 = LatexToTree(latex_1);
-var tree_2 = LatexToTree(latex_2);
+let latex_1 = '-ab<0';
+let latex_2 = '-ab<0';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
 
-var tree_11 = ineqMulNeg(tree_1);
-var tree_21 = ineqMulNegUS(tree_2);
-var result_1 = JSON.stringify(tree_11, null, 4);
-var result_2 = JSON.stringify(tree_21, null, 4);
+let tree_11 = ineqMulNeg(tree_1);
+let tree_21 = ineqMulNegUS(tree_2);
+let result_1 = JSON.stringify(tree_11, null, 4);
+let result_2 = JSON.stringify(tree_21, null, 4);
 console.log(result_1 === result_2);
 console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));

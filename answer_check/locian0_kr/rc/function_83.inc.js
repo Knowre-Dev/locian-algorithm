@@ -4,15 +4,15 @@ export function addAdjacentSigns(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
+    let tree_1 = _.cloneDeep(tree);
 
-    var operator = tree_1.shift();
-    var sign = 1;
-    var newOperand = [];
+    let operator = tree_1.shift();
+    let sign = 1;
+    let newOperand = [];
     
     if (operator === 'addchain') {
-        for (var term of tree_1) {             
-            var nterm = addAdjacentSigns(term[1]);
+        for (let term of tree_1) {             
+            let nterm = addAdjacentSigns(term[1]);
             if (nterm[0] === 'negative') {
                 if (term[0] === 'add') {
                     newOperand.push(['sub', nterm[1]]);
@@ -26,7 +26,7 @@ export function addAdjacentSigns(tree) {
             }
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(addAdjacentSigns(v));
         }
     }

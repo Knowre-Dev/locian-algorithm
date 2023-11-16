@@ -7,10 +7,10 @@ export function fracNegative(tree) {
         return tree;
     }
 
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var sign = 1;
-    var newOperand = [];
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let sign = 1;
+    let newOperand = [];
     if (operator === 'negative') {
         newOperand.push(fracNegative(tree_1[0]));
         if (newOperand[0][0] === 'negative') {
@@ -18,8 +18,8 @@ export function fracNegative(tree) {
             newOperand = newOperand[0][1];
         }
     } else if (operator === 'fraction') {
-        var num = fracNegative(tree_1[0]);
-        var den = fracNegative(tree_1[1]);
+        let num = fracNegative(tree_1[0]);
+        let den = fracNegative(tree_1[1]);
         
         if (num[0] === 'negative') {
             sign = -1 * sign;
@@ -40,9 +40,9 @@ export function fracNegative(tree) {
         newOperand = [num, den];
         
     } else if (operator === 'addchain') {
-        for (var term of tree_1) {                
+        for (let term of tree_1) {                
             if (term[1][0] === 'fraction') {
-                var nterm = fracNegative(term[1]);        
+                let nterm = fracNegative(term[1]);        
                 if (nterm[0] === 'negative') {
                     if (term[0] === 'add') {
                         newOperand.push(['sub', nterm[1]]);
@@ -59,8 +59,8 @@ export function fracNegative(tree) {
             }
         }
     } else if (operator === 'mulchain') {
-        for (var term of tree_1) {
-            var nterm = fracNegative(term[1]);
+        for (let term of tree_1) {
+            let nterm = fracNegative(term[1]);
             if (nterm[0] === 'negative') {
                 sign = -1 * sign;
                 newOperand.push([term[0], nterm[1]]);
@@ -69,7 +69,7 @@ export function fracNegative(tree) {
             }
         }
     } else {
-        for (var v of tree_1) {
+        for (let v of tree_1) {
             newOperand.push(fracNegative(v));
         }
     }
@@ -84,9 +84,9 @@ export function fracNegative(tree) {
 }
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '\\frac{125\\pi}{\\pi}';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = fracNegative(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let latex_1 = '\\frac{125\\pi}{\\pi}';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = fracNegative(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(JSON.stringify(tree_11, null, 4));
 */

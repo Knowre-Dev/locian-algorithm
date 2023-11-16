@@ -23,10 +23,10 @@ export function rearrangeTreeEq(A, B) {
         } 
         return 0;
     } 
-    var A_1 = _.cloneDeep(A);
-    var B_1 = _.cloneDeep(B);
-    var operatorA;
-    var operandA;
+    let A_1 = _.cloneDeep(A);
+    let B_1 = _.cloneDeep(B);
+    let operatorA;
+    let operandA;
     if (A_1[0] === 'negative') {
         operatorA = A_1[1][0];
         //operandA = A_1[1].splice(1);
@@ -37,8 +37,8 @@ export function rearrangeTreeEq(A, B) {
         operandA = A_1.slice(1);
     }
     
-    var operatorB;
-    var operandB;
+    let operatorB;
+    let operandB;
     if (B_1[0] === 'negative') {
         operatorB = B_1[1][0];
         
@@ -49,9 +49,9 @@ export function rearrangeTreeEq(A, B) {
         operandB = B_1.slice(1);
     }
     
-    var place = [0, 0];
-    var opflag;
-    for (var [k, term] of [operatorA, operatorB].entries()) {
+    let place = [0, 0];
+    let opflag;
+    for (let [k, term] of [operatorA, operatorB].entries()) {
         switch (term) {
             case 'add':
             case 'sub':
@@ -88,8 +88,8 @@ export function rearrangeTreeEq(A, B) {
     if (operandA.length < operandB.length) {
         return -1;
     } 
-    for (var [k, v] of operandA.entries()) {
-        var temp = rearrangeTreeEq(v, operandB[k]);
+    for (let [k, v] of operandA.entries()) {
+        let temp = rearrangeTreeEq(v, operandB[k]);
          if (temp === 0) {
             continue;
         } else {
@@ -101,14 +101,14 @@ export function rearrangeTreeEq(A, B) {
 /*
 import {LatexToTree, compareMathTree, is_equal_tree} from "../checkmath.js";
 
-var tree_1 = LatexToTree("[1]");
-var tree_2 = LatexToTree("[1]");
+let tree_1 = LatexToTree("[1]");
+let tree_2 = LatexToTree("[1]");
 
 tree_1 = rearrangeTreeEq(tree_1);
 tree_2 = rearrangeTreeEq(tree_2);
-var result_1 = JSON.stringify(tree_1, null, 4);
-var result_2 = JSON.stringify(tree_2, null, 4);
-var result = compareMathTree(tree_1, tree_2);
+let result_1 = JSON.stringify(tree_1, null, 4);
+let result_2 = JSON.stringify(tree_2, null, 4);
+let result = compareMathTree(tree_1, tree_2);
 console.log(result);
 console.log(result_1);
 console.log(result_2);

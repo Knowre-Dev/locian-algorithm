@@ -5,11 +5,11 @@ export function setAssociative(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    var tree_1 = _.cloneDeep(tree);
-    var operator = tree_1.shift();
-    var newOperand = [];
-    for (var v of tree_1) {
-        var term = addAssociative(v);
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+    let newOperand = [];
+    for (let v of tree_1) {
+        let term = addAssociative(v);
         if (operator === term[0]) {
             term.shift();
             newOperand = newOperand.concat(term);
