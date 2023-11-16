@@ -421,7 +421,7 @@ export function LatexToTree(A, node = null, node_idx = null) {
     
     //get grouping
     var oldA = '';
-    while (newA != oldA) {
+    while (newA !== oldA) {
         
         oldA = newA;
         //get parenthesis
@@ -679,7 +679,7 @@ export function LatexToTree(A, node = null, node_idx = null) {
     
     
     oldA = '';
-    while (oldA != newA) {
+    while (oldA !== newA) {
         oldA = newA;
         //get special lv1 command 2 arg
         regex = new RegExp(
@@ -740,7 +740,7 @@ export function LatexToTree(A, node = null, node_idx = null) {
         }
     }
     oldA = '';
-    while (oldA != newA) {
+    while (oldA !== newA) {
         oldA = newA;
         //get special lv2 command 3 arg
         regex = new RegExp(
@@ -1186,10 +1186,10 @@ function sub_LatexToTree(newA, node, node_idx) {
         var index = match[0][1].length;
         var op = '';
         for (var i = 1; i < length; i++) {
-            if (newA.charAt(index) == '\/') {
+            if (newA.charAt(index) === '\/') {
                 op = 'div';
                 index += 1;
-            } else if (newA.charAt(index) == '*') {
+            } else if (newA.charAt(index) === '*') {
                 op = 'mul';
                 index += 1;
             } else {
@@ -1215,7 +1215,7 @@ export function match_all(string, regexp) {
     var result  = [];
     var index = 0;
     for (var match of matches) {
-        if (index == 0) {
+        if (index === 0) {
             for (var i = 0; i < match.length; i++) {
                 result.push([]);
             }  
@@ -1253,10 +1253,10 @@ export function compareMathTree(treeA, treeB) {
         }
     }
     
-    if (treeA_1[0] == 'anything') {
+    if (treeA_1[0] === 'anything') {
         treeA_1 = treeB_1;
         
-    } else if (treeB_1[0] == 'anything') {
+    } else if (treeB_1[0] === 'anything') {
         treeB_1 = treeA_1;
         
     }
@@ -1280,14 +1280,14 @@ export function compareMathTree(treeA, treeB) {
                 var BReSci;
                 var AImSci;
                 var BImSci;
-                if (v[0] == 'equation') {
+                if (v[0] === 'equation') {
                     AReSci = (parseFloat(v[1][0]) - parseFloat(v[2][0])).toExponential(4);
                     BReSci = (parseFloat(treeB_1[k][1][0]) - parseFloat(treeB_1[k][2][0])).toExponential(4);
 
                     AImSci = (parseFloat(v[1][1]) - parseFloat(v[2][1])).toExponential(4);
                     BImSci = (parseFloat(treeB_1[k][1][1]) - parseFloat(treeB_1[k][2][1])).toExponential(4);
 
-                    if (AReSci == -1 * BReSci && AImSci == -1 * BImSci) {
+                    if (AReSci === -1 * BReSci && AImSci === -1 * BImSci) {
                         BReSci = AReSci;
                         BImSci = AImSci;
                     }
@@ -1347,14 +1347,14 @@ export function is_equal_tree(tree_1, tree_2) {
     var tree_21 = JSON.parse(JSON.stringify(tree_2));
     var type_1 = typeof tree_11;
     var type_2 = typeof tree_21;
-    if (type_1 != type_2) {
+    if (type_1 !== type_2) {
         return false;
     }
-    if (type_1 == 'string') {
-        return tree_11 == tree_21;
+    if (type_1 === 'string') {
+        return tree_11 === tree_21;
     }
 
-    if (type_1 == 'number') {
+    if (type_1 === 'number') {
         var d = Math.pow(0.1, 5);
         return Math.abs(tree_11 - tree_21) < d;
     }
@@ -1363,13 +1363,13 @@ export function is_equal_tree(tree_1, tree_2) {
         return false;
     }
 
-    if (JSON.stringify(tree_11) == JSON.stringify(tree_21)) {
+    if (JSON.stringify(tree_11) === JSON.stringify(tree_21)) {
         return true;
     }
 
     var length_1 = tree_11.length;
     var length_2 = tree_21.length;
-    if (length_1 != length_2) {
+    if (length_1 !== length_2) {
         return false;
     }
     for (var i = 0; i < length_1; i++) {

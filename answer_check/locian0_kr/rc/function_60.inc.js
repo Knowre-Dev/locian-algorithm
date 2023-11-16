@@ -1,23 +1,30 @@
+import _ from 'lodash';
+
 export function rearrangeTreeEq(A, B) {
-    var A_1 = JSON.parse(JSON.stringify(A));
-    var B_1 = JSON.parse(JSON.stringify(B));
-    if (Array.isArray(A_1) && !Array.isArray(B_1)) {
+    
+    if (Array.isArray(A) && !Array.isArray(B)) {
         return 1;
-    } else if (!Array.isArray(A_1) && Array.isArray(B_1)) {
+    }
+    if (!Array.isArray(A) && Array.isArray(B)) {
         return -1;
-    } else if (!Array.isArray(A_1) && !Array.isArray(B_1)) {
-        if (typeof A_1 > typeof B_1) {
+    }
+    if (!Array.isArray(A) && !Array.isArray(B)) {
+        if (typeof A > typeof B) {
             return 1;
-        } else if (typeof A_1 < typeof B_1) {
+        } 
+        if (typeof A < typeof B) {
             return -1;
-        } else if (A_1 > B_1) {
+        } 
+        if (A > B) {
             return 1;
-        } else if (A_1 < B_1) {
+        } 
+        if (A < B) {
             return -1;
-        } else {
-            return 0;
-        }
+        } 
+        return 0;
     } 
+    var A_1 = _.cloneDeep(A);
+    var B_1 = _.cloneDeep(B);
     var operatorA;
     var operandA;
     if (A_1[0] === 'negative') {
@@ -34,11 +41,11 @@ export function rearrangeTreeEq(A, B) {
     var operandB;
     if (B_1[0] === 'negative') {
         operatorB = B_1[1][0];
-        //operandB = B_1[1].splice(1);
+        
         operandB = B_1[1].slice(1);
     } else {
         operatorB = B_1[0];
-        //operandB = B_1.splice(1);
+        
         operandB = B_1.slice(1);
     }
     

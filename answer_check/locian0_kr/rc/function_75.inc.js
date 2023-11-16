@@ -1,24 +1,27 @@
-
+import _ from 'lodash';
 
 export function eqMulProp(tree) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (Array.isArray(tree_1)) {
-        var operator = tree_1.shift();
-        var newOperand = [];
-        if (operator === 'equation') {
-            if (tree_1[0][0] === 'fraction') {
-                newOperand.push(tree_1[0][1][0]);
-                // multiply tree[0][1][1] to tree[1];
-            } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0][0] === 'fraction') {
+    if (!Array.isArray(tree)) {
+        return tree;
+    }
+    var tree_1 = _.cloneDeep(tree);
 
-            } else {
-                newOperand = tree_1;
-            }
+    var operator = tree_1.shift();
+    var newOperand = [];
+    if (operator === 'equation') {
+        if (tree_1[0][0] === 'fraction') {
+            newOperand.push(tree_1[0][1][0]);
+            // multiply tree[0][1][1] to tree[1];
+        } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0][0] === 'fraction') {
+
         } else {
             newOperand = tree_1;
         }
-        tree_1 = [operator].concat(newOperand);
+    } else {
+        newOperand = tree_1;
     }
+    tree_1 = [operator].concat(newOperand);
+    
     return tree_1;
 }
 
@@ -27,14 +30,15 @@ import {mulNegative} from '../rc/function_160.inc.js';
 
 
 export function eqMulPropUS(tree) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (!Array.isArray(tree_1)) {
-        return tree_1;
+    
+    if (!Array.isArray(tree)) {
+        return tree;
     }
     
-    if (!['equation', 'inequality'].includes(tree_1[0])) {
-        return tree_1;
+    if (!['equation', 'inequality'].includes(tree[0])) {
+        return tree;
     }
+    var tree_1 = _.cloneDeep(tree);
     // Input now guaranteed to be a tree array representing equation or inequality
     
     // Find the common factors for all sides
@@ -49,8 +53,8 @@ export function eqMulPropUS(tree) {
     factor = array2ChainTree(factor);
     var newtree;
     
-    if (JSON.stringify(factor) == JSON.stringify(['natural', '1']) || 
-        JSON.stringify(factor) == JSON.stringify(['natural', '0'])) {
+    if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) || 
+        JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
         newtree = tree_1; // No need to divide by 1
     } else {
         newtree = [tree_1[0]];
@@ -72,27 +76,7 @@ export function eqMulPropUS(tree) {
     //     Use this function in conjunction with eqMulNeg() and ineqMulNeg()
     //     to handle such cases
     
-    /*//
-    if (gettype(tree) === 'array') {
-        operator = array_shift(tree);
-
-        newOperand = [];
-        if (operator === 'equation') {
-            if (tree[0][0] === 'fraction') {
-                newOperand[] = tree[0][1][0];
-                // multiply tree[0][1][1] to tree[1];
-            } elseif (tree[0][0] === 'addchain' && tree[0][1][0][0] === 'fraction') {
-                
-            } else {
-                newOperand = tree;
-            }
-        } else {
-            newOperand = tree;
-        }
-        tree = array_merge([operator], newOperand);
-    }
-    return tree;
-    //*/
+    
     
 }
 /*

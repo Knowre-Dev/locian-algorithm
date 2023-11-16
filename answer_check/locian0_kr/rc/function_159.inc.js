@@ -1,11 +1,13 @@
 import {mulIdentity} from '../rc/function_56.inc.js';
 import {array2ChainTree, evalNumericValues, findDenominators, isNumeric, multFactor} from '../rc/function_152.inc.js';
+import _ from 'lodash';
 
 export function mulAllSidesByCommonDenom(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (!Array.isArray(tree_1)) {
-        return tree_1;
+    
+    if (!Array.isArray(tree)) {
+        return tree;
     }
+    var tree_1 = _.cloneDeep(tree);
     var newOperand = [];
     var operator = tree_1.shift();
     if (operator === 'equation' || operator === 'inequality') {
@@ -19,10 +21,10 @@ export function mulAllSidesByCommonDenom(tree = null) {
             // Make sure to pass the third arg as TRUE
             // to get absolute values of all denominators (in case of any negative denominators)
             // to ensure preservation of directions of inequality
-            denomArr[k] = findDenominators(subtree, true, operator == 'inequality');
+            denomArr[k] = findDenominators(subtree, true, operator === 'inequality');
             
             // Multiply all denominators in this subtree into a single quantity
-            if (denomArr[k].length == 0) {
+            if (denomArr[k].length === 0) {
                 denomArr[k] = ['natural', '1'];
             } else {
                 var prod = [];
@@ -41,21 +43,21 @@ export function mulAllSidesByCommonDenom(tree = null) {
         commonD = mulIdentity(commonD);
         
         // Construct a new tree with the common denominator multiplied
-        // Execute only if commonD != ['natural', '1']
-        if (JSON.stringify(commonD) == JSON.stringify(['natural', '1'])) {
+        // Execute only if commonD !== ['natural', '1']
+        if (JSON.stringify(commonD) === JSON.stringify(['natural', '1'])) {
             newOperand = tree_1;
         } else {
             for (var side of tree_1) {
-                if (JSON.stringify(side) == JSON.stringify(['natural', '0'])) {
+                if (JSON.stringify(side) === JSON.stringify(['natural', '0'])) {
                     newOperand.push(side);
-                } else if (side[0] == 'addchain') {
+                } else if (side[0] === 'addchain') {
                     var termArr = [];
                     var side_1 = side.slice(1);
                     for (var aterm of side_1) {
                         var newTree;
-                        if (JSON.stringify(aterm[1]) == JSON.stringify(['natural', '1'])) {
+                        if (JSON.stringify(aterm[1]) === JSON.stringify(['natural', '1'])) {
                             newTree = commonD;
-                        } else if (JSON.stringify(aterm[1]) == JSON.stringify(['negative', ['natural', '1']])) {
+                        } else if (JSON.stringify(aterm[1]) === JSON.stringify(['negative', ['natural', '1']])) {
                             newTree = ['negative', commonD];
                         } else {
                             newTree = multFactor(aterm[1], ['mul', commonD], true);

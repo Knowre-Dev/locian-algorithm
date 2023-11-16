@@ -14,13 +14,15 @@ import {decElimZero} from '../rc/function_79.inc.js';
 import {addFactoredFormVar} from '../rc/function_117.inc.js';
 import {sub_mulCommutative} from '../rc/function_126.inc.js';
 import {nthrootToSquareroot} from '../rc/function_191.inc.js';
+import _ from 'lodash';
+
 
 export function 기약분수_소수_가능(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco();
     //   tree_1 = $tree ?: laco.parse('x(yz-y)');
     
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     laco.apply(nthrootToSquareroot);
     laco.apply(decElimZero);   //소수점 밑 0 생략
     laco.apply(fracDecimal);    // 소수 -> 분수
@@ -38,7 +40,7 @@ export function 기약분수_소수_가능(tree = null) {
     laco.apply(addCommutative); //덧셈 교환법칙 
     laco.apply(sub_mulCommutative); //곱셈 교환법칙
     laco.apply(addFactoredForm); //공통 숫자로 묶어냄
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
 
        
 
@@ -47,15 +49,15 @@ export function 기약분수_소수_가능(tree = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-var latex_1 = '\\frac{50\\pi }{3}-25\\sqrt{3}';
-var latex_2 = '\\frac{100\\pi -150\\sqrt{3}}{6}';
-var tree_1 = LatexToTree(latex_1);
-var tree_2 = LatexToTree(latex_2);
-var tree_11 = 기약분수_소수_가능(tree_1);
-var tree_21 = 기약분수_소수_가능(tree_2);
-var result_1 = JSON.stringify(tree_11, null, 4);
-var result_2 = JSON.stringify(tree_21, null, 4);
-console.log(result_1 == result_2);
+let latex_1 = '\\frac{50\\pi }{3}-25\\sqrt{3}';
+let latex_2 = '\\frac{100\\pi -150\\sqrt{3}}{6}';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
+let tree_11 = 기약분수_소수_가능(tree_1);
+let tree_21 = 기약분수_소수_가능(tree_2);
+let result_1 = JSON.stringify(tree_11, null, 4);
+let result_2 = JSON.stringify(tree_21, null, 4);
+console.log(result_1 === result_2);
 console.log(result_1);
 console.log(result_2);
 */

@@ -1571,7 +1571,7 @@ export function match_all(string, regexp) {
 }
 
 
-function compareMathTree(treeA, treeB) {
+export function compareMathTree(treeA, treeB) {
     var treeA_1 = JSON.parse(JSON.stringify(treeA));
     var treeB_1 = JSON.parse(JSON.stringify(treeB));
 	//var debugFLAG = false;

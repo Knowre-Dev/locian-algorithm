@@ -5,20 +5,20 @@ Combines an addchain with at least one fraction into a single fraction
 import {mulIdentity} from '../rc/function_56.inc.js';
 import {array2ChainTree, findDenominators, findGCF, multFactor} from '../rc/function_152.inc.js';
 import {mulAssociative} from '../rc/function_157.inc.js';
-
+import _ from 'lodash';
 
 export function fracCombine(tree) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (!Array.isArray(tree_1) || tree_1.length < 1) {
-        return tree_1;
-    }
     
+    if (!Array.isArray(tree) || tree.length < 1) {
+        return tree;
+    }
+    var tree_1 = _.cloneDeep(tree);
     var operator = tree_1[0];
     var operand = tree_1.slice(1);
-    if (operator == 'addchain') {
+    if (operator === 'addchain') {
     
         var denomArr = findDenominators(tree_1, true);
-        if (denomArr.length == 0) {
+        if (denomArr.length === 0) {
             return [operator].concat(operand);
         }
         for (var [k, d] of denomArr.entries()) {
@@ -27,10 +27,10 @@ export function fracCombine(tree) {
         var denom = array2ChainTree(denomArr);
         var find = findGCF(denom);
        
-        if (JSON.stringify(find['sym']) != JSON.stringify([])) {
+        if (JSON.stringify(find['sym']) !== JSON.stringify([])) {
             var denom_arr = [];
             for (var [k, f] of Object.entries(find)) {
-                if (k == 'const'){
+                if (k === 'const'){
                     denom_arr.push(['mul', f]);
                 } else {
                     for (var f1 of f) {

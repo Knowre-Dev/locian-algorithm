@@ -1,22 +1,28 @@
-export function fracMfrac(tree) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (Array.isArray(tree_1)) {
-        var operator = tree_1.shift();
-        var newOperand = [];
-        if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
-            var num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
-            var den = tree_1[2];
+import _ from 'lodash';
 
-            var operator = 'fraction';
-            newOperand.push(num);
-            newOperand.push(den);
-        } else {
-            for (var v of tree_1) {
-                newOperand.push(fracMfrac(v));
-            }
-        }
-        tree_1 = [operator].concat(newOperand);
+export function fracMfrac(tree) {
+    
+    if (!Array.isArray(tree)) {
+        return tree;
     }
+    
+    var tree_1 = _.cloneDeep(tree);
+    var operator = tree_1.shift();
+    var newOperand = [];
+    if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
+        var num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
+        var den = tree_1[2];
+
+        var operator = 'fraction';
+        newOperand.push(num);
+        newOperand.push(den);
+    } else {
+        for (var v of tree_1) {
+            newOperand.push(fracMfrac(v));
+        }
+    }
+    tree_1 = [operator].concat(newOperand);
+    
     return tree_1;
 }
 /*

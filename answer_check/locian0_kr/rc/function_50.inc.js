@@ -1,21 +1,25 @@
-export function negParenthesis(tree) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (Array.isArray(tree_1)) {
-        var operator = tree_1.shift();
+import _ from 'lodash';
 
-        var newOperand = [];
-        if (operator === 'addchain') {
-            if (tree_1[0][0] === 'add' && tree_1[0][1][0] === 'negative') {
-                tree_1[0] = ['sub', tree_1[0][1][1]];
-            }
-            newOperand = tree_1;
-        } else {
-            for (var v of tree_1) {
-                newOperand.push(negParenthesis(v));
-            }
-        }
-        tree_1 = [operator].concat(newOperand);
+export function negParenthesis(tree) {
+    if (!Array.isArray(tree)) {
+        return tree;
     }
+    let tree_1 = _.cloneDeep(tree);
+    let operator = tree_1.shift();
+
+    let newOperand = [];
+    if (operator === 'addchain') {
+        if (tree_1[0][0] === 'add' && tree_1[0][1][0] === 'negative') {
+            tree_1[0] = ['sub', tree_1[0][1][1]];
+        }
+        newOperand = tree_1;
+    } else {
+        for (let v of tree_1) {
+            newOperand.push(negParenthesis(v));
+        }
+    }
+    tree_1 = [operator].concat(newOperand);
+
     return tree_1;
 }
 

@@ -1,15 +1,16 @@
 import {Laco} from '../libs/common.inc.js';
 
 import {varReverseShift} from '../rc/function_63.inc.js';
+import _ from 'lodash';
 
 export function test_sunny(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
-    tree_1 = tree_1 ? tree_1 : laco.parse('\\angle{BCAEDF}');
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco();
+    //tree_1 = tree_1 ? tree_1 : laco.parse('\\angle{BCAEDF}');
     
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     laco.apply(varReverseShift, [null, 'angle']);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
     
     
     return tree_1;

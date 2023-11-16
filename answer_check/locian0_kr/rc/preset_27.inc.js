@@ -17,14 +17,14 @@ import {rdecToFrac} from '../rc/function_78.inc.js';
 import {decElimZero} from '../rc/function_79.inc.js';
 import {addPolyZero} from '../rc/function_80.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
-
+import _ from 'lodash';
 
 export function jjee(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
-    tree_1 = tree_1 ? tree_1 : laco.parse('2+y-3x');
+    //let tree_1 = JSON.parse(JSON.stringify(tree));
+    let laco = new Laco();
+    //tree_1 = tree_1 ? tree_1 : laco.parse('2+y-3x');
     
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     laco.apply(allIdentity);
     laco.apply(rdecToFrac);
     laco.apply(fracComplex);
@@ -47,7 +47,7 @@ export function jjee(tree = null) {
     laco.apply(fracDecimal);
     laco.apply(fracExpress);
     laco.apply(decElimZero);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
        
 
     return tree_1;

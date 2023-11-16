@@ -15,11 +15,13 @@ import {eqMulProp} from '../rc/function_75.inc.js';
 import {rdecToFrac} from '../rc/function_78.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
+import _ from 'lodash';
+
 
 export function equiv_equations(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
-    laco.initialize(tree_1);
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco();
+    laco.initialize(tree);
     laco.apply(allIdentity);
     laco.apply(varReverse, ['angle']);
     laco.apply(varReverse, ['mangle']);
@@ -43,7 +45,7 @@ export function equiv_equations(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
        
     
     return tree_1;

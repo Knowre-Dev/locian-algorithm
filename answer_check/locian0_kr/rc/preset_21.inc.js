@@ -17,14 +17,14 @@ import {rdecToFrac} from '../rc/function_78.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import {decIdentity} from '../rc/function_86.inc.js';
-
+import _ from 'lodash';
 
 export function no_identities(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco()
-    tree_1 = tree_1 ? tree_1 : laco.parse('3x+y+0+1a-0+\\frac{1}{2}x');
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco()
+    //tree_1 = tree_1 ? tree_1 : laco.parse('3x+y+0+1a-0+\\frac{1}{2}x');
     
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     laco.apply(decIdentity);
     laco.apply(eqIdentity);
     laco.apply(ineqIdentity);
@@ -49,7 +49,7 @@ export function no_identities(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
 
     return tree_1;
 }

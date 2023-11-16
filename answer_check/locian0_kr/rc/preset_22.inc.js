@@ -12,13 +12,14 @@ import {powDecomposition} from '../rc/function_68.inc.js';
 import {eqMulNeg} from '../rc/function_73.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
+import _ from 'lodash';
 
 export function no_decimal(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco()
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco()
 
     
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     laco.apply(allIdentity);
     laco.apply(varReverse, ['angle']);
     laco.apply(varReverse, ['mangle']);
@@ -39,21 +40,21 @@ export function no_decimal(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
     
     return tree_1;
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
-var latex_1 = '3x';
-var latex_2 = '-\\frac{-3x}{1}';
-var tree_1 = LatexToTree(latex_1);
-var tree_2 = LatexToTree(latex_2);
-var tree_11 = no_decimal(tree_1);
-var tree_21 = no_decimal(tree_2);
-var result_1 = JSON.stringify(tree_11, null, 4);
-var result_2 = JSON.stringify(tree_21, null, 4);
-console.log(result_1 == result_2);
+let latex_1 = '3x';
+let latex_2 = '-\\frac{-3x}{1}';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
+let tree_11 = no_decimal(tree_1);
+let tree_21 = no_decimal(tree_2);
+let result_1 = JSON.stringify(tree_11, null, 4);
+let result_2 = JSON.stringify(tree_21, null, 4);
+console.log(result_1 === result_2);
 console.log(result_1);
 console.log(result_2);
 */

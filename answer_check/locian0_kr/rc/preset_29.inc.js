@@ -15,11 +15,13 @@ import {eqMulNeg} from '../rc/function_73.inc.js';
 import {rdecToFrac} from '../rc/function_78.inc.js';
 import {addFactorNegative} from '../rc/function_81.inc.js';
 import {addAdjacentSigns} from '../rc/function_83.inc.js';
+import _ from 'lodash';
+
 
 export function simp_distribute(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
-    laco.initialize(tree_1);
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco();
+    laco.initialize(tree);
     laco.apply(allIdentity);
     laco.apply(varReverse, ['angle']);
     laco.apply(varReverse, ['mangle']);
@@ -43,7 +45,7 @@ export function simp_distribute(tree = null) {
     laco.apply(addFactoredForm);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
        
     
     return tree_1;
@@ -51,15 +53,15 @@ export function simp_distribute(tree = null) {
 
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
-var latex_1 = '8';
-var latex_2 = '2\\times 2\\times 2';
-var tree_1 = LatexToTree(latex_1);
-var tree_2 = LatexToTree(latex_2);
-var tree_11 = simp_distribute(tree_1);
-var tree_21 = simp_distribute(tree_2);
-var result_1 = JSON.stringify(tree_11, null, 4);
-var result_2 = JSON.stringify(tree_21, null, 4);
-console.log(result_1 == result_2);
+let latex_1 = '8';
+let latex_2 = '2\\times 2\\times 2';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
+let tree_11 = simp_distribute(tree_1);
+let tree_21 = simp_distribute(tree_2);
+let result_1 = JSON.stringify(tree_11, null, 4);
+let result_2 = JSON.stringify(tree_21, null, 4);
+console.log(result_1 === result_2);
 console.log(result_1);
 console.log(result_2);
 */

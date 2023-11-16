@@ -25,7 +25,7 @@ export function mulAssociative(tree) {
     }
     return tree_1;
 }
-
+/*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';
 var func = mulAssociative;
 var latex1 = '(ab)c';
@@ -37,3 +37,4 @@ var tree21 = func(tree2);
 console.log(is_equal_tree(tree11, tree21));
 console.log(JSON.stringify(tree11, null, 4));
 console.log(JSON.stringify(tree21, null, 4));
+*/

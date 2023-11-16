@@ -175,10 +175,10 @@ function preset_html(funcs, tree = '') {
     var tree_1 = JSON.parse(JSON.stringify(tree));
     laco.initialize(tree_1);
     for (var v of funcs) {
-        if (v[2] == true) {
+        if (v[2] === true) {
             var func = eval(v[0]);
             
-            if (v[1] == '') {
+            if (v[1] === '') {
                 laco.apply(func);
             } else {
                 laco.apply(func, eval(v[1]));

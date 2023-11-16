@@ -32,21 +32,15 @@ import {mulNegative} from '../rc/function_160.inc.js';
 import {solParenthesis} from '../rc/function_163.inc.js';
 import {expToFrac} from '../rc/function_187.inc.js';
 import {eqIneqDivPi} from '../rc/function_202.inc.js';
-
+import _ from 'lodash';
 
 export function 모두가능(tree = null, variable = ['anything', 'x']) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    var laco = new Laco();
+    //let tree_1 = _.cloneDeep(tree);
+    let laco = new Laco();
     //tree_1 = $tree ? : laco.parse('ba+3xy+\overline{SCEAG});;
     
-    /*
-    laco.initialize(tree_1);
-        laco.apply(evaluateEx);
-        laco.finalize();;s
     
-    return tree_1;
-    /*/ 
-    laco.initialize(tree_1);
+    laco.initialize(tree);
     // Step 0. Rewrite any and every set notation to inequality
     //            (will deal with infinity later)
     laco.apply(intervalSetNot, variable);
@@ -146,13 +140,16 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     
     // Step 6. Sort all remaining terms in a predefined order (incl. sides in eqns/ineqs)
     //             and resolve any inconsistencies that fails to consider
-    //             x=0 == -x=0 or |x| == |-x|
+    //             x=0 === -x=0 or |x| === |-x|
     laco.apply(allCommutative);
     laco.apply(addFactorNegative);
     laco.apply(eqIdentity); // Somehow eqMulNeg must come after this to work properly
     laco.apply(eqMulNeg);
+    //console.log(JSON.stringify(laco.finalize(), null, 4));
     laco.apply(eqIneqMulProp);
+    //console.log(JSON.stringify(laco.finalize(), null, 4));
     laco.apply(eqIneqDivPi);
+    
     laco.apply(eqMulProp);
     
     laco.apply(ineqMulNegUS);
@@ -174,20 +171,11 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     // Step 8. Substitute a randomly generated complex number to each variable
     //            and then compare the output values one-on-one to establish equivalence
     laco.apply(evaluateEx_new);
-    tree_1 = laco.finalize();
+    let tree_1 = laco.finalize();
     return tree_1;
     //*/
     
-    /*
-    tree_1 = tree_1 ? tree_1 : laco.parse('ba+3xy+\overline{SCEAG});;
     
-    tree_1 = laco.initialize(tree_1);
-        laco.apply(evaluateEx);
-        laco.finalize();
-       
-    
-    return tree_1;
-    */
 }
 
 
@@ -204,23 +192,23 @@ function 모두가능(tree_1 = null) {
 */
 /*
 import {LatexToTree, compareMathTree} from '../checkmath.js';
-var latex_1 = '9-8p>0';
-var latex_2 = '(-3)^2-4\\times 1\\times 2p>0';
-var tree_1 = LatexToTree(latex_1);
-var tree_2 = LatexToTree(latex_2);
-var tree_11 = 모두가능(tree_1);
-var tree_21 = 모두가능(tree_2);
+let latex_1 = ' 2\\left(5\\right)+2x\\geq 10';
+let latex_2 = 'x\\geq 0';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
+let tree_11 = 모두가능(tree_1);
+let tree_21 = 모두가능(tree_2);
 console.log(compareMathTree(tree_11, tree_21));
-var result_1 = JSON.stringify(tree_11, null, 4);
-var result_2 = JSON.stringify(tree_21, null, 4);
+let result_1 = JSON.stringify(tree_11, null, 4);
+let result_2 = JSON.stringify(tree_21, null, 4);
 console.log(result_1);
 console.log(result_2);
 */
 /*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';
-var latex_1 = '(-3)^2-4\\times 1\\times 2p>0';
-var tree_1 = LatexToTree(latex_1);
-var tree_11 = 모두가능(tree_1);
-var result_1 = JSON.stringify(tree_11, null, 4);
+let latex_1 = 'x\\geq 0';
+let tree_1 = LatexToTree(latex_1);
+let tree_11 = 모두가능(tree_1);
+let result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */

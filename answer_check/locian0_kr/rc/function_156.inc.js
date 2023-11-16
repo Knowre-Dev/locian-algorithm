@@ -19,15 +19,15 @@ A new tree with like terms grouped together into mulchains of an addchain and va
 //import {mulIdentity} from '../rc/function_59.inc.js';
 import {array2ChainTree, findVars, termExists} from '../rc/function_152.inc.js';
 import {exprSimpConst} from '../rc/function_154.inc.js';
-
+import _ from 'lodash';
 
 
 export function groupLikeVariableTerms(tree = null) {
-    var tree_1 = JSON.parse(JSON.stringify(tree));
-    if (!Array.isArray(tree_1)) {
-        return tree_1;
-    }
     
+    if (!Array.isArray(tree)) {
+        return tree;
+    }
+    var tree_1 = _.cloneDeep(tree);
     var operator = tree_1.shift();
     var newOperand = [];
     switch (operator) {
@@ -47,7 +47,7 @@ export function groupLikeVariableTerms(tree = null) {
             
             // Find all variables in this tree
             var varList = findVars([operator].concat(tree_1));
-            if (varList.length == 0) {
+            if (varList.length === 0) {
                 newOperand = tree_1;
                 break;
             }
@@ -64,7 +64,7 @@ export function groupLikeVariableTerms(tree = null) {
             // Iterate through each variable in varList
             for (var [k, variable] of varList.entries()) {
                 
-                if (termIndices.length == 0) {
+                if (termIndices.length === 0) {
                     // All terms have been visited,
                     //so no need to execute the outer foreach loop further
                     break;
@@ -81,12 +81,12 @@ export function groupLikeVariableTerms(tree = null) {
                         // the list of indices of not-yet-visited terms
                         if (termExists(variable, term[1], false, true)) {
                             var coeff = [];
-                            if (JSON.stringify(variable) == JSON.stringify(term[1])) {
+                            if (JSON.stringify(variable) === JSON.stringify(term[1])) {
                                 coeff = ['natural', '1'];
                             } else if (term[1][0] === 'mulchain') {
                                 var term_1 = term[1].slice(1);
                                 for (var m of term_1) {
-                                    if (JSON.stringify(variable) != JSON.stringify(m[1])) {
+                                    if (JSON.stringify(variable) !== JSON.stringify(m[1])) {
                                         coeff.push(m);
                                     }
                                 }
@@ -121,21 +121,21 @@ export function groupLikeVariableTerms(tree = null) {
             for (var [k, variable] of varList.entries()) {
                 // skip if there is no coefficient for this variable
                 
-                if (coeffArr[k.toString()].length == 0) {
+                if (coeffArr[k.toString()].length === 0) {
                     continue;
                 }
                 var addOp = 'add';
                 var coeff = coeffArr[k.toString()];
                 if (Array.isArray(coeff)) {
-                    if (coeff[0] == 'negative') {
+                    if (coeff[0] === 'negative') {
                         addOp = 'sub';
                         coeff = coeff[1];
-                    } else if (coeff[0] == 'pm') {
+                    } else if (coeff[0] === 'pm') {
                         addOp = 'addsub';
                         coeff = coeff[1];
                     }
                 }
-                if (JSON.stringify(coeff) == JSON.stringify(['natural', '1'])) {
+                if (JSON.stringify(coeff) === JSON.stringify(['natural', '1'])) {
                     // Omit coefficient of 1
                     newOperand.push([addOp, variable]);
                 } else {
@@ -145,7 +145,7 @@ export function groupLikeVariableTerms(tree = null) {
             // Don't forget any constant term
             if (coeffArr['const'].length > 0) {
                 coeff = coeffArr['const'];
-                if (coeff[0] == 'negative') {
+                if (coeff[0] === 'negative') {
                     newOperand.push(['sub', coeff[1]]);
                 } else {
                     newOperand.push(['add', coeff]);
@@ -154,7 +154,7 @@ export function groupLikeVariableTerms(tree = null) {
             
             // If there is only one operand, just output that operand
             // with an appropriate sign as applicable
-            if (newOperand.length == 1) {
+            if (newOperand.length === 1) {
                 return array2ChainTree(newOperand);
             }
             break;
@@ -175,18 +175,18 @@ export function groupLikeVariableTerms(tree = null) {
             for (var term of tree_1) {
                 var base = ['mul', term[1]];
                 var expo = ['add', ['natural', '1']];
-                if (base[1][0] == 'power') {
+                if (base[1][0] === 'power') {
                     expo[1] = base[1][2];
                     base[1] = base[1][1];
                 }
-                if (expo[1][0] == 'negative') {
+                if (expo[1][0] === 'negative') {
                     expo[0] = 'sub';
                     expo[1] = expo[1][1];
                 }
                 
                 var tk = -1;
                 for (var [i, v] of baseArr.entries()) {
-                    if (JSON.stringify(base) == JSON.stringify(v)) {
+                    if (JSON.stringify(base) === JSON.stringify(v)) {
                         tk = i;
                         break;
                     }
@@ -198,7 +198,7 @@ export function groupLikeVariableTerms(tree = null) {
                     expoArr[ind].push(expo);
                     ind++;
                 } else {
-                    if (typeof expoArr[tk] == 'undefined') {
+                    if (typeof expoArr[tk] === 'undefined') {
                         expoArr[tk] = [];
                     }
                     expoArr[tk].push(expo);
@@ -215,16 +215,16 @@ export function groupLikeVariableTerms(tree = null) {
                 
                 expoArr[k] = array2ChainTree(expoArr[k]);
                 expoArr[k] = exprSimpConst(expoArr[k]);
-                if (JSON.stringify(expoArr[k]) == JSON.stringify(['natural', '0'])) {
+                if (JSON.stringify(expoArr[k]) === JSON.stringify(['natural', '0'])) {
                     continue;
                 }
-                if (expoArr[k][0] == 'negative') {
+                if (expoArr[k][0] === 'negative') {
                     baseArr[k][0] = 'div';
                     expoArr[k] = expoArr[k][1];
                 }
                 
                 var mTerm = [baseArr[k][0], ['power', baseArr[k][1], expoArr[k]]];
-                if (JSON.stringify(mTerm[1][2]) == JSON.stringify(['natural', '1'])) {
+                if (JSON.stringify(mTerm[1][2]) === JSON.stringify(['natural', '1'])) {
                     mTerm[1] = mTerm[1][1];
                 }
                 
@@ -235,8 +235,8 @@ export function groupLikeVariableTerms(tree = null) {
             
             // If there is only one operand, just output that operand
             // with inversion, as applicable
-            if (newOperand.length == 1) {
-                if (newOperand[0][0] == 'div') {
+            if (newOperand.length === 1) {
+                if (newOperand[0][0] === 'div') {
                     return ['fraction', ['natural', '1'], newOperand[0][1]];
                 } else {
                     return newOperand[0][1];
@@ -246,7 +246,7 @@ export function groupLikeVariableTerms(tree = null) {
             // Prepend 1 at the front if all terms are division terms
             var allDiv = true;
             for (var newOpd of newOperand) {
-                if (newOpd[0] == 'mul')
+                if (newOpd[0] === 'mul')
                     allDiv = false;
             }
             if (allDiv) {

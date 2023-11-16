@@ -22,6 +22,8 @@
       "/node_modules/"
     ],
     "testEnvironment": "node"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
-  
 }

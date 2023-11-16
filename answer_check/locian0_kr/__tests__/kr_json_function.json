@@ -447,6 +447,17 @@
     ]
   },
   {
+    "id": 65,
+    "name": "eqIdentity",
+    "data": [
+      { 
+        "answer": "", 
+        "inswer": "", 
+        "result": 1
+      }
+    ]
+  },
+  {
     "id": 66,
     "name": "ineqIdentity",
     "data": [
