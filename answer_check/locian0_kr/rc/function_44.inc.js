@@ -23,9 +23,9 @@ export function 곱셈결합법칙(tree) {
             newOperand.push(term);
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 /*

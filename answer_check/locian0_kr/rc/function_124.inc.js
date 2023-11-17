@@ -14,10 +14,10 @@ export function ineqMulNeg(tree = null) {
         if (tree_1[0][0] === 'negative') {
             newOperand.push(tree_1[0][1]);              
             flag = true;
-        } else if(tree_1[0][0] === 'addchain' && tree_1[0][1][0] === 'sub') {
+        } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0] === 'sub') {
             newOperand.push(addNegative(['negative', tree_1[0]]));    
             flag = true;
-        }else{
+        } else {
             newOperand.push(tree_1[0]);
             flag = false;
         }  
@@ -51,10 +51,10 @@ export function ineqMulNeg(tree = null) {
     } else {
         newOperand = tree_1;
     }   
-    tree_1 = [operator].concat(newOperand);        
+    return [operator].concat(newOperand);        
     
     
-    return tree_1;
+    
 }
 
 export function ineqMulNegUS(tree) {
@@ -69,7 +69,7 @@ export function ineqMulNegUS(tree) {
         newOperand = tree_1;           
     } else {
         if (JSON.stringify(tree_1[0]) === JSON.stringify(['natural', '0'])) {
-            //let indZero = 0;
+            
             let tree_2 = tree_1.slice(1);
             for (let subtree of tree_2) {
                 // If you see any nonnegative argument,
@@ -81,7 +81,7 @@ export function ineqMulNegUS(tree) {
                 }
             }
         } else if (JSON.stringify(tree_1[nOperands - 1]) === JSON.stringify(['natural', '0'])) {
-            //let indZero = nOperands - 1;
+           
             let tree_2 = tree_1.slice(0, -1);
             for (let subtree of tree_2) {
                 if (Array.isArray(subtree) && 
@@ -122,9 +122,9 @@ export function ineqMulNegUS(tree) {
         }
         
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 /*

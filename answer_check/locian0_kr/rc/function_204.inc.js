@@ -29,10 +29,10 @@ export function addNegaToSub(tree = null) {
             newOperand.push(addNegative(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
     
-    return tree_1;
+    
 }
 
 /*

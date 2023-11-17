@@ -21,13 +21,11 @@ export function rootToExp(tree = null) {
             }
             return newOperand;                
         } else if (tree_1[1][0] === 'power') { // 루트 안이 거듭제곱일 경우
-            //operator = 'power';
             newPower = ['fraction', tree_1[1][2], newPower];                  
             let newOperand = ['power', tree_1[1][1], newPower];
             
             return newOperand;               
         } else {
-            //let operator = 'power';
             newPower = ['fraction', ['natural', '1'], newPower];
             let newOperand = ['power', tree_1[1], newPower];
             

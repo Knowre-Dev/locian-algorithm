@@ -4,14 +4,11 @@ import _ from 'lodash';
 
 
 export function geometry_polygon(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(varReverseShift);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

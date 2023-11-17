@@ -47,9 +47,9 @@ export function expToFrac(tree = null) {
     }
     
     tree_1 = [operator].concat(newOperand);
-    tree_1 = fracFirst(tree_1);
+    return fracFirst(tree_1);
     
-    return tree_1;
+    
 }
 
 export function fracFirst(tree) {

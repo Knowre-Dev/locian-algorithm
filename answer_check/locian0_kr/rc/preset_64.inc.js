@@ -35,7 +35,7 @@ import {eqIneqDivPi} from '../rc/function_202.inc.js';
 import _ from 'lodash';
 
 export function 모두가능(tree = null, variable = ['anything', 'x']) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //tree_1 = $tree ? : laco.parse('ba+3xy+\overline{SCEAG});;
     
@@ -171,9 +171,8 @@ export function 모두가능(tree = null, variable = ['anything', 'x']) {
     // Step 8. Substitute a randomly generated complex number to each variable
     //            and then compare the output values one-on-one to establish equivalence
     laco.apply(evaluateEx_new);
-    let tree_1 = laco.finalize();
-    return tree_1;
-    //*/
+    return laco.finalize();
+    
     
     
 }

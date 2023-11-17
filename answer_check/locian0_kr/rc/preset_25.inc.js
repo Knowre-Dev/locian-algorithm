@@ -16,7 +16,7 @@ import {addFactorNegative} from '../rc/function_81.inc.js';
 import _ from 'lodash';
 
 export function test_larwein(tree =  null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('3,200x+6,400,123y-m\\angle{30}');
     
@@ -41,10 +41,7 @@ export function test_larwein(tree =  null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

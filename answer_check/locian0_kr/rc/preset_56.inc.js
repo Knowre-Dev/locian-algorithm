@@ -23,7 +23,7 @@ import _ from 'lodash';
 
 
 export function 식_간단히(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(ineqIdentity);
@@ -58,10 +58,7 @@ export function 식_간단히(tree = null) {
     laco.apply(ineqIdentity);
     laco.apply(eqIdentity);      
 
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

@@ -13,7 +13,7 @@ import {addFactoredFormVar} from '../rc/function_117.inc.js';
 import _ from 'lodash';
 
 export function 기약분수만_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);    
     laco.apply(negParenthesis);
@@ -27,13 +27,7 @@ export function 기약분수만_가능(tree = null) {
     laco.apply(addFactoredFormVar);
     laco.apply(allCommutative);
     laco.apply(allAssociative);
-    let tree_1 = laco.finalize();
-       
-    
-
-
-
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree} from '../checkmath.js';

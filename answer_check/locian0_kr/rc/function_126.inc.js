@@ -65,11 +65,11 @@ export function sub_mulCommutative(tree = null) {
         }           
     }
     
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
    
     
     
-    return tree_1;
+    
 }
 
 export function sort_array(A) {
@@ -127,100 +127,4 @@ export function sub_deter(tree = null) {// 결과가 true면 정렬함, false면
     }   
     return result;
 }
-/*
-function sub_deter1(tree=null)
-{
-    if(gettype(tree) === 'array'){//return이 true면 문자 존재
-        operator = array_shift(tree);
-        
-        if(operator === 'mulchain'){
-            return = false;
-            foreach(tree as t){
-                if(t[1][0] === 'variable'){//
-                    return = true;
-                    break;
-                }else if(t[1][0] === 'addchain'){
-                    foreach(t[1][1] as t11){
-                        if(t11[1][0] === 'mulchain'){
-                            return = sub_deter1(t11[1]);
-                            if(return === true){
-                                break;
-                            }
-                        }  
-                    }
-                    
-                }
-            }
-        }else{
-            return = false;
-            foreach(tree as t){
-                return = sub_deter1(t);
-                if(return === true){
-                    return = true;
-                    break;
-                }
-            }
-        }
-    }
-    return return;
-}
-
-
-
-function sub_deter(tree=null)// 결과가 true면 정렬함, false면 정렬 안함
-{
-    if (gettype(tree) === 'array'){
-        operator = array_shift(tree);
-        
-        if(operator === 'mulchain'){
-            array_shift(tree);
-            
-            return = true;
-            foreach(tree as t){
-                if(t[0] !== 'mul'){
-                    return = false;
-                    break;
-                }else{                    
-                    if(t[1][0] === 'natural'){
-                        return = false; 
-                        break;
-                    }else if(t[1][0] === 'decimal'){
-                        return = false; 
-                        break;
-                    }else if(t[1][0] === 'fraction'){
-                        return = false; 
-                        break;
-                    }else if(t[1][0] === 'negative'){
-                        return = false; 
-                        break;
-                    }else if(t[1][0] === 'addchain'){
-                        foreach(t[1][1] as k=>t11){
-                            if(is_array(t11)){
-                                deter = sub_deter(t11[1]);
-                                if(deter === false){
-                                    return = false; 
-                                    break 2;
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }else{
-            return = true;
-            foreach(tree as t){
-                deter = sub_deter(t);
-                if(deter === false){
-                    return = false;
-                    break;
-                }
-            }
-        }
-    }else{
-        return = false;
-    }   
-    return return;
-}
-*/
 

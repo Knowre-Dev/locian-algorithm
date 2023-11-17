@@ -15,9 +15,9 @@ export function nthrootToSquareroot(tree = null) {
             newOperand.push(nthrootToSquareroot(v));
         }           
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';

@@ -61,12 +61,12 @@ export function makeOneSideOfEqIneqZero(tree = null) {
     } else {
         newOperand = tree_1;
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
     
     // NOTE: This function does not distribute the minus sign
     //     Use addNegative() right after this function to perform that transformation
-    return tree_1;
+    
     
 }
 

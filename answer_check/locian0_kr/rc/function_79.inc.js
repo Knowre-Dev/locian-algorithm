@@ -26,8 +26,8 @@ export function decElimZero(tree) {
             newOperand.push(decElimZero(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 

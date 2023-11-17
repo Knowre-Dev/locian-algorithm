@@ -15,7 +15,7 @@ import {sub_addFactorNegative} from '../rc/function_130.inc.js';
 import _ from 'lodash';
 
 export function 등식_좌우변경가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(negParenthesis);
@@ -31,10 +31,7 @@ export function 등식_좌우변경가능(tree = null) {
     laco.apply(allCommutative);
     laco.apply(allAssociative);
     laco.apply(sub_addFactorNegative);
-    let tree_1 = laco.finalize();
-    
-
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree} from '../checkmath.js';

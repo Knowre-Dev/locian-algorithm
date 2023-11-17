@@ -25,9 +25,9 @@ export function addPolyZero(tree) {
             newOperand.push(addPolyZero(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 export function checkZeroEquiv(tree) {

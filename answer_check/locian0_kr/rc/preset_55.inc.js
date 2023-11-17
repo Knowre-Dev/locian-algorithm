@@ -5,14 +5,11 @@ import _ from 'lodash';
 
 
 export function 고정(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(addNegaToSub);
-    let tree_1 = laco.finalize();
-    
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

@@ -37,8 +37,7 @@ export function addIdentity(tree) {
             newOperand.push(addIdentity(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
 }
 

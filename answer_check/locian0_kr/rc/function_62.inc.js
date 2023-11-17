@@ -22,8 +22,7 @@ export function varShift(tree, types = [null], parent = null) {
         }
         let vars_1 = _.cloneDeep(vars);
         vars_1.sort();
-        let min = vars_1[0];
-        let k = Object.keys(vars).find(key => vars[key] === min);
+        let k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
         let result = [];
 
         for (let v of [[k, vars.length], [0, k]]) {
@@ -36,8 +35,8 @@ export function varShift(tree, types = [null], parent = null) {
         operator += '_fixed';
     }
 
-    tree_1 = [operator].concat(tree_1);
+    return [operator].concat(tree_1);
     
-    return tree_1;
+    
 }
 

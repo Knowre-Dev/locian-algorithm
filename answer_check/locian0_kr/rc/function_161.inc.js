@@ -31,14 +31,13 @@ export function divFrac(tree) {
             newOperand = newOperand.shift()[1];
         }
     } else {
-        for (let [k, arr] of tree_1.entries()) {
+        for (let arr of tree_1) {
             newOperand.push(divFrac(arr));
-           
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 

@@ -10,9 +10,6 @@ export function natElimZero(tree = null) {
     let newOperand = [];
     
     if (operator === 'natural') {
-        
-        
-        
         newOperand.push(tree_1[0].replaceAll(new RegExp('^0+(?!$)', 'g'), ''));
         
         
@@ -21,10 +18,10 @@ export function natElimZero(tree = null) {
             newOperand.push(natElimZero(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
 
-    return tree_1;
+    
 }
 
 

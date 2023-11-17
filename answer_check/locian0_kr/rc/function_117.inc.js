@@ -70,7 +70,7 @@ export function addFactoredFormVar(tree = null) {
                     v = [v];
                 }
                 
-                //let unique = [...new Set(first)];
+                
                 for (let vu of unique) {
                     let key1 = [];
                     for (let [k1, v1] of first.entries()) {
@@ -119,7 +119,7 @@ export function addFactoredFormVar(tree = null) {
                 }                  
                         
             } else {
-                //let unique = [...new Set(first)];
+                
                 operator = 'mulchain';
                 let div = [];
                 for (let vu of unique) {
@@ -168,10 +168,10 @@ export function addFactoredFormVar(tree = null) {
             newOperand.push(addFactoredFormVar(v));
         }
     } 
-    tree_1 = sub_mulCommutative([operator].concat(newOperand));
+    return sub_mulCommutative([operator].concat(newOperand));
     
     
-    return tree_1;
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';
@@ -187,104 +187,6 @@ console.log(result_1 === result_2);
 console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
-/*
-function addFactoredFormVar(tree = null) {
-    let tree_1 = JSON.parse(JSON.stringify(tree));
-    if (Array.isArray(tree_1)) {
-        let deter = sub_deter(tree_1);
-        if (!deter) {
-            return tree_1;
-        }
-        
-        let operator = tree_1.shift();
-        let newOperand = [];
-        let vari = [];
-        if (operator === 'addchain') {
-            for (let [k, t] of tree_1.entries()) {
-                if (t[1][0] === 'variable') {
-                    vari.push(t[1][1]);
-                } else if (t[1][0] === 'mulchain') {
-                    let var_mul = [];
-                    let nt1 = t[1];
-                    nt1.shift();
-                    for (let t1 of nt1) {
-                        if (t1[1][0] === 'variable') {
-                            var_mul.push(t1[1][1]);
-                        }
-                    }
-                    vari.push(var_mul);
-                } else {
-                    vari.push('1');
-                }
-            }
-            if (vari.includes('1')) {
-                newOperand = tree_1;
-            } else {
-                let first = vari.shift();
-                if (!Array.isArray(first)) {
-                    first = [first];
-                }
-                for (let v of vari){
-                    if (!Array.isArray(v)) {
-                        v = [v];
-                    }
-                    first = first.filter(x => v.includes(x));
-                }
-               
-                first = first.values();
-                if (first.length === 0) {
-                    newOperand = tree_1;
-                } else if (first.length === 1) {
-                    operator = 'mulchain';
-                    let div = [['variable', first[0]]];
-                    let div_1 = [];
-                    for (let t of tree_1){
-                        let frac = fracSimpVar(['fraction', t[1], ['variable', first[0]]]);
-                        div_1.push([t[0], frac]);
-                    }
-                    div.push(['addchain'].concat(div_1));
-                    for (let d of div) {
-                        newOperand.push(['mul', d]);
-                    }                                
-                } else {
-                    operator = 'mulchain';
-                    let div = [];
-                    for (let f of first) {
-                        div.push(['variable', f]);
-                    }
-                    let div_1 = [];
-                    for (let t of tree_1){
-                        let frac = t[1];
-                        for (let d of div) {
-                            frac = fracSimpVar(['fraction', frac, d]);
-                        }
-                        div_1.push([t[0], frac]);
-                    }
-                    div.push(['addchain'].concat(div_1));
-                    for (let d of div){
-                        newOperand.push(['mul', d]);
-                    }  
-                }
-            }
-            
-        } else if (operator === 'mulchain') {
-            for (let v of tree_1){
-                if (v[1][0] === 'addchain') {
-                    newOperand.push(addFactoredFormVar(v));
-                } else {
-                    newOperand.push(v);
-                }
-            }
-        } else {
-            for (let v of tree_1) {
-                newOperand.push(addFactoredFormVar(v));
-            }
-        }
-        tree_1 = sub_mulCommutative([operator].concat(newOperand));
-    }
 
-    return tree_1;
-}
-*/
 
 

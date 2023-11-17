@@ -87,9 +87,9 @@ export function addFactor(tree) {
             newOperand.push(v);
         }
     }
-    tree_1 = addCommutative([operator].concat(newOperand));
+    return addCommutative([operator].concat(newOperand));
     
-    return tree_1;
+    
 }
 
 

@@ -15,7 +15,7 @@ import {addAdjacentSigns} from '../rc/function_83.inc.js';
 import _ from 'lodash';
 
 export function no_decimal(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco()
 
     
@@ -40,9 +40,7 @@ export function no_decimal(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

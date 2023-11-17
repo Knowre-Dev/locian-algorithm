@@ -23,30 +23,27 @@ export function rearrangeTreeEq(A, B) {
         } 
         return 0;
     } 
-    let A_1 = _.cloneDeep(A);
-    let B_1 = _.cloneDeep(B);
+    
     let operatorA;
     let operandA;
-    if (A_1[0] === 'negative') {
-        operatorA = A_1[1][0];
-        //operandA = A_1[1].splice(1);
-        operandA = A_1[1].slice(1);
+    if (A[0] === 'negative') {
+        operatorA = A[1][0];
+        operandA = A[1].slice(1);
     } else {
-        operatorA = A_1[0];
-        //operandA = A_1.splice(1);
-        operandA = A_1.slice(1);
+        operatorA = A[0];
+        operandA = A.slice(1);
     }
     
     let operatorB;
     let operandB;
-    if (B_1[0] === 'negative') {
-        operatorB = B_1[1][0];
+    if (B[0] === 'negative') {
+        operatorB = B[1][0];
         
-        operandB = B_1[1].slice(1);
+        operandB = B[1].slice(1);
     } else {
-        operatorB = B_1[0];
+        operatorB = B[0];
         
-        operandB = B_1.slice(1);
+        operandB = B.slice(1);
     }
     
     let place = [0, 0];

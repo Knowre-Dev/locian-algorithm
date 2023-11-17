@@ -20,9 +20,9 @@ export function eqMulProp(tree) {
     } else {
         newOperand = tree_1;
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 import {array2ChainTree, findGCF, multFactor} from '../rc/function_152.inc.js';
@@ -58,8 +58,8 @@ export function eqMulPropUS(tree) {
         newtree = tree_1; // No need to divide by 1
     } else {
         newtree = [tree_1[0]];
-        let tree_2 = tree_1.slice(1);
-        for (let subtree of tree_2) {
+        tree_1 = tree_1.slice(1);
+        for (let subtree of tree_1) {
             if (!Array.isArray(subtree)) {
                 // this block executes for inequality signs (e.g., 'le', 'ge')
                 newtree.push(subtree);
@@ -69,8 +69,8 @@ export function eqMulPropUS(tree) {
             newtree.push(newsubtree);
         }
     }
-    newtree = mulNegative(newtree);
-    return newtree;
+    return mulNegative(newtree);
+    
     
     // NOTE: This function does not support division by negative common factor
     //     Use this function in conjunction with eqMulNeg() and ineqMulNeg()

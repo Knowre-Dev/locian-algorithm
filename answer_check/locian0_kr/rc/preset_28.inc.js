@@ -21,7 +21,7 @@ import _ from 'lodash';
 
 
 export function standard_form(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(eqIdentity);
@@ -44,10 +44,7 @@ export function standard_form(tree = null) {
     laco.apply(eqMulNeg);
     laco.apply(negParenthesis);
     laco.apply(fracExpress);
-    let tree_1 = laco.finalize();
-       
-
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

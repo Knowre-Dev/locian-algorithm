@@ -31,7 +31,7 @@ export function absToMul(tree = null) {
                 } else {
                     if (nt[1][0] === 'variable') {
                         vari.push(nt);
-                    }else{
+                    } else {
                         nat.push(nt);                            
                     }
                 }                   
@@ -64,8 +64,8 @@ export function absToMul(tree = null) {
             newOperand.push(absToMul(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);  
+    return [operator].concat(newOperand);  
     
-    return tree_1;
+    
 }
 

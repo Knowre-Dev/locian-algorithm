@@ -81,9 +81,9 @@ export function rootSimpInt(tree) {
             newOperand.push(rootSimpInt(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 export function pfactor(n) {

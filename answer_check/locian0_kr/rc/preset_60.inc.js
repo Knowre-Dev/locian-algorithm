@@ -4,15 +4,11 @@ import {varReverseShift} from '../rc/function_63.inc.js';
 import _ from 'lodash';
 
 export function 역순밀림_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(varReverseShift);
-    let tree_1 = laco.finalize();
-       
-    
-
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree} from '../checkmath.js';

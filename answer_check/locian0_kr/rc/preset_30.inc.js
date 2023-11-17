@@ -15,7 +15,7 @@ import _ from 'lodash';
 
 
 export function poly_division(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(fracIdentity);
@@ -29,10 +29,7 @@ export function poly_division(tree = null) {
     laco.apply(fracExpress);
     laco.apply(negParenthesis);
     laco.apply(addPolyZero);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

@@ -20,7 +20,7 @@ import {decIdentity} from '../rc/function_86.inc.js';
 import _ from 'lodash';
 
 export function no_identities(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco()
     //tree_1 = tree_1 ? tree_1 : laco.parse('3x+y+0+1a-0+\\frac{1}{2}x');
     
@@ -49,7 +49,5 @@ export function no_identities(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-
-    return tree_1;
+    return laco.finalize();
 }

@@ -19,7 +19,7 @@ export function fracSimpInt(tree) {
             
         } else if (num[0] === 'mulchain') {
             let arrNum = [];
-            //let narrNum = [];
+           
             let num_1 = num.slice(1);
             for (let term of num_1) {
                 if (term[0] === 'mul' && term[1][0] === 'natural') {
@@ -115,9 +115,9 @@ export function fracSimpInt(tree) {
             newOperand.push(fracSimpInt(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 export function EuclidAlg(A, B) {

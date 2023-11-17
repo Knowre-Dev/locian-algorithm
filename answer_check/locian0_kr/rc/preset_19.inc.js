@@ -19,7 +19,7 @@ import _ from 'lodash';
 
 
 export function 기본(tree = null) {
-    //let  tree_1 = _.cloneDeep(tree);
+   
     let  laco  = new Laco()
     //tree_1 = tree_1 ? tree_1 : laco.parse('3x+y+0+1a-0+\\frac{3}{2}x');
     
@@ -48,8 +48,7 @@ export function 기본(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let  tree_1 = laco.finalize();
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

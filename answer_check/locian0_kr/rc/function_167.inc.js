@@ -5,9 +5,8 @@ export function setCommutative(tree = null) {
     if (!Array.isArray(tree)) {
         return tree; 
     }
-    let tree_1 = _.cloneDeep(tree);
-    tree_1 = rearrangeTree(tree_1, ['cap', 'cup']);
-    return tree_1;
+    return rearrangeTree(tree, ['cap', 'cup']);
+    
     
 }
 

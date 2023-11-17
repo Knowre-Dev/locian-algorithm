@@ -23,7 +23,7 @@ export function divIdentity(tree) {
             newOperand.push(divIdentity(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
-    return tree_1;
+    return [operator].concat(newOperand);
+    
 }
 

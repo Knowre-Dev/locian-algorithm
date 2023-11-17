@@ -16,7 +16,7 @@ import _ from 'lodash';
 
 
 export function 분수와소수(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('\frac{3}{2}x');
     
@@ -41,10 +41,7 @@ export function 분수와소수(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

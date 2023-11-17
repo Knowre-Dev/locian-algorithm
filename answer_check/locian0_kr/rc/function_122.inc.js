@@ -24,8 +24,8 @@ export function powerFrac(tree = null) {
             newOperand.push(powerFrac(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 

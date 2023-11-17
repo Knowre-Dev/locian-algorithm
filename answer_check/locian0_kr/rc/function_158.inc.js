@@ -50,8 +50,8 @@ export function fracPlusMinus(tree) {
         newOperand = [[operator].concat(newOperand)];
         operator = 'pm';
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 

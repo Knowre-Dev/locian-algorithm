@@ -12,8 +12,9 @@ export function mulNegative(tree) {
     let sign = 1;
     if (operator === 'negative') {
         let newsubtree = mulNegative(operand[0]);
-        if (newsubtree[0] === 'negative')
+        if (newsubtree[0] === 'negative') {
             return newsubtree[1];
+        }
         return [operator, newsubtree];
     }
     if (operator === 'mulchain') {

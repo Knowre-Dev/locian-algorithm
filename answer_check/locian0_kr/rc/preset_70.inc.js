@@ -5,15 +5,12 @@ import {setCommutative} from '../rc/function_167.inc.js';
 import _ from 'lodash';
 
 export function 집합연산_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(setAssociative);
     laco.apply(setCommutative);       
-    let tree_1 = laco.finalize();
-    
-
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

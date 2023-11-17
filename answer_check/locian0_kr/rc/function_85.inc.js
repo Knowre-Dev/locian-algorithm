@@ -28,8 +28,8 @@ export function ineqSetNot(tree, vari = ['anything', 'x']) {
             newOperand.push(ineqSetNot(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
 
-    return tree_1;
+    
 }
 

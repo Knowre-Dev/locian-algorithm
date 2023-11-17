@@ -23,8 +23,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
         }
         let vars_1 = _.cloneDeep(vars);
         vars_1.sort();
-        let min = vars_1[0];
-        let k = Object.keys(vars).find(key => vars[key] === min);
+        
+        let k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
         let result = [];
 
         if (((typeof vars[k-1] !== 'undefined') ? vars[k-1] : vars[vars.length-1]) 
@@ -43,9 +43,9 @@ export function varReverseShift(tree, types = [null], parent = null) {
         operator += '_fixed';
     }
     
-    tree_1 = [operator].concat(tree_1);
+    return [operator].concat(tree_1);
     
-    return tree_1;
+    
 }
 
 

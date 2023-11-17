@@ -20,9 +20,9 @@ export function powerOne(tree = null) {
             newOperand.push(powerOne(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
     
-    return tree_1;
+    
 }
 

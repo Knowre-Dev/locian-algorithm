@@ -31,9 +31,9 @@ export function mulFracSeparation(tree = null) {
             newOperand.push(mulFracSeparation(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
 
-    return tree_1;
+    
 }
 

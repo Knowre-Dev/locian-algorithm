@@ -4,15 +4,12 @@ import {mulCommutative} from '../rc/function_46.inc.js';
 import _ from 'lodash';
 
 export function 곱셈_교환법칙(tree =  null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
         
     laco.apply(mulCommutative);
-    let tree_1 = laco.finalize();
-       
-
-    return tree_1;
+    return laco.finalize();
 }
 
 

@@ -114,10 +114,10 @@ export function solParenthesis(tree = null) {
         }
         tree_1 = [operator].concat(newOperand);
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
     
-    return tree_1;
+    
 }
 
 /*

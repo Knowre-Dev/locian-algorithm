@@ -57,8 +57,6 @@ export function exprSimpConst(tree = null) {
             
             var subresult = exprSimpConst(tree_1[0]);
             if (subresult[0] === 'negative') {
-                
-            
                 return subresult[1];
             }
             newOperand.push(subresult);
@@ -243,8 +241,8 @@ export function exprSimpConst(tree = null) {
             }
     }
 
-    tree_1 = [operator].concat(newOperand);
-    return tree_1;
+    return [operator].concat(newOperand);
+    
     
 }
 

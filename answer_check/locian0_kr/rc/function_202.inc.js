@@ -42,9 +42,9 @@ export function eqIneqDivPi(tree = null) {
     } else {
         newOperand = tree_1;
     }     
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';

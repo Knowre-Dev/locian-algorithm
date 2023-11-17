@@ -23,7 +23,7 @@ import _ from 'lodash';
 
 
 export function no_simp_frac(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco()
     //tree_1 = tree_1 ? tree_1 : laco.parse('3x-y+0+1a-0+\frac{1}{2}x');
 
@@ -50,9 +50,8 @@ export function no_simp_frac(tree = null) {
     laco.apply(fracDecimal);
     laco.apply(fracExpress);
     laco.apply(fracSimpInt);
-    let tree_1 = laco.finalize();
+    return laco.finalize();
     
-    return tree_1;
 }
 
 /*

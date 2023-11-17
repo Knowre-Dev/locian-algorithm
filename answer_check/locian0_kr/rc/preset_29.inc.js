@@ -19,7 +19,7 @@ import _ from 'lodash';
 
 
 export function simp_distribute(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(allIdentity);
@@ -45,10 +45,7 @@ export function simp_distribute(tree = null) {
     laco.apply(addFactoredForm);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

@@ -24,7 +24,7 @@ import {nthrootToSquareroot} from '../rc/function_191.inc.js';
 import _ from 'lodash';
 
 export function 식간단히_지수유리수(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);  
     laco.apply(nthrootToSquareroot);                 
@@ -54,10 +54,7 @@ export function 식간단히_지수유리수(tree = null) {
     laco.apply(addFactoredFormVar);  
     laco.apply(addFactoredForm); 
     laco.apply(sub_mulCommutative);
-    let tree_1 = laco.finalize();
-
-    
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

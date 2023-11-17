@@ -26,8 +26,6 @@ export function sub_addFactorNegative(tree = null) {
             newOperand.push(sub_addFactorNegative(v));
         }
         tree_1 = ['equation'].concat(newOperand);
-        //tree = addAdjacentSigns(tree);
-        //tree = addFactorNegative(tree);
     } else if (operator === 'inequality') {
         let newOperand = [];
         for (let v of tree_1) {

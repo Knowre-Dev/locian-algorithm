@@ -24,10 +24,10 @@ export function mulPowSeparation(tree = null) {
             newOperand.push(mulPowSeparation(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
 
-    return tree_1;
+    
 }
 
 

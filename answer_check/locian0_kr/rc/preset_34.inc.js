@@ -20,7 +20,7 @@ import _ from 'lodash';
 
 
 export function set_bounds(tree = null, variable = ['anything', 'x']) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(decIdentity);
@@ -42,10 +42,7 @@ export function set_bounds(tree = null, variable = ['anything', 'x']) {
     laco.apply(ineqSetNot, variable)
     laco.apply(intervalSetNot, variable)
     laco.apply(ineqIdentity);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree} from '../checkmath.js';

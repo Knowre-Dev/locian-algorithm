@@ -19,7 +19,7 @@ import _ from 'lodash';
 
 
 export function equiv_equations(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(allIdentity);
@@ -45,8 +45,5 @@ export function equiv_equations(tree = null) {
     laco.apply(addFactorNegative);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }

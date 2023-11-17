@@ -5,7 +5,7 @@ export function varReverse(tree, types = [null], parent = null) {
         return tree;
     }
     let tree_1 = _.cloneDeep(tree);
-    //let types_1 = _.cloneDeep(types);
+  
     let operator = tree_1.shift();
     for (let [k, v] of tree_1.entries()) {
         tree_1[k] = varReverse(v, types, operator);
@@ -35,9 +35,9 @@ export function varReverse(tree, types = [null], parent = null) {
         operator += '_fixed';
     }
 
-    tree_1 = [operator].concat(tree_1);
+    return [operator].concat(tree_1);
     
-    return tree_1;
+    
 }
 
 /*

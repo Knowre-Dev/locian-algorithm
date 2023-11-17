@@ -31,7 +31,7 @@ export function rdecToFrac(tree) {
             let dec = tree_1[1];
             let rdec = tree_1[2];
             let mul;
-            let num
+            let num;
             if (int === '0') {
                 mul = parseInt(dec) * Math.pow(10, rdec.length) + parseInt(rdec);
                 num = mul - parseInt(dec);
@@ -50,9 +50,9 @@ export function rdecToFrac(tree) {
             newOperand.push(rdecToFrac(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';

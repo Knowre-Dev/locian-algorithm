@@ -18,7 +18,7 @@ import _ from 'lodash';
 
 
 export function 기약분수_소수_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //   tree_1 = $tree ?: laco.parse('x(yz-y)');
     
@@ -40,11 +40,7 @@ export function 기약분수_소수_가능(tree = null) {
     laco.apply(addCommutative); //덧셈 교환법칙 
     laco.apply(sub_mulCommutative); //곱셈 교환법칙
     laco.apply(addFactoredForm); //공통 숫자로 묶어냄
-    let tree_1 = laco.finalize();
-
-       
-
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

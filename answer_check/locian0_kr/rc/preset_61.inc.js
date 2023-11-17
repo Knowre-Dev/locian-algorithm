@@ -5,15 +5,12 @@ import _ from 'lodash';
 
 
 export function 대분수_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('\mfrac[1]{1}{2}');
     laco.initialize(tree);
     laco.apply(mfracEquiv);
-    let tree_1 = laco.finalize();
-    
-
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree} from '../checkmath.js';

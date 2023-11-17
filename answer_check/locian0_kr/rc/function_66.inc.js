@@ -5,10 +5,10 @@ export function ineqIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    tree_1 = rearrangeTree(tree_1, ['inequality']);
+    
+    return rearrangeTree(tree, ['inequality']);
 
-    return tree_1;
+    
 }
 
 /*

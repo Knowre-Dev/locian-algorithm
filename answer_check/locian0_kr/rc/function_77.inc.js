@@ -254,7 +254,7 @@ export function fracSimpVar(tree) {
                 arrDen.unshift('mulchain');
                 
                 if (den_key === 0) {
-                    //newOperand.push(sub_mulCommutative(arrDen));
+                   
                     newOperand.push(mulCommutative(arrDen));
                 } else {
                     newOperand.push(sub_mulCommutative(arrDen));
@@ -334,10 +334,10 @@ export function fracSimpVar(tree) {
             newOperand.push(fracSimpVar(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
     
-    return tree_1;
+    
 }
 
 /*

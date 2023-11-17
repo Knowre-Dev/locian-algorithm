@@ -2,14 +2,11 @@ import {Laco} from '../libs/common.inc.js';
 import _ from 'lodash';
 
 export function same(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     
     laco.initialize(tree);
-    let tree_1 = laco.finalize();
-    
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

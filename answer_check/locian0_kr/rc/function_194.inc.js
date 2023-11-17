@@ -44,9 +44,9 @@ export function mulToExp(tree = null) {
             newOperand.push(mulToExp(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 
 

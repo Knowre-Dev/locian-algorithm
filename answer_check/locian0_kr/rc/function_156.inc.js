@@ -261,8 +261,8 @@ export function groupLikeVariableTerms(tree = null) {
             }
     }
     
-    tree_1 = [operator].concat(newOperand);
-    return tree_1;
+    return [operator].concat(newOperand);
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';

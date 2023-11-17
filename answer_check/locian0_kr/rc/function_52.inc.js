@@ -21,9 +21,8 @@ export function fracMfrac(tree) {
             newOperand.push(fracMfrac(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
 }
 /*
 import {LatexToTree} from '../checkmath.js';

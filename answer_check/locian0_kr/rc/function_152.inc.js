@@ -6,7 +6,7 @@ export function evaluateEx_new(tree) {
         return tree;
     }
     let tree_1 = _.cloneDeep(tree);
-    let newTree
+    let newTree;
     switch (tree_1[0]) {
         // 160828 larwein - inequality patch
         case 'inequality':
@@ -99,8 +99,8 @@ A quick helper function for naming variables for lookup table
 export function getVarName(variable) {
     let variable_1 = _.cloneDeep(variable);
     let varname = variable_1.slice(1);
-    varname = varname.length > 1 ? ('(' + varname.join() + ')') : varname[0].toString();
-    return varname;
+    return varname.length > 1 ? ('(' + varname.join() + ')') : varname[0].toString();
+    
 
 }
 /*
@@ -166,7 +166,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = new Object()) {
     return array2ChainTree(newTree);
     // end debug
     //*/
-    //let maxVal = Math.pow(2, 63) - 1;
+    
     let maxVal =  Number.MAX_SAFE_INTEGER;
     let rangeWidth = 10;
     let bound = rangeWidth / 2;
@@ -302,7 +302,7 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
     let operand_1 = _.cloneDeep(operand);
     let lookupTable_1 = _.cloneDeep(lookupTable);
     
-    switch(operator) {
+    switch (operator) {
         case 'natural':
         case 'decimal':
             return [parseFloat(operand_1[0]), 0];
@@ -389,9 +389,9 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             let intg = parseFloat(operand_1[0]);
             let num;
             if (operand_1[1] === '') {
-                let num = parseFloat(operand_1[1] + operand_1[2]);
+                num = parseFloat(operand_1[1] + operand_1[2]);
             } else {
-                let num = parseFloat(operand_1[1] + (parseFloat(operand_1[2]) - parseFloat(operand_1[1])).toString());
+                num = parseFloat(operand_1[1] + (parseFloat(operand_1[2]) - parseFloat(operand_1[1])).toString());
             }
             let denum = '';
             for(let i = 0; i < operand_1[2].length; i++) {
@@ -504,7 +504,6 @@ export function evaluateVariable(variable, lookupTable = new Object()) {
 
     
     
-    //let variable_1 = _.cloneDeep(variable);
     let lookupTable_1 = _.cloneDeep(lookupTable);
     
     let varname = getVarName(variable);
@@ -538,8 +537,7 @@ export function powComplex_inLocian(A, B) {
         }
         return [0, 0];
     }
-    //let A_1 = _.cloneDeep(A);
-    //let B_1 = _.cloneDeep(B);
+    
     // r is the modulus of the base
     let r = Math.sqrt(Math.pow(A[0], 2) + Math.pow(A[1], 2));
     if (r < 1) {
@@ -687,7 +685,7 @@ export function array2ChainTree(arr, evalNumeric = false) {
                 nonnumericArr.push([term[0], subtree]);
             }
         }
-        //console.log(JSON.stringify(numericArr, null, 4))
+        
         let numRes = array2ChainTree(numericArr);
         arr_1 = nonnumericArr;
         if (numRes.length > 0) {
@@ -723,8 +721,8 @@ export function array2ChainTree(arr, evalNumeric = false) {
     }
     
     // Construct the tree
-    let tree = [operator].concat(arr_1);
-    return tree;
+    return [operator].concat(arr_1);
+    
 }
 
 /*
@@ -803,8 +801,7 @@ export function combine2ChainTree(tree1, tree2, subtype = null) {
         !Array.isArray(tree2) || tree2.length < 1) {
         return false;
     }
-    //let tree1_1 = _.cloneDeep(tree1);
-    //let tree2_1 = _.cloneDeep(tree2);
+    
     // Set subtype if not provided (see the note above)
     if (subtype === null) {
         if (['addchain', 'mulchain'].includes(tree1[0])) {
@@ -971,8 +968,8 @@ export function evalNumericValues_addChain(operand) {
     } else {
         operand_11 = [['sub', tree]];
     }
-    tree = ['addchain'].concat(operand_11).concat(operand_12);
-    return tree;
+    return ['addchain'].concat(operand_11).concat(operand_12);
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';
@@ -990,7 +987,7 @@ Author: epark
 */
 export function evalNumericValues_mulChain(operand) {
     let operand_1 = _.cloneDeep(operand);
-    //let operator = 'mulchain';
+    
     
     let numer = 1;
     let denom = 1;
@@ -1035,8 +1032,8 @@ export function evalNumericValues_mulChain(operand) {
     if (numer < 0) {
         tree = ['negative', tree];
     }
-    tree = fracSimpInt(tree);
-    return tree;
+    return fracSimpInt(tree);
+    
 }
 /*
 import {LatexToTree} from '../checkmath.js';
@@ -1136,7 +1133,7 @@ export function evalNumericValues_power(operand) {
         tree = ['negative', tree];
     }
     
-    //tree = mulIdentity(tree);
+    
     return tree;
 }
 
@@ -1878,7 +1875,7 @@ export function utf8_ord(ch) {
         return (h & 0x0F) << 18 | (ch[1].charCodeAt(0) & 0x3F) << 12 | (ch[2].charCodeAt(0) & 0x3F) << 6 | (ch[3].charCodeAt(0) & 0x3F);
     }
     return h
-    //return false;
+    
 }
 /*
 let result = utf8_ord('하');

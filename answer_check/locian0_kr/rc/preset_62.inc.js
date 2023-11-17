@@ -14,7 +14,7 @@ import _ from 'lodash';
 
 
 export function 인수분해꼴(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(fracExpress);
@@ -29,10 +29,7 @@ export function 인수분해꼴(tree = null) {
     laco.apply(sub_mulCommutative);
     laco.apply(addFactorNegative);
     laco.apply(mulConstCal);
-    let tree_1 = laco.finalize();
-    
-
-    return tree_1;
+    return laco.finalize();
 }
 
 /*

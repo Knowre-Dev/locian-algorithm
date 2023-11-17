@@ -80,8 +80,7 @@ export function mulAllSidesByCommonDenom(tree = null) {
         newOperand = tree_1;
     }
     
-    tree_1 = [operator].concat(newOperand);
-    return tree_1;
+    return [operator].concat(newOperand);
 }
 
 /*

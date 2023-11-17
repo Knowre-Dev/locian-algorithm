@@ -10,7 +10,7 @@ import {sub_mulCommutative} from '../rc/function_126.inc.js';
 import _ from 'lodash';
 
 export function 거듭제곱꼴만_가능(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     laco.initialize(tree);
     laco.apply(powerFrac);//분수 분모 분자 쪼갬
@@ -21,10 +21,7 @@ export function 거듭제곱꼴만_가능(tree = null) {
     //laco.apply(allCommutative);
     laco.apply(addCommutative);
     laco.apply(sub_mulCommutative);
-    let tree_1 = laco.finalize();
-       
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';

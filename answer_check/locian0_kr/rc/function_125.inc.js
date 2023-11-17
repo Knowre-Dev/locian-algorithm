@@ -77,9 +77,6 @@ export function eqIneqMulProp(tree = null) {
                 newOperand = tree_1;
             } else {
                 let deno = ['natural', div.toString()];
-                /*simp1 = sub_div(tree_1[0], deno);
-                simp2 = sub_div(tree_1[1], deno);                  
-                newOperand = [simp1, simp2];*/
                 
                 for (let i = 0; i < tree_1.length; i++){
                     if (i % 2 === 0) {
@@ -131,9 +128,9 @@ export function eqIneqMulProp(tree = null) {
     } else {
         newOperand = tree_1;
     }     
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
@@ -172,7 +169,7 @@ export function sub_getConstant(tree) {
         if (con.includes(1)){
                 if (con.length !== 1) {
                 let con1 = [];
-                    for (let c of con){
+                for (let c of con){
                     if (c !== 1) {
                         con1.push(c);                            
                     }
@@ -181,7 +178,7 @@ export function sub_getConstant(tree) {
             }
         }
     } else if (operator === 'addchain') {
-        for(let t of tree_1) {
+        for (let t of tree_1) {
             con = con.concat(sub_getConstant(t[1]));
         }           
     } else if (operator === 'negative') {
@@ -192,9 +189,7 @@ export function sub_getConstant(tree) {
         con.push(1);
     } else if (operator === 'variable'){
         con.push(1);
-    } else {
-        
-    }
+    } 
 
     return con;
 }
@@ -224,10 +219,7 @@ export function sub_div(tree, deno) {
     let frac2 = fracNegative(frac1);
     let separation = fracSeparation(frac2);
     let simp = fracSimpInt(separation);
-    
-    /*print_r(frac1);
-print_r(separation);
-print_r(simp);   */ 
+
     return simp;
     
 }

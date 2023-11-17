@@ -38,8 +38,8 @@ export function powAddFactoredForm(tree = null) {
             newOperand.push(powAddFactoredForm(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 

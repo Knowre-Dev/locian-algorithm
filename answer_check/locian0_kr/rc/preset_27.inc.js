@@ -20,7 +20,7 @@ import {addFactorNegative} from '../rc/function_81.inc.js';
 import _ from 'lodash';
 
 export function jjee(tree = null) {
-    //let tree_1 = JSON.parse(JSON.stringify(tree));
+    
     let laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('2+y-3x');
     
@@ -47,8 +47,5 @@ export function jjee(tree = null) {
     laco.apply(fracDecimal);
     laco.apply(fracExpress);
     laco.apply(decElimZero);
-    let tree_1 = laco.finalize();
-       
-
-    return tree_1;
+    return laco.finalize();
 }

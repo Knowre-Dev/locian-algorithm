@@ -50,8 +50,8 @@ export function fracComplex(tree) {
             newOperand.push(fracComplex(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+    
 }
 

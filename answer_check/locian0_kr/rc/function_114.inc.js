@@ -34,8 +34,8 @@ export function mulToNega(tree = null) {
             newOperand.push(mulToNega(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);    
+    return [operator].concat(newOperand);    
     
-    return tree_1;
+    
 }
 

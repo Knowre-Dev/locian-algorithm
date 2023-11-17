@@ -3,16 +3,13 @@ import {evaluateEx_new} from '../rc/function_152.inc.js';
 import _ from 'lodash';
 
 export function equivalent(tree = null) {
-    //let tree_1 = _.cloneDeep(tree);
+    
     let laco = new Laco();
     //tree_1 = tree_1 ? tree_1 : laco.parse('ba+3xy+\overline{SCEAG}');
     
     laco.initialize(tree);
     laco.apply(evaluateEx_new);
-    let tree_1 = laco.finalize();
-   
-    
-    return tree_1;
+    return laco.finalize();
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

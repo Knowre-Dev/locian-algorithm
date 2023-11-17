@@ -22,8 +22,9 @@ export function addAssociative(tree) {
             newOperand.push(term);
         }
     }
-    tree_1 = [operator].concat(newOperand);
-    return tree_1;
+    
+    return [operator].concat(newOperand);
+    
 }
 /*
 import {LatexToTree, compareMathTree} from "../checkmath.js";

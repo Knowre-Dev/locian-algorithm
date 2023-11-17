@@ -19,9 +19,9 @@ export function powIdentity(tree) {
             newOperand.push(powIdentity(v));
         }
     }
-    tree_1 = [operator].concat(newOperand);
+    return [operator].concat(newOperand);
     
-    return tree_1;
+   
 }
 /*
 import {LatexToTree, compareMathTree} from '../checkmath.js';
