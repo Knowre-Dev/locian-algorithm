@@ -2,11 +2,15 @@ import {rearrangeTree} from '../rc/function_61.inc.js';
 import _ from 'lodash';
 
 export function mulCommutative(tree) {
-    let tree_1 = _.cloneDeep(tree);
-    if (Array.isArray(tree_1)) {
-        tree_1 = rearrangeTree(tree_1, ['mulchain']);
+   
+   
+    if (!Array.isArray(tree)) {
+        return tree;
     }
-    return tree_1;
+    
+    return rearrangeTree(tree, ['mulchain']);
+    
+
 }
 
 

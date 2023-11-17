@@ -87,7 +87,7 @@ export function rootSimpInt(tree) {
 }
 
 export function pfactor(n) {
-    // max_n = 2^31-1 = 2147483647
+    
     let d = 2;
     let factors = [];
     let dmax = Math.floor(Math.sqrt(n));

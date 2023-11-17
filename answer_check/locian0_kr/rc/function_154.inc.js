@@ -29,7 +29,10 @@ import _ from 'lodash';
 
 export function exprSimpConst(tree = null) {
     
-    if (!Array.isArray(tree) || tree.length === 0) {
+    if (!Array.isArray(tree)) {
+        return tree;
+    }
+    if (tree.length === 0) {
         return tree;
     }
     let tree_1 = _.cloneDeep(tree);
