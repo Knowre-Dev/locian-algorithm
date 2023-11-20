@@ -6,13 +6,13 @@ export function fracDecimal(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }  
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
-
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'decimal') {
         let val = tree_1[0].split('.');
-        // 20190419 larwein - 000.x 가 그대로 000.x 가 되면서 무한 루프에 빠지는 버그
+        
         
         let num = parseInt(val[0] + val[1]);
         let den = Math.pow(10, val[1].length);

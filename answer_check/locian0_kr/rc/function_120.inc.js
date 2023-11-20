@@ -4,8 +4,9 @@ export function powerOne(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     
     if (operator === 'power') {

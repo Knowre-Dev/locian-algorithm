@@ -5,10 +5,9 @@ export function fracExpress(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }  
-
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
     
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     let nega;
     if (operator === 'mulchain' && tree_1[0][1][0] === 'fraction') {
@@ -74,7 +73,7 @@ export function fracExpress(tree) {
     tree_1 = [operator].concat(newOperand);
     
     if (nega) {
-        tree_1 = ['negative'].concat([tree_1]);
+        return ['negative'].concat([tree_1]);
     }
     return tree_1;
 }

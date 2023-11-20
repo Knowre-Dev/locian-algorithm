@@ -12,12 +12,12 @@ export function fracCombine(tree) {
     if (!Array.isArray(tree) || tree.length < 1) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1[0];
-    let operand = tree_1.slice(1);
+    
+    let operator = tree[0];
+    let operand = tree.slice(1);
     if (operator === 'addchain') {
     
-        let denomArr = findDenominators(tree_1, true);
+        let denomArr = findDenominators(tree, true);
         if (denomArr.length === 0) {
             return [operator].concat(operand);
         }

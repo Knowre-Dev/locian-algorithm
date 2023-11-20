@@ -10,8 +10,9 @@ export function rearrangeTree(tree, types = []) {
     if (JSON.stringify(tree) === JSON.stringify([])) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     for (let v of tree_1) {
         if (Array.isArray(v)) {

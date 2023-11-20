@@ -6,8 +6,8 @@ export function fracMfrac(tree) {
         return tree;
     }
     
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
         let num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];

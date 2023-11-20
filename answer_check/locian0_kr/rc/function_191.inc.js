@@ -4,9 +4,10 @@ export function nthrootToSquareroot(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
-    let operator = tree_1.shift();
     if (operator === 'nthroot' && JSON.stringify(tree_1[0]) === JSON.stringify([])) {
         operator = 'squareroot';
         newOperand = [tree_1[1]];         

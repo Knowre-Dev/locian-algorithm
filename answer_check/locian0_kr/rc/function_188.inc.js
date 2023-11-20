@@ -4,8 +4,9 @@ export function rootToExp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     if (operator === 'nthroot') {
         let newPower = tree_1[0];
         if (tree_1[1][0] === 'mulchain') { // 루트 안이 곱셈식일 경우

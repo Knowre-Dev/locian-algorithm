@@ -6,8 +6,9 @@ export function sub_mulCommutative(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'mulchain') {
         let array = sort_array(tree_1);
@@ -73,9 +74,9 @@ export function sub_mulCommutative(tree = null) {
 }
 
 export function sort_array(A) {
-    let A_1 = _.cloneDeep(A);
+    //let A_1 = _.cloneDeep(A);
     let arr = [];
-    for (let v of A_1){
+    for (let v of A){
         if (!Array.isArray(v)) {
             arr.push(v);
         } else {
@@ -88,43 +89,44 @@ export function sort_array(A) {
 export function sub_deter(tree = null) {// 결과가 true면 정렬함, false면 정렬 안함
     
     let result = true;
-    if (Array.isArray(tree)) {
-        let tree_1 = _.cloneDeep(tree);
-        let operator = tree_1.shift();
-        if (operator === 'mulchain') {
-            tree_1.shift();
-            for (let t of tree_1) {
-                if (t[0] !== 'mul') {
-                    result = false;
+    if (!Array.isArray(tree)) {
+        return result;
+    }
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
+    if (operator === 'mulchain') {
+        tree_1.shift();
+        for (let t of tree_1) {
+            if (t[0] !== 'mul') {
+                result = false;
+                break;
+            } else {                    
+                if (t[1][0] === 'natural') {
+                    result = false; 
                     break;
-                } else {                    
-                    if (t[1][0] === 'natural') {
-                        result = false; 
-                        break;
-                    } else if (t[1][0] === 'decimal') {
-                        result = false; 
-                        break;
-                    } else if (t[1][0] === 'fraction') {
-                        result = false; 
-                        break;
-                    } else if (t[1][0] === 'negative') {
-                        result = false; 
-                        break;
-                    }
-                }
-            }
-        } else {
-            for (let t of tree_1) {
-                let deter = sub_deter(t);
-                if (deter === false) {
-                    result = false;
+                } else if (t[1][0] === 'decimal') {
+                    result = false; 
+                    break;
+                } else if (t[1][0] === 'fraction') {
+                    result = false; 
+                    break;
+                } else if (t[1][0] === 'negative') {
+                    result = false; 
                     break;
                 }
             }
         }
     } else {
-        result = true;
-    }   
+        for (let t of tree_1) {
+            let deter = sub_deter(t);
+            if (deter === false) {
+                result = false;
+                break;
+            }
+        }
+    }
+
     return result;
 }
 

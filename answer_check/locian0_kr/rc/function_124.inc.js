@@ -6,8 +6,10 @@ export function ineqMulNeg(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+   
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
+
     let newOperand = [];
     if (operator === 'inequality') {
         let flag;
@@ -61,8 +63,9 @@ export function ineqMulNegUS(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let nOperands = tree_1.length;
     let newOperand = [];
     if (operator !== 'inequality') {

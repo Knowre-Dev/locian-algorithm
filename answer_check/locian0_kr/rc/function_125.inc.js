@@ -6,8 +6,9 @@ export function eqIneqMulProp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();  
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'equation') {
         let con1 = sub_getConstant(tree_1[0]);

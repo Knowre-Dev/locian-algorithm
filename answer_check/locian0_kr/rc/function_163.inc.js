@@ -4,9 +4,9 @@ export function solParenthesis(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();   
-        
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'mulchain') {
         let mul = true;
@@ -112,7 +112,7 @@ export function solParenthesis(tree = null) {
         for (let v of tree_1) {
             newOperand.push(solParenthesis(v));
         }
-        tree_1 = [operator].concat(newOperand);
+        //tree_1 = [operator].concat(newOperand);
     }
     return [operator].concat(newOperand);
     

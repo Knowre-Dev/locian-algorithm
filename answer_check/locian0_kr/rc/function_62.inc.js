@@ -4,9 +4,9 @@ export function varShift(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
     
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     for (let [k, v] of tree_1.entries()) {
         tree_1[k] = varShift(v, types, operator);
     }

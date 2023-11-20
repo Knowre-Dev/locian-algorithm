@@ -5,9 +5,10 @@ export function mulNegative(tree) {
     if (!Array.isArray(tree) || tree.length < 1) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
-    let operand = tree_1;
+    
+    let operator = tree[0];
+    let operand = tree.slice(1);
+    //let operand = tree_1;
     let newOperand = [];
     let sign = 1;
     if (operator === 'negative') {
@@ -36,7 +37,7 @@ export function mulNegative(tree) {
         }
     }
     
-    tree_1 = [operator].concat(newOperand);
+    let tree_1 = [operator].concat(newOperand);
     if (sign === -1) {
         tree_1 = ['negative', tree_1];
     }

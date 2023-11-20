@@ -4,9 +4,9 @@ export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'addchain') {
         for (let term of tree_1) {
@@ -36,9 +36,9 @@ export function checkZeroEquiv(tree) {
     if (!Array.isArray(tree)) {
         return result;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
-    
+   
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     switch (operator) {
         case 'fraction':
             result = checkZeroEquiv(tree_1[0]);

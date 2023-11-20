@@ -7,9 +7,10 @@ export function mulAllSidesByCommonDenom(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
+   
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
-    let operator = tree_1.shift();
     if (operator === 'equation' || operator === 'inequality') {
         // Remove any complex fractions
         //tree = fracComplex(tree); Gurantee this instead by precondition (better performance)

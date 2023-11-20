@@ -4,9 +4,9 @@ export function eqMulProp(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'equation') {
         if (tree_1[0][0] === 'fraction') {
@@ -38,11 +38,11 @@ export function eqMulPropUS(tree) {
     if (!['equation', 'inequality'].includes(tree[0])) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
+    //let tree_1 = _.cloneDeep(tree);
     // Input now guaranteed to be a tree array representing equation or inequality
     
     // Find the common factors for all sides
-    let gcfArr = findGCF(tree_1);
+    let gcfArr = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
     let factor = [];
@@ -55,10 +55,10 @@ export function eqMulPropUS(tree) {
     
     if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) || 
         JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
-        newtree = tree_1; // No need to divide by 1
+        newtree = tree; // No need to divide by 1
     } else {
-        newtree = [tree_1[0]];
-        tree_1 = tree_1.slice(1);
+        newtree = [tree[0]];
+        let tree_1 = tree.slice(1);
         for (let subtree of tree_1) {
             if (!Array.isArray(subtree)) {
                 // this block executes for inequality signs (e.g., 'le', 'ge')

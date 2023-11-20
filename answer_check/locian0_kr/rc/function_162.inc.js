@@ -16,8 +16,9 @@ export function sub_addFactored(tree = null) {
     if (JSON.stringify(tree) !== JSON.stringify(simple1) || JSON.stringify(tree) !== JSON.stringify(simple2)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+   
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
         
     if (operator === 'addchain') {

@@ -4,8 +4,9 @@ export function rootSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let tree_1 = _.cloneDeep(tree);
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'squareroot' && tree_1[0][0] === 'natural') {
         let factors = pfactor(parseInt(tree_1[0][1]));

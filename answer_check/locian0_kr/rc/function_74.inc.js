@@ -25,12 +25,11 @@ export function rearrangeTreeAdd(A, B) {
         return 0;
         
     }
-    let A_1 = _.cloneDeep(A);
-    let B_1 = _.cloneDeep(B);
-    let operatorA = A_1[0];
-    let operatorB = B_1[0];
-    let operandA = A_1.splice(1);
-    let operandB = B_1.splice(1);    
+    
+    let operatorA = A[0];
+    let operatorB = B[0];
+    let operandA = A.slice(1);
+    let operandB = B.slice(1);    
     let opflag = ['add', 'sub', 'addsub', 'subadd'].includes(operatorA);
     if (operatorA > operatorB && !opflag) {
         return 1;
