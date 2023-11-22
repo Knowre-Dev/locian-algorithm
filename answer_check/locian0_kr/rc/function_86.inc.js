@@ -9,11 +9,8 @@ export function decIdentity(tree) {
     let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'decimal') {
-        if (tree_1[0].substr(0, 1) === '.') {
-            newOperand.push('0' + tree_1[0]);
-        } else {
-            newOperand = tree_1;
-        }            
+        (tree_1[0].substr(0, 1) === '.') ? newOperand.push('0' + tree_1[0])
+        : newOperand = tree_1           
     } else if (operator === 'rdecimal') {
         if (tree_1[0] === '') {
             newOperand.push('0');

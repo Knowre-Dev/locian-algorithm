@@ -9,7 +9,8 @@ export function divFrac(tree) {
     let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'mulchain') {
-        for (let k = 0; k < tree_1.length; k++) {
+        let tree_1_length = tree_1.length;
+        for (let k = 0; k < tree_1_length; k++) {
             if (k === 0) {
                 newOperand.push(tree_1[k]);
             } else if (tree_1[k][0] === 'div' && (newOperand[newOperand.length - 1])[0] === 'mul') {

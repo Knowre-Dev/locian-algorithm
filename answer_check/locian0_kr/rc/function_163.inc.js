@@ -45,7 +45,8 @@ export function solParenthesis(tree = null) {
                 newOperand = tree_1;
             } else if (addchain.length === 1) {                    
                 operator = 'addchain';
-                for (let term of addchain[0]) {
+                let addchain_0 = addchain[0]
+                for (let term of addchain_0) {
                     if (Array.isArray(term)) {
                         let merge = mono.concat([['mul', term[1]]]);
                         let mul = ['mulchain'].concat(merge);
@@ -112,7 +113,7 @@ export function solParenthesis(tree = null) {
         for (let v of tree_1) {
             newOperand.push(solParenthesis(v));
         }
-        //tree_1 = [operator].concat(newOperand);
+       
     }
     return [operator].concat(newOperand);
     

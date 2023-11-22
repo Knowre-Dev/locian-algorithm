@@ -11,21 +11,13 @@ export function eqMulNeg(tree) {
     let newOperand = [];
     if (operator === 'equation' && 
         (tree_1[0][0] === 'negative' || (tree_1[0][0] === 'addchain' && tree_1[0][1][0] === 'sub'))) {
-        if (tree_1[0][0] === 'negative') {
-            newOperand.push(tree_1[0][1]);
-        } else {
-            newOperand.push(addNegative(['negative', tree_1[0]]));
-        }
+        tree_1[0][0] === 'negative' ? newOperand.push(tree_1[0][1])
+        : newOperand.push(addNegative(['negative', tree_1[0]]))
         
-        if (tree_1[1][0] === 'negative') {
-            newOperand.push(tree_1[1][1]);
-        } else if (tree_1[1][0] === 'addchain') {
-            newOperand.push(addNegative(['negative', tree_1[1]]));
-        } else if (tree_1[1][0] === 'natural' && tree_1[1][1] === '0') {
-            newOperand.push(tree_1[1]);
-        } else {
-            newOperand.push(['negative', tree_1[1]]);
-        }
+        tree_1[1][0] === 'negative' ? newOperand.push(tree_1[1][1])
+        : tree_1[1][0] === 'addchain' ? newOperand.push(addNegative(['negative', tree_1[1]]))
+        : (tree_1[1][0] === 'natural' && tree_1[1][1] === '0') ? newOperand.push(tree_1[1])
+        : newOperand.push(['negative', tree_1[1]])
     } else {
         newOperand = tree_1;
     }

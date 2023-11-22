@@ -18,7 +18,8 @@ export function addFactor(tree) {
                 let con = ['natural', '1'];
                 let syms = [];
                 let addterm_1 = addterm[1].slice(1);
-                for (let [km, multerm] of addterm_1.entries()) {
+                let addterm_1_entries = addterm_1.entries();
+                for (let [km, multerm] of addterm_1_entries) {
                     if (multerm[0] === 'mul') {
                         if (multerm[1][0] === 'variable') {
                             syms.push(multerm);

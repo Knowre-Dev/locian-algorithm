@@ -26,7 +26,8 @@ export function sub_addFactored(tree = null) {
         for (let t of tree_1) {
             if (t[0] === 'add') {
                 if (t[1][0] === 'addchain') {
-                    for (let [k, t11] of t[1].entries()) {
+                    let t_1_entries = t[1].entries();
+                    for (let [k, t11] of t_1_entries) {
                         if (k !== 0) {
                             add_term.push(t11);                        
                         }                            
@@ -34,7 +35,8 @@ export function sub_addFactored(tree = null) {
                 } else {
                     if (t[1][0] === 'mulchain') {       
                         let addchain = false;
-                        for (let [k, t1] of t[1].entries()) {
+                        let t_1_entries = t[1].entries();
+                        for (let [k, t1] of t_1_entries) {
                             if (k !== 0 && t1[1][0] === 'addchain'){
                                 addchain = t;                                       
                             }                            
@@ -52,7 +54,8 @@ export function sub_addFactored(tree = null) {
                 }
             } else {
                 if (t[1][0] === 'addchain') {
-                    for (let [k, t11] of t[1].entries()) {                            
+                    let t_1_entries = t[1].entries();
+                    for (let [k, t11] of t_1_entries) {                            
                         if (k !== 0) {
                             if (t11[0] === 'add') {
                                 add_term.push(['sub', t11[1]]);
@@ -64,7 +67,8 @@ export function sub_addFactored(tree = null) {
                 } else {
                     if (t[1][0] === 'mulchain') {       
                         let addchain = false;
-                        for (let [k, t1] of t[1].entries()) {
+                        let t_1_entries = t[1].entries();
+                        for (let [k, t1] of t_1_entries) {
                             if (k !== 0 && t1[1][0] === 'addchain') {
                                 addchain = t;        
                                 break;

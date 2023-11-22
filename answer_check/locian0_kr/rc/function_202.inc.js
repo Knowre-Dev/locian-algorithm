@@ -72,9 +72,8 @@ export function sub_divPi(tree, div) {
     if (tree[0] === 'natural' && tree[1] === '0') {
         return tree;    
     } 
-    let tree_1 =  _.cloneDeep(tree);
-    let div_1 =  _.cloneDeep(div);
-    let frac1 = ['fraction', tree_1, div_1];
+    
+    let frac1 = ['fraction', tree, div];
     let frac2 = fracNegative(frac1);
     let separation = fracSeparation(frac2);
     let simp = fracSimpVar(separation);
@@ -88,8 +87,9 @@ export function sub_divPi(tree, div) {
 export function checkPi(tree) {
     
     if (Array.isArray(tree)) {
-        let tree_1 = _.cloneDeep(tree);
-        let operator = tree_1.shift();
+       
+        let operator = tree[0];
+        let tree_1 = tree.slice(1); 
         if (operator === 'variable') {
             if (tree_1[0] === 'pi') {
                 return true;
@@ -137,7 +137,7 @@ export function checkPi(tree) {
             let check = true;
             for (let t of tree_1) {
                 check = checkPi(t);
-                //if (check === false) {
+                
                 if (check === true) {
                     break;
                 }

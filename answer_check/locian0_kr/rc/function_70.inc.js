@@ -23,7 +23,8 @@ export function addFactoredForm(tree) {
         let consArr = [];
         let factArr = [];
         let add = false;
-        for (let [kt, term] of tree_1.entries()) {
+        let tree_1_entries = tree_1.entries();
+        for (let [kt, term] of tree_1_entries) {
             if (term[0] === 'mul') {
                 if (term[1][0] === 'addchain') {
                     let fact = addFactor_1(term[1]);

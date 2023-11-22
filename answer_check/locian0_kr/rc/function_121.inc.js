@@ -12,7 +12,8 @@ export function mulPowSeparation(tree = null) {
     if (operator === 'power') {
         if (tree_1[0][0] === 'mulchain') {
             operator = 'mulchain';
-            for (let t1 of tree_1[0]){
+            let tree_1_0 = tree_1[0];
+            for (let t1 of tree_1_0) {
                 if (Array.isArray(t1)){
                     newOperand.push([t1[0], ['power', t1[1], tree_1[1]]]);
                 }                    

@@ -35,8 +35,7 @@ export function addFactoredFormVar(tree = null) {
                 vars.push(t[1][1]);
             } else if (t[1][0] === 'mulchain') {
                 let var_mul = [];
-                let nt1 = JSON.parse(JSON.stringify(t[1]));
-                nt1.shift();
+                let nt1 = t[1].slice(1);
                 for (let t1 of nt1) {
                     if (t1[1][0] === 'variable') {
                         var_mul.push(t1[1][1]);
@@ -73,13 +72,15 @@ export function addFactoredFormVar(tree = null) {
                 
                 for (let vu of unique) {
                     let key1 = [];
-                    for (let [k1, v1] of first.entries()) {
+                    let first_entries = first.entries();
+                    for (let [k1, v1] of first_entries) {
                         if (v1 === vu) {
                             key1.push(k1);
                         }
                     }
                     let key2 = [];
-                    for (let [k2, v2] of v.entries()) {
+                    let v_entries = v.entries();
+                    for (let [k2, v2] of v_entries) {
                         if (v2 === vu) {
                             key2.push(k2);
                         }
@@ -124,7 +125,8 @@ export function addFactoredFormVar(tree = null) {
                 let div = [];
                 for (let vu of unique) {
                     let find_keys = [];
-                    for (let [k1, v1] of first.entries()) {
+                    let first_entries = first.entries();
+                    for (let [k1, v1] of first_entries) {
                         if (v1 === vu) {
                             find_keys.push(k1);
                         }

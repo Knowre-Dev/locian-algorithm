@@ -8,7 +8,6 @@ export function mulNegative(tree) {
     
     let operator = tree[0];
     let operand = tree.slice(1);
-    //let operand = tree_1;
     let newOperand = [];
     let sign = 1;
     if (operator === 'negative') {
@@ -38,10 +37,8 @@ export function mulNegative(tree) {
     }
     
     let tree_1 = [operator].concat(newOperand);
-    if (sign === -1) {
-        tree_1 = ['negative', tree_1];
-    }
-    return tree_1;
+    return sign === -1 ? ['negative', tree_1]
+        : tree_1;
     
 }
 

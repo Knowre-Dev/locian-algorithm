@@ -2,13 +2,8 @@ import {rearrangeTree} from '../rc/function_61.inc.js';
 import _ from 'lodash';
 
 export function ineqIdentity(tree) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-    
-    return rearrangeTree(tree, ['inequality']);
-
-    
+    return Array.isArray(tree) ? rearrangeTree(tree, ['inequality']) 
+        : tree;
 }
 
 /*

@@ -13,7 +13,8 @@ export function addAssociative(tree) {
     for (let v of tree_1) {
         let term = addAssociative(v);
         if (operator === 'addchain' && term[0] === 'add' && term[1][0] === 'addchain') {
-            for (let [tk, tv] of term[1].entries()) {
+            let term_1_entries = term[1].entries()
+            for (let [tk, tv] of term_1_entries) {
                 if (tk !== 0) {
                     newOperand.push(tv);
                 }

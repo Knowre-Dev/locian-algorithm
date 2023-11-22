@@ -20,11 +20,8 @@ export function powBaseSort(tree = null) {
                 
                 let newBaseTerm = [];
                 for (let b of base){
-                    if (b[0] === 'sub') {
-                        newBaseTerm.push(['add', b[1]]);
-                    } else {
-                        newBaseTerm.push(['sub', b[1]]);
-                    }
+                    b[0] === 'sub' ? newBaseTerm.push(['add', b[1]])
+                    : newBaseTerm.push(['sub', b[1]])
                 }
                 let newBase = ['addchain'].concat(newBaseTerm);
                 newOperand = [newBase, expo];   

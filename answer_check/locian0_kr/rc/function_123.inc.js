@@ -13,7 +13,8 @@ export function mulFracSeparation(tree = null) {
         if (tree_1[1][0] === 'mulchain') {
             if (tree_1[0][0] === 'natural' && tree_1[0][1] === '1') {
                 operator = 'mulchain';
-                for (let t1 of tree_1[1]) {
+                let tree_1_1 = tree_1[1];
+                for (let t1 of tree_1_1) {
                     if (Array.isArray(t1)) {
                         newOperand.push([
                             t1[0], 

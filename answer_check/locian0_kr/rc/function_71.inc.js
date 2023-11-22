@@ -13,13 +13,9 @@ export function addNegative(tree) {
         if (addchain[0] === 'addchain') {
             operator = addchain.shift();
             for (let term of addchain) {
-                if (term[0] === 'add') {
-                    newOperand.push(['sub', term[1]]);
-                } else if (term[0] === 'sub') {
-                    newOperand.push(['add', term[1]]);
-                } else {
-                    newOperand.push(term);
-                }
+                term[0] === 'add' ?  newOperand.push(['sub', term[1]])
+                : term[0] === 'sub' ? newOperand.push(['add', term[1]])
+                : newOperand.push(term)
             }
         } else {
             newOperand = tree_1;
@@ -29,13 +25,9 @@ export function addNegative(tree) {
             if (term[0] === 'sub' && term[1][0] === 'addchain') {
                 let term_1 = term[1].slice(1)
                 for (let inner of term_1) {
-                    if (inner[0] === 'add') {
-                        newOperand.push(['sub', inner[1]]);
-                    } else if (inner[0] === 'sub') {
-                        newOperand.push(['add', inner[1]]);
-                    } else {
-                        newOperand.push(inner);
-                    }
+                    inner[0] === 'add' ? newOperand.push(['sub', inner[1]])
+                    : inner[0] === 'sub' ? newOperand.push(['add', inner[1]])
+                    : newOperand.push(inner)
                 }
             } else {
                 newOperand.push(term);

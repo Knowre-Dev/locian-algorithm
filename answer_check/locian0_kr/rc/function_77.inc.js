@@ -25,7 +25,8 @@ export function fracSimpVar(tree) {
         } else if (num[0] === 'mulchain') {
             let vars = [];
             let num_1 = num.slice(1);
-            for (let [k, term] of num_1.entries()) {
+            let num_1_entries = num_1.entries()
+            for (let [k, term] of num_1_entries) {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
                         if (!vars.includes(term[1][1])) {
@@ -34,7 +35,8 @@ export function fracSimpVar(tree) {
                         } else {
                             //let search = vars.indexOf();
                             let search;
-                            for (let [k, v] of vars.entries()) {
+                            let vars_entries = vars.entries();
+                            for (let [k, v] of vars_entries) {
                                 if (JSON.stringify(v) === JSON.stringify(term[1][1])) {
                                     search = k;
                                     break;
@@ -67,7 +69,8 @@ export function fracSimpVar(tree) {
         } else if (den[0] === 'mulchain') {
             let vars = [];
             let den_1 = den.slice(1);
-            for (let [k, term] of den_1.entries()) {
+            let den_1_entries = den_1.entries();
+            for (let [k, term] of den_1_entries) {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {                           
                         if(!vars.includes(term[1][1])){
@@ -77,7 +80,8 @@ export function fracSimpVar(tree) {
                             
                             
                             let search;
-                            for (let [k, v] of vars.entries()) {
+                            let vars_entries = vars.entries();
+                            for (let [k, v] of vars_entries) {
                                 if (JSON.stringify(v) === JSON.stringify(term[1][1])) {
                                     search = k;
                                     break;
@@ -120,9 +124,10 @@ export function fracSimpVar(tree) {
             let deni = 0;
             let newNum = [];
             let newDen = [];
-            
-            for (let k = numk; k < newVarNum.length; k++) {    
-                for (let i = deni; i < newVarDen.length; i++) {
+            let newVarNum_length = newVarNum.length;
+            for (let k = numk; k < newVarNum_length; k++) {
+                let newVarDen_length = newVarDen.length;
+                for (let i = deni; i < newVarDen_length; i++) {
                     if (newVarNum[k][1][1] < newVarDen[i][1][1]) {
                         if (newVarNum[k][2][1] === '1') {
                             newNum.push(newVarNum[k][1]);
@@ -131,7 +136,7 @@ export function fracSimpVar(tree) {
                         }
                         numk++;
                         if (numk === newVarNum.length) {
-                            for (let j = deni; j < newVarDen.length; j++) {
+                            for (let j = deni; j < newVarDen_length; j++) {
                                 if (newVarDen[j][2][1] === '1') {
                                     newDen.push(newVarDen[j][1]);
                                 } else {
@@ -159,7 +164,8 @@ export function fracSimpVar(tree) {
                         numk++;
                         deni++;
                         if (numk === newVarNum.length) {
-                            for (let j = deni; j < newVarDen.length; j++) {
+
+                            for (let j = deni; j < newVarDen_length; j++) {
                                 if (newVarDen[j][2][1] === '1') {
                                     newDen.push(newVarDen[j][1]);
                                 } else {
@@ -168,7 +174,7 @@ export function fracSimpVar(tree) {
                             }
                         }
                         if (deni === newVarDen.length) {
-                            for (let j = numk; j < newVarNum.length; j++) {
+                            for (let j = numk; j < newVarNum_length; j++) {
                                 if (newVarNum[j][2][1] === '1') {
                                     newNum.push(newVarNum[j][1]);
                                 } else {
@@ -185,7 +191,7 @@ export function fracSimpVar(tree) {
                         }
                         deni++;
                         if (deni === newVarDen.length) {
-                            for (let j = numk; j < newVarNum.length; j++) {
+                            for (let j = numk; j < newVarNum_length; j++) {
                                 if (newVarNum[j][2][1] === '1') {
                                     newNum.push(newVarNum[j][1]);
                                 } else {

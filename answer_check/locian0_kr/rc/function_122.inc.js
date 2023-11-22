@@ -12,7 +12,8 @@ export function powerFrac(tree = null) {
     if (operator === 'power') {
         if (tree_1[0][0] === 'fraction') {
             operator = 'fraction';
-            for (let t1 of tree_1[0]){
+            let tree_1_0 = tree_1[0];
+            for (let t1 of tree_1_0){
                 if (Array.isArray(t1)) {
                     newOperand.push(['power', t1, tree_1[1]]);
                 }                    

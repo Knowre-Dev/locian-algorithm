@@ -44,7 +44,8 @@ export function checkZeroEquiv(tree) {
             result = checkZeroEquiv(tree_1[0]);
             break;
         case 'mulchain':
-            for (let term of tree_1[0]) {
+            let tree_1_0 = tree_1[0];
+            for (let term of tree_1_0) {
                 if (term[0] === 'natural' && term[1] === '0') {
                     result = true;
                 }

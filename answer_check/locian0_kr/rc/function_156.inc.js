@@ -31,6 +31,7 @@ export function groupLikeVariableTerms(tree = null) {
     let operator = tree[0];
     let tree_1 = tree.slice(1);
     let newOperand = [];
+    let newtree;
     switch (operator) {
         case 'natural':
         case 'decimal':
@@ -40,7 +41,7 @@ export function groupLikeVariableTerms(tree = null) {
         case 'addchain':
             // Recursive portion
             // added to allow for proper parse in case a power term is present
-            var newtree = [];
+            newtree = [];
             for (let term of tree_1) {
                 newtree.push([term[0], groupLikeVariableTerms(term[1])]);
             }
@@ -63,7 +64,8 @@ export function groupLikeVariableTerms(tree = null) {
                 coeffArr[k.toString()] = [];
             }
             // Iterate through each variable in varList
-            for (let [k, variable] of varList.entries()) {
+            let varList_entries = varList.entries();
+            for (let [k, variable] of varList_entries) {
                 
                 if (termIndices.length === 0) {
                     // All terms have been visited,
@@ -72,7 +74,8 @@ export function groupLikeVariableTerms(tree = null) {
                 }
                 
                 // Go through each unvisited child node in the tree
-                for (let [tk, term] of tree_1.entries()) {
+                let tree_1_entries = tree_1.entries();
+                for (let [tk, term] of tree_1_entries) {
                     if (termIndices.includes(tk)) {
                         let addOp = term[0]; // this is just 'add', 'sub', etc.
                         
@@ -119,7 +122,8 @@ export function groupLikeVariableTerms(tree = null) {
             }
             
             // Construct the final list of new operands
-            for (let [k, variable] of varList.entries()) {
+            varList_entries = varList.entries();
+            for (let [k, variable] of varList_entries) {
                 // skip if there is no coefficient for this variable
                 
                 if (coeffArr[k.toString()].length === 0) {
@@ -162,7 +166,7 @@ export function groupLikeVariableTerms(tree = null) {
             
         case 'mulchain':
             // Recursive portion
-            var newtree = [];
+            newtree = [];
             for (let term of tree_1) {
                 newtree.push([term[0], groupLikeVariableTerms(term[1])]);
             }
@@ -186,7 +190,8 @@ export function groupLikeVariableTerms(tree = null) {
                 }
                 
                 let tk = -1;
-                for (let [i, v] of baseArr.entries()) {
+                let baseArr_entries = baseArr.entries()
+                for (let [i, v] of baseArr_entries) {
                     if (JSON.stringify(base) === JSON.stringify(v)) {
                         tk = i;
                         break;
@@ -208,7 +213,7 @@ export function groupLikeVariableTerms(tree = null) {
             }
             
             let range = [];
-            for (let i = 0; i <= ind-1; i++) {
+            for (let i = 0; i < ind; i++) {
                 range.push(i);
             }
             
@@ -237,18 +242,17 @@ export function groupLikeVariableTerms(tree = null) {
             // If there is only one operand, just output that operand
             // with inversion, as applicable
             if (newOperand.length === 1) {
-                if (newOperand[0][0] === 'div') {
-                    return ['fraction', ['natural', '1'], newOperand[0][1]];
-                } else {
-                    return newOperand[0][1];
-                }
+                return newOperand[0][0] === 'div' ? ['fraction', ['natural', '1'], newOperand[0][1]]
+                    : newOperand[0][1];
+                
             }
             
             // Prepend 1 at the front if all terms are division terms
             let allDiv = true;
             for (let newOpd of newOperand) {
-                if (newOpd[0] === 'mul')
+                if (newOpd[0] === 'mul') {
                     allDiv = false;
+                }
             }
             if (allDiv) {
                 newOperand.unshift(['mul', ['natural', '1']]);

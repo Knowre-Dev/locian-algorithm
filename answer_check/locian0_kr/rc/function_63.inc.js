@@ -7,7 +7,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
    
     let operator = tree[0];
     let tree_1 = tree.slice(1);
-    for (let [k, v] of tree_1.entries()) {
+    let tree_1_entries = tree_1.entries();
+    for (let [k, v] of tree_1_entries) {
         tree_1[k] = varReverseShift(v, types, operator);
     }
 
@@ -32,11 +33,12 @@ export function varReverseShift(tree, types = [null], parent = null) {
             k = vars.length - 1 - k;
             vars = vars.reverse();
         }
-
-        for (let v of [[k, vars.length], [0, k]]) {
-            for (let i = v[0]; i < v[1]; i++) {
-                result.push(['mul', ['variable', vars[i]]]);
-            }
+        let vars_length = vars.length;
+        for (let i = k; i < vars_length; i++) {
+            result.push(['mul', ['variable', vars[i]]]);
+        }
+        for (let i = 0; i < k; i++) {
+            result.push(['mul', ['variable', vars[i]]]);
         }
 
         tree_1 = result;

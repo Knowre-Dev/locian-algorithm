@@ -15,11 +15,9 @@ export function ineqRearrange(tree = null) {
             let tree_2 = tree_1.reverse();
             for (let v of tree_2) {
                 if (Array.isArray(v)) {
-                    if (v[0] === 'negative') {
-                        temp.push(v[1]);
-                    } else {
-                        temp.push(['negative', v]);
-                    }
+                    v[0] === 'negative' ? temp.push(v[1])
+                    : temp.push(['negative', v])
+                
                 } else {
                     temp.push(v);
                 }

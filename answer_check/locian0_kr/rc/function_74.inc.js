@@ -10,20 +10,13 @@ export function rearrangeTreeAdd(A, B) {
         return -1;
     }
     if (!Array.isArray(A) && !Array.isArray(B)) {
-        if (typeof A > typeof B) {
-            return 1;
-        } 
-        if (typeof A < typeof B) {
-            return -1;
-        } 
-        if (A > B) {
-            return 1;
-        } 
-        if (A < B) {
-            return -1;
-        } 
-        return 0;
-        
+
+        return typeof A > typeof B ? 1
+            : typeof A < typeof B ? -1
+            : A > B ? 1
+            : A < B ? -1
+            : 0
+      
     }
     
     let operatorA = A[0];
@@ -36,7 +29,8 @@ export function rearrangeTreeAdd(A, B) {
     } 
     if (operatorA < operatorB && !opflag) {
         return -1;
-    } if (['add', 'sub'].includes(operatorA) && ['addsub', 'subadd'].includes(operatorB)) {
+    } 
+    if (['add', 'sub'].includes(operatorA) && ['addsub', 'subadd'].includes(operatorB)) {
         return -1;
     } 
     if (['addsub', 'subadd'].includes(operatorA) && ['add', 'sub'].includes(operatorB)) {
@@ -48,7 +42,8 @@ export function rearrangeTreeAdd(A, B) {
     if (operandA.length < operandB.length) {
         return -1;
     } 
-    for (let [k, v] of operandA.entries()) {
+    let operandA_entries = operandA.entries();
+    for (let [k, v] of operandA_entries) {
         let temp = rearrangeTreeEq(v, operandB[k]);
         if (temp === 0) {
             continue;

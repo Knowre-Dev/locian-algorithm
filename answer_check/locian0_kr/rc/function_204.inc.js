@@ -11,7 +11,8 @@ export function addNegaToSub(tree = null) {
     let tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'addchain') {
-        for (let [k, v] of tree_1.entries()) {
+        let tree_1_entries = tree_1.entries();
+        for (let [k, v] of tree_1_entries) {
             
             if (k === 0) {
                 if (v[0] === 'add' && v[1][0] === 'negative') {

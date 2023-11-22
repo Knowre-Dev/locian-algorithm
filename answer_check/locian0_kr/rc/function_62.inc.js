@@ -7,13 +7,15 @@ export function varShift(tree, types = [null], parent = null) {
     
     let operator = tree[0];
     let tree_1 = tree.slice(1);
-    for (let [k, v] of tree_1.entries()) {
+    let tree_1_entries = tree_1.entries();
+    for (let [k, v] of tree_1_entries) {
         tree_1[k] = varShift(v, types, operator);
     }
 
     if (operator === 'mulchain' && types.includes(parent)) {
         let vars = [];
         for (let v of tree_1) {
+            
             if (v[0] === 'mul' && v[1][0] === 'variable' && v.length === 2) {
                 vars.push(v[1][1]);
             } else {
@@ -24,13 +26,17 @@ export function varShift(tree, types = [null], parent = null) {
         vars_1.sort();
         let k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
         let result = [];
-
-        for (let v of [[k, vars.length], [0, k]]) {
-            for (let i = v[0]; i < v[1]; i++) {
-                result.push(['mul', ['variable', vars[i]]]);
-            }
+        
+        
+        let vars_length = vars.length;
+        for (let i = k; i < vars_length; i++) {
+            result.push(['mul', ['variable', vars[i]]]);
         }
-
+        for (let i = 0; i < k; i++) {
+            result.push(['mul', ['variable', vars[i]]]);
+        }
+            
+        
         tree_1 = result;
         operator += '_fixed';
     }

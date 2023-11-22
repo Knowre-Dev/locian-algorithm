@@ -27,7 +27,8 @@ export function mulToExp(tree = null) {
                 varNum.push(term);
             }
         }
-        for (let v of Object.values(power)) {
+        let power_values = Object.values(power);
+        for (let v of power_values) {
             if (v.length > 1){
                 varNum.push(['mul', ['power', v[0], ['natural', (v.length).toString()]]]);
             } else {

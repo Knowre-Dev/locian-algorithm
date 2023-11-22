@@ -13,8 +13,6 @@ export function natElimZero(tree = null) {
     
     if (operator === 'natural') {
         newOperand.push(tree_1[0].replaceAll(new RegExp('^0+(?!$)', 'g'), ''));
-        
-        
     } else {
         for (let v of tree_1) {
             newOperand.push(natElimZero(v));

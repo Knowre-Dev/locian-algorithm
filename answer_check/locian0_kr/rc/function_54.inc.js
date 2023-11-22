@@ -32,13 +32,9 @@ export function fracSeparation(tree) {
             let sign;      
             let nden;       
             if (den[0] === 'negative') {
-                if (term[0] === 'add') {
-                    sign = 'sub';
-                } else if (term[0] === 'sub') {
-                    sign = 'add';
-                } else {
-                    sign = term[0];
-                }
+                sign = term[0] === 'add' ? 'sub'
+                    : term[0] === 'sub' ? 'add'
+                    : term[0];
                 nden = den[1];
             } else if (den[0] === 'pm' || term[0] === 'addsub') {
                 sign = 'addsub';

@@ -20,12 +20,8 @@ export function fracExpress(tree) {
                 if (term[1][1][0] === 'mulchain') {     
                     num = num.concat(term[1][1].slice(1));
                 } else if (term[1][1][0] === 'negative'){
-                    
-                    if (term[1][1][1][1] === '1'){
-                        nega = true;
-                    } else {
-                        num.push([term[0], term[1][1]]);
-                    }
+                    term[1][1][1][1] === '1' ? nega = true
+                        : num.push([term[0], term[1][1]])
                 } else if (term[1][1][1] !== '1') {    
                     num.push([term[0], term[1][1]]);
                 }
@@ -35,25 +31,16 @@ export function fracExpress(tree) {
                     den.push([term[0], term[1][2]]);
                 }
             } else {
-                if (term[1][0] === 'mulchain') {
-                    num = num.concat(term[1].slice(1));
-                } else {
-                    num.push([term[0], term[1]]);
-                }
+                term[1][0] === 'mulchain' ? num = num.concat(term[1].slice(1))
+                    : num.push([term[0], term[1]])
             }
         }
-        if (num.length === 1) {
-            num = num[0][1];                
-        } else if (num.length === 0) {
-            num = ['natural', '1'];
-        } else {               
-            num.unshift('mulchain');
-        }
-        if (den.length === 1) {
-            den = den[0][1];
-        } else {
-            den.unshift('mulchain');
-        }
+
+        num.length === 1 ? num = num[0][1]                
+            : num.length === 0 ? num = ['natural', '1']
+            : num.unshift('mulchain')
+        den.length === 1 ? den = den[0][1]
+            : den.unshift('mulchain')
         
         if (den.length > 1) {
             operator = 'fraction';
@@ -71,11 +58,8 @@ export function fracExpress(tree) {
     
     
     tree_1 = [operator].concat(newOperand);
-    
-    if (nega) {
-        return ['negative'].concat([tree_1]);
-    }
-    return tree_1;
+    return nega ? ['negative'].concat([tree_1]) 
+        : tree_1;
 }
 
 

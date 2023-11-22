@@ -14,7 +14,8 @@ export function 곱셈결합법칙(tree) {
     for (let v of tree_1) {
         let term = 곱셈결합법칙(v);
         if (operator === 'mulchain' && term[0] === 'mul' && term[1][0] === 'mulchain') {
-            for (let [tk, tv] of term[1].entries()) {
+            let term_1_entries = term[1].entries();
+            for (let [tk, tv] of term_1_entries) {
                 if (tk !== 0) {
                     newOperand.push(tv);
                 }

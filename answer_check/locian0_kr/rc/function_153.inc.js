@@ -21,7 +21,8 @@ export function fracCombine(tree) {
         if (denomArr.length === 0) {
             return [operator].concat(operand);
         }
-        for (let [k, d] of denomArr.entries()) {
+        let denomArr_entries = denomArr.entries();
+        for (let [k, d] of denomArr_entries) {
             denomArr[k] = ['mul', d];
         }
         let denom = array2ChainTree(denomArr);
@@ -29,7 +30,8 @@ export function fracCombine(tree) {
        
         if (JSON.stringify(find['sym']) !== JSON.stringify([])) {
             let denom_arr = [];
-            for (let [k, f] of Object.entries(find)) {
+            let find_entries = Object.entries(find);
+            for (let [k, f] of find_entries) {
                 if (k === 'const'){
                     denom_arr.push(['mul', f]);
                 } else {

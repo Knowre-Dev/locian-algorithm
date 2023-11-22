@@ -38,7 +38,7 @@ export function eqMulPropUS(tree) {
     if (!['equation', 'inequality'].includes(tree[0])) {
         return tree;
     }
-    //let tree_1 = _.cloneDeep(tree);
+    
     // Input now guaranteed to be a tree array representing equation or inequality
     
     // Find the common factors for all sides
@@ -47,7 +47,8 @@ export function eqMulPropUS(tree) {
     // so as to guarantee correct inequality directions
     let factor = [];
     factor.push(['mul', gcfArr['const']]);
-    for (let sym of gcfArr['sym']) {
+    let gcfArr_sym = gcfArr['sym'];
+    for (let sym of gcfArr_sym) {
         factor.push(['mul', sym]);
     }
     factor = array2ChainTree(factor);

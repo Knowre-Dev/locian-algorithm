@@ -37,8 +37,8 @@ export function mulConstCal(tree = null) {
             let value = first[1][1];
             for (let nt of nterm){
                 if (nt[0] === 'mul') {
-                    value = value * nt[1][1];
-                }else if (nt[0] === 'div') {
+                    value = value * nt[1][1]
+                }   else if (nt[0] === 'div') {
                     value = value / nt[1][1];
                 }
             }

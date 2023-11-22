@@ -15,11 +15,8 @@ export function rearrangeTree(tree, types = []) {
     let tree_1 = tree.slice(1);
     let newOperand = [];
     for (let v of tree_1) {
-        if (Array.isArray(v)) {
-            newOperand.push(rearrangeTree(v, types));
-        } else {
-            newOperand.push(v);
-        }
+        Array.isArray(v) ? newOperand.push(rearrangeTree(v, types))
+            : newOperand.push(v)
     }
     if (types.includes(operator)) {
         switch (operator) {
@@ -35,27 +32,21 @@ export function rearrangeTree(tree, types = []) {
             case 'inequality':
                 let rightNum = 0;
                 for (let i = 1; i < newOperand.length; i += 2) {
-                    if (newOperand[i] === 'gt' || newOperand[i] === 'ge') {
-                        rightNum++;
-                    } else {
-                        rightNum--;
-                    }
+                    (newOperand[i] === 'gt' || newOperand[i] === 'ge') ? rightNum++
+                        : rightNum--
+        
+                    
                 }
                 if (rightNum < 0) {
                     let temp = [];
                     let newOperand_reverse = newOperand.reverse();
                     for (let v of newOperand_reverse) {
-                        if (v === 'gt') {
-                            temp.push('lt');
-                        } else if (v === 'ge') {
-                            temp.push('le');
-                        } else if (v === 'lt') {
-                            temp.push('gt');
-                        } else if (v === 'le') {
-                            temp.push('ge');
-                        } else {
-                            temp.push(v);
-                        }
+                        v === 'gt' ? temp.push('lt')
+                        : v === 'ge' ? temp.push('le')
+                        : v === 'lt' ? temp.push('gt')
+                        : v === 'le' ? temp.push('ge')
+                        : temp.push(v)
+                        
                     }
                     newOperand = temp;
                 } else if (rightNum === 0) {

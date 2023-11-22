@@ -13,7 +13,8 @@ export function rootSimpInt(tree) {
         
         let inside = 1;
         let outside = 1;
-        for (let [factor, power] of factors.entries()) {
+        let factors_entries = factors.entries();
+        for (let [factor, power] of factors_entries) {
             if (power === undefined) {
                 continue;
             }
@@ -111,6 +112,7 @@ export function pfactor(n) {
             for (let i = d; i <= dmax; i += d) {
                 sieve[i] = 0;
             }
+           
             do {
                 d++;
             } while (d < dmax && sieve[d] !== 1);

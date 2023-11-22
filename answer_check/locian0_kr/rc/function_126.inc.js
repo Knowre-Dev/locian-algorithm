@@ -74,7 +74,7 @@ export function sub_mulCommutative(tree = null) {
 }
 
 export function sort_array(A) {
-    //let A_1 = _.cloneDeep(A);
+    
     let arr = [];
     for (let v of A){
         if (!Array.isArray(v)) {

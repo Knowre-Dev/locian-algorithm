@@ -22,11 +22,8 @@ export function fracSimpInt(tree) {
            
             let num_1 = num.slice(1);
             for (let term of num_1) {
-                if (term[0] === 'mul' && term[1][0] === 'natural') {
-                    arrNum.push(parseInt(term[1][1]));
-                } else {
-                    narrNum.push(term);
-                }
+                (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum.push(parseInt(term[1][1]))
+                : narrNum.push(term)
             }
             if (arrNum.length === 0) {
                 intNum = 1;
@@ -50,11 +47,8 @@ export function fracSimpInt(tree) {
         } else if (den[0] === 'mulchain') {
             let den_1 = den.slice(1);
             for (let term of den_1) {
-                if (term[0] === 'mul' && term[1][0] === 'natural') {
-                    arrDen.push(parseInt(term[1][1]));
-                } else {
-                    narrDen.push(term);
-                }
+                (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen.push(parseInt(term[1][1]))
+                : narrDen.push(term)
             }
             if (arrDen.length === 0) {
                 intDen = 1;
@@ -80,11 +74,8 @@ export function fracSimpInt(tree) {
             if (newNum !== '1') {
                 narrNum.unshift(['mul', ['natural', newNum]]);
             }
-            if (narrNum.length === 1) {
-                narrNum = narrNum[0][1];
-            } else {
-                narrNum.unshift('mulchain');
-            }
+            narrNum.length === 1 ? narrNum = narrNum[0][1]
+            : narrNum.unshift('mulchain')
             newOperand.push(narrNum);
         } else {
             newOperand.push(num);
@@ -101,11 +92,8 @@ export function fracSimpInt(tree) {
             if (newDen !== '1') {
                 narrDen.unshift(['mul', ['natural', newDen]]);
             }
-            if (narrDen.length === 1) {
-                narrDen = narrDen[0][1];
-            } else {
-                narrDen.unshift('mulchain');
-            }
+            narrDen.length === 1 ? narrDen = narrDen[0][1]
+            : narrDen.unshift('mulchain')
             newOperand.push(narrDen);
         } else {
             newOperand.push(den);
@@ -128,4 +116,3 @@ export function EuclidAlg(A, B) {
     }
     return A;
 }
-

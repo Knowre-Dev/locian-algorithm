@@ -80,11 +80,8 @@ export function eqIneqMulProp(tree = null) {
                 let deno = ['natural', div.toString()];
                 
                 for (let i = 0; i < tree_1.length; i++){
-                    if (i % 2 === 0) {
-                        newOperand.push(sub_div(tree_1[i], deno));
-                    } else {
-                        newOperand.push(tree_1[i]);
-                    }
+                    i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
+                    : newOperand.push(tree_1[i])
                 }
             }
         } else if (con.length > 2) {
@@ -97,11 +94,8 @@ export function eqIneqMulProp(tree = null) {
             } else {
                 let deno = ['natural', div.toString()];
                 for (let i = 0; i < tree_1.length; i++){
-                    if (i % 2 === 0) {
-                        newOperand.push(sub_div(tree_1[i], deno));
-                    } else {
-                        newOperand.push(tree_1[i]);
-                    }
+                    i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
+                    : newOperand.push(tree_1[i])
                 }
             }             
         } else if (con.length === 1) {     
@@ -114,11 +108,8 @@ export function eqIneqMulProp(tree = null) {
             if (is_included) {
                 let deno = ['natural', con[0]];
                 for (let i = 0; i < tree_1.length; i++) {
-                    if (i % 2 === 0) {
-                        newOperand.push(sub_div(tree_1[i], deno));
-                    } else {
-                        newOperand.push(tree_1[i]);
-                    }
+                    i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
+                    : newOperand.push(tree_1[i])
                 }
             } else {
                 newOperand = tree_1;
@@ -152,9 +143,9 @@ export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return con;
     }
-    let tree_1 = _.cloneDeep(tree);
-   
-    let operator = tree_1.shift();
+    
+    let operator = tree[0];
+    let tree_1 = tree.slice(1);
     if (operator === 'natural') {
         if (tree_1[0] !== '0') {
             con.push(parseInt(tree_1[0]));
@@ -214,9 +205,8 @@ import {fracSeparation} from '../rc/function_54.inc.js';
 import {fracSimpInt} from '../rc/function_76.inc.js';
 
 export function sub_div(tree, deno) {
-    let tree_1 = _.cloneDeep(tree);
-    let deno_1 = _.cloneDeep(deno);
-    let frac1 = ['fraction', tree_1, deno_1];
+    
+    let frac1 = ['fraction', tree, deno];
     let frac2 = fracNegative(frac1);
     let separation = fracSeparation(frac2);
     let simp = fracSimpInt(separation);

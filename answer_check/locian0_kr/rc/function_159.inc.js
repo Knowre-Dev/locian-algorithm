@@ -17,7 +17,8 @@ export function mulAllSidesByCommonDenom(tree = null) {
         
         // Initialize array to store product of all denominators in each side
         let denomArr = [];
-        for (let [k, subtree] of tree_1.entries()) {
+        let tree_1_entries = tree_1.entries()
+        for (let [k, subtree] of tree_1_entries) {
             // Find all unique denominators in this subtree
             // Make sure to pass the third arg as TRUE
             // to get absolute values of all denominators (in case of any negative denominators)

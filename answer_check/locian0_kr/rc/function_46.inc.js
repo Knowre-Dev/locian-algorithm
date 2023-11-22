@@ -3,12 +3,8 @@ import _ from 'lodash';
 
 export function mulCommutative(tree) {
    
-   
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-    
-    return rearrangeTree(tree, ['mulchain']);
+    return Array.isArray(tree) ? rearrangeTree(tree, ['mulchain']) 
+        : tree;
     
 
 }

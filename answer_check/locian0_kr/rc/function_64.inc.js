@@ -7,7 +7,8 @@ export function varReverse(tree, types = [null], parent = null) {
     
     let operator = tree[0];
     let tree_1 = tree.slice(1);
-    for (let [k, v] of tree_1.entries()) {
+    let tree_1_entries = tree_1.entries();
+    for (let [k, v] of tree_1_entries) {
         tree_1[k] = varReverse(v, types, operator);
     }
     if (operator === 'mulchain' && types.includes(parent)) {

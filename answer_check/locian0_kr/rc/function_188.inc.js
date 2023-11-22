@@ -12,7 +12,8 @@ export function rootToExp(tree = null) {
         if (tree_1[1][0] === 'mulchain') { // 루트 안이 곱셈식일 경우
             let newOperand = [];
             operator = 'mulchain';
-            for (let v of tree_1[1]) {
+            let tree_1_1 = tree_1[1];
+            for (let v of tree_1_1) {
                 if (Array.isArray(v)) {
                     let term = ['nthroot', newPower, v[1]];
                     newOperand.push([v[0], rootToExp(term)]);

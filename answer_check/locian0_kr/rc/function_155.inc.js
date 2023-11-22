@@ -18,7 +18,8 @@ export function makeOneSideOfEqIneqZero(tree = null) {
         // no side in the chain of equalities is already identically zero
         
         let term = ['sub', tree_1[0]];
-        for (let [k, v] of tree_1.entries()) {
+        let tree_1_entries = tree_1.entries();
+        for (let [k, v] of tree_1_entries) {
             let temp;
             if (k === 0) {
                 temp = ['natural', '0'];
@@ -34,14 +35,16 @@ export function makeOneSideOfEqIneqZero(tree = null) {
         
     } else if (operator === 'inequality') {
         for (let subtree of tree_1) {
-            if (JSON.stringify(subtree) === JSON.stringify(['natural', '0']))
+            if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
                 return [operator].concat(tree_1);
+            }
         }
         // From here on, we are guaranteed that
         // no side in the chain of inequalities is already identically zero
         
         let term = ['sub', tree_1[0]];
-        for (let [k, v] of tree_1.entries()) {
+        let tree_1_entries = tree_1.entries();
+        for (let [k, v] of tree_1_entries) {
             let temp;
             if (k === 0) {
                 temp = ['natural', '0'];

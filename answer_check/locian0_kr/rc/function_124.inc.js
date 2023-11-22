@@ -24,27 +24,18 @@ export function ineqMulNeg(tree = null) {
             flag = false;
         }  
         if (flag === true) {
-            for (let i = 1; i < tree_1.length; i++) {
+            let tree_1_length = tree_1.length;
+            for (let i = 1; i < tree_1_length; i++) {
                 if (i % 2 !== 0) {
-                    if (tree_1[i] === 'gt') {
-                        newOperand.push('lt');
-                    } else if (tree_1[i] === 'ge') {
-                        newOperand.push('le');
-                    } else if (tree_1[i] === 'lt') {
-                        newOperand.push('gt');
-                    }else{
-                        newOperand.push('ge');
-                    }
+                    tree_1[i] === 'gt' ? newOperand.push('lt')
+                    : tree_1[i] === 'ge' ? newOperand.push('le')
+                    : tree_1[i] === 'lt' ? newOperand.push('gt')
+                    : newOperand.push('ge')
                 } else {
-                    if (tree_1[i][0] === 'negative') {
-                        newOperand.push(tree_1[i][1]);
-                    } else if (tree_1[i][0] === 'addchain') {
-                        newOperand.push(addNegative(['negative', tree_1[i]]));
-                    } else if (tree_1[i][0] === 'natural' && tree_1[i][1] === '0') {
-                        newOperand.push(tree_1[i]);
-                    } else {
-                        newOperand.push(['negative', tree_1[i]]);
-                    }
+                    tree_1[i][0] === 'negative' ? newOperand.push(tree_1[i][1])
+                    : tree_1[i][0] === 'addchain' ? newOperand.push(addNegative(['negative', tree_1[i]]))
+                    : (tree_1[i][0] === 'natural' && tree_1[i][1] === '0') ? newOperand.push(tree_1[i])
+                    : newOperand.push(['negative', tree_1[i]])
                 }
             }
         } else {
@@ -115,11 +106,8 @@ export function ineqMulNegUS(tree) {
                         newOperand.push('gt');
                         break;
                     default:
-                        if (subtree[0] === 'negative') {
-                            newOperand.push(subtree[1]);
-                        } else {
-                            newOperand.push(addNegative(['negative', subtree]));
-                        }
+                        subtree[0] === 'negative' ? newOperand.push(subtree[1])
+                        : newOperand.push(addNegative(['negative', subtree]))
                 }
             }
         }
