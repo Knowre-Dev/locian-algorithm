@@ -1,0 +1,23 @@
+# Logs and databases  #
+#######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files  #
+#######################
+.vscode
+
+# Node Files          #
+#######################
+node_modules/
+bower_components
+npm-debug.log
+.npm
+dist/
+.editorconfig
+
+# secret config files #
+#######################
+.env
+
