@@ -1,27 +1,26 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
-import {addCommutative} from '../rc/function_47.inc.js';
-import {allAssociative} from '../rc/function_67.inc.js';
-import {powerOne} from '../rc/function_120.inc.js';
-import {mulPowSeparation} from '../rc/function_121.inc.js';
-import {powerFrac} from '../rc/function_122.inc.js';
-import {mulFracSeparation} from '../rc/function_123.inc.js';
-import {sub_mulCommutative} from '../rc/function_126.inc.js';
-import _ from 'lodash';
+import { addCommutative } from '../rc/function_47.inc.js'
+import { allAssociative } from '../rc/function_67.inc.js'
+import { powerOne } from '../rc/function_120.inc.js'
+import { mulPowSeparation } from '../rc/function_121.inc.js'
+import { powerFrac } from '../rc/function_122.inc.js'
+import { mulFracSeparation } from '../rc/function_123.inc.js'
+import { sub_mulCommutative } from '../rc/function_126.inc.js'
+import _ from 'lodash'
 
-export function 거듭제곱꼴만_가능(tree = null) {
-    
-    let laco = new Laco();
-    laco.initialize(tree);
-    laco.apply(powerFrac);//분수 분모 분자 쪼갬
-    laco.apply(powerOne);
-    laco.apply(mulPowSeparation);
-    laco.apply(mulFracSeparation);
-    laco.apply(allAssociative);
-    //laco.apply(allCommutative);
-    laco.apply(addCommutative);
-    laco.apply(sub_mulCommutative);
-    return laco.finalize();
+export function 거듭제곱꼴만_가능 (tree = null) {
+  const laco = new Laco()
+  laco.initialize(tree)
+  laco.apply(powerFrac)// 분수 분모 분자 쪼갬
+  laco.apply(powerOne)
+  laco.apply(mulPowSeparation)
+  laco.apply(mulFracSeparation)
+  laco.apply(allAssociative)
+  // laco.apply(allCommutative);
+  laco.apply(addCommutative)
+  laco.apply(sub_mulCommutative)
+  return laco.finalize()
 }
 /*
 import {LatexToTree, is_equal_tree} from '../checkmath.js';

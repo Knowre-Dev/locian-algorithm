@@ -1,19 +1,17 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
-import {mulCommutative} from '../rc/function_46.inc.js';
-import _ from 'lodash';
+import { mulCommutative } from '../rc/function_46.inc.js'
+import _ from 'lodash'
 
-export function 곱셈_교환법칙(tree =  null) {
-    
-    let laco = new Laco();
-    laco.initialize(tree);
-        
-    laco.apply(mulCommutative);
-    return laco.finalize();
+import { LatexToTree, is_equal_tree } from '../checkmath.js'
+
+export function 곱셈_교환법칙 (tree = null) {
+  const laco = new Laco()
+  laco.initialize(tree)
+
+  laco.apply(mulCommutative)
+  return laco.finalize()
 }
-
-
-import {LatexToTree, is_equal_tree} from '../checkmath.js';
 /*
 let latex_1 = 'x^2+y^2';
 let latex_2 = 'a';

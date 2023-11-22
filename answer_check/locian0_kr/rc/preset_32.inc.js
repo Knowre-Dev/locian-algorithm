@@ -1,14 +1,12 @@
-import {Laco} from '../libs/common.inc.js';
-import {varReverseShift} from '../rc/function_63.inc.js';
-import _ from 'lodash';
+import { Laco } from '../libs/common.inc.js'
+import { varReverseShift } from '../rc/function_63.inc.js'
+import _ from 'lodash'
 
-
-export function geometry_polygon(tree = null) {
-    
-    let laco = new Laco();
-    laco.initialize(tree);
-    laco.apply(varReverseShift);
-    return laco.finalize();
+export function geometry_polygon (tree = null) {
+  const laco = new Laco()
+  laco.initialize(tree)
+  laco.apply(varReverseShift)
+  return laco.finalize()
 }
 
 /*

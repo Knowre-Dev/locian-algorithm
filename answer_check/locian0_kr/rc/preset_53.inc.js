@@ -1,32 +1,26 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
-import {negParenthesis} from '../rc/function_50.inc.js';
-import {posiSign} from '../rc/function_51.inc.js';
-import {allAssociative, allCommutative} from '../rc/function_67.inc.js';
-import {decElimZero} from '../rc/function_79.inc.js';
-import _ from 'lodash';
+import { negParenthesis } from '../rc/function_50.inc.js'
+import { posiSign } from '../rc/function_51.inc.js'
+import { allAssociative, allCommutative } from '../rc/function_67.inc.js'
+import { decElimZero } from '../rc/function_79.inc.js'
+import _ from 'lodash'
 
+export function 소수만가능 (tree = null) {
+  const laco = new Laco()
+  // tree_1 = tree_1 ? tree_1 : laco.parse('\frac{3}{2}x');
 
-export function 소수만가능(tree = null) {
-    
-    let laco = new Laco();
-    //tree_1 = tree_1 ? tree_1 : laco.parse('\frac{3}{2}x');
-    
-    /* KR Test */
-    laco.initialize(tree);
-    laco.apply(posiSign);
-    laco.apply(negParenthesis);
-    laco.apply(decElimZero);
-    laco.apply(allAssociative);
-    laco.apply(allCommutative);
-    return laco.finalize();
+  /* KR Test */
+  laco.initialize(tree)
+  laco.apply(posiSign)
+  laco.apply(negParenthesis)
+  laco.apply(decElimZero)
+  laco.apply(allAssociative)
+  laco.apply(allCommutative)
+  return laco.finalize()
 }
 
-    
-
-
-
-/*        
+/*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = '42.0';
 let latex_2 = '42';

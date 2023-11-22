@@ -1,57 +1,54 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
-import {addAssociative} from '../rc/function_45.inc.js';
-import {mulCommutative} from '../rc/function_46.inc.js';
-import {addCommutative} from '../rc/function_47.inc.js';
-import {fracExpress} from '../rc/function_48.inc.js';
-import {fracDecimal} from '../rc/function_49.inc.js';
-import {negParenthesis} from '../rc/function_50.inc.js';
-import {posiSign} from '../rc/function_51.inc.js';
-import {fracMfrac} from '../rc/function_52.inc.js';
-import {fracNegative} from '../rc/function_53.inc.js';
-import {fracSeparation} from '../rc/function_54.inc.js';
-import {addIdentity} from '../rc/function_55.inc.js';
-import {mulIdentity} from '../rc/function_56.inc.js';
-import {divIdentity} from '../rc/function_57.inc.js';
-import {fracIdentity} from '../rc/function_58.inc.js';
-import {powIdentity} from '../rc/function_59.inc.js';
-import {fracSimpInt} from '../rc/function_76.inc.js';
-import {addAdjacentSigns} from '../rc/function_83.inc.js';
-import {decIdentity} from '../rc/function_86.inc.js';
-import {mulAssociative} from '../rc/function_157.inc.js';
-import _ from 'lodash';
+import { addAssociative } from '../rc/function_45.inc.js'
+import { mulCommutative } from '../rc/function_46.inc.js'
+import { addCommutative } from '../rc/function_47.inc.js'
+import { fracExpress } from '../rc/function_48.inc.js'
+import { fracDecimal } from '../rc/function_49.inc.js'
+import { negParenthesis } from '../rc/function_50.inc.js'
+import { posiSign } from '../rc/function_51.inc.js'
+import { fracMfrac } from '../rc/function_52.inc.js'
+import { fracNegative } from '../rc/function_53.inc.js'
+import { fracSeparation } from '../rc/function_54.inc.js'
+import { addIdentity } from '../rc/function_55.inc.js'
+import { mulIdentity } from '../rc/function_56.inc.js'
+import { divIdentity } from '../rc/function_57.inc.js'
+import { fracIdentity } from '../rc/function_58.inc.js'
+import { powIdentity } from '../rc/function_59.inc.js'
+import { fracSimpInt } from '../rc/function_76.inc.js'
+import { addAdjacentSigns } from '../rc/function_83.inc.js'
+import { decIdentity } from '../rc/function_86.inc.js'
+import { mulAssociative } from '../rc/function_157.inc.js'
+import _ from 'lodash'
 
+export function no_simp_frac (tree = null) {
+  const laco = new Laco()
+  // tree_1 = tree_1 ? tree_1 : laco.parse('3x-y+0+1a-0+\frac{1}{2}x');
 
-export function no_simp_frac(tree = null) {
-    
-    let laco = new Laco()
-    //tree_1 = tree_1 ? tree_1 : laco.parse('3x-y+0+1a-0+\frac{1}{2}x');
-
-    laco.initialize(tree);
-    laco.apply(addIdentity);
-    laco.apply(mulIdentity);
-    laco.apply(divIdentity);
-    laco.apply(fracIdentity);
-    laco.apply(powIdentity);
-    laco.apply(decIdentity);
-    laco.apply(mulCommutative);
-    laco.apply(addCommutative);
-    laco.apply(fracSeparation);
-    laco.apply(fracMfrac);
-    laco.apply(posiSign);
-    laco.apply(addAdjacentSigns);
-    laco.apply(fracNegative);
-    laco.apply(negParenthesis);
-    laco.apply(fracExpress);
-    laco.apply(mulAssociative);
-    laco.apply(addAssociative);
-    laco.apply(mulCommutative);
-    laco.apply(addCommutative);
-    laco.apply(fracDecimal);
-    laco.apply(fracExpress);
-    laco.apply(fracSimpInt);
-    return laco.finalize();
-    
+  laco.initialize(tree)
+  laco.apply(addIdentity)
+  laco.apply(mulIdentity)
+  laco.apply(divIdentity)
+  laco.apply(fracIdentity)
+  laco.apply(powIdentity)
+  laco.apply(decIdentity)
+  laco.apply(mulCommutative)
+  laco.apply(addCommutative)
+  laco.apply(fracSeparation)
+  laco.apply(fracMfrac)
+  laco.apply(posiSign)
+  laco.apply(addAdjacentSigns)
+  laco.apply(fracNegative)
+  laco.apply(negParenthesis)
+  laco.apply(fracExpress)
+  laco.apply(mulAssociative)
+  laco.apply(addAssociative)
+  laco.apply(mulCommutative)
+  laco.apply(addCommutative)
+  laco.apply(fracDecimal)
+  laco.apply(fracExpress)
+  laco.apply(fracSimpInt)
+  return laco.finalize()
 }
 
 /*

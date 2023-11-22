@@ -1,33 +1,31 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
-export function powDecomposition(tree) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'power') {
-        let base = powDecomposition(tree_1[0]);
-        let expo = powDecomposition(tree_1[1]);
-        if (base[0] === 'addchain' && expo[0] === 'natural') {
-            operator = 'mulchain';
-            let expo_int = parseInt(expo[1]);
-            for (let i = 0; i < expo_int; i++) {                    
-                newOperand.push(['mul', base]);    
-            }                   
-        } else {
-            newOperand = [base, expo];
-        }
+export function powDecomposition (tree) {
+  if (!Array.isArray(tree)) {
+    return tree
+  }
+
+  let operator = tree[0]
+  const tree_1 = tree.slice(1)
+  let newOperand = []
+  if (operator === 'power') {
+    const base = powDecomposition(tree_1[0])
+    const expo = powDecomposition(tree_1[1])
+    if (base[0] === 'addchain' && expo[0] === 'natural') {
+      operator = 'mulchain'
+      const expo_int = parseInt(expo[1])
+      for (let i = 0; i < expo_int; i++) {
+        newOperand.push(['mul', base])
+      }
     } else {
-        for (let v of tree_1) {
-            newOperand.push(powDecomposition(v));
-        }
+      newOperand = [base, expo]
     }
-    return [operator].concat(newOperand);
-    
-    
+  } else {
+    for (const v of tree_1) {
+      newOperand.push(powDecomposition(v))
+    }
+  }
+  return [operator].concat(newOperand)
 }
 
 /*

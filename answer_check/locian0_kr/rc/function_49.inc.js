@@ -1,42 +1,38 @@
-import {EuclidAlg} from '../rc/function_76.inc.js';
-import _ from 'lodash';
+import { EuclidAlg } from '../rc/function_76.inc.js'
+import _ from 'lodash'
 
-export function fracDecimal(tree) {
-    
-    if (!Array.isArray(tree)) {
-        return tree;
-    }  
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'decimal') {
-        let val = tree_1[0].split('.');
-        
-        
-        let num = parseInt(val[0] + val[1]);
-        let den = Math.pow(10, val[1].length);
-    
-        let gcf = EuclidAlg(num, den);
-        let newNum = num / gcf;
-        let newDen = den / gcf;
-        
-        if (newDen === 1) {
-            operator = 'natural';
-            newOperand.push(newNum.toString());
-        } else {
-            operator = 'fraction';
-            newOperand.push(['natural', newNum.toString()]);
-            newOperand.push(['natural', newDen.toString()]);
-        }
+export function fracDecimal (tree) {
+  if (!Array.isArray(tree)) {
+    return tree
+  }
+
+  let operator = tree[0]
+  const tree_1 = tree.slice(1)
+  const newOperand = []
+  if (operator === 'decimal') {
+    const val = tree_1[0].split('.')
+
+    const num = parseInt(val[0] + val[1])
+    const den = Math.pow(10, val[1].length)
+
+    const gcf = EuclidAlg(num, den)
+    const newNum = num / gcf
+    const newDen = den / gcf
+
+    if (newDen === 1) {
+      operator = 'natural'
+      newOperand.push(newNum.toString())
     } else {
-        for (let v of tree_1) {
-            newOperand.push(fracDecimal(v));
-        }
+      operator = 'fraction'
+      newOperand.push(['natural', newNum.toString()])
+      newOperand.push(['natural', newDen.toString()])
     }
-    return [operator].concat(newOperand);
-
-    
+  } else {
+    for (const v of tree_1) {
+      newOperand.push(fracDecimal(v))
+    }
+  }
+  return [operator].concat(newOperand)
 }
 /*
 import {LatexToTree} from '../checkmath.js';

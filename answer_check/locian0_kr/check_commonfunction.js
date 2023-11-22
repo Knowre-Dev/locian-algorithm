@@ -4,26 +4,26 @@ role:
 input:
 output:
 ***********************************************************/
-function getOrderedAnswerArray(answerArray) {
-    var answerArray_1 = JSON.parse(JSON.stringify(answerArray));
-	var result = [];
-	for (var answer of answerArray_1) {
-		var regex = new RegExp('/([0-9]+)+/', 'g');
-		var position = answer.get('order').split(regex);
-        position = position.filter((str) => str !== '');
-		var temp = result;
-		for (var [k, v] of position.entries) {
-			if (k === position.length - 1) {
-                if (temp.has(v) === false) {
-                    temp[v] = new Map();
-                }
-				temp.get(v).set('answer' + temp[v].toString(), answer);
-            } else {
-				temp = temp[v];
-            }
-		}
-	}
-	return result
+function getOrderedAnswerArray (answerArray) {
+  const answerArray_1 = JSON.parse(JSON.stringify(answerArray))
+  const result = []
+  for (const answer of answerArray_1) {
+    const regex = new RegExp('/([0-9]+)+/', 'g')
+    let position = answer.get('order').split(regex)
+    position = position.filter((str) => str !== '')
+    let temp = result
+    for (const [k, v] of position.entries) {
+      if (k === position.length - 1) {
+        if (temp.has(v) === false) {
+          temp[v] = new Map()
+        }
+        temp.get(v).set('answer' + temp[v].toString(), answer)
+      } else {
+        temp = temp[v]
+      }
+    }
+  }
+  return result
 }
 
 /***********************************************************

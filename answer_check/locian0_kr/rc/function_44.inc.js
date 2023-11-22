@@ -1,32 +1,27 @@
+import _ from 'lodash'
 
+export function 곱셈결합법칙 (tree) {
+  if (!Array.isArray(tree)) {
+    return tree
+  }
 
-import _ from 'lodash';
-
-export function 곱셈결합법칙(tree) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    for (let v of tree_1) {
-        let term = 곱셈결합법칙(v);
-        if (operator === 'mulchain' && term[0] === 'mul' && term[1][0] === 'mulchain') {
-            let term_1_entries = term[1].entries();
-            for (let [tk, tv] of term_1_entries) {
-                if (tk !== 0) {
-                    newOperand.push(tv);
-                }
-            }
-        } else {
-            newOperand.push(term);
+  const operator = tree[0]
+  const tree_1 = tree.slice(1)
+  const newOperand = []
+  for (const v of tree_1) {
+    const term = 곱셈결합법칙(v)
+    if (operator === 'mulchain' && term[0] === 'mul' && term[1][0] === 'mulchain') {
+      const term_1_entries = term[1].entries()
+      for (const [tk, tv] of term_1_entries) {
+        if (tk !== 0) {
+          newOperand.push(tv)
         }
+      }
+    } else {
+      newOperand.push(term)
     }
-    return [operator].concat(newOperand);
-    
-    
+  }
+  return [operator].concat(newOperand)
 }
 
 /*
@@ -42,4 +37,3 @@ let result = compareMathTree(tree_1, tree_2);
 console.log(result_1);
 console.log(result_2);
 */
-

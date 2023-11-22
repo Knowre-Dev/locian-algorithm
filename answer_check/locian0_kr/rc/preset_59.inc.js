@@ -1,16 +1,13 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
+import { varReverse } from '../rc/function_64.inc.js'
+import _ from 'lodash'
 
-import {varReverse} from '../rc/function_64.inc.js';
-import _ from 'lodash';
-
-
-export function 역순가능(tree = null) {
-    
-    let laco = new Laco();
-    laco.initialize(tree);
-    laco.apply(varReverse);
-    return laco.finalize();
+export function 역순가능 (tree = null) {
+  const laco = new Laco()
+  laco.initialize(tree)
+  laco.apply(varReverse)
+  return laco.finalize()
 }
 
 /*

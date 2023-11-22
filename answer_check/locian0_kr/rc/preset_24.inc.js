@@ -1,15 +1,14 @@
-import {Laco} from '../libs/common.inc.js';
-import {evaluateEx_new} from '../rc/function_152.inc.js';
-import _ from 'lodash';
+import { Laco } from '../libs/common.inc.js'
+import { evaluateEx_new } from '../rc/function_152.inc.js'
+import _ from 'lodash'
 
-export function equivalent(tree = null) {
-    
-    let laco = new Laco();
-    //tree_1 = tree_1 ? tree_1 : laco.parse('ba+3xy+\overline{SCEAG}');
-    
-    laco.initialize(tree);
-    laco.apply(evaluateEx_new);
-    return laco.finalize();
+export function equivalent (tree = null) {
+  const laco = new Laco()
+  // tree_1 = tree_1 ? tree_1 : laco.parse('ba+3xy+\overline{SCEAG}');
+
+  laco.initialize(tree)
+  laco.apply(evaluateEx_new)
+  return laco.finalize()
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

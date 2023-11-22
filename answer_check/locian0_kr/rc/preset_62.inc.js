@@ -1,35 +1,33 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js'
 
-import {addCommutative} from '../rc/function_47.inc.js';
-import {fracExpress} from '../rc/function_48.inc.js';
-import {allAssociative} from '../rc/function_67.inc.js';
-import {addFactoredForm} from '../rc/function_70.inc.js';
-import {addFactorNegative} from '../rc/function_81.inc.js';
-import {powBaseSort} from '../rc/function_111.inc.js';
-import {powAddFactoredForm} from '../rc/function_112.inc.js';
-import {mulConstCal} from '../rc/function_113.inc.js';
-import {mulToNega} from '../rc/function_114.inc.js';
-import {sub_mulCommutative} from '../rc/function_126.inc.js';
-import _ from 'lodash';
+import { addCommutative } from '../rc/function_47.inc.js'
+import { fracExpress } from '../rc/function_48.inc.js'
+import { allAssociative } from '../rc/function_67.inc.js'
+import { addFactoredForm } from '../rc/function_70.inc.js'
+import { addFactorNegative } from '../rc/function_81.inc.js'
+import { powBaseSort } from '../rc/function_111.inc.js'
+import { powAddFactoredForm } from '../rc/function_112.inc.js'
+import { mulConstCal } from '../rc/function_113.inc.js'
+import { mulToNega } from '../rc/function_114.inc.js'
+import { sub_mulCommutative } from '../rc/function_126.inc.js'
+import _ from 'lodash'
 
-
-export function 인수분해꼴(tree = null) {
-    
-    let laco = new Laco();
-    laco.initialize(tree);
-    laco.apply(fracExpress);
-    laco.apply(mulToNega);
-    laco.apply(powBaseSort);
-    //laco.apply(powAddFactoredForm);
-    //laco.apply(addFactoredForm);
-    laco.apply(allAssociative);
-    laco.apply(sub_mulCommutative);
-    //laco.apply(allCommutative);
-    laco.apply(addCommutative);
-    laco.apply(sub_mulCommutative);
-    laco.apply(addFactorNegative);
-    laco.apply(mulConstCal);
-    return laco.finalize();
+export function 인수분해꼴 (tree = null) {
+  const laco = new Laco()
+  laco.initialize(tree)
+  laco.apply(fracExpress)
+  laco.apply(mulToNega)
+  laco.apply(powBaseSort)
+  // laco.apply(powAddFactoredForm);
+  // laco.apply(addFactoredForm);
+  laco.apply(allAssociative)
+  laco.apply(sub_mulCommutative)
+  // laco.apply(allCommutative);
+  laco.apply(addCommutative)
+  laco.apply(sub_mulCommutative)
+  laco.apply(addFactorNegative)
+  laco.apply(mulConstCal)
+  return laco.finalize()
 }
 
 /*

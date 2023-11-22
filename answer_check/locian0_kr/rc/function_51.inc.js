@@ -1,24 +1,22 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
-export function posiSign(tree) {
-    if (!Array.isArray(tree)) {
-        return tree;
+export function posiSign (tree) {
+  if (!Array.isArray(tree)) {
+    return tree
+  }
+
+  let operator = tree[0]
+  const tree_1 = tree.slice(1)
+  let newOperand = []
+  if (operator === 'positive') {
+    operator = tree_1[0].shift()
+    newOperand = tree_1[0]
+  } else {
+    for (const v of tree_1) {
+      newOperand.push(posiSign(v))
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'positive') {
-        operator = tree_1[0].shift();
-        newOperand = tree_1[0];
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(posiSign(v));
-        }
-    }
-    return [operator].concat(newOperand);
-    
-    
+  }
+  return [operator].concat(newOperand)
 }
 
 /*

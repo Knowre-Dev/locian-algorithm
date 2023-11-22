@@ -1,12 +1,11 @@
-import {Laco} from '../libs/common.inc.js';
-import _ from 'lodash';
+import { Laco } from '../libs/common.inc.js'
+import _ from 'lodash'
 
-export function same(tree = null) {
-    
-    let laco = new Laco();
-    
-    laco.initialize(tree);
-    return laco.finalize();
+export function same (tree = null) {
+  const laco = new Laco()
+
+  laco.initialize(tree)
+  return laco.finalize()
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

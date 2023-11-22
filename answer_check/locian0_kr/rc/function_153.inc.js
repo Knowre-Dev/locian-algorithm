@@ -1,73 +1,68 @@
-
 /*
 Combines an addchain with at least one fraction into a single fraction
 */
-import {mulIdentity} from '../rc/function_56.inc.js';
-import {array2ChainTree, findDenominators, findGCF, multFactor} from '../rc/function_152.inc.js';
-import {mulAssociative} from '../rc/function_157.inc.js';
-import _ from 'lodash';
+import { mulIdentity } from '../rc/function_56.inc.js'
+import { array2ChainTree, findDenominators, findGCF, multFactor } from '../rc/function_152.inc.js'
+import { mulAssociative } from '../rc/function_157.inc.js'
+import _ from 'lodash'
 
-export function fracCombine(tree) {
-    
-    if (!Array.isArray(tree) || tree.length < 1) {
-        return tree;
+export function fracCombine (tree) {
+  if (!Array.isArray(tree) || tree.length < 1) {
+    return tree
+  }
+
+  const operator = tree[0]
+  let operand = tree.slice(1)
+  if (operator === 'addchain') {
+    const denomArr = findDenominators(tree, true)
+    if (denomArr.length === 0) {
+      return [operator].concat(operand)
     }
-    
-    let operator = tree[0];
-    let operand = tree.slice(1);
-    if (operator === 'addchain') {
-    
-        let denomArr = findDenominators(tree, true);
-        if (denomArr.length === 0) {
-            return [operator].concat(operand);
-        }
-        let denomArr_entries = denomArr.entries();
-        for (let [k, d] of denomArr_entries) {
-            denomArr[k] = ['mul', d];
-        }
-        let denom = array2ChainTree(denomArr);
-        let find = findGCF(denom);
-       
-        if (JSON.stringify(find['sym']) !== JSON.stringify([])) {
-            let denom_arr = [];
-            let find_entries = Object.entries(find);
-            for (let [k, f] of find_entries) {
-                if (k === 'const'){
-                    denom_arr.push(['mul', f]);
-                } else {
-                    for (let f1 of f) {
-                        denom_arr.push(['mul', f1]);
-                    }               
-                }         
-            }          
-            denom = ['mulchain'].concat(denom_arr);
-        }    
-        
-        let newOperand = [];
-        for (let term of operand) {
-            let op = term[0];
-            let subtree = term[1];
-            
-            let newN = multFactor(subtree, ['mul', denom], true);
-            // Some postprocessing before adding to newOperand
-            newN = mulAssociative(newN);
-            newN = mulIdentity(newN);
-            newOperand.push([op, newN]);
-        }
-        
-        let newtree = array2ChainTree(newOperand);
-        return ['fraction', newtree, denom];
-    } else {
-        let newOperand = [];
-        for (let subtree of operand) {
-            newOperand.push(fracCombine(subtree));
-        }
-        operand = newOperand;
-        
+    const denomArr_entries = denomArr.entries()
+    for (const [k, d] of denomArr_entries) {
+      denomArr[k] = ['mul', d]
     }
-    
-    return [operator].concat(operand);
-    
+    let denom = array2ChainTree(denomArr)
+    const find = findGCF(denom)
+
+    if (JSON.stringify(find.sym) !== JSON.stringify([])) {
+      const denom_arr = []
+      const find_entries = Object.entries(find)
+      for (const [k, f] of find_entries) {
+        if (k === 'const') {
+          denom_arr.push(['mul', f])
+        } else {
+          for (const f1 of f) {
+            denom_arr.push(['mul', f1])
+          }
+        }
+      }
+      denom = ['mulchain'].concat(denom_arr)
+    }
+
+    const newOperand = []
+    for (const term of operand) {
+      const op = term[0]
+      const subtree = term[1]
+
+      let newN = multFactor(subtree, ['mul', denom], true)
+      // Some postprocessing before adding to newOperand
+      newN = mulAssociative(newN)
+      newN = mulIdentity(newN)
+      newOperand.push([op, newN])
+    }
+
+    const newtree = array2ChainTree(newOperand)
+    return ['fraction', newtree, denom]
+  } else {
+    const newOperand = []
+    for (const subtree of operand) {
+      newOperand.push(fracCombine(subtree))
+    }
+    operand = newOperand
+  }
+
+  return [operator].concat(operand)
 }
 
 /*

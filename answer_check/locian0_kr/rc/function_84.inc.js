@@ -1,50 +1,48 @@
-import _ from 'lodash';
+import _ from 'lodash'
 
-export function intervalSetNot(tree, vari = ['anything', 'x']) {
-    if (!Array.isArray(tree)) {
-        return tree;
+export function intervalSetNot (tree, vari = ['anything', 'x']) {
+  if (!Array.isArray(tree)) {
+    return tree
+  }
+
+  let operator = tree[0]
+  const tree_1 = tree.slice(1)
+  let newOperand = []
+  if (operator === 'interval') {
+    operator = 'inequality'
+    newOperand = [
+      tree_1[2],
+      tree_1[3] === ')' ? 'gt' : 'ge',
+      vari,
+      tree_1[0] === '(' ? 'gt' : 'ge',
+      tree_1[1]
+    ]
+  } else if (operator === 'tuple') { // jhshin
+    operator = 'inequality'
+    newOperand = [
+      tree_1[1],
+      'gt',
+      vari,
+      'gt',
+      tree_1[0]
+    ]
+  } else if (operator === 'setname') {
+    if (tree_1[0] === 'real') {
+      operator = 'inequality'
+      newOperand = [
+        ['infinity'],
+        'gt',
+        vari,
+        'gt',
+        ['negative', ['infinity']]
+      ]
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'interval') {
-        operator = 'inequality';
-        newOperand = [
-            tree_1[2],
-            tree_1[3] === ')' ? 'gt' : 'ge',
-            vari,
-            tree_1[0] === '(' ? 'gt' : 'ge',
-            tree_1[1]
-        ];
-    } else if (operator === 'tuple') { // jhshin
-        operator = 'inequality';
-        newOperand = [
-            tree_1[1],
-            'gt',
-            vari,
-            'gt',
-            tree_1[0]
-        ];
-    } else if (operator === 'setname') {
-        if (tree_1[0] === 'real') {
-            operator = 'inequality';
-            newOperand = [
-                ['infinity'],
-                'gt',
-                vari,
-                'gt',
-                ['negative', ['infinity']]
-            ];
-        }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(intervalSetNot(v));
-        }
+  } else {
+    for (const v of tree_1) {
+      newOperand.push(intervalSetNot(v))
     }
-    return [operator].concat(newOperand);
-    
-    
+  }
+  return [operator].concat(newOperand)
 }
 /*
 import {LatexToTree, compareMathTree, is_equal_tree} from "../checkmath.js";
