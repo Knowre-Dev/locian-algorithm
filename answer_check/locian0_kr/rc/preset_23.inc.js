@@ -1,10 +1,8 @@
-import {Laco} from '../libs/common.inc.js';
-import _ from 'lodash';
+import { Laco } from '../libs/common.inc.js';
 
 export function same(tree = null) {
-    
-    let laco = new Laco();
-    
+    const laco = new Laco();
+
     laco.initialize(tree);
     return laco.finalize();
 }

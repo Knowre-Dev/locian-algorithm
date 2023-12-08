@@ -1,7 +1,4 @@
-import _ from 'lodash';
-
 export function rearrangeTreeEq(A, B) {
-    
     if (Array.isArray(A) && !Array.isArray(B)) {
         return 1;
     }
@@ -14,8 +11,8 @@ export function rearrangeTreeEq(A, B) {
             : A > B ? 1
             : A < B ? -1
             : 0;
-    } 
-    
+    }
+
     let operatorA;
     let operandA;
     if (A[0] === 'negative') {
@@ -25,42 +22,41 @@ export function rearrangeTreeEq(A, B) {
         operatorA = A[0];
         operandA = A.slice(1);
     }
-    
+
     let operatorB;
     let operandB;
     if (B[0] === 'negative') {
         operatorB = B[1][0];
-        
         operandB = B[1].slice(1);
     } else {
         operatorB = B[0];
-        
         operandB = B.slice(1);
     }
-    
-    let place = [0, 0];
-    let opflag;
-    let operator_entries = [operatorA, operatorB].entries();
-    for (let [k, term] of operator_entries) {
+
+    const place = [0, 0];
+    const operator_entries = [operatorA, operatorB].entries();
+    for (const [k, term] of operator_entries) {
         switch (term) {
             case 'add':
             case 'sub':
             case 'addsub':
-            case 'subadd':
-                opflag = false;
+            case 'subadd': {
                 break;
-            case 'negative':
+            }
+            case 'negative': {
                 place[k] = 1;
                 break;
-            case 'fraction':
+            }
+            case 'fraction': {
                 place[k] = 2;
                 break;
-            default:
-                opflag = true;               
+            }
+            default: {
                 break;
+            }
         }
     }
-    
+
     if (place[0] < place[1]) {
         return 1;
     }
@@ -72,23 +68,22 @@ export function rearrangeTreeEq(A, B) {
     }
     if (operatorA < operatorB) {
         return -1;
-    } 
-    if (operandA.length > operandB.length) {
+    }
+    const operandA_lehgth = operandA.length;
+    const operandB_length = operandB.length
+    if (operandA_lehgth > operandB_length) {
         return 1;
     }
-    if (operandA.length < operandB.length) {
+    if (operandA_lehgth < operandB_length) {
         return -1;
     }
-    
-    let operandA_entries = operandA.entries();
-    for (let [k, v] of operandA_entries) {
-        let temp = rearrangeTreeEq(v, operandB[k]);
+
+    const operandA_entries = operandA.entries();
+    for (const [k, v] of operandA_entries) {
+        const temp = rearrangeTreeEq(v, operandB[k]);
         if (temp !== 0) {
             return temp;
         }
-        
-        
-       
     }
     return 0;
 }

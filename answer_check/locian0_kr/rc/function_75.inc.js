@@ -1,84 +1,72 @@
-import _ from 'lodash';
-
 export function eqMulProp(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
+
+    const operator = tree[0];
     if (operator === 'equation') {
+        let newOperand = [];
+        const tree_1 = tree.slice(1);
         if (tree_1[0][0] === 'fraction') {
             newOperand.push(tree_1[0][1][0]);
-            // multiply tree[0][1][1] to tree[1];
         } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0][0] === 'fraction') {
-
+            // empty
         } else {
             newOperand = tree_1;
         }
-    } else {
-        newOperand = tree_1;
+        return [operator].concat(newOperand);
     }
-    return [operator].concat(newOperand);
-    
-    
+    return tree;
 }
 
-import {array2ChainTree, findGCF, multFactor} from '../rc/function_152.inc.js';
-import {mulNegative} from '../rc/function_160.inc.js';
-
+import { array2ChainTree, findGCF, multFactor } from '../rc/function_152.inc.js';
+import { mulNegative } from '../rc/function_160.inc.js';
 
 export function eqMulPropUS(tree) {
-    
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     if (!['equation', 'inequality'].includes(tree[0])) {
         return tree;
     }
-    
+
     // Input now guaranteed to be a tree array representing equation or inequality
-    
+
     // Find the common factors for all sides
-    let gcfArr = findGCF(tree);
+    const gcfArr = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
     let factor = [];
-    factor.push(['mul', gcfArr['const']]);
-    let gcfArr_sym = gcfArr['sym'];
-    for (let sym of gcfArr_sym) {
+    factor.push(['mul', gcfArr.const]);
+    const gcfArr_sym = gcfArr.sym;
+    for (const sym of gcfArr_sym) {
         factor.push(['mul', sym]);
     }
     factor = array2ChainTree(factor);
-    let newtree;
-    
-    if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) || 
+    // let newtree;
+
+    if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) ||
         JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
-        newtree = tree; // No need to divide by 1
-    } else {
-        newtree = [tree[0]];
-        let tree_1 = tree.slice(1);
-        for (let subtree of tree_1) {
-            if (!Array.isArray(subtree)) {
-                // this block executes for inequality signs (e.g., 'le', 'ge')
-                newtree.push(subtree);
-                continue;
-            }
-            let newsubtree = multFactor(subtree, ['div', factor], true);
-            newtree.push(newsubtree);
+        return tree; // No need to divide by 1
+    }
+
+    const newtree = [tree[0]];
+    const tree_1 = tree.slice(1);
+    for (const subtree of tree_1) {
+        if (!Array.isArray(subtree)) {
+            // this block executes for inequality signs (e.g., 'le', 'ge')
+            newtree.push(subtree);
+            continue;
         }
+        const newsubtree = multFactor(subtree, ['div', factor], true);
+        newtree.push(newsubtree);
     }
     return mulNegative(newtree);
-    
-    
+
     // NOTE: This function does not support division by negative common factor
     //     Use this function in conjunction with eqMulNeg() and ineqMulNeg()
     //     to handle such cases
-    
-    
-    
 }
 /*
 import {LatexToTree} from '../checkmath.js';

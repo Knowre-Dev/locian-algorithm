@@ -1,40 +1,28 @@
-import {addNegative} from '../rc/function_71.inc.js';
-import _ from 'lodash';
-
+import { addNegative } from '../rc/function_71.inc.js';
 
 export function addNegaToSub(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-   
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
+    const operator = tree[0];
     if (operator === 'addchain') {
-        let tree_1_entries = tree_1.entries();
-        for (let [k, v] of tree_1_entries) {
-            
-            if (k === 0) {
-                if (v[0] === 'add' && v[1][0] === 'negative') {
-                    newOperand.push(['sub', v[1][1]]);
-                } else if (v[0] === 'add' && v[1][0] === 'positive') {
-                    newOperand.push(['add', v[1][1]]);
-                } else {
-                    newOperand.push(v);
-                }
-            } else {                
-                newOperand.push(v);
-            }
+        const tree_1 = tree.slice(1);
+        const newOperand = [];
+        const tree_1_entries = tree_1.entries();
+        for (const [k, v] of tree_1_entries) {
+            k === 0 ? (v[0] === 'add' && v[1][0] === 'negative') ? newOperand.push(['sub', v[1][1]])
+                : (v[0] === 'add' && v[1][0] === 'positive') ? newOperand.push(['add', v[1][1]])
+                : newOperand.push(v)
+            : newOperand.push(v);
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(addNegative(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    const tree_1 = tree.slice(1);
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(addNegative(v));
     }
     return [operator].concat(newOperand);
-    
-    
-    
 }
 
 /*

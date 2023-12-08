@@ -1,12 +1,9 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {addNegaToSub} from '../rc/function_204.inc.js';
-import _ from 'lodash';
-
+import { addNegaToSub } from '../rc/function_204.inc.js';
 
 export function 고정(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree);
     laco.apply(addNegaToSub);
     return laco.finalize();

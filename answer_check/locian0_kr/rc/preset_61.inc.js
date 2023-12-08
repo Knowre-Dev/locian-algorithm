@@ -1,13 +1,10 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {mfracEquiv} from '../rc/function_110.inc.js';
-import _ from 'lodash';
-
+import { mfracEquiv } from '../rc/function_110.inc.js';
 
 export function 대분수_가능(tree = null) {
-    
-    let laco = new Laco();
-    //tree_1 = tree_1 ? tree_1 : laco.parse('\mfrac[1]{1}{2}');
+    const laco = new Laco();
+    // tree_1 = tree_1 ? tree_1 : laco.parse('\mfrac[1]{1}{2}');
     laco.initialize(tree);
     laco.apply(mfracEquiv);
     return laco.finalize();

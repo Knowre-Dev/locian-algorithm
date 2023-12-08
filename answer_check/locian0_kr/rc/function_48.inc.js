@@ -1,28 +1,23 @@
-import _ from 'lodash';
-
 export function fracExpress(tree) {
-    
     if (!Array.isArray(tree)) {
         return tree;
-    }  
-    
+    }
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    let nega;
+    const tree_1 = tree.slice(1);
     if (operator === 'mulchain' && tree_1[0][1][0] === 'fraction') {
+        let newOperand = [];
         let num = [];
         let den = [];
-        
-        nega = false;
-        for (let term of tree_1) {
+        let nega = false;
+        for (const term of tree_1) {
             if (term[1][0] === 'fraction') {
-                if (term[1][1][0] === 'mulchain') {     
+                if (term[1][1][0] === 'mulchain') {
                     num = num.concat(term[1][1].slice(1));
-                } else if (term[1][1][0] === 'negative'){
+                } else if (term[1][1][0] === 'negative') {
                     term[1][1][1][1] === '1' ? nega = true
-                        : num.push([term[0], term[1][1]])
-                } else if (term[1][1][1] !== '1') {    
+                    : num.push([term[0], term[1][1]])
+                } else if (term[1][1][1] !== '1') {
                     num.push([term[0], term[1][1]]);
                 }
                 if (term[1][2][0] === 'mulchain') {
@@ -35,13 +30,14 @@ export function fracExpress(tree) {
                     : num.push([term[0], term[1]])
             }
         }
+        const num_length = num.length;
+        num_length === 1 ? num = num[0][1]
+        : num_length === 0 ? num = ['natural', '1']
+        : num.unshift('mulchain')
 
-        num.length === 1 ? num = num[0][1]                
-            : num.length === 0 ? num = ['natural', '1']
-            : num.unshift('mulchain')
         den.length === 1 ? den = den[0][1]
-            : den.unshift('mulchain')
-        
+        : den.unshift('mulchain')
+
         if (den.length > 1) {
             operator = 'fraction';
             newOperand.push(num);
@@ -50,16 +46,12 @@ export function fracExpress(tree) {
             operator = num.shift();
             newOperand = num;
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(fracExpress(v));
-        }
+        return nega ? ['negative'].concat([[operator].concat(newOperand)])
+        : [operator].concat(newOperand);
     }
-    
-    
-    tree_1 = [operator].concat(newOperand);
-    return nega ? ['negative'].concat([tree_1]) 
-        : tree_1;
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(fracExpress(v));
+    }
+    return [operator].concat(newOperand);
 }
-
-

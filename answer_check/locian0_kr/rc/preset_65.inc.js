@@ -1,11 +1,9 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {natElimZero} from '../rc/function_119.inc.js';
-import _ from 'lodash';
+import { natElimZero } from '../rc/function_119.inc.js';
 
 export function 자연수만_가능(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree);
     laco.apply(natElimZero);
     return laco.finalize();

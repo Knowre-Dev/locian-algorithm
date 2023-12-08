@@ -1,18 +1,17 @@
-import _ from 'lodash';
-
 export function fracComplex(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let numArr = [];
-    let denArr = [];
+
+    const operator = tree[0];
+
+    const numArr = [];
+    const denArr = [];
     let newOperand = [];
     if (operator === 'fraction') {
-        let num = fracComplex(tree_1[0]);
-        let den = fracComplex(tree_1[1]);
+        const tree_1 = tree.slice(1);
+        const num = fracComplex(tree_1[0]);
+        const den = fracComplex(tree_1[1]);
         if (num[0] === 'fraction') {
             numArr.push(num[1]);
             denArr.push(num[2]);
@@ -25,34 +24,32 @@ export function fracComplex(tree) {
         } else {
             denArr.push(den);
         }
-        
+
         let newNum = [];
         if (numArr.length > 1) {
             newNum = ['mulchain'];
-            for (let term of numArr) {
+            for (const term of numArr) {
                 newNum.push(['mul', term]);
             }
         } else {
             newNum = numArr[0];
         }
-        
+
         let newDen = [];
         if (denArr.length > 1) {
             newDen = ['mulchain'];
-            for (let term of denArr) {
+            for (const term of denArr) {
                 newDen.push(['mul', term]);
             }
         } else {
             newDen = denArr[0];
         }
         newOperand = [newNum, newDen];
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(fracComplex(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    const tree_1 = tree.slice(1);
+    for (const v of tree_1) {
+        newOperand.push(fracComplex(v));
     }
     return [operator].concat(newOperand);
-    
-    
 }
-

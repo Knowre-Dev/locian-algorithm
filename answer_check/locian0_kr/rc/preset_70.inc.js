@@ -1,15 +1,13 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {setAssociative} from '../rc/function_166.inc.js';
-import {setCommutative} from '../rc/function_167.inc.js';
-import _ from 'lodash';
+import { setAssociative } from '../rc/function_166.inc.js';
+import { setCommutative } from '../rc/function_167.inc.js';
 
 export function 집합연산_가능(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree);
     laco.apply(setAssociative);
-    laco.apply(setCommutative);       
+    laco.apply(setCommutative);
     return laco.finalize();
 }
 

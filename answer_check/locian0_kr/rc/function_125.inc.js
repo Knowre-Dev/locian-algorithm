@@ -1,128 +1,124 @@
-import {EuclidAlg} from '../rc/function_76.inc.js';
-import _ from 'lodash';
-
+import { EuclidAlg, fracSimpInt } from '../rc/function_76.inc.js';
 
 export function eqIneqMulProp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'equation') {
-        let con1 = sub_getConstant(tree_1[0]);
-        let con2 = sub_getConstant(tree_1[1]);
-        let con = con1.concat(con2);
-        con = Array.from(new Set(con));
-        if (con.includes(1)) {
-            return [operator].concat(tree_1);
-        }
-        if (con.length === 2) {
-            let div = EuclidAlg(con[0], con[1]);
-            if (div === 1) {
-                newOperand = tree_1;
-            } else {
-                let deno = ['natural', div.toString()];
-                let simp1 = sub_div(tree_1[0], deno);
-                let simp2 = sub_div(tree_1[1], deno);                  
-                newOperand = [simp1, simp2];
+
+    const operator = tree[0];
+    switch (operator) {
+        case 'equation': {
+            const tree_1 = tree.slice(1);
+            // let newOperand = [];
+            let con = sub_getConstant(tree_1[0]).concat(sub_getConstant(tree_1[1]));
+            con = Array.from(new Set(con));
+            if (con.includes(1)) {
+                return [operator].concat(tree_1);
             }
-        } else if (con.length > 2){
-            let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
-            for(let i = 2; i < con.length; i++){
-                div = EuclidAlg(div, parseInt(con[i]));
+            const con_length = con.length;
+            if (con_length === 2) {
+                const div = EuclidAlg(con[0], con[1]);
+                if (div === 1) {
+                    return tree;
+                }
+                const deno = ['natural', div.toString()];
+                return [operator].concat([sub_div(tree_1[0], deno), sub_div(tree_1[1], deno)]);
             }
-            if (div === 1) {
-                newOperand = tree_1;
-            }else{
-                let deno = ['natural', div.toString()];
-                let simp1 = sub_div(tree_1[0], deno);
-                let simp2 = sub_div(tree_1[1], deno);
-                newOperand = [simp1, simp2];
-            }             
-        } else if (con.length === 1){               
-            if (JSON.stringify(tree_1[0]) === JSON.stringify(['natural', '0'])) {
-                let deno = ['natural', con[0]];
-                let simp1 = sub_div(tree_1[0], deno);
-                let simp2 = sub_div(tree_1[1], deno);
-                newOperand = [simp1, simp2]; 
-            } else if (JSON.stringify(tree_1[1]) === JSON.stringify(['natural', '0'])) {
-                let deno = ['natural', con[0]];
-                let simp1 = sub_div(tree_1[0], deno);
-                let simp2 = sub_div(tree_1[1], deno);
-                newOperand = [simp1, simp2];
-            } else {
-                newOperand = tree_1;
+            if (con_length > 2) {
+                let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
+                for (let i = 2; i < con_length; i++) {
+                    div = EuclidAlg(div, parseInt(con[i]));
+                }
+                if (div === 1) {
+                    return tree;
+                }
+                const deno = ['natural', div.toString()];
+                return [operator].concat([sub_div(tree_1[0], deno), sub_div(tree_1[1], deno)]);
             }
-        } else {
-            newOperand = tree_1;
-        }
-    } else if (operator === 'inequality') {
-        let con = [];
-        for (let i = 0; i < tree_1.length; i++){
-            if (i % 2 === 0) {
-                con = con.concat(sub_getConstant(tree_1[i]));
+            if (con_length === 1) {
+                if (JSON.stringify(tree_1[0]) === JSON.stringify(['natural', '0'])) {
+                    const deno = ['natural', con[0]];
+                    return [operator].concat([sub_div(tree_1[0], deno), sub_div(tree_1[1], deno)]);
+                }
+                if (JSON.stringify(tree_1[1]) === JSON.stringify(['natural', '0'])) {
+                    const deno = ['natural', con[0]];
+                    return [operator].concat([sub_div(tree_1[0], deno), sub_div(tree_1[1], deno)]);
+                }
+                return tree;
             }
+            return tree;
         }
-        
-        con = [...new Set(con)];
-        
-        if (con.includes(1)) {
-            return [operator].concat(tree_1);
-        }
-        
-        if (con.length === 2) {
-            let div = EuclidAlg(con[0], con[1]);
-            if (div === 1) {
-                newOperand = tree_1;
-            } else {
-                let deno = ['natural', div.toString()];
-                
-                for (let i = 0; i < tree_1.length; i++){
+        case 'inequality': {
+            const tree_1 = tree.slice(1);
+            let con = [];
+            const tree_1_length = tree_1.length;
+            for (let i = 0; i < tree_1_length; i++) {
+                if (i % 2 === 0) {
+                    con = con.concat(sub_getConstant(tree_1[i]));
+                }
+            }
+
+            con = [...new Set(con)];
+            if (con.includes(1)) {
+                return tree;
+            }
+            const con_length = con.length;
+            if (con_length === 2) {
+                const div = EuclidAlg(con[0], con[1]);
+                if (div === 1) {
+                    return tree;
+                }
+                const newOperand = [];
+                const deno = ['natural', div.toString()];
+                for (let i = 0; i < tree_1_length; i++) {
                     i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
                     : newOperand.push(tree_1[i])
                 }
+                return [operator].concat(newOperand);
             }
-        } else if (con.length > 2) {
-            let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
-            for (let i = 2; i < con.length; i++) {
-                div = EuclidAlg(div, parseInt(con[i]));
-            }
-            if (div === 1) {
-                newOperand = tree_1;
-            } else {
-                let deno = ['natural', div.toString()];
-                for (let i = 0; i < tree_1.length; i++){
+            if (con_length > 2) {
+                let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
+                for (let i = 2; i < con_length; i++) {
+                    div = EuclidAlg(div, parseInt(con[i]));
+                }
+                if (div === 1) {
+                    return tree; // newOperand = tree_1;
+                }
+                const newOperand = [];
+                const deno = ['natural', div.toString()];
+                for (let i = 0; i < tree_1_length; i++) {
                     i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
                     : newOperand.push(tree_1[i])
                 }
-            }             
-        } else if (con.length === 1) {     
-            let is_included = false;
-            for (let term of tree_1) {
-                if (JSON.stringify(term) === JSON.stringify(['natural', '0'])) {
-                    is_included = true
+                return [operator].concat(newOperand);
+            }
+            if (con_length === 1) {
+                let is_included = false;
+                for (const term of tree_1) {
+                    if (JSON.stringify(term) === JSON.stringify(['natural', '0'])) {
+                        is_included = true;
+                        break;
+                    }
                 }
-            }   
-            if (is_included) {
-                let deno = ['natural', con[0]];
-                for (let i = 0; i < tree_1.length; i++) {
-                    i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
-                    : newOperand.push(tree_1[i])
+                if (is_included) {
+                    const deno = ['natural', con[0]];
+                    const newOperand = [];
+                    for (let i = 0; i < tree_1_length; i++) {
+                        i % 2 === 0 ? newOperand.push(sub_div(tree_1[i], deno))
+                        : newOperand.push(tree_1[i])
+                    }
+                    return [operator].concat(newOperand);
+                } else {
+                    return tree;
                 }
             } else {
-                newOperand = tree_1;
+                return tree;
             }
-        } else {
-            newOperand = tree_1;
         }
-    } else {
-        newOperand = tree_1;
-    }     
-    return [operator].concat(newOperand);
-    
-    
+        default: {
+            return tree;
+        }
+    }
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
@@ -143,46 +139,61 @@ export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return con;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    if (operator === 'natural') {
-        if (tree_1[0] !== '0') {
-            con.push(parseInt(tree_1[0]));
+
+    const operator = tree[0];
+    switch (operator) {
+        case 'natural': {
+            const tree_1 = tree.slice(1);
+            if (tree_1[0] !== '0') {
+                con.push(parseInt(tree_1[0]));
+            }
+            break;
         }
-    } else if (operator === 'mulchain') {        
-        for (let t of tree_1) {
-            if (t[0] === 'mul') {
+        case 'mulchain': {
+            const tree_1 = tree.slice(1);
+            for (const t of tree_1) {
+                if (t[0] === 'mul') {
+                    con = con.concat(sub_getConstant(t[1]));
+                }
+            }
+
+            con = Array.from(new Set(con));
+            if (con.includes(1)) {
+                    if (con.length !== 1) {
+                    const con1 = [];
+                    for (const c of con) {
+                        if (c !== 1) {
+                            con1.push(c);
+                        }
+                    }
+                        con = con1;
+                }
+            }
+            break;
+        }
+        case 'addchain': {
+            const tree_1 = tree.slice(1);
+            for (const t of tree_1) {
                 con = con.concat(sub_getConstant(t[1]));
             }
+            break;
         }
-        
-        con = Array.from(new Set(con));
-        if (con.includes(1)){
-                if (con.length !== 1) {
-                let con1 = [];
-                for (let c of con){
-                    if (c !== 1) {
-                        con1.push(c);                            
-                    }
-                }            
-                    con = con1;
+        case 'negative': {
+            const tree_1 = tree.slice(1);
+            for (const t of tree_1) {
+                con = con.concat(sub_getConstant(t));
             }
+            break;
         }
-    } else if (operator === 'addchain') {
-        for (let t of tree_1) {
-            con = con.concat(sub_getConstant(t[1]));
-        }           
-    } else if (operator === 'negative') {
-        for (let t of tree_1) {
-            con = con.concat(sub_getConstant(t));
+        case 'power': {
+            con.push(1);
+            break;
         }
-    } else if (operator === 'power') {
-        con.push(1);
-    } else if (operator === 'variable'){
-        con.push(1);
-    } 
-
+        case 'variable': {
+            con.push(1);
+            break;
+        }
+    }
     return con;
 }
 /*
@@ -200,21 +211,14 @@ console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
 
-import {fracNegative} from '../rc/function_53.inc.js';
-import {fracSeparation} from '../rc/function_54.inc.js';
-import {fracSimpInt} from '../rc/function_76.inc.js';
+import { fracNegative } from '../rc/function_53.inc.js';
+import { fracSeparation } from '../rc/function_54.inc.js';
 
 export function sub_div(tree, deno) {
-    
-    let frac1 = ['fraction', tree, deno];
-    let frac2 = fracNegative(frac1);
-    let separation = fracSeparation(frac2);
-    let simp = fracSimpInt(separation);
+    const frac1 = ['fraction', tree, deno];
+    const frac2 = fracNegative(frac1);
+    const separation = fracSeparation(frac2);
+    const simp = fracSimpInt(separation);
 
     return simp;
-    
 }
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//

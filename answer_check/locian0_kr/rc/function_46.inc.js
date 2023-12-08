@@ -1,16 +1,9 @@
-import {rearrangeTree} from '../rc/function_61.inc.js';
-import _ from 'lodash';
+import { rearrangeTree } from '../rc/function_61.inc.js';
 
 export function mulCommutative(tree) {
-   
-    return Array.isArray(tree) ? rearrangeTree(tree, ['mulchain']) 
+    return Array.isArray(tree) ? rearrangeTree(tree, ['mulchain'])
         : tree;
-    
-
 }
-
-
-
 
 /*
 import {LatexToTree, compareMathTree} from '../checkmath.js';

@@ -1,82 +1,67 @@
-
 /*
 Simplifies any numerical constant expression inside the given tree
 
 Author: epark
 */
-import {addAssociative} from '../rc/function_45.inc.js';
-import {fracMfrac} from '../rc/function_52.inc.js';
-import {fracNegative} from '../rc/function_53.inc.js';
-import {addIdentity} from '../rc/function_55.inc.js';
-import {mulIdentity} from '../rc/function_56.inc.js';
-import {powIdentity} from '../rc/function_59.inc.js';
-import {fracComplex} from '../rc/function_69.inc.js';
-import {addNegative} from '../rc/function_71.inc.js';
-import {fracSimpInt} from '../rc/function_76.inc.js';
-import {fracSimpVar} from '../rc/function_77.inc.js';
-import {mulZero} from '../rc/function_82.inc.js';
-import {array2ChainTree, findGCF, isNumeric} from '../rc/function_152.inc.js';
-import {mulAssociative} from '../rc/function_157.inc.js';
-import {divFrac} from '../rc/function_161.inc.js';            
-import _ from 'lodash';
-            
-            
-            
-            
-            
-            
-            
+
+import { addAssociative } from '../rc/function_45.inc.js';
+import { fracDecimal } from '../rc/function_49.inc.js';
+import { fracMfrac } from '../rc/function_52.inc.js';
+import { fracNegative } from '../rc/function_53.inc.js';
+import { addIdentity } from '../rc/function_55.inc.js';
+import { mulIdentity } from '../rc/function_56.inc.js';
+import { powIdentity } from '../rc/function_59.inc.js';
+import { fracComplex } from '../rc/function_69.inc.js';
+import { addNegative } from '../rc/function_71.inc.js';
+import { fracSimpInt } from '../rc/function_76.inc.js';
+import { fracSimpVar } from '../rc/function_77.inc.js';
+import { rdecToFrac } from '../rc/function_78.inc.js';
+import { mulZero } from '../rc/function_82.inc.js';
+import { array2ChainTree, findGCF, isNumeric } from '../rc/function_152.inc.js';
+import { mulAssociative } from '../rc/function_157.inc.js';
+import { divFrac } from '../rc/function_161.inc.js';
 
 export function exprSimpConst(tree = null) {
-    
     if (!Array.isArray(tree)) {
         return tree;
     }
     if (tree.length === 0) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    let oldtree;
-    let subresult;
-    let newtree;
-    let termArr;
-    let basetree;
-    let expotree;
+
+    const operator = tree[0];
+    const newOperand = [];
     switch (operator) {
         case 'infinity': // fin
         case 'natural': // fin
-        case 'variable': // fin
-            newOperand = tree_1;
-            break;
-        case 'decimal': // fin
+        case 'variable': { // fin
+            return tree;
+        }
+        case 'decimal': { // fin
             // Possible output type: fraction
-            oldtree = [operator].concat(tree_1);
-            return fracDecimal(oldtree);
-        case 'rdecimal': // fin
+            return fracDecimal(tree);
+        }
+        case 'rdecimal': { // fin
             // Possible output type: fraction
-            oldtree = [operator].concat(tree_1);
-            return rdecToFrac(oldtree);        
-        case 'mfraction':
-            oldtree = [operator].concat(tree_1);
-            return fracMfrac(oldtree);
-        case 'negative': // fin
+            return rdecToFrac(tree);
+        }
+        case 'mfraction': {
+            return fracMfrac(tree);
+        }
+        case 'negative': { // fin
             // Possible output type: ANYTHING
-            
-            subresult = exprSimpConst(tree_1[0]);
+            const subresult = exprSimpConst(tree.slice(1)[0]);
             if (subresult[0] === 'negative') {
                 return subresult[1];
             }
             newOperand.push(subresult);
-            break;
-        
-        case 'absolute': // fin
+            return [operator].concat(newOperand);
+        }
+        case 'absolute': { // fin
             // Possible output types:
             // absolute,
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
-            subresult = exprSimpConst(tree_1[0]);
+            let subresult = exprSimpConst(tree.slice(1)[0]);
             if (subresult[0] === 'negative') {
                 subresult = subresult[1];
             }
@@ -84,31 +69,27 @@ export function exprSimpConst(tree = null) {
                 return subresult;
             }
             newOperand.push(subresult);
-            break;
-        case 'fraction': // fin
-            // Possible output types: ANYTHING
+            return [operator].concat(newOperand);
+        }
+        case 'fraction': { // fin
+            // Possible output types: ANYTHINGlet
+            const tree_1 = tree.slice(1);
             if (tree_1[0][0] === 'power' &&
-                tree_1[1][0] === 'power' && 
+                tree_1[1][0] === 'power' &&
                 tree_1[0][2] === tree_1[1][2]) {
-                newtree = [
+                const newtree = [
                     'power',
                     ['fraction', tree_1[0][1], tree_1[1][1]],
                     tree_1[0][2]
                 ];
-                newtree = exprSimpConst(newtree);
-                return newtree;
+                return exprSimpConst(newtree);
             }
-            let numer = exprSimpConst(tree_1[0]);
-            let denom = exprSimpConst(tree_1[1]);
-            tree_1 = [operator, numer, denom];
-            tree_1 = fracComplex(tree_1);
-            tree_1 = fracNegative(tree_1);
-            tree_1 = fracSimpInt(tree_1);
-            tree_1 = fracSimpVar(tree_1);
-            return tree_1;
+            return fracSimpVar(fracSimpInt(fracNegative(fracComplex([operator, exprSimpConst(tree_1[0]), exprSimpConst(tree_1[1])]))));
+        }
         case 'nthroot':
-        case 'squareroot':
+        case 'squareroot': {
             // rootN is the n in nth root (e.g., 2 for square root, 3 for a cubic root)
+            const tree_1 = tree.slice(1);
             let rootN;
             let radicand;
             if (operator === 'squareroot') {
@@ -118,30 +99,18 @@ export function exprSimpConst(tree = null) {
                 rootN = exprSimpConst(tree_1[0]);
                 radicand = exprSimpConst(tree_1[1]);
             }
-            expotree = ['fraction', ['natural', '1'], rootN];
-            expotree = fracComplex(expotree);
-            newtree = ['power', radicand, expotree];
-            newtree = exprSimpConst(newtree);
-            return newtree;
-        case 'addchain': // fin
-        
-            tree_1 = array2ChainTree(tree_1);
-            
-            tree_1 = addIdentity(tree_1);
-            
-            tree_1 = addAssociative(tree_1);
-            
-            tree_1 = addNegative(tree_1);
-            
-            
+            return exprSimpConst(['power', radicand, fracComplex(['fraction', ['natural', '1'], rootN])]);
+        }
+        case 'addchain': { // fin
+            let tree_1 = tree.slice(1);
+            tree_1 = addNegative(addAssociative(addIdentity(array2ChainTree(tree_1))));
             if (tree_1[0] !== 'addchain') {
                 return tree_1;
             }
 
             tree_1 = tree_1.slice(1);
-            termArr = [];
-        
-            for (let term of tree_1) {
+            const termArr = [];
+            for (const term of tree_1) {
                 let op = term[0];
                 let subtree = exprSimpConst(term[1]);
                 if (subtree[0] === 'negative') {
@@ -155,18 +124,16 @@ export function exprSimpConst(tree = null) {
                 }
                 termArr.push([op, subtree]);
             }
-            newtree = array2ChainTree(termArr, true);
-            
-            return newtree;
-        case 'mulchain': // fin
-        
+            return array2ChainTree(termArr, true);
+        }
+        case 'mulchain': { // fin
+            let tree_1 = tree.slice(1);
             tree_1 = array2ChainTree(tree_1);
             tree_1 = mulAssociative(tree_1);
             tree_1 = tree_1.slice(1);
-            termArr = [];
+            const termArr = [];
             let sign = 1;
-            for (let term of tree_1) {
-                let op = term[0];
+            for (const term of tree_1) {
                 let subtree = exprSimpConst(term[1]);
                 // Take all negative signs out to the front
                 if (Array.isArray(subtree)) {
@@ -175,32 +142,26 @@ export function exprSimpConst(tree = null) {
                         subtree = subtree[1];
                     }
                 }
-                termArr.push([op, subtree]);
+                termArr.push([term[0], subtree]);
             }
-            newtree = array2ChainTree(termArr, true);
-            newtree = mulZero(newtree);
-            newtree = mulIdentity(newtree);
-            newtree = mulAssociative(newtree);
-            if (sign < 0) {
-                newtree = ['negative', newtree];
-            }
-            return newtree;
-        case 'power':
+            const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(termArr, true))));
+            return sign < 0 ? ['negative', newtree] : newtree;
+        }
+        case 'power': {
             // Possible output types:
             // negative, fraction, squareroot, power
-            basetree = exprSimpConst(tree_1[0]);
-            expotree = exprSimpConst(tree_1[1]);
-            
-            
+            const tree_1 = tree.slice(1);
+            let basetree = exprSimpConst(tree_1[0]);
+            let expotree = exprSimpConst(tree_1[1]);
             // If the original expotree is a fraction with even denominator,
             // the result must work with the absolute value of the original base
             // So make a flag variable to store that info
             let evenRootFlag = false;
             if (expotree[0] === 'fraction') {
-                let gcfArr = findGCF(expotree[2], ['natural', '2']);
-                evenRootFlag = JSON.stringify(gcfArr['const']) === JSON.stringify(['natural', '2']);
+                const gcfArr = findGCF(expotree[2], ['natural', '2']);
+                evenRootFlag = JSON.stringify(gcfArr.const) === JSON.stringify(['natural', '2']);
             }
-            
+
             // Simplify (a^b)^c to a^(bc)
             if (basetree[0] === 'power') {
                 expotree = ['mulchain', ['mul', basetree[2]], ['mul', expotree]];
@@ -210,52 +171,39 @@ export function exprSimpConst(tree = null) {
             }
             // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
             // Reflect this by modifying basetree as applicable
-            let cons = findGCF(expotree, ['natural', '2'])['const'];
-           
-            let oddExpoFlag = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
-            if (expotree[0] === 'natural' && oddExpoFlag && evenRootFlag)
+            const cons = findGCF(expotree, ['natural', '2']).const;
+            const oddExpoFlag = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
+            if (expotree[0] === 'natural' && oddExpoFlag && evenRootFlag) {
                 basetree = ['absolute', basetree];
-            
-            let mtermArr = [];
+            }
+            const mtermArr = [];
             // Convert fraction to division just to make coding easier
-            // 
             // The if statement below is omitted out (epark 20180830)
             // because this causes NAN output for inputs like ((103/100)^t),
             // where changing this to (103^t)/(100^t) for large t
             // causes float values to become NAN at evaluateEx_new
-            /*//
-            if (basetree[0] === 'fraction')
-                basetree = ['mulchain', ['mul', basetree[1]], ['div', basetree[2]]];
-            //*/
+
             if (basetree[0] === 'mulchain') {
-                let basetree_1 = basetree.slice(1);
-                for (let term of basetree_1) {
-                    let subtree = exprSimpConst(['power', term[1], expotree]);
-                    mtermArr.push([term[0], subtree]);
+                const basetree_1 = basetree.slice(1);
+                for (const term of basetree_1) {
+                    mtermArr.push([term[0], exprSimpConst(['power', term[1], expotree])]);
                 }
             } else {
                 mtermArr.push(['mul', ['power', basetree, expotree]]);
             }
-            
-            newtree = array2ChainTree(mtermArr, true);
-            
-            
-            newtree = divFrac(newtree);
+
             // Remove any power of 1 before returning
-            newtree = powIdentity(newtree);
-            //newtree = mulIdentity(newtree);
-            return newtree;
-        default:
-            for (let v of tree_1) {
+            return powIdentity(divFrac(array2ChainTree(mtermArr, true)));
+        }
+        default: {
+            const tree_1 = tree.slice(1);
+            for (const v of tree_1) {
                 newOperand.push(exprSimpConst(v));
             }
+            return [operator].concat(newOperand);
+        }
     }
-
-    return [operator].concat(newOperand);
-    
-    
 }
-
 
 /*
 import {LatexToTree} from '../checkmath.js';

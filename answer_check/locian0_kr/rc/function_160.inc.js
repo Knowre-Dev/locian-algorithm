@@ -1,44 +1,44 @@
-import _ from 'lodash';
-
 export function mulNegative(tree) {
-    
     if (!Array.isArray(tree) || tree.length < 1) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let operand = tree.slice(1);
-    let newOperand = [];
-    let sign = 1;
-    if (operator === 'negative') {
-        let newsubtree = mulNegative(operand[0]);
-        if (newsubtree[0] === 'negative') {
-            return newsubtree[1];
-        }
-        return [operator, newsubtree];
-    }
-    if (operator === 'mulchain') {
-        for (let mterm of operand) {
-            if (mterm[1][0] === 'negative') {
-                sign = -1 * sign;
-                mterm[1] = mterm[1][1];
+    const operator = tree[0];
+    switch (operator) {
+        case 'negative': {
+            const newsubtree = mulNegative(tree.slice(1)[0]);
+            if (newsubtree[0] === 'negative') {
+                return newsubtree[1];
             }
-            newOperand.push(mterm);
+            return [operator, newsubtree];
         }
-    } else {
-        for (let subtree of operand) {
-            let newsubtree = mulNegative(subtree);
-            if (operator === 'fraction' && newsubtree[0] === 'negative') {
-                sign = -1 * sign;
-                newsubtree = newsubtree[1];
+        case 'mulchain': {
+            const operand = tree.slice(1);
+            const newOperand = [];
+            let sign = 1;
+            for (const mterm of operand) {
+                if (mterm[1][0] === 'negative') {
+                    sign = -1 * sign;
+                    mterm[1] = mterm[1][1];
+                }
+                newOperand.push(mterm);
             }
-            newOperand.push(newsubtree);
+            return sign === -1 ? ['negative', [operator].concat(newOperand)]
+                : [operator].concat(newOperand);
+        }
+        default: {
+            const operand = tree.slice(1);
+            const newOperand = [];
+            let sign = 1;
+            for (const subtree of operand) {
+                let newsubtree = mulNegative(subtree);
+                if (operator === 'fraction' && newsubtree[0] === 'negative') {
+                    sign = -1 * sign;
+                    newsubtree = newsubtree[1];
+                }
+                newOperand.push(newsubtree);
+            }
+            return sign === -1 ? ['negative', [operator].concat(newOperand)]
+                : [operator].concat(newOperand);
         }
     }
-    
-    let tree_1 = [operator].concat(newOperand);
-    return sign === -1 ? ['negative', tree_1]
-        : tree_1;
-    
 }
-

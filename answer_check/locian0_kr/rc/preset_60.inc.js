@@ -1,11 +1,9 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {varReverseShift} from '../rc/function_63.inc.js';
-import _ from 'lodash';
+import { varReverseShift } from '../rc/function_63.inc.js';
 
 export function 역순밀림_가능(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree);
     laco.apply(varReverseShift);
     return laco.finalize();

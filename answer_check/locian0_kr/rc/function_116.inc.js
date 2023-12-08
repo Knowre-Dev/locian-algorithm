@@ -1,20 +1,16 @@
-import _ from 'lodash';
-
 export function rootSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
+    const tree_1 = tree.slice(1);
     if (operator === 'squareroot' && tree_1[0][0] === 'natural') {
-        let factors = pfactor(parseInt(tree_1[0][1]));
-        
+        const factors = pfactor(parseInt(tree_1[0][1]));
         let inside = 1;
         let outside = 1;
-        let factors_entries = factors.entries();
-        for (let [factor, power] of factors_entries) {
+        const factors_entries = factors.entries();
+        for (const [factor, power] of factors_entries) {
             if (power === undefined) {
                 continue;
             }
@@ -24,32 +20,43 @@ export function rootSimpInt(tree) {
                 outside *= Math.pow(factor, power / 2);
             } else {
                 inside *= factor;
-                outside *= Math.pow(factor, (power - 1)/2);
+                outside *= Math.pow(factor, (power - 1) / 2);
             }
         }
         if (inside === 1) {
-            newOperand = tree_1;
-            
-        } else if (outside === 1) {
-            newOperand.push(tree_1[0]);
-           
-        } else {
-            operator = 'mulchain';
-            newOperand.push(['mul', ['natural', outside.toString()]]);
-            newOperand.push(['mul', ['squareroot', ['natural', inside.toString()]]]);
+            return tree;
         }
-    } else if (operator === 'mulchain') {
-        let cons = [];
-        for (let term of tree_1) {
+        if (outside === 1) {
+            const newOperand = [];
+            newOperand.push(tree_1[0]);
+            return [operator].concat(newOperand);
+        }
+        operator = 'mulchain';
+        const newOperand = [];
+        newOperand.push(['mul', ['natural', outside.toString()]]);
+        newOperand.push(['mul', ['squareroot', ['natural', inside.toString()]]]);
+        return [operator].concat(newOperand);
+    }
+    if (operator === 'mulchain') {
+        const newOperand = [];
+        const cons = [];
+        for (const term of tree_1) {
             if (term[0] === 'mul' && term[1][0] === 'squareroot') {
-                let nroot = rootSimpInt(term[1]);
-                if (nroot[0] === 'natural') {
-                    cons.push(['mul', nroot]);
-                } else if (nroot[0] === 'mulchain') {
-                    cons.push(nroot[1]);
-                    newOperand.push(nroot[2]);
-                } else if (nroot[0] === 'squareroot') {
-                    newOperand.push(['mul', nroot]);
+                const nroot = rootSimpInt(term[1]);
+                switch (nroot[0]) {
+                    case 'natural': {
+                        cons.push(['mul', nroot]);
+                        break;
+                    }
+                    case 'mulchain': {
+                        cons.push(nroot[1]);
+                        newOperand.push(nroot[2]);
+                        break;
+                    }
+                    case 'squareroot': {
+                        newOperand.push(['mul', nroot]);
+                        break;
+                    }
                 }
             } else if (term[0] === 'mul' && ['natural', 'fraction'].includes(term[1][0])) {
                 cons.push(term);
@@ -57,12 +64,15 @@ export function rootSimpInt(tree) {
                 newOperand.push(term);
             }
         }
-        if (cons.length === 1) {
+        const cons_length = cons.length;
+        if (cons_length === 1) {
             newOperand.unshift(cons[0]);
-        } else if (cons.length > 1) {
+            return [operator].concat(newOperand);
+        }
+        if (cons_length > 1) {
             let num = 1;
             let den = 1;
-            for (let term of cons) {
+            for (const term of cons) {
                 if (term[1][0] === 'natural') {
                     num *= parseInt(term[1][1]);
                 } else if (term[1][0] === 'fraction') {
@@ -77,23 +87,22 @@ export function rootSimpInt(tree) {
                 mul = ['mul', ['fraction', ['natural', num.toString()], ['natural', den.toString()]]];
             }
             newOperand.unshift(mul);
+            return [operator].concat(newOperand);
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(rootSimpInt(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(rootSimpInt(v));
     }
     return [operator].concat(newOperand);
-    
-    
 }
 
 export function pfactor(n) {
-    
     let d = 2;
-    let factors = [];
+    const factors = [];
     let dmax = Math.floor(Math.sqrt(n));
-    let sieve = [];
+    const sieve = [];
     sieve.fill(1, 1, dmax);
     do {
         let r = false;
@@ -112,7 +121,6 @@ export function pfactor(n) {
             for (let i = d; i <= dmax; i += d) {
                 sieve[i] = 0;
             }
-           
             do {
                 d++;
             } while (d < dmax && sieve[d] !== 1);
@@ -126,5 +134,3 @@ export function pfactor(n) {
     } while (n > 1 && d <= dmax);
     return factors;
 }
-
-

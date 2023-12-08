@@ -1,30 +1,30 @@
-import _ from 'lodash';
-
 export function addNegative(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
+    const tree_1 = tree.slice(1);
     let newOperand = [];
     if (operator === 'negative' && tree_1.length === 1) {
-        let addchain = addNegative(tree_1[0]);           
+        const addchain = addNegative(tree_1[0]);
         if (addchain[0] === 'addchain') {
             operator = addchain.shift();
-            for (let term of addchain) {
-                term[0] === 'add' ?  newOperand.push(['sub', term[1]])
+            for (const term of addchain) {
+                term[0] === 'add' ? newOperand.push(['sub', term[1]])
                 : term[0] === 'sub' ? newOperand.push(['add', term[1]])
                 : newOperand.push(term)
             }
         } else {
             newOperand = tree_1;
         }
-    } else if (operator === 'addchain') {
-        for (let term of tree_1) {
+        return [operator].concat(newOperand);
+    }
+    if (operator === 'addchain') {
+        for (const term of tree_1) {
             if (term[0] === 'sub' && term[1][0] === 'addchain') {
-                let term_1 = term[1].slice(1)
-                for (let inner of term_1) {
+                const term_1 = term[1].slice(1)
+                for (const inner of term_1) {
                     inner[0] === 'add' ? newOperand.push(['sub', inner[1]])
                     : inner[0] === 'sub' ? newOperand.push(['add', inner[1]])
                     : newOperand.push(inner)
@@ -33,13 +33,10 @@ export function addNegative(tree) {
                 newOperand.push(term);
             }
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(addNegative(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    for (const v of tree_1) {
+        newOperand.push(addNegative(v));
     }
     return [operator].concat(newOperand);
-
-    
 }
-

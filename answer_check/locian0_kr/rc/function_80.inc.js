@@ -1,65 +1,58 @@
-import _ from 'lodash';
-
 export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
+    const operator = tree[0];
     if (operator === 'addchain') {
-        for (let term of tree_1) {
-            if (term[0] === 'sub') {
-                if (checkZeroEquiv(term[1])) {
-                    newOperand.push(['add', term[1]]);
-                } else {
-                    newOperand.push(term);
-                }
-            } else {
-                newOperand.push(term);
-            }
+        const tree_1 = tree.slice(1);
+        const newOperand = [];
+        for (const term of tree_1) {
+            term[0] === 'sub' ? checkZeroEquiv(term[1]) ? newOperand.push(['add', term[1]])
+                                : newOperand.push(term)
+            : newOperand.push(term);
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(addPolyZero(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    const tree_1 = tree.slice(1);
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(addPolyZero(v));
     }
     return [operator].concat(newOperand);
-    
-    
 }
 
 export function checkZeroEquiv(tree) {
-    
-    let result = false
     if (!Array.isArray(tree)) {
-        return result;
+        return false;
     }
-   
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
+
+    const operator = tree[0];
     switch (operator) {
-        case 'fraction':
-            result = checkZeroEquiv(tree_1[0]);
-            break;
-        case 'mulchain':
-            let tree_1_0 = tree_1[0];
-            for (let term of tree_1_0) {
+        case 'fraction': {
+            const tree_1 = tree.slice(1);
+            return checkZeroEquiv(tree_1[0]);
+        }
+        case 'mulchain': {
+            const tree_1 = tree.slice(1);
+            const tree_1_0 = tree_1[0];
+            let result = false
+            for (const term of tree_1_0) {
                 if (term[0] === 'natural' && term[1] === '0') {
                     result = true;
                 }
             }
-            break;          
-        case 'natural':
+            return result;
+        }
+        case 'natural': {
+            const tree_1 = tree.slice(1);
+            let result = false
             if (tree_1[0] === '0') {
                 result = true;
             }
-            break;
-        default:
-            break;
+            return result;
+        }
+        default: {
+            return false;
+        }
     }
-    
-    return result;
 }
-

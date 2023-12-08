@@ -1,41 +1,30 @@
-import _ from 'lodash';
-
 export function mulToNega(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    let newTree = [];
     if (operator === 'mulchain') {
-        if(tree_1[0][1][0] === 'negative' && tree_1[0][1][1][0] === 'natural' && tree_1[0][1][1][1] !== '1'){
-            let first_term = tree_1.shift();
+        const tree_1 = tree.slice(1);
+        if (tree_1[0][1][0] === 'negative' && tree_1[0][1][1][0] === 'natural' && tree_1[0][1][1][1] !== '1') {
             operator = 'negative';
-            let newFirst = ['mul', first_term[1][1]];     
-
-            newTree.push(newFirst);
-            for (let t of tree_1) {
-                newTree.push(t);
-            }
-
+            const first_term = tree_1.shift();
+            let newTree = [];
+            newTree.push(['mul', first_term[1][1]]);
+            newTree = newTree.concat(tree_1);
+            const newOperand = [];
             newOperand.push('mulchain');
-            for (let n of newTree) {
+            for (const n of newTree) {
                 newOperand.push(n);
             }
-            
-            newOperand = [newOperand];
-        } else {
-            newOperand = tree_1;
+            return [operator, newOperand];
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(mulToNega(v));
-        }
+        return tree;
     }
-    return [operator].concat(newOperand);    
-    
-    
+    const tree_1 = tree.slice(1);
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(mulToNega(v));
+    }
+    return [operator].concat(newOperand);
 }
-

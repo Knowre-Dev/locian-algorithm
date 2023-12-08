@@ -1,52 +1,41 @@
-import _ from 'lodash';
-
 export function rootToExp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    if (operator === 'nthroot') {
-        let newPower = tree_1[0];
-        if (tree_1[1][0] === 'mulchain') { // 루트 안이 곱셈식일 경우
-            let newOperand = [];
-            operator = 'mulchain';
-            let tree_1_1 = tree_1[1];
-            for (let v of tree_1_1) {
-                if (Array.isArray(v)) {
-                    let term = ['nthroot', newPower, v[1]];
-                    newOperand.push([v[0], rootToExp(term)]);
-                } else {
-                    newOperand.push(v);
-                }                    
+
+    const operator = tree[0];
+    switch (operator) {
+        case 'nthroot': {
+            const tree_1 = tree.slice(1);
+            switch (tree_1[1][0]) {
+                case 'mulchain': { // 루트 안이 곱셈식일 경우
+                    const newOperand = [];
+                    // operator = 'mulchain';
+                    const tree_1_1 = tree_1[1];
+                    for (const v of tree_1_1) {
+                        Array.isArray(v) ? newOperand.push([v[0], rootToExp(['nthroot', tree_1[0], v[1]])])
+                        : newOperand.push(v);
+                    }
+                    return newOperand;
+                }
+                case 'power': { // 루트 안이 거듭제곱일 경우
+                    return ['power', tree_1[1][1], ['fraction', tree_1[1][2], tree_1[0]]];
+                }
+                default: {
+                    return ['power', tree_1[1], ['fraction', ['natural', '1'], tree_1[0]]];
+                }
             }
-            return newOperand;                
-        } else if (tree_1[1][0] === 'power') { // 루트 안이 거듭제곱일 경우
-            newPower = ['fraction', tree_1[1][2], newPower];                  
-            let newOperand = ['power', tree_1[1][1], newPower];
-            
-            return newOperand;               
-        } else {
-            newPower = ['fraction', ['natural', '1'], newPower];
-            let newOperand = ['power', tree_1[1], newPower];
-            
-            return newOperand;
         }
-    } else if (operator === 'squareroot') {
-        let newOperand = [['natural', '2']].concat(tree_1);
-        tree_1 = ['nthroot'].concat(newOperand);
-        return rootToExp(tree_1);
-    } else {
-        let newOperand = [];
-        for (let v of tree_1) {
-            newOperand.push(rootToExp(v));
-        }            
-        tree_1 = [operator].concat(newOperand);
+        case 'squareroot': {
+            return rootToExp(['nthroot'].concat([['natural', '2']].concat(tree.slice(1))));
+        }
+        default: {
+            const tree_1 = tree.slice(1);
+            const newOperand = [];
+            for (const v of tree_1) {
+                newOperand.push(rootToExp(v));
+            }
+            return [operator].concat(newOperand);
+        }
     }
-    
-    
-    return tree_1;
 }
-
-

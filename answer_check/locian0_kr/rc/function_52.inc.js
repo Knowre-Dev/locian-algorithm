@@ -1,29 +1,26 @@
-import _ from 'lodash';
-
 export function fracMfrac(tree) {
-    
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
-    let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
-    if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
-        let num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
-        let den = tree_1[2];
 
+    let operator = tree[0];
+    const tree_1 = tree.slice(1);
+    if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
+        const newOperand = [];
+        const num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
+        const den = tree_1[2];
         operator = 'fraction';
         newOperand.push(num);
         newOperand.push(den);
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(fracMfrac(v));
-        }
+        return [operator].concat(newOperand);
+    }
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(fracMfrac(v));
     }
     return [operator].concat(newOperand);
-    
 }
+
 /*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = '\\mfrac[1]{7}{3}';

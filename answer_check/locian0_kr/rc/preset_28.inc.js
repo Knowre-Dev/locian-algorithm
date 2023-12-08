@@ -1,28 +1,25 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {mulCommutative} from '../rc/function_46.inc.js';
-import {fracExpress} from '../rc/function_48.inc.js';
-import {fracDecimal} from '../rc/function_49.inc.js';
-import {negParenthesis} from '../rc/function_50.inc.js';
-import {fracMfrac} from '../rc/function_52.inc.js';
-import {fracNegative} from '../rc/function_53.inc.js';
-import {addIdentity} from '../rc/function_55.inc.js';
-import {mulIdentity} from '../rc/function_56.inc.js';
-import {fracIdentity} from '../rc/function_58.inc.js';
-import {powIdentity} from '../rc/function_59.inc.js';
-import {eqIdentity} from '../rc/function_65.inc.js';
-import {ineqIdentity} from '../rc/function_66.inc.js';
-import {eqMulNeg} from '../rc/function_73.inc.js';
-import {rdecToFrac} from '../rc/function_78.inc.js';
-import {mulZero} from '../rc/function_82.inc.js';
-import {addAdjacentSigns} from '../rc/function_83.inc.js';
-import {decIdentity} from '../rc/function_86.inc.js';
-import _ from 'lodash';
-
+import { mulCommutative } from '../rc/function_46.inc.js';
+import { fracExpress } from '../rc/function_48.inc.js';
+import { fracDecimal } from '../rc/function_49.inc.js';
+import { negParenthesis } from '../rc/function_50.inc.js';
+import { fracMfrac } from '../rc/function_52.inc.js';
+import { fracNegative } from '../rc/function_53.inc.js';
+import { addIdentity } from '../rc/function_55.inc.js';
+import { mulIdentity } from '../rc/function_56.inc.js';
+import { fracIdentity } from '../rc/function_58.inc.js';
+import { powIdentity } from '../rc/function_59.inc.js';
+import { eqIdentity } from '../rc/function_65.inc.js';
+import { ineqIdentity } from '../rc/function_66.inc.js';
+import { eqMulNeg } from '../rc/function_73.inc.js';
+import { rdecToFrac } from '../rc/function_78.inc.js';
+import { mulZero } from '../rc/function_82.inc.js';
+import { addAdjacentSigns } from '../rc/function_83.inc.js';
+import { decIdentity } from '../rc/function_86.inc.js';
 
 export function standard_form(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree);
     laco.apply(eqIdentity);
     laco.apply(ineqIdentity);
@@ -34,7 +31,7 @@ export function standard_form(tree = null) {
     laco.apply(decIdentity);
     laco.apply(mulCommutative);
     laco.apply(eqMulNeg); // needs the commutative property?
-    //laco.apply(eqMulProp);
+    // laco.apply(eqMulProp);
     laco.apply(rdecToFrac);
     laco.apply(fracMfrac);
     laco.apply(fracDecimal);

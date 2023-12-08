@@ -1,72 +1,53 @@
-import _ from 'lodash';
-
 export function absToMul(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
     let newOperand = [];
-    
+
     if (operator === 'absolute') {
+        const tree_1 = tree.slice(1);
         if (tree_1[0][0] === 'variable') {
-            newOperand = tree_1;
-        } else if (tree_1[0][0] === 'negative' 
-            && tree_1[0][1][0] === 'variable'){
-            let ntree = tree_1[0];
-            ntree.shift();
-            newOperand = ntree;
-        } else if (tree_1[0][0] === 'mulchain'){
-            let ntree = tree_1[0];
-            ntree.shift();
-            let vari = [];
-            let nat = [];
-            for (let nt of ntree) {
+            return tree;
+        }
+        if (tree_1[0][0] === 'negative' && tree_1[0][1][0] === 'variable') {
+            const ntree = tree_1[0].slice(1);
+            return [operator].concat(ntree);
+        }
+        if (tree_1[0][0] === 'mulchain') {
+            const ntree = tree_1[0].slice(1);
+            const vari = [];
+            const nat = [];
+            for (const nt of ntree) {
                 if (nt[1][0] === 'negative') {
-                    if (nt[1][1][0] === 'variable') {
-                        vari.push([nt[0], nt[1][1]]);
-                    } else {
-                        nat.push([nt[0], nt[1][1]]);
-                    }
+                    nt[1][1][0] === 'variable' ? vari.push([nt[0], nt[1][1]])
+                    : nat.push([nt[0], nt[1][1]]);
                 } else {
-                    if (nt[1][0] === 'variable') {
-                        vari.push(nt);
-                    } else {
-                        nat.push(nt);                            
-                    }
-                }                   
+                    nt[1][0] === 'variable' ? vari.push(nt)
+                    : nat.push(nt);
+                }
             }
             if (nat.length === 0) {
                 newOperand.push(['mulchain'].concat(vari));
-            } else {
-                if (vari.length === 1) {
-                    let abs_arr = [vari[0][0], ['absolute', vari[0][1]]];
-                    let mul_arr = nat.concat([abs_arr]);
-                    operator = 'mulchain';
-                    newOperand = mul_arr;
-                } else {
-                    let mul1 = ['mulchain'].concat(vari);
-                    let abs_arr = ['mul', ['absolute', mul1]];
-                    let mul_arr = nat.concat([abs_arr]);
-                    operator = 'mulchain';
-                    newOperand = mul_arr;                       
-                }
-            }                
-        } else if (tree_1[0][0] === 'negative'){
+                return [operator].concat(newOperand);
+            }
+            if (vari.length === 1) {
+                return ['mulchain'].concat(nat, [[vari[0][0], ['absolute', vari[0][1]]]]);
+            }
+            return ['mulchain'].concat(nat, [['mul', ['absolute', ['mulchain'].concat(vari)]]]);
+        }
+        if (tree_1[0][0] === 'negative') {
             tree_1[0][0] = 'absolute';
             newOperand = absToMul(tree_1[0]);
-            operator = newOperand.shift(); 
-        } else {
-            newOperand = tree_1;
+            operator = newOperand.shift();
+            return [operator].concat(newOperand);
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(absToMul(v));
-        }
+        return tree;
     }
-    return [operator].concat(newOperand);  
-    
-    
+    const tree_1 = tree.slice(1);
+    for (const v of tree_1) {
+        newOperand.push(absToMul(v));
+    }
+    return [operator].concat(newOperand);
 }
-

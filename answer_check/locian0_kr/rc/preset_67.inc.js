@@ -1,22 +1,20 @@
-import {Laco} from '../libs/common.inc.js';
+import { Laco } from '../libs/common.inc.js';
 
-import {fracExpress} from '../rc/function_48.inc.js';
-import {negParenthesis} from '../rc/function_50.inc.js';
-import {posiSign} from '../rc/function_51.inc.js';
-import {fracNegative} from '../rc/function_53.inc.js';
-import {fracSeparation} from '../rc/function_54.inc.js';
-import {allAssociative, allCommutative} from '../rc/function_67.inc.js';
-import {fracSimpInt} from '../rc/function_76.inc.js';
-import {fracSimpVar} from '../rc/function_77.inc.js';
-import {addFactorNegative} from '../rc/function_81.inc.js';
-import {addAdjacentSigns} from '../rc/function_83.inc.js';
-import _ from 'lodash';
+import { fracExpress } from '../rc/function_48.inc.js';
+import { negParenthesis } from '../rc/function_50.inc.js';
+import { posiSign } from '../rc/function_51.inc.js';
+import { fracNegative } from '../rc/function_53.inc.js';
+import { fracSeparation } from '../rc/function_54.inc.js';
+import { allAssociative, allCommutative } from '../rc/function_67.inc.js';
+import { fracSimpInt } from '../rc/function_76.inc.js';
+import { fracSimpVar } from '../rc/function_77.inc.js';
+import { addFactorNegative } from '../rc/function_81.inc.js';
+import { addAdjacentSigns } from '../rc/function_83.inc.js';
 
 export function 가분수만_가능(tree = null) {
-    
-    let laco = new Laco();
+    const laco = new Laco();
     laco.initialize(tree)
-    //laco.apply(allIdentity);
+    // laco.apply(allIdentity);
     laco.apply(allAssociative);
     laco.apply(allCommutative);
     laco.apply(fracSimpVar);

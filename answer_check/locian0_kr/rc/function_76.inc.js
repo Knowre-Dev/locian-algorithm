@@ -1,116 +1,150 @@
-import _ from 'lodash';
-
 export function fracSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    
+
     let operator = tree[0];
-    let tree_1 = tree.slice(1);
-    let newOperand = [];
     if (operator === 'fraction') {
-        let num = fracSimpInt(tree_1[0]);
-        let den = fracSimpInt(tree_1[1]);
+        const tree_1 = tree.slice(1);
+        let newOperand = [];
+        const num = fracSimpInt(tree_1[0]);
+        const den = fracSimpInt(tree_1[1]);
         let intNum;
         let intDen;
         let narrNum = [];
-        if (num[0] === 'natural') {
-            intNum = parseInt(num[1]);
-            
-        } else if (num[0] === 'mulchain') {
-            let arrNum = [];
-           
-            let num_1 = num.slice(1);
-            for (let term of num_1) {
-                (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum.push(parseInt(term[1][1]))
-                : narrNum.push(term)
+        switch (num[0]) {
+            case 'natural': {
+                intNum = parseInt(num[1]);
+                break;
             }
-            if (arrNum.length === 0) {
-                intNum = 1;
-            } else if (arrNum.length === 1) {
-                intNum = arrNum[0];
-            } else {
-                intNum = 1;
-                for (let v of arrNum) {
-                    intNum *= v;
+            case 'mulchain': {
+                const arrNum = [];
+                const num_1 = num.slice(1);
+                for (const term of num_1) {
+                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum.push(parseInt(term[1][1]))
+                    : narrNum.push(term)
                 }
-                
+                const arrNum_length = arrNum.length;
+                switch (arrNum_length) {
+                    case 0: {
+                        intNum = 1;
+                        break;
+                    }
+                    case 1: {
+                        intNum = arrNum[0];
+                        break;
+                    }
+                    default: {
+                        intNum = 1;
+                        for (const v of arrNum) {
+                            intNum *= v;
+                        }
+                    }
+                }
+                break;
             }
-        } else {
-            intNum = 1;
+            default: {
+                intNum = 1;
+            }
         }
-        let arrDen = [];    
+
+        const arrDen = [];
         let narrDen = [];
-        
-        if (den[0] === 'natural') {
-            intDen = parseInt(den[1]);
-        } else if (den[0] === 'mulchain') {
-            let den_1 = den.slice(1);
-            for (let term of den_1) {
-                (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen.push(parseInt(term[1][1]))
-                : narrDen.push(term)
+
+        switch (den[0]) {
+            case 'natural': {
+                intDen = parseInt(den[1]);
+                break;
             }
-            if (arrDen.length === 0) {
-                intDen = 1;
-            } else if (arrDen.length === 1) {
-                intDen = arrDen[0];
-            } else {
-                intDen = 1;
-                for (let v of arrDen) {
-                    intDen *= v;
+            case 'mulchain': {
+                const den_1 = den.slice(1);
+                for (const term of den_1) {
+                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen.push(parseInt(term[1][1]))
+                    : narrDen.push(term)
                 }
+                const arrDen_length = arrDen.length;
+                switch (arrDen_length) {
+                    case 0: {
+                        intDen = 1;
+                        break;
+                    }
+                    case 1: {
+                        intDen = arrDen[0];
+                        break;
+                    }
+                    default: {
+                        intDen = 1;
+                        for (const v of arrDen) {
+                            intDen *= v;
+                        }
+                    }
+                }
+                break;
             }
-        } else {
-            intDen = 1;
-        }
-        
-        let gcf = EuclidAlg(intNum, intDen);
-        let newNum = (intNum/gcf).toString();
-        let newDen = (intDen/gcf).toString();
-        
-        if (num[0] === 'natural') {
-            newOperand.push(['natural', newNum]);
-        } else if (num[0] === 'mulchain') {
-            if (newNum !== '1') {
-                narrNum.unshift(['mul', ['natural', newNum]]);
+            default: {
+                intDen = 1;
             }
-            narrNum.length === 1 ? narrNum = narrNum[0][1]
-            : narrNum.unshift('mulchain')
-            newOperand.push(narrNum);
-        } else {
-            newOperand.push(num);
         }
-        
-        if (den[0] === 'natural') {
-            if (newDen === '1') {
-                operator = newOperand[0].shift();
-                newOperand = newOperand[0];
-            } else {
-                newOperand.push(['natural', newDen]);
+
+        const gcf = EuclidAlg(intNum, intDen);
+        const newNum = (intNum / gcf).toString();
+        const newDen = (intDen / gcf).toString();
+
+        switch (num[0]) {
+            case 'natural': {
+                newOperand.push(['natural', newNum]);
+                break;
             }
-        } else if (den[0] === 'mulchain') {
-            if (newDen !== '1') {
-                narrDen.unshift(['mul', ['natural', newDen]]);
+            case 'mulchain': {
+                if (newNum !== '1') {
+                    narrNum.unshift(['mul', ['natural', newNum]]);
+                }
+                narrNum.length === 1 ? narrNum = narrNum[0][1]
+                : narrNum.unshift('mulchain')
+                newOperand.push(narrNum);
+                break;
             }
-            narrDen.length === 1 ? narrDen = narrDen[0][1]
-            : narrDen.unshift('mulchain')
-            newOperand.push(narrDen);
-        } else {
-            newOperand.push(den);
+            default: {
+                newOperand.push(num);
+            }
         }
-    } else {
-        for (let v of tree_1) {
-            newOperand.push(fracSimpInt(v));
+
+        switch (den[0]) {
+            case 'natural': {
+                if (newDen === '1') {
+                    operator = newOperand[0].shift();
+                    newOperand = newOperand[0];
+                } else {
+                    newOperand.push(['natural', newDen]);
+                }
+                break;
+            }
+            case 'mulchain': {
+                if (newDen !== '1') {
+                    narrDen.unshift(['mul', ['natural', newDen]]);
+                }
+                narrDen.length === 1 ? narrDen = narrDen[0][1]
+                : narrDen.unshift('mulchain')
+                newOperand.push(narrDen);
+                break;
+            }
+            default: {
+                newOperand.push(den);
+            }
         }
+        return [operator].concat(newOperand);
+    }
+    const tree_1 = tree.slice(1);
+    const newOperand = [];
+    for (const v of tree_1) {
+        newOperand.push(fracSimpInt(v));
     }
     return [operator].concat(newOperand);
-    
-    
 }
 
 export function EuclidAlg(A, B) {
     while (B !== 0) {
-        let temp = B;
+        const temp = B;
         B = A % B;
         A = temp;
     }
