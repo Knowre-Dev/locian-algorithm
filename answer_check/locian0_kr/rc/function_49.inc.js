@@ -5,11 +5,10 @@ export function fracDecimal(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'decimal') {
-        const tree_1 = tree.slice(1);
-        const newOperand = [];
-        const val = tree_1[0].split('.');
+        const [, ...operand] = tree;
+        const val = operand[0].split('.');
         const num = parseInt(val[0] + val[1]);
         const den = Math.pow(10, val[1].length);
         const gcf = EuclidAlg(num, den);
@@ -17,21 +16,13 @@ export function fracDecimal(tree) {
         const newDen = den / gcf;
 
         if (newDen === 1) {
-            operator = 'natural';
-            newOperand.push(newNum.toString());
-        } else {
-            operator = 'fraction';
-            newOperand.push(['natural', newNum.toString()]);
-            newOperand.push(['natural', newDen.toString()]);
+            return ['natural', newNum.toString()];
         }
-        return [operator].concat(newOperand);
+        return ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
     }
-    const newOperand = [];
-    const tree_1 = tree.slice(1);
-    for (const v of tree_1) {
-        newOperand.push(fracDecimal(v));
-    }
-    return [operator].concat(newOperand);
+    const [, ...operand] = tree;
+    const newOperand = operand.map(term => fracDecimal(term));
+    return [operator, ...newOperand];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

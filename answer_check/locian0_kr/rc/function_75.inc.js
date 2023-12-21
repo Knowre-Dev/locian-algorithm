@@ -5,16 +5,14 @@ export function eqMulProp(tree) {
 
     const operator = tree[0];
     if (operator === 'equation') {
-        let newOperand = [];
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'fraction') {
-            newOperand.push(tree_1[0][1][0]);
-        } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0][0] === 'fraction') {
-            // empty
-        } else {
-            newOperand = tree_1;
+        const [, ...operand] = tree;
+        if (operand[0][0] === 'fraction') {
+            return [operator, [operand[0][1][0]]];
         }
-        return [operator].concat(newOperand);
+        if (operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction') {
+            return [operator, []];
+        }
+        return [operator, ...operand];
     }
     return tree;
 }
@@ -37,30 +35,26 @@ export function eqMulPropUS(tree) {
     const gcfArr = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
-    let factor = [];
-    factor.push(['mul', gcfArr.const]);
+    let factor = [['mul', gcfArr.const]];
     const gcfArr_sym = gcfArr.sym;
     for (const sym of gcfArr_sym) {
         factor.push(['mul', sym]);
     }
     factor = array2ChainTree(factor);
-    // let newtree;
 
     if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) ||
         JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
         return tree; // No need to divide by 1
     }
-
     const newtree = [tree[0]];
-    const tree_1 = tree.slice(1);
-    for (const subtree of tree_1) {
+    const [, ...operand] = tree;
+    for (const subtree of operand) {
         if (!Array.isArray(subtree)) {
             // this block executes for inequality signs (e.g., 'le', 'ge')
             newtree.push(subtree);
             continue;
         }
-        const newsubtree = multFactor(subtree, ['div', factor], true);
-        newtree.push(newsubtree);
+        newtree.push(multFactor(subtree, ['div', factor], true));
     }
     return mulNegative(newtree);
 

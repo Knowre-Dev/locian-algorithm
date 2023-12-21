@@ -3,15 +3,15 @@ export function fracComplex(tree) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
 
     const numArr = [];
     const denArr = [];
-    let newOperand = [];
+    const newOperand = [];
     if (operator === 'fraction') {
-        const tree_1 = tree.slice(1);
-        const num = fracComplex(tree_1[0]);
-        const den = fracComplex(tree_1[1]);
+        const [, ...operand] = tree;
+        const num = fracComplex(operand[0]);
+        const den = fracComplex(operand[1]);
         if (num[0] === 'fraction') {
             numArr.push(num[1]);
             denArr.push(num[2]);
@@ -44,12 +44,11 @@ export function fracComplex(tree) {
         } else {
             newDen = denArr[0];
         }
-        newOperand = [newNum, newDen];
-        return [operator].concat(newOperand);
+        return [operator, newNum, newDen]
     }
-    const tree_1 = tree.slice(1);
-    for (const v of tree_1) {
-        newOperand.push(fracComplex(v));
+    const [, ...operand] = tree;
+    for (const term of operand) {
+        newOperand.push(fracComplex(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

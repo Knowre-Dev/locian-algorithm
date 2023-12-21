@@ -3,40 +3,40 @@ export function eqIneqDivPi(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'equation': {
-            const tree_1 = tree.slice(1);
-            if (checkPi(tree_1[0]) && checkPi(tree_1[1])) {
+            const [, ...operand] = tree;
+            if (checkPi(operand[0]) && checkPi(operand[1])) {
                 const newOperand = [];
-                for (const v of tree_1) {
+                for (const v of operand) {
                     newOperand.push(sub_divPi(v, ['variable', 'pi']));
                 }
-                return [operator].concat(newOperand);
+                return [operator, ...newOperand];
             }
-            return [operator].concat(tree_1);
+            return [operator, ...operand];
         }
         case 'inequality': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             let check = true;
-            const tree_1_length = tree_1.length
-            for (let i = 0; i < tree_1_length; i++) {
+            const operand_length = operand.length;
+            for (let i = 0; i < operand_length; i++) {
                 if (i % 2 === 0) {
-                    check = checkPi(tree_1[i]);
+                    check = checkPi(operand[i]);
                     if (check === false) {
                         break;
                     }
                 }
             }
             if (!check) {
-                return [operator].concat(tree_1);
+                return [operator, ...operand];
             }
             const newOperand = [];
-            for (let i = 0; i < tree_1_length; i++) {
-                i % 2 === 0 ? newOperand.push(sub_divPi(tree_1[i], ['variable', 'pi']))
-                : newOperand.push(tree_1[i])
+            for (let i = 0; i < operand_length; i++) {
+                i % 2 === 0 ? newOperand.push(sub_divPi(operand[i], ['variable', 'pi']))
+                : newOperand.push(operand[i]);
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
         default: {
             return tree;
@@ -68,67 +68,74 @@ export function sub_divPi(tree, div) {
     }
 
     const frac = fracNegative(['fraction', tree, div]);
-    const separation = fracSeparation(frac);
-    return fracSimpVar(separation);
+    return fracSimpVar(fracSeparation(frac));
 }
 
 export function checkPi(tree) {
     if (Array.isArray(tree)) {
-        const operator = tree[0];
-        const tree_1 = tree.slice(1);
-        if (operator === 'variable') {
-            if (tree_1[0] === 'pi') {
-                return true;
-            }
-        } else if (operator === 'mulchain') {
-            for (const t of tree_1) {
-                if (t[0] === 'mul' && checkPi(t[1])) {
+        const [operator, ...operand] = tree;
+        switch (operator) {
+            case 'variable': {
+                if (operand[0] === 'pi') {
                     return true;
                 }
+                break;
             }
-        } else if (operator === 'addchain') {
-            let check = true;
-            for (const t of tree_1) {
-                check = checkPi(t);
-                if (check === false) {
-                    break;
+            case 'mulchain': {
+                for (const t of operand) {
+                    if (t[0] === 'mul' && checkPi(t[1])) {
+                        return true;
+                    }
                 }
+                break;
             }
-            return check;
-        } else if (operator === 'negative') {
-            let check = true;
-            for (const t of tree_1) {
-                check = checkPi(t);
-                if (check === false) {
-                    break;
+            case 'addchain': {
+                let check = true;
+                for (const term of operand) {
+                    check = checkPi(term);
+                    if (check === false) {
+                        return check;
+                    }
                 }
+                return check;
             }
-            return check;
-        } else if (operator === 'power') {
-            let check = true;
-            for (const t of tree_1) {
-                check = checkPi(t);
-                if (check === false) {
-                    break;
+            case 'negative': {
+                let check = true;
+                for (const term of operand) {
+                    check = checkPi(term);
+                    if (check === false) {
+                        return check;
+                    }
                 }
+                return check;
             }
-            return check;
-        } else if (operator === 'natural') {
-            if (tree_1[0] === '0') {
-                // 0 이어도 pi 나누기 가능해서 추가
-                return true;
-            } else {
+            case 'power': {
+                let check = true;
+                for (const term of operand) {
+                    check = checkPi(term);
+                    if (check === false) {
+                        return check;
+                    }
+                }
+                return check;
+            }
+            case 'natural': {
+                if (operand[0] === '0') {
+                    // 0 이어도 pi 나누기 가능해서 추가
+                    return true;
+                }
                 return false;
             }
-        } else {
-            let check = true;
-            for (const t of tree_1) {
-                check = checkPi(t);
-                if (check === true) {
-                    break;
+            default: {
+                let check = true;
+                for (const term of operand) {
+                    check = checkPi(term);
+                    if (check === true) {
+                        return check;
+                    }
                 }
+                return check;
             }
-            return check;
         }
     }
     return false;

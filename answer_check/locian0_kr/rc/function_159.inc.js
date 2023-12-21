@@ -6,32 +6,32 @@ export function mulAllSidesByCommonDenom(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'equation' || operator === 'inequality') {
         // Remove any complex fractions
         // tree = fracComplex(tree); Gurantee this instead by precondition (better performance)
 
         // Initialize array to store product of all denominators in each side
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const denomArr = [];
-        const tree_1_entries = tree_1.entries()
-        for (const [k, subtree] of tree_1_entries) {
+        const operand_entries = operand.entries()
+        for (const [key, term] of operand_entries) {
             // Find all unique denominators in this subtree
             // Make sure to pass the third arg as TRUE
             // to get absolute values of all denominators (in case of any negative denominators)
             // to ensure preservation of directions of inequality
-            denomArr[k] = findDenominators(subtree, true, operator === 'inequality');
+            denomArr[key] = findDenominators(term, true, operator === 'inequality');
 
             // Multiply all denominators in this subtree into a single quantity
-            if (denomArr[k].length === 0) {
-                denomArr[k] = ['natural', '1'];
+            if (denomArr[key].length === 0) {
+                denomArr[key] = ['natural', '1'];
             } else {
                 const prod = [];
-                const denomArr_k = denomArr[k];
-                for (const dd of denomArr_k) {
-                    prod.push(['mul', dd]);
+                const denomArr_k = denomArr[key];
+                for (const term_denomArr_k of denomArr_k) {
+                    prod.push(['mul', term_denomArr_k]);
                 }
-                denomArr[k] = array2ChainTree(prod, true);
+                denomArr[key] = array2ChainTree(prod, true);
             }
         }
 
@@ -48,12 +48,12 @@ export function mulAllSidesByCommonDenom(tree = null) {
             return tree;
         }
         const newOperand = [];
-        for (const side of tree_1) {
+        for (const side of operand) {
             if (JSON.stringify(side) === JSON.stringify(['natural', '0'])) {
                 newOperand.push(side);
             } else if (side[0] === 'addchain') {
                 const termArr = [];
-                const side_1 = side.slice(1);
+                const [, ...side_1] = side;
                 for (const aterm of side_1) {
                     let newTree;
                     if (JSON.stringify(aterm[1]) === JSON.stringify(['natural', '1'])) {
@@ -77,7 +77,7 @@ export function mulAllSidesByCommonDenom(tree = null) {
                 newOperand.push(newSide);
             }
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
     return tree;
 }

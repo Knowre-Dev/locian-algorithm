@@ -3,22 +3,13 @@ export function fracMfrac(tree) {
         return tree;
     }
 
-    let operator = tree[0];
-    const tree_1 = tree.slice(1);
-    if (operator === 'mfraction' && parseInt(tree_1[1][1]) < parseInt(tree_1[2][1])) {
-        const newOperand = [];
-        const num = ['natural', (parseInt(tree_1[0][1]) * parseInt(tree_1[2][1]) + parseInt(tree_1[1][1])).toString()];
-        const den = tree_1[2];
-        operator = 'fraction';
-        newOperand.push(num);
-        newOperand.push(den);
-        return [operator].concat(newOperand);
+    const [operator, ...operand] = tree;
+    if (operator === 'mfraction' && parseInt(operand[1][1]) < parseInt(operand[2][1])) {
+        const num = ['natural', (parseInt(operand[0][1]) * parseInt(operand[2][1]) + parseInt(operand[1][1])).toString()];
+        return ['fraction', num, operand[2]];
     }
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(fracMfrac(v));
-    }
-    return [operator].concat(newOperand);
+    const newOperand = operand.map(term => fracMfrac(term));
+    return [operator, ...newOperand];
 }
 
 /*

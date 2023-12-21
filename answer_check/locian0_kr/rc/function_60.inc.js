@@ -13,29 +13,12 @@ export function rearrangeTreeEq(A, B) {
             : 0;
     }
 
-    let operatorA;
-    let operandA;
-    if (A[0] === 'negative') {
-        operatorA = A[1][0];
-        operandA = A[1].slice(1);
-    } else {
-        operatorA = A[0];
-        operandA = A.slice(1);
-    }
-
-    let operatorB;
-    let operandB;
-    if (B[0] === 'negative') {
-        operatorB = B[1][0];
-        operandB = B[1].slice(1);
-    } else {
-        operatorB = B[0];
-        operandB = B.slice(1);
-    }
+    const [operatorA, ...operandA] = A[0] === 'negative' ? A[1] : A;
+    const [operatorB, ...operandB] = B[0] === 'negative' ? B[1] : B;
 
     const place = [0, 0];
     const operator_entries = [operatorA, operatorB].entries();
-    for (const [k, term] of operator_entries) {
+    for (const [key, term] of operator_entries) {
         switch (term) {
             case 'add':
             case 'sub':
@@ -44,11 +27,11 @@ export function rearrangeTreeEq(A, B) {
                 break;
             }
             case 'negative': {
-                place[k] = 1;
+                place[key] = 1;
                 break;
             }
             case 'fraction': {
-                place[k] = 2;
+                place[key] = 2;
                 break;
             }
             default: {
@@ -79,8 +62,8 @@ export function rearrangeTreeEq(A, B) {
     }
 
     const operandA_entries = operandA.entries();
-    for (const [k, v] of operandA_entries) {
-        const temp = rearrangeTreeEq(v, operandB[k]);
+    for (const [key, termA] of operandA_entries) {
+        const temp = rearrangeTreeEq(termA, operandB[key]);
         if (temp !== 0) {
             return temp;
         }

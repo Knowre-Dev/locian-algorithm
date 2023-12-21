@@ -12,30 +12,27 @@ export function addFactor_1(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
-    // let power = false;
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         let power = false;
         const consArr = [];
-        let con = [];
-        let syms = [];
-        for (const addterm of tree_1) {
+        for (const addterm of operand) {
             if (addterm[1][0] === 'mulchain') {
-                con = ['natural', '1'];
-                syms = [];
-                const addterm_1 = addterm[1].slice(1);
+                let con = ['natural', '1'];
+                const syms = [];
+                const [, ...addterm_1] = addterm[1];
                 const addterm_1_entries = addterm_1.entries();
-                for (const [km, multerm] of addterm_1_entries) {
-                    if (multerm[0] === 'mul') {
-                        if (multerm[1][0] === 'variable') {
-                            syms.push(multerm);
-                        } else if (multerm[1][0] === 'squareroot') {
-                            syms.push(multerm);
-                        } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0' && km === 0) {
-                            con = multerm;
-                        } else if (multerm[1][0] === 'power' && multerm[1][1][0] === 'variable') {
-                            syms.push(multerm);
+                for (const [key_addterm_1, term_addterm_1] of addterm_1_entries) {
+                    if (term_addterm_1[0] === 'mul') {
+                        if (term_addterm_1[1][0] === 'variable') {
+                            syms.push(term_addterm_1);
+                        } else if (term_addterm_1[1][0] === 'squareroot') {
+                            syms.push(term_addterm_1);
+                        } else if (term_addterm_1[1][0] === 'natural' && term_addterm_1[1][1] !== '0' && key_addterm_1 === 0) {
+                            con = term_addterm_1;
+                        } else if (term_addterm_1[1][0] === 'power' && term_addterm_1[1][1][0] === 'variable') {
+                            syms.push(term_addterm_1);
                         }
                     }
                 }
@@ -43,18 +40,19 @@ export function addFactor_1(tree = null) {
                     consArr.push(con);
                 }
             } else if (addterm[1][0] === 'fraction') {
+                const syms = [];
+                let con = [];
                 if (addterm[1][1][0] === 'mulchain') {
                     con = ['natural', '1'];
-                    syms = [];
-                    const addterm_11 = addterm[1][1].slice(1);
-                    for (const multerm of addterm_11) {
-                        if (multerm[0] === 'mul') {
-                            if (multerm[1][0] === 'variable') {
-                                syms.push(multerm);
-                            } else if (multerm[1][0] === 'squareroot') {
-                                syms.push(multerm);
-                            } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0') {
-                                con = multerm;
+                    const [, ...addterm_11] = addterm[1][1];
+                    for (const term_addterm_11 of addterm_11) {
+                        if (term_addterm_11[0] === 'mul') {
+                            if (term_addterm_11[1][0] === 'variable') {
+                                syms.push(term_addterm_11);
+                            } else if (term_addterm_11[1][0] === 'squareroot') {
+                                syms.push(term_addterm_11);
+                            } else if (term_addterm_11[1][0] === 'natural' && term_addterm_11[1][1] !== '0') {
+                                con = term_addterm_11;
                             }
                         }
                     }
@@ -66,14 +64,14 @@ export function addFactor_1(tree = null) {
                     consArr.push(con);
                 }
             } else if (addterm[1][0] === 'natural' && addterm[1][1] !== '1') {
-                con = addterm;
-                consArr.push(con);
+                consArr.push(addterm);
             } else if (addterm[1][0] === 'power') {
                 power = true;
             }
         }
         const consArr_length = consArr.length;
         if (consArr_length !== 0) {
+            let con = [];
             if (consArr_length === 1) {
                 con = ['natural', '1'];
             } else {
@@ -91,25 +89,19 @@ export function addFactor_1(tree = null) {
                 return addCommutative(tree);// newOperand = tree_1;
             }
             const newAdd = ['addchain'];
-            for (const addterm of tree_1) {
-                if (addterm[1][0] === 'fraction') {
-                    if (addterm[1][2][0] !== 'mulchain') {
-                        addterm[1][2] = ['mulchain', ['mul', addterm[1][2]]];
+            for (const term of operand) {
+                if (term[1][0] === 'fraction') {
+                    if (term[1][2][0] !== 'mulchain') {
+                        term[1][2] = ['mulchain', ['mul', term[1][2]]];
                     }
-                    newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1][1], addterm[1][2].concat([['mul', con]])])]);
+                    newAdd.push([term[0], fracSimpInt(['fraction', term[1][1], [...term[1][2], ...[['mul', con]]]])]);
                 } else {
-                    newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1], con])]);
+                    newAdd.push([term[0], fracSimpInt(['fraction', term[1], con])]);
                 }
             }
             return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);
         }
         return addCommutative(tree);
     }
-    const tree_1 = tree.slice(1);
-    const newOperand = [];
-
-    for (const v of tree_1) {
-        newOperand.push(v);
-    }
-    return addCommutative([operator].concat(newOperand));
+    return addCommutative(tree);
 }

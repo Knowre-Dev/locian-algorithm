@@ -5,16 +5,15 @@ export function setAssociative(tree) {
         return tree;
     }
 
-    const operator = tree[0];
-    const tree_1 = tree.slice(1);
+    const [operator, ...operand] = tree;
     let newOperand = [];
-    for (const v of tree_1) {
-        const term = addAssociative(v);
-        if (operator === term[0]) {
-            newOperand = newOperand.concat(term.slice(1));
+    for (const term of operand) {
+        const term_1 = addAssociative(term);
+        if (operator === term_1[0]) {
+            newOperand = [...newOperand, ...term_1.slice(1)];
         } else {
-            newOperand.push(term);
+            newOperand.push(term_1);
         }
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

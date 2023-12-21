@@ -3,16 +3,14 @@ export function fracPlusMinus(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     let sign = 1;
-    let newOperand = [];
     if (operator === 'fraction') {
-        const tree_1 = tree.slice(1);
-        let num = fracPlusMinus(tree_1[0]);
-        let den = fracPlusMinus(tree_1[1]);
+        const [, ...operand] = tree;
+        let num = fracPlusMinus(operand[0]);
         switch (num[0]) {
             case 'negative': {
-                sign = -1 * sign;
+                sign *= -1;
                 num = num[1];
                 break;
             }
@@ -27,9 +25,10 @@ export function fracPlusMinus(tree) {
                 break;
             }
         }
+        let den = fracPlusMinus(operand[1]);
         switch (den[0]) {
             case 'negative': {
-                sign = -1 * sign;
+                sign *= -1;
                 den = den[1];
                 break;
             }
@@ -44,24 +43,16 @@ export function fracPlusMinus(tree) {
                 break;
             }
         }
-        Math.abs(sign) > 1 ? newOperand = [num, den]
-        : newOperand = tree_1
-    } else {
-        const tree_1 = tree.slice(1);
-        for (const v of tree_1) {
-            newOperand.push(fracPlusMinus(v));
-        }
+        return sign === -2 ? ['mp', [operator, num, den]]
+            : sign === 2 ? ['pm', [operator, num, den]]
+            : tree;
     }
-
-    if (sign === -2) {
-        newOperand = [[operator].concat(newOperand)];
-        operator = 'mp';
-        return [operator].concat(newOperand);
+    const [, ...operand] = tree;
+    const newOperand = [];
+    for (const term of operand) {
+        newOperand.push(fracPlusMinus(term));
     }
-    if (sign === 2) {
-        newOperand = [[operator].concat(newOperand)];
-        operator = 'pm';
-        return [operator].concat(newOperand);
-    }
-    return [operator].concat(newOperand);
+    return sign === -2 ? ['mp', [operator, ...newOperand]]
+        : sign === 2 ? ['pm', [operator, ...newOperand]]
+        : [operator, ...newOperand];
 }

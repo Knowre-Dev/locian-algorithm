@@ -3,26 +3,18 @@ export function divIdentity(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'mulchain') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        for (const v of tree_1) {
-            if (v[0] !== 'div' || v[1][0] !== 'natural' || v[1][1] !== '1') {
-                newOperand.push(v);
+        const [, ...operand] = tree;
+        const newOperand = [];
+        for (const term of operand) {
+            if (term[0] !== 'div' || term[1][0] !== 'natural' || term[1][1] !== '1') {
+                newOperand.push(term);
             }
         }
-
-        if (newOperand.length === 1) {
-            operator = newOperand[0][1].shift();
-            newOperand = newOperand[0][1];
-        }
-        return [operator].concat(newOperand);
+        return newOperand.length === 1 ? newOperand[0][1] : [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(divIdentity(v));
-    }
-    return [operator].concat(newOperand);
+    const [, ...operand] = tree;
+    const newOperand = operand.map(term => divIdentity(term));
+    return [operator, ...newOperand];
 }

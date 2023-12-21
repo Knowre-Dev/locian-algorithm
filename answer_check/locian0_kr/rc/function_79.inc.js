@@ -5,9 +5,9 @@ export function decElimZero(tree) {
 
     let operator = tree[0];
     if (operator === 'decimal') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const newOperand = [];
-        const decArr = tree_1[0].split('');
+        const decArr = operand[0].split('');
         while (decArr[decArr.length - 1] === '0') {
             decArr.splice(-1);
         }
@@ -16,14 +16,13 @@ export function decElimZero(tree) {
             operator = 'natural';
             decArr.splice(-1);
         }
-        const dec = decArr.join('');
-        newOperand.push(dec);
-        return [operator].concat(newOperand);
+        newOperand.push(decArr.join(''));
+        return [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(decElimZero(v));
+    for (const term of operand) {
+        newOperand.push(decElimZero(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

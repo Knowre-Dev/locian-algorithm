@@ -10,7 +10,7 @@ export function fracCombine(tree) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
         const denomArr = findDenominators(tree, true);
         if (denomArr.length === 0) {
@@ -18,8 +18,8 @@ export function fracCombine(tree) {
         }
 
         const denomArr_entries = denomArr.entries();
-        for (const [k, d] of denomArr_entries) {
-            denomArr[k] = ['mul', d];
+        for (const [key, denom] of denomArr_entries) {
+            denomArr[key] = ['mul', denom];
         }
         let denom = array2ChainTree(denomArr);
         const find = findGCF(denom);
@@ -27,32 +27,31 @@ export function fracCombine(tree) {
         if (JSON.stringify(find.sym) !== JSON.stringify([])) {
             const denom_arr = [];
             const find_entries = Object.entries(find);
-            for (const [k, f] of find_entries) {
-                if (k === 'const') {
-                    denom_arr.push(['mul', f]);
+            for (const [key, value] of find_entries) {
+                if (key === 'const') {
+                    denom_arr.push(['mul', value]);
                 } else {
-                    for (const f1 of f) {
-                        denom_arr.push(['mul', f1]);
+                    for (const value_1 of value) {
+                        denom_arr.push(['mul', value_1]);
                     }
                 }
             }
-            denom = ['mulchain'].concat(denom_arr);
+            denom = ['mulchain', ...denom_arr];
         }
-        const operand = tree.slice(1);
+        const [, ...operand] = tree;
         const newOperand = [];
         for (const term of operand) {
             newOperand.push([term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
         }
 
-        const newtree = array2ChainTree(newOperand);
-        return ['fraction', newtree, denom];
+        return ['fraction', array2ChainTree(newOperand), denom];
     }
-    const operand = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
     for (const subtree of operand) {
         newOperand.push(fracCombine(subtree));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 /*

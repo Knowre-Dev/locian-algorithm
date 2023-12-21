@@ -3,60 +3,50 @@ export function expToFrac(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
-    let tree_1 = tree.slice(1);
+    const [operator, ...operand] = tree;
     let newOperand = [];
     if (operator === 'power') {
-        if (tree_1[1][0] === 'negative') {
-            const newPower = tree_1[1][1];
+        if (operand[1][0] === 'negative') {
+            const newPower = operand[1][1];
             // 밑이 분수일 경우
-            if (tree_1[0][0] === 'fraction') {
-                (tree_1[0][1][0] === 'natural' && tree_1[0][1][1] === '1') ? newOperand = tree_1[0][2]
-                : newOperand = ['fraction', tree_1[0][2], tree_1[0][1]];
+            if (operand[0][0] === 'fraction') {
+                newOperand = (operand[0][1][0] === 'natural' && operand[0][1][1] === '1') ? operand[0][2]
+                    : ['fraction', operand[0][2], operand[0][1]];
                 if (newPower[0] === 'natural' && newPower[1] === '1') {
                     return newOperand;
-                } else {
-                    newOperand = ['power'].concat([newOperand]);
-                    newOperand.push(newPower);
                 }
-                return newOperand;
-            } else {
-                // 최종 형태 분수, 1/(exp) 의 형태
-
-                (newPower[0] === 'natural' && newPower[1] === '1') ? newOperand = ['fraction', ['natural', '1'], tree_1[0]]
-                : newOperand = ['fraction',
-                        ['natural', '1'],
-                        ['power', tree_1[0], newPower]
-                    ];
-                return newOperand;
+                return ['power', ...[newOperand], newPower];
             }
-        } else {
-            newOperand = tree_1;
+            // 최종 형태 분수, 1/(exp) 의 형태
+            newOperand = (newPower[0] === 'natural' && newPower[1] === '1') ? ['fraction', ['natural', '1'], operand[0]]
+                : ['fraction',
+                    ['natural', '1'],
+                    ['power', operand[0], newPower]
+                ];
+            return newOperand;
         }
-    } else {
-        for (const v of tree_1) {
-            newOperand.push(expToFrac(v));
-        }
+        return fracFirst(tree);
     }
-
-    tree_1 = [operator].concat(newOperand);
-    return fracFirst(tree_1);
+    for (const term of operand) {
+        newOperand.push(expToFrac(term));
+    }
+    return fracFirst([operator, ...newOperand]);
 }
 
 export function fracFirst(tree) {
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'mulchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const frac = [];
         const other = [];
-        for (const v of tree_1) {
-            if (v[0] === 'mul' && v[1][0] === 'fraction') {
-                frac.push(v);
+        for (const term of operand) {
+            if (term[0] === 'mul' && term[1][0] === 'fraction') {
+                frac.push(term);
             } else {
-                other.push(v);
+                other.push(term);
             }
         }
-        return [operator].concat(frac, other);
+        return [operator, ...frac, ...other];
     }
     return tree;
 }

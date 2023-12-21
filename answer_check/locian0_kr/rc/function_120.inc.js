@@ -3,18 +3,16 @@ export function powerOne(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'power') {
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'natural' && tree_1[0][1] === '1') {
-            return ['natural', '1']
-        }
-        return tree;
+        const [, ...operand] = tree;
+        return (operand[0][0] === 'natural' && operand[0][1] === '1') ? ['natural', '1']
+            : tree;
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(powerOne(v));
+    for (const term of operand) {
+        newOperand.push(powerOne(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

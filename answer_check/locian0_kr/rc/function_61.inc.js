@@ -9,28 +9,24 @@ export function rearrangeTree(tree, types = []) {
         return tree;
     }
 
-    // eslint-disable-next-line prefer-const
-    let operator = tree[0];
-    const tree_1 = tree.slice(1);
-    let newOperand = [];
-    for (const v of tree_1) {
-        Array.isArray(v) ? newOperand.push(rearrangeTree(v, types))
-            : newOperand.push(v)
+    const [operator, ...operand] = tree;
+    const newOperand = [];
+    for (const term of operand) {
+        Array.isArray(term) ? newOperand.push(rearrangeTree(term, types))
+            : newOperand.push(term)
     }
     if (!types.includes(operator)) {
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
     switch (operator) {
         case 'array':
         case 'mulchain':
         case 'equation':
         case 'neq': {
-            newOperand = newOperand.sort(rearrangeTreeEq);
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand.sort(rearrangeTreeEq)];
         }
         case 'addchain': {
-            newOperand = newOperand.sort(rearrangeTreeAdd);
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand.sort(rearrangeTreeAdd)];
         }
         case 'inequality': {
             let rightNum = 0;
@@ -42,28 +38,24 @@ export function rearrangeTree(tree, types = []) {
             if (rightNum < 0) {
                 const temp = [];
                 const newOperand_reverse = newOperand.reverse();
-                for (const v of newOperand_reverse) {
-                    v === 'gt' ? temp.push('lt')
-                    : v === 'ge' ? temp.push('le')
-                    : v === 'lt' ? temp.push('gt')
-                    : v === 'le' ? temp.push('ge')
-                    : temp.push(v)
+                for (const term_reverse of newOperand_reverse) {
+                    term_reverse === 'gt' ? temp.push('lt')
+                    : term_reverse === 'ge' ? temp.push('le')
+                    : term_reverse === 'lt' ? temp.push('gt')
+                    : term_reverse === 'le' ? temp.push('ge')
+                    : temp.push(term_reverse)
                 }
-                newOperand = temp;
-                return [operator].concat(newOperand);
+                return [operator, ...temp];
             }
-            if (rightNum === 0) {
-                return 'ERROR-ineq';
-            }
-            return [operator].concat(newOperand);
+            return rightNum === 0 ? 'ERROR-ineq'
+                : [operator, ...newOperand];
         }
         case 'cap':
         case 'cup': {
-            newOperand = newOperand.sort(rearrangeTreeEq);
-            return [operator].concat(newOperand);
+           return [operator, ...newOperand.sort(rearrangeTreeEq)];
         }
         default: {
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
     }
 }

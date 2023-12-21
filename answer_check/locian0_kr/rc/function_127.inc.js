@@ -3,18 +3,18 @@ export function ineqRearrange(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'inequality') {
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'negative') {
-            const temp = [];
-            const tree_2 = tree_1.reverse();
-            for (const v of tree_2) {
-                Array.isArray(v) ? v[0] === 'negative' ? temp.push(v[1])
-                                : temp.push(['negative', v])
-                : temp.push(v);
+        const [, ...operand] = tree;
+        if (operand[0][0] === 'negative') {
+            const newOperand = [];
+            const operand_reverse = operand.reverse();
+            for (const term_reverse of operand_reverse) {
+                Array.isArray(term_reverse) ? term_reverse[0] === 'negative' ? newOperand.push(term_reverse[1])
+                    : newOperand.push(['negative', term_reverse])
+                : newOperand.push(term_reverse);
             }
-            return [operator].concat(temp);
+            return [operator, ...newOperand];
         }
         return tree;
     }

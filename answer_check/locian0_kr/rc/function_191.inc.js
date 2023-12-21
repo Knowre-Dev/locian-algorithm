@@ -3,16 +3,15 @@ export function nthrootToSquareroot(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
-    const tree_1 = tree.slice(1);
-    if (operator === 'nthroot' && JSON.stringify(tree_1[0]) === JSON.stringify([])) {
-        return ['squareroot', tree_1[1]];
+    const [operator, ...operand] = tree;
+    if (operator === 'nthroot' && JSON.stringify(operand[0]) === JSON.stringify([])) {
+        return ['squareroot', operand[1]];
     }
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(nthrootToSquareroot(v));
+    for (const term of operand) {
+        newOperand.push(nthrootToSquareroot(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

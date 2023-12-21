@@ -3,17 +3,15 @@ export function fracExpress(tree) {
         return tree;
     }
 
-    let operator = tree[0];
-    const tree_1 = tree.slice(1);
-    if (operator === 'mulchain' && tree_1[0][1][0] === 'fraction') {
-        let newOperand = [];
+    const [operator, ...operand] = tree;
+    if (operator === 'mulchain' && operand[0][1][0] === 'fraction') {
         let num = [];
         let den = [];
         let nega = false;
-        for (const term of tree_1) {
+        for (const term of operand) {
             if (term[1][0] === 'fraction') {
                 if (term[1][1][0] === 'mulchain') {
-                    num = num.concat(term[1][1].slice(1));
+                    num = [...num, ...term[1][1].slice(1)];
                 } else if (term[1][1][0] === 'negative') {
                     term[1][1][1][1] === '1' ? nega = true
                     : num.push([term[0], term[1][1]])
@@ -21,12 +19,12 @@ export function fracExpress(tree) {
                     num.push([term[0], term[1][1]]);
                 }
                 if (term[1][2][0] === 'mulchain') {
-                    den = den.concat(term[1][2].slice(1));
+                    den = [...den, ...term[1][2].slice(1)];
                 } else if (term[1][2][1] !== '1') {
                     den.push([term[0], term[1][2]]);
                 }
             } else {
-                term[1][0] === 'mulchain' ? num = num.concat(term[1].slice(1))
+                term[1][0] === 'mulchain' ? num = [...num, ...term[1].slice(1)]
                     : num.push([term[0], term[1]])
             }
         }
@@ -39,19 +37,12 @@ export function fracExpress(tree) {
         : den.unshift('mulchain')
 
         if (den.length > 1) {
-            operator = 'fraction';
-            newOperand.push(num);
-            newOperand.push(den);
-        } else {
-            operator = num.shift();
-            newOperand = num;
+            return nega ? ['negative', ['fraction', num, den]]
+                : ['fraction', num, den];
         }
-        return nega ? ['negative'].concat([[operator].concat(newOperand)])
-        : [operator].concat(newOperand);
+        return nega ? ['negative', num]
+            : num;
     }
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(fracExpress(v));
-    }
-    return [operator].concat(newOperand);
+    const newOperand = operand.map(term => fracExpress(term));
+    return [operator, ...newOperand];
 }

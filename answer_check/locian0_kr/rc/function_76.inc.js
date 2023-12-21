@@ -5,10 +5,9 @@ export function fracSimpInt(tree) {
 
     let operator = tree[0];
     if (operator === 'fraction') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        const num = fracSimpInt(tree_1[0]);
-        const den = fracSimpInt(tree_1[1]);
+        const [, ...operand] = tree;
+        const num = fracSimpInt(operand[0]);
+        const den = fracSimpInt(operand[1]);
         let intNum;
         let intDen;
         let narrNum = [];
@@ -19,7 +18,7 @@ export function fracSimpInt(tree) {
             }
             case 'mulchain': {
                 const arrNum = [];
-                const num_1 = num.slice(1);
+                const [, ...num_1] = num;
                 for (const term of num_1) {
                     (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum.push(parseInt(term[1][1]))
                     : narrNum.push(term)
@@ -57,7 +56,7 @@ export function fracSimpInt(tree) {
                 break;
             }
             case 'mulchain': {
-                const den_1 = den.slice(1);
+                const [, ...den_1] = den;
                 for (const term of den_1) {
                     (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen.push(parseInt(term[1][1]))
                     : narrDen.push(term)
@@ -89,7 +88,7 @@ export function fracSimpInt(tree) {
         const gcf = EuclidAlg(intNum, intDen);
         const newNum = (intNum / gcf).toString();
         const newDen = (intDen / gcf).toString();
-
+        let newOperand = [];
         switch (num[0]) {
             case 'natural': {
                 newOperand.push(['natural', newNum]);
@@ -111,12 +110,8 @@ export function fracSimpInt(tree) {
 
         switch (den[0]) {
             case 'natural': {
-                if (newDen === '1') {
-                    operator = newOperand[0].shift();
-                    newOperand = newOperand[0];
-                } else {
-                    newOperand.push(['natural', newDen]);
-                }
+                newDen === '1' ? [operator, ...newOperand] = newOperand[0]
+                : newOperand.push(['natural', newDen]);
                 break;
             }
             case 'mulchain': {
@@ -132,14 +127,14 @@ export function fracSimpInt(tree) {
                 newOperand.push(den);
             }
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(fracSimpInt(v));
+    for (const term of operand) {
+        newOperand.push(fracSimpInt(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 export function EuclidAlg(A, B) {

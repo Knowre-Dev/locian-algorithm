@@ -2,19 +2,15 @@ export function negParenthesis(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'add' && tree_1[0][1][0] === 'negative') {
-            tree_1[0] = ['sub', tree_1[0][1][1]];
+        const [, ...operand] = tree;
+        if (operand[0][0] === 'add' && operand[0][1][0] === 'negative') {
+            operand[0] = ['sub', operand[0][1][1]];
         }
-        // newOperand = tree_1;
-        return [operator].concat(tree_1);
+        return [operator, ...operand];
     }
-    const tree_1 = tree.slice(1);
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(negParenthesis(v));
-    }
-    return [operator].concat(newOperand);
+    const [, ...operand] = tree;
+    const newOperand = operand.map(term => negParenthesis(term));
+    return [operator, ...newOperand];
 }

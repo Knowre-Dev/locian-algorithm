@@ -3,38 +3,35 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'interval': {
-            const tree_1 = tree.slice(1);
-            let newOperand = [];
-            operator = 'inequality';
-            newOperand = [
-                tree_1[2],
-                tree_1[3] === ')' ? 'gt' : 'ge',
+            const [, ...operand] = tree;
+            const newOperand = [
+                operand[2],
+                operand[3] === ')' ? 'gt' : 'ge',
                 vari,
-                tree_1[0] === '(' ? 'gt' : 'ge',
-                tree_1[1]
+                operand[0] === '(' ? 'gt' : 'ge',
+                operand[1]
             ];
-            return [operator].concat(newOperand);
+            return ['inequality', ...newOperand];
         }
-        case 'tuple': { // jhshin
-            const tree_1 = tree.slice(1);
-            return ['inequality', tree_1[1], 'gt', vari, 'gt', tree_1[0]];
+        case 'tuple': {
+            const [, ...operand] = tree;
+            return ['inequality', operand[1], 'gt', vari, 'gt', operand[0]];
         }
         case 'setname': {
-            const tree_1 = tree.slice(1);
-            // let newOperand = [];
-            return tree_1[0] === 'real' ? ['inequality', ['infinity'], 'gt', vari, 'gt', ['negative', ['infinity']]]
-                : [operator].concat([]);
+            const [, ...operand] = tree;
+            return operand[0] === 'real' ? ['inequality', ['infinity'], 'gt', vari, 'gt', ['negative', ['infinity']]]
+                : [operator, ...[]];
         }
         default: {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(intervalSetNot(v));
+            for (const term of operand) {
+                newOperand.push(intervalSetNot(term));
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
     }
 }

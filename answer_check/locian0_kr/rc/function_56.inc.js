@@ -3,48 +3,36 @@ export function mulIdentity(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'negative': {
-            const tree_1 = tree.slice(1);
-            let newOperand = [];
-            newOperand.push(mulIdentity(tree_1[0]));
-            if (newOperand[0][0] === 'negative') {
-                operator = newOperand[0][1].shift();
-                newOperand = newOperand[0][1];
-            }
-            return [operator].concat(newOperand);
+            const [, ...operand] = tree;
+            const newOperand = [mulIdentity(operand[0])];
+            return newOperand[0][0] === 'negative' ? newOperand[0][1]
+                : [operator, ...newOperand];
         }
         case 'mulchain': {
-            const tree_1 = tree.slice(1);
-            let newOperand = [];
+            const [, ...operand] = tree;
+            const newOperand = [];
             let sign = 1;
-            for (const v of tree_1) {
-                if (v[1][0] === 'natural' && v[1][1] === '1') {
+            for (const term of operand) {
+                if (term[1][0] === 'natural' && term[1][1] === '1') {
                     continue;
-                } else if (v[1][0] === 'negative' && v[1][1][0] === 'natural' && v[1][1][1] === '1') {
+                } else if (term[1][0] === 'negative' && term[1][1][0] === 'natural' && term[1][1][1] === '1') {
                     sign = -1;
                 } else {
-                    newOperand.push(mulIdentity(v));
+                    newOperand.push(mulIdentity(term));
                 }
             }
-            if (newOperand.length === 1) {
-                operator = newOperand[0][1].shift();
-                newOperand = newOperand[0][1];
-            }
-            if (sign === -1) {
-                newOperand = [[operator].concat(newOperand)];
-                operator = 'negative';
-            }
-            return [operator].concat(newOperand);
+            return newOperand.length === 1 ? sign === -1 ? ['negative', newOperand[0][1]]
+                    : newOperand[0][1]
+                : sign === -1 ? ['negative', [operator, ...newOperand]]
+                    : [operator, ...newOperand];
         }
         default: {
-            const tree_1 = tree.slice(1);
-            const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(mulIdentity(v));
-            }
-            return [operator].concat(newOperand);
+            const [, ...operand] = tree;
+            const newOperand = operand.map(term => mulIdentity(term));
+            return [operator, ...newOperand];
         }
     }
 }

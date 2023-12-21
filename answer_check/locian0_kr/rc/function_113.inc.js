@@ -3,28 +3,28 @@ export function mulConstCal(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'mulchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const nterm = [];
         const varterm = [];
 
-        for (const t of tree_1) {
-            if (t[1][0] === 'power') {
-                if (t[1][1][0] === 'natural' && t[1][2][0] === 'natural') {
-                    let base = t[1][1][1];
-                    const top = t[1][2][1];
+        for (const term of operand) {
+            if (term[1][0] === 'power') {
+                if (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') {
+                    let base = term[1][1][1];
+                    const top = term[1][2][1];
                     for (let i = 1; i < top; i++) {
                         base = base * base;
                     }
-                    nterm.push([t[0], ['natural', base.toString()]]);
+                    nterm.push([term[0], ['natural', base.toString()]]);
                 } else {
-                    varterm.push(t);
+                    varterm.push(term);
                 }
-            } else if (t[1][0] === 'natural') {
-                nterm.push(t);
+            } else if (term[1][0] === 'natural') {
+                nterm.push(term);
             } else {
-                varterm.push(t);
+                varterm.push(term);
             }
         }
 
@@ -33,23 +33,23 @@ export function mulConstCal(tree = null) {
             let value = first[1][1];
             for (const nt of nterm) {
                 if (nt[0] === 'mul') {
-                    value = value * nt[1][1]
+                    value *= nt[1][1]
                 } else if (nt[0] === 'div') {
-                    value = value / nt[1][1];
+                    value /= nt[1][1];
                 }
             }
 
             if (varterm.length === 0) {
                 return ['natural', value.toString()];
             }
-            return [operator, ['mul', ['natural', value.toString()]]].concat(varterm);
+            return [operator, ['mul', ['natural', value.toString()]], ...varterm];
         }
         return tree;
     }
     const newOperand = [];
-    const tree_1 = tree.slice(1);
-    for (const v of tree_1) {
-        newOperand.push(mulConstCal(v));
+    const [, ...operand] = tree;
+    for (const term of operand) {
+        newOperand.push(mulConstCal(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

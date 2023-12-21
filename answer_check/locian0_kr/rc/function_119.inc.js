@@ -3,18 +3,16 @@ export function natElimZero(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
 
     if (operator === 'natural') {
-        const tree_1 = tree.slice(1);
-        const newOperand = [];
-        newOperand.push(tree_1[0].replaceAll(new RegExp('^0+(?!$)', 'g'), ''));
-        return [operator].concat(newOperand);
+        const [, ...operand] = tree;
+        return [operator, operand[0].replaceAll(new RegExp('^0+(?!$)', 'g'), '')];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(natElimZero(v));
+    for (const term of operand) {
+        newOperand.push(natElimZero(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

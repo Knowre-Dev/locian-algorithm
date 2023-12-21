@@ -5,28 +5,20 @@ export function mulZero(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'mulchain') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        let zero = false;
-        for (const term of tree_1) {
+        const [, ...operand] = tree;
+        for (const term of operand) {
             if (checkZeroEquiv(term[1])) {
-                zero = true;
+                return ['natural', '0'];
             }
         }
-        if (zero) {
-            operator = 'natural';
-            newOperand.push('0');
-        } else {
-            newOperand = tree_1;
-        }
-        return [operator].concat(newOperand);
+        return tree;
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(mulZero(v));
+    for (const term of operand) {
+        newOperand.push(mulZero(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

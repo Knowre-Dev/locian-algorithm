@@ -24,7 +24,7 @@ export function groupLikeVariableTerms(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'natural':
         case 'decimal':
@@ -35,31 +35,30 @@ export function groupLikeVariableTerms(tree = null) {
             // Recursive portion
             // added to allow for proper parse in case a power term is present
             const newtree = [];
-            let tree_1 = tree.slice(1);
-            for (const term of tree_1) {
+            let [, ...operand] = tree;
+            for (const term of operand) {
                 newtree.push([term[0], groupLikeVariableTerms(term[1])]);
             }
-            tree_1 = newtree;
+            operand = newtree;
 
             // Find all variables in this tree
-            const varList = findVars([operator].concat(tree_1));
-            // let newOperand = [];
+            const varList = findVars([operator, ...operand]);
             if (varList.length === 0) {
-                return [operator].concat(tree_1);
+                return [operator, ...operand];
             }
             // Pick a variable
             // and group among the terms not yet visited (i.e., accounted for)
             // that contains this variable/mulchain of variables
-            const termIndices = [...tree_1.keys()];
+            const termIndices = [...operand.keys()];
 
-            const coeffArr = {}
+            const coeffArr = {};
             coeffArr.const = [];
-            for (const k in varList) {
-                coeffArr[k.toString()] = [];
+            for (const key in varList) {
+                coeffArr[key.toString()] = [];
             }
             // Iterate through each variable in varList
             let varList_entries = varList.entries();
-            for (const [k, variable] of varList_entries) {
+            for (const [key, variable] of varList_entries) {
                 if (termIndices.length === 0) {
                     // All terms have been visited,
                     // so no need to execute the outer foreach loop further
@@ -67,10 +66,10 @@ export function groupLikeVariableTerms(tree = null) {
                 }
 
                 // Go through each unvisited child node in the tree
-                const tree_1_entries = tree_1.entries();
-                const key = k.toString();
-                for (const [tk, term] of tree_1_entries) {
-                    if (termIndices.includes(tk)) {
+                const operand_entries = operand.entries();
+                const key_string = key.toString();
+                for (const [key_operand, term] of operand_entries) {
+                    if (termIndices.includes(key_operand)) {
                         const addOp = term[0]; // this is just 'add', 'sub', etc.
                         // If the term contains variable,
                         // then update the coefficient table
@@ -81,16 +80,16 @@ export function groupLikeVariableTerms(tree = null) {
                             if (JSON.stringify(variable) === JSON.stringify(term[1])) {
                                 coeff = ['natural', '1'];
                             } else if (term[1][0] === 'mulchain') {
-                                const term_1 = term[1].slice(1);
-                                for (const m of term_1) {
-                                    if (JSON.stringify(variable) !== JSON.stringify(m[1])) {
-                                        coeff.push(m);
+                                const [, ...term_1] = term[1];
+                                for (const term_term_1 of term_1) {
+                                    if (JSON.stringify(variable) !== JSON.stringify(term_term_1[1])) {
+                                        coeff.push(term_term_1);
                                     }
                                 }
                                 coeff = array2ChainTree(coeff);
                             }
-                            coeffArr[key].push([addOp, coeff]);
-                            termIndices.splice(termIndices.indexOf(tk), 1);
+                            coeffArr[key_string].push([addOp, coeff]);
+                            termIndices.splice(termIndices.indexOf(key_operand), 1);
                         }
                     }
                 } // end going through each unvisited child node in the tree
@@ -98,28 +97,28 @@ export function groupLikeVariableTerms(tree = null) {
                 // Convert each coefficient
                 // into either a single constant or an addchain of constants
 
-                if (coeffArr[key].length > 0) {
-                    coeffArr[key] = array2ChainTree(coeffArr[key]);
+                if (coeffArr[key_string].length > 0) {
+                    coeffArr[key_string] = array2ChainTree(coeffArr[key_string]);
                 }
             } // end iterating through each variable in varList
 
             // Account for all constant terms, if any
             if (termIndices.length > 0) {
-                for (const tk of termIndices) {
-                    coeffArr.const.push(tree_1[tk]);
+                for (const index of termIndices) {
+                    coeffArr.const.push(operand[index]);
                 }
                 coeffArr.const = array2ChainTree(coeffArr.const);
             }
             // Construct the final list of new operands
             const newOperand = [];
             varList_entries = varList.entries();
-            for (const [k, variable] of varList_entries) {
+            for (const [key_variable, variable] of varList_entries) {
                 // skip if there is no coefficient for this variable
-                if (coeffArr[k.toString()].length === 0) {
+                if (coeffArr[key_variable.toString()].length === 0) {
                     continue;
                 }
                 let addOp = 'add';
-                let coeff = coeffArr[k.toString()];
+                let coeff = coeffArr[key_variable.toString()];
                 if (Array.isArray(coeff)) {
                     if (coeff[0] === 'negative') {
                         addOp = 'sub';
@@ -142,23 +141,23 @@ export function groupLikeVariableTerms(tree = null) {
             // If there is only one operand, just output that operand
             // with an appropriate sign as applicable
             return newOperand.length === 1 ? array2ChainTree(newOperand)
-                : [operator].concat(newOperand);
+                : [operator, ...newOperand];
         }
         case 'mulchain': {
             // Recursive portion
-            let tree_1 = tree.slice(1);
+            let [, ...operand] = tree;
             const newtree = [];
-            for (const term of tree_1) {
+            for (const term of operand) {
                 newtree.push([term[0], groupLikeVariableTerms(term[1])]);
             }
-            tree_1 = newtree;
+            operand = newtree;
 
             // Combine each repeating term into an exponential term
             const baseArr = [];
             const expoArr = [];
             let ind = 0;
 
-            for (const term of tree_1) {
+            for (const term of operand) {
                 const base = ['mul', term[1]];
                 const expo = ['add', ['natural', '1']];
                 if (base[1][0] === 'power') {
@@ -227,18 +226,19 @@ export function groupLikeVariableTerms(tree = null) {
             for (const newOpd of newOperand) {
                 if (newOpd[0] === 'mul') {
                     allDiv = false;
+                    break;
                 }
             }
-            return allDiv ? [operator].concat(newOperand.unshift(['mul', ['natural', '1']]))
-                : [operator].concat(newOperand);
+            return allDiv ? [operator, ...newOperand.unshift(['mul', ['natural', '1']])]
+                : [operator, ...newOperand];
         }
         default: {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const subtree of tree_1) {
+            for (const subtree of operand) {
                 newOperand.push(groupLikeVariableTerms(subtree));
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
     }
 }

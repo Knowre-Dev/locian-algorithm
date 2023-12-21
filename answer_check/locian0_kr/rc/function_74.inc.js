@@ -14,10 +14,8 @@ export function rearrangeTreeAdd(A, B) {
             : A < B ? -1
             : 0
     }
-    const operatorA = A[0];
-    const operatorB = B[0];
-    const operandA = A.slice(1);
-    const operandB = B.slice(1);
+    const [operatorA, ...operandA] = A;
+    const [operatorB, ...operandB] = B;
     const opflag = ['add', 'sub', 'addsub', 'subadd'].includes(operatorA);
     if (operatorA > operatorB && !opflag) {
         return 1;
@@ -40,11 +38,9 @@ export function rearrangeTreeAdd(A, B) {
         return -1;
     }
     const operandA_entries = operandA.entries();
-    for (const [k, v] of operandA_entries) {
-        const temp = rearrangeTreeEq(v, operandB[k]);
-        if (temp === 0) {
-            continue;
-        } else {
+    for (const [key, term] of operandA_entries) {
+        const temp = rearrangeTreeEq(term, operandB[key]);
+        if (temp !== 0) {
             return temp;
         }
     }

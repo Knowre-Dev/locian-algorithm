@@ -7,31 +7,27 @@ export function ineqMulNeg(tree = null) {
 
     const operator = tree[0];
     if (operator === 'inequality') {
-        const tree_1 = tree.slice(1);
-        const newOperand = [];
-        if (tree_1[0][0] === 'negative') {
-            newOperand.push(tree_1[0][1]);
-        } else if (tree_1[0][0] === 'addchain' && tree_1[0][1][0] === 'sub') {
-            newOperand.push(addNegative(['negative', tree_1[0]]));
+        const [, ...operand] = tree;
+        let newOperand = [];
+        if (operand[0][0] === 'negative') {
+            newOperand = [operand[0][1]];
+        } else if (operand[0][0] === 'addchain' && operand[0][1][0] === 'sub') {
+            newOperand = [addNegative(['negative', operand[0]])];
         } else {
-            newOperand.push(tree_1[0]);
             return tree;
         }
-        const tree_1_length = tree_1.length;
-        for (let i = 1; i < tree_1_length; i++) {
-            if (i % 2 !== 0) {
-                tree_1[i] === 'gt' ? newOperand.push('lt')
-                : tree_1[i] === 'ge' ? newOperand.push('le')
-                : tree_1[i] === 'lt' ? newOperand.push('gt')
+        const operand_length = operand.length;
+        for (let i = 1; i < operand_length; i++) {
+            i % 2 !== 0 ? operand[i] === 'gt' ? newOperand.push('lt')
+                : operand[i] === 'ge' ? newOperand.push('le')
+                : operand[i] === 'lt' ? newOperand.push('gt')
                 : newOperand.push('ge')
-            } else {
-                tree_1[i][0] === 'negative' ? newOperand.push(tree_1[i][1])
-                : tree_1[i][0] === 'addchain' ? newOperand.push(addNegative(['negative', tree_1[i]]))
-                : (tree_1[i][0] === 'natural' && tree_1[i][1] === '0') ? newOperand.push(tree_1[i])
-                : newOperand.push(['negative', tree_1[i]])
-            }
+            : operand[i][0] === 'negative' ? newOperand.push(operand[i][1])
+                : operand[i][0] === 'addchain' ? newOperand.push(addNegative(['negative', operand[i]]))
+                : (operand[i][0] === 'natural' && operand[i][1] === '0') ? newOperand.push(operand[i])
+                : newOperand.push(['negative', operand[i]]);
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
     return tree;
 }
@@ -43,33 +39,32 @@ export function ineqMulNegUS(tree) {
 
     const operator = tree[0];
     if (operator !== 'inequality') {
-        // newOperand = tree.slice(1);
         return tree;
     }
-    const tree_1 = tree.slice(1);
-    if (JSON.stringify(tree_1[0]) === JSON.stringify(['natural', '0'])) {
-        const tree_2 = tree_1.slice(1);
-        for (const subtree of tree_2) {
+    const [, ...operand] = tree;
+    if (JSON.stringify(operand[0]) === JSON.stringify(['natural', '0'])) {
+        const [, ...operand_1] = operand;
+        for (const term_1 of operand_1) {
             // If you see any nonnegative argument,
             // just return the whole tree as it was before
-            if (Array.isArray(subtree) && (subtree[0] !== 'negative' &&
-                !(subtree[0] === 'addchain' && subtree[1][0] === 'sub'))) {
-                return [operator].concat(tree_1);
+            if (Array.isArray(term_1) && (term_1[0] !== 'negative' &&
+                !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'))) {
+                return [operator, ...operand];
             }
         }
-    } else if (JSON.stringify(tree_1[tree_1.length - 1]) === JSON.stringify(['natural', '0'])) {
-        const tree_2 = tree_1.slice(0, -1);
-        for (const subtree of tree_2) {
-            if (Array.isArray(subtree) && (subtree[0] !== 'negative' &&
-                !(subtree[0] === 'addchain' && subtree[1][0] === 'sub'))) {
-                return [operator].concat(tree_1);
+    } else if (JSON.stringify(operand[operand.length - 1]) === JSON.stringify(['natural', '0'])) {
+        const operand_1 = operand.slice(0, -1);
+        for (const term_1 of operand_1) {
+            if (Array.isArray(term_1) && (term_1[0] !== 'negative' &&
+                !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'))) {
+                return [operator, ...operand];
             }
         }
     } else {
-        return [operator].concat(tree_1);
+        return [operator, ...operand];
     }
     const newOperand = [];
-    for (const subtree of tree_1) {
+    for (const subtree of operand) {
         if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
             newOperand.push(subtree);
         } else {
@@ -97,7 +92,7 @@ export function ineqMulNegUS(tree) {
             }
         }
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 /*

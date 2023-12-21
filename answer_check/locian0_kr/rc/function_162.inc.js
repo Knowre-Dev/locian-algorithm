@@ -13,82 +13,79 @@ export function sub_addFactored(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
 
     switch (operator) {
         case 'addchain': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
             const add_term = [];
-            for (const t of tree_1) {
-                if (t[0] === 'add') {
-                    if (t[1][0] === 'addchain') {
-                        const t_1_entries = t[1].entries();
-                        for (const [k, t11] of t_1_entries) {
-                            if (k !== 0) {
-                                add_term.push(t11);
+            for (const term of operand) {
+                if (term[0] === 'add') {
+                    if (term[1][0] === 'addchain') {
+                        const term_1_entries = term[1].entries();
+                        for (const [key, term_term_1] of term_1_entries) {
+                            if (key !== 0) {
+                                add_term.push(term_term_1);
                             }
                         }
                     } else {
-                        if (t[1][0] === 'mulchain') {
+                        if (term[1][0] === 'mulchain') {
                             let addchain = false;
-                            const t_1_entries = t[1].entries();
-                            for (const [k, t1] of t_1_entries) {
-                                if (k !== 0 && t1[1][0] === 'addchain') {
-                                    addchain = t;
+                            const term_1_entries = term[1].entries();
+                            for (const [key, term_term_1] of term_1_entries) {
+                                if (key !== 0 && term_term_1[1][0] === 'addchain') {
+                                    addchain = term;
                                 }
                             }
                             if (addchain !== false) {
                                 add_term.push(addFactoredForm(addFactoredFormVar(addchain)));
                             } else {
-                                add_term.push(t);
+                                add_term.push(term);
                             }
                         } else {
-                            add_term.push(t);
+                            add_term.push(term);
                         }
                     }
                 } else {
-                    if (t[1][0] === 'addchain') {
-                        const t_1_entries = t[1].entries();
-                        for (const [k, t11] of t_1_entries) {
-                            if (k !== 0) {
-                                t11[0] === 'add' ? add_term.push(['sub', t11[1]])
-                                : add_term.push(['add', t11[1]]);
+                    if (term[1][0] === 'addchain') {
+                        const term_1_entries = term[1].entries();
+                        for (const [key, term_term_1] of term_1_entries) {
+                            if (key !== 0) {
+                                term_term_1[0] === 'add' ? add_term.push(['sub', term_term_1[1]])
+                                : add_term.push(['add', term_term_1[1]]);
                             }
                         }
                     } else {
-                        if (t[1][0] === 'mulchain') {
+                        if (term[1][0] === 'mulchain') {
                             let addchain = false;
-                            const t_1_entries = t[1].entries();
-                            for (const [k, t1] of t_1_entries) {
-                                if (k !== 0 && t1[1][0] === 'addchain') {
-                                    addchain = t;
+                            const term_1_entries = term[1].entries();
+                            for (const [key, term_term_1] of term_1_entries) {
+                                if (key !== 0 && term_term_1[1][0] === 'addchain') {
+                                    addchain = term;
                                     break;
                                 }
                             }
 
-                            if (addchain !== false) {
-                                add_term.push(addFactoredForm(addFactoredFormVar(addchain)));
-                            } else {
-                                add_term.push(t);
-                            }
+                            addchain !== false ? add_term.push(addFactoredForm(addFactoredFormVar(addchain)))
+                            : add_term.push(term);
                         } else {
-                            add_term.push(t);
+                            add_term.push(term);
                         }
                     }
                 }
             }
 
-            return add_term.length !== 0 ? addFactoredFormVar(['addchain'].concat(add_term))
-                : [operator].concat(newOperand);
+            return add_term.length !== 0 ? addFactoredFormVar(['addchain', ...add_term])
+                : [operator, ...newOperand];
         }
         case 'mulchain': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const t of tree_1) {
-                newOperand.push(sub_addFactored(t));
+            for (const term of operand) {
+                newOperand.push(sub_addFactored(term));
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
         default: {
             return tree;

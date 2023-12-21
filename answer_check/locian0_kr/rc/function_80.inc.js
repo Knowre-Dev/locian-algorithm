@@ -2,23 +2,23 @@ export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const newOperand = [];
-        for (const term of tree_1) {
+        for (const term of operand) {
             term[0] === 'sub' ? checkZeroEquiv(term[1]) ? newOperand.push(['add', term[1]])
-                                : newOperand.push(term)
+                : newOperand.push(term)
             : newOperand.push(term);
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(addPolyZero(v));
+    for (const term of operand) {
+        newOperand.push(addPolyZero(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 export function checkZeroEquiv(tree) {
@@ -26,30 +26,26 @@ export function checkZeroEquiv(tree) {
         return false;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'fraction': {
-            const tree_1 = tree.slice(1);
-            return checkZeroEquiv(tree_1[0]);
+            return checkZeroEquiv(tree[1]);
         }
         case 'mulchain': {
-            const tree_1 = tree.slice(1);
-            const tree_1_0 = tree_1[0];
-            let result = false
-            for (const term of tree_1_0) {
+            const operand = tree[1];
+            for (const term of operand) {
                 if (term[0] === 'natural' && term[1] === '0') {
-                    result = true;
+                    return true;
                 }
             }
-            return result;
+            return false;
         }
         case 'natural': {
-            const tree_1 = tree.slice(1);
-            let result = false
-            if (tree_1[0] === '0') {
-                result = true;
+            const [, ...operand] = tree;
+            if (operand[0] === '0') {
+                return true;
             }
-            return result;
+            return false;
         }
         default: {
             return false;

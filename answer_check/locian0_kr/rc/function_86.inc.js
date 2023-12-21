@@ -3,35 +3,29 @@ export function decIdentity(tree) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'decimal': {
-            const tree_1 = tree.slice(1);
-            if (tree_1[0].substr(0, 1) === '.') {
-                const newOperand = [];
-                newOperand.push('0' + tree_1[0]);
-                return [operator].concat(newOperand);
+            const [, ...operand] = tree;
+            if (operand[0].substr(0, 1) === '.') {
+                return [operator, '0' + operand[0]];
             }
             return tree;
         }
         case 'rdecimal': {
-            const tree_1 = tree.slice(1);
-            if (tree_1[0] === '') {
-                const newOperand = [];
-                newOperand.push('0');
-                newOperand.push(tree_1[1]);
-                newOperand.push(tree_1[2]);
-                return [operator].concat(newOperand);
+            const [, ...operand] = tree;
+            if (operand[0] === '') {
+                return [operator, '0', operand[1], operand[2]];
             }
             return tree;
         }
         default: {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(decIdentity(v));
+            for (const term of operand) {
+                newOperand.push(decIdentity(term));
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
     }
 }

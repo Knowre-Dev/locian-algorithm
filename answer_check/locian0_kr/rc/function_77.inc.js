@@ -6,12 +6,11 @@ export function fracSimpVar(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const operator = tree[0];
     if (operator === 'fraction') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        const num = fracSimpVar(tree_1[0]);
-        const den = fracSimpVar(tree_1[1]);
+        const [, ...operand] = tree;
+        const num = fracSimpVar(operand[0]);
+        const den = fracSimpVar(operand[1]);
 
         // get the variables in the numerator
         let varNum = [];
@@ -23,34 +22,34 @@ export function fracSimpVar(tree) {
             varNum.push(num);
         } else if (num[0] === 'mulchain') {
             const vars = [];
-            const num_1 = num.slice(1);
+            const [, ...num_1] = num;
             const num_1_entries = num_1.entries()
-            for (const [k, term] of num_1_entries) {
+            for (const [key, term] of num_1_entries) {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
                         if (!vars.includes(term[1][1])) {
-                            vars[k] = term[1][1];
-                            varNum[k] = ['power', term[1], ['natural', '1']];
+                            vars[key] = term[1][1];
+                            varNum[key] = ['power', term[1], ['natural', '1']];
                         } else {
                             // let search = vars.indexOf();
                             let search;
                             const vars_entries = vars.entries();
-                            for (const [k, v] of vars_entries) {
-                                if (JSON.stringify(v) === JSON.stringify(term[1][1])) {
-                                    search = k;
+                            for (const [key_vari, vari] of vars_entries) {
+                                if (JSON.stringify(vari) === JSON.stringify(term[1][1])) {
+                                    search = key_vari;
                                     break;
                                 }
                             }
                             varNum[search] = ['power', term[1], ['natural', (parseInt(varNum[search][2][1]) + 1).toString()]];
                         }
                     } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                        varNum[k] = term[1];
+                        varNum[key] = term[1];
                     } else {
-                        num_key = k;
+                        num_key = key;
                         narrNum.push(term);
                     }
                 } else {
-                    num_key = k;
+                    num_key = key;
                     narrNum.push(term);
                 }
             }
@@ -66,33 +65,33 @@ export function fracSimpVar(tree) {
             varDen.push(den);
         } else if (den[0] === 'mulchain') {
             const vars = [];
-            const den_1 = den.slice(1);
+            const [, ...den_1] = den;
             const den_1_entries = den_1.entries();
-            for (const [k, term] of den_1_entries) {
+            for (const [key, term] of den_1_entries) {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
                         if (!vars.includes(term[1][1])) {
-                            vars[k] = term[1][1];
-                            varDen[k] = ['power', term[1], ['natural', '1']];
+                            vars[key] = term[1][1];
+                            varDen[key] = ['power', term[1], ['natural', '1']];
                         } else {
                             let search;
                             const vars_entries = vars.entries();
-                            for (const [k, v] of vars_entries) {
-                                if (JSON.stringify(v) === JSON.stringify(term[1][1])) {
-                                    search = k;
+                            for (const [key_vari, vari] of vars_entries) {
+                                if (JSON.stringify(vari) === JSON.stringify(term[1][1])) {
+                                    search = key_vari;
                                     break;
                                 }
                             }
                             varDen[search][2][1] = (parseInt(varDen[search][2][1]) + 1).toString();
                         }
                     } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                        varDen[k] = term[1];
+                        varDen[key] = term[1];
                     } else {
-                        den_key = k;
+                        den_key = key;
                         narrDen.push(term);
                     }
                 } else {
-                    den_key = k;
+                    den_key = key;
                     narrDen.push(term);
                 }
             }
@@ -185,7 +184,7 @@ export function fracSimpVar(tree) {
                     arrNum.push(term);
                 }
             }
-
+            const newOperand = [];
             arrNum.sort();// added
             const arrNum_length = arrNum.length;
             switch (arrNum_length) {
@@ -198,9 +197,8 @@ export function fracSimpVar(tree) {
                     break;
                 }
                 default: {
-                    arrNum.unshift('mulchain');
-                    num_key === 0 ? newOperand.push(mulCommutative(arrNum))
-                    : newOperand.push(sub_mulCommutative(arrNum));
+                    num_key === 0 ? newOperand.push(mulCommutative(['mulchain', ...arrNum]))
+                    : newOperand.push(sub_mulCommutative(['mulchain', ...arrNum]));
                 }
             }
 
@@ -220,99 +218,87 @@ export function fracSimpVar(tree) {
             const arrDen_length = arrDen.length;
             switch (arrDen_length) {
                 case 0: {
-                    operator = newOperand[0].shift();
-                    newOperand = newOperand[0];
-                    break;
+                    return newOperand[0];
                 }
                 case 1: {
-                    newOperand.push(arrDen[0][1]);
-                    break;
+                    return [operator, ...newOperand, arrDen[0][1]];
                 }
                 default: {
-                    arrDen.unshift('mulchain');
-                    den_key === 0 ? newOperand.push(mulCommutative(arrDen))
-                    : newOperand.push(sub_mulCommutative(arrDen));
-                }
-            }
-        } else {
-            if (varDen.length === newVarDen.length && varNum.length === newVarNum.length) {
-                newOperand.push(num);
-                newOperand.push(den);
-            } else {
-                const newNum = [];
-                for (const nn of newVarNum) {
-                    nn[2][1] === '1' ? newNum.push(nn[1])
-                    : newNum.push(nn);
-                }
-                const arrNum = [];
-                if (newNum.length > 0) {
-                    for (const term of newNum) {
-                        arrNum.push(['mul', term]);
-                    }
-                }
-                if (narrNum.length > 0) {
-                    for (const term of narrNum) {
-                        arrNum.push(term);
-                    }
-                }
-                const arrNum_length = arrNum.length;
-                switch (arrNum_length) {
-                    case 0: {
-                        newOperand.push(['natural', '1']);
-                        break;
-                    }
-                    case 1: {
-                        newOperand.push(arrNum[0][1]);
-                        break;
-                    }
-                    default: {
-                        arrNum.unshift('mulchain');
-                        newOperand.push(mulCommutative(arrNum));
-                    }
-                }
-
-                const newDen = [];
-                for (const nn of newVarDen) {
-                    nn[2][1] === '1' ? newDen.push(nn[1])
-                    : newDen.push(nn);
-                }
-                const arrDen = [];
-                if (newDen.length > 0) {
-                    for (const term of newDen) {
-                        arrDen.push(['mul', term]);
-                    }
-                }
-                if (narrDen.length > 0) {
-                    for (const term of narrDen) {
-                        arrDen.push(term);
-                    }
-                }
-                const arrDen_length = arrDen.length;
-                switch (arrDen_length) {
-                    case 0: {
-                        operator = newOperand[0].shift();
-                        newOperand = newOperand[0];
-                        break;
-                    }
-                    case 1: {
-                        newOperand.push([0][1]);
-                        break;
-                    }
-                    default: {
-                        arrDen.unshift('mulchain');
-                        newOperand.push(mulCommutative(arrDen));
-                    }
+                    return den_key === 0 ? [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])]
+                        : [operator, ...newOperand, sub_mulCommutative(['mulchain', ...arrDen])]
                 }
             }
         }
-        return [operator].concat(newOperand);
+        if (varDen.length === newVarDen.length && varNum.length === newVarNum.length) {
+            return [operator, num, den];
+        }
+        const newNum = [];
+        for (const nn of newVarNum) {
+            nn[2][1] === '1' ? newNum.push(nn[1])
+            : newNum.push(nn);
+        }
+        const arrNum = [];
+        if (newNum.length > 0) {
+            for (const term of newNum) {
+                arrNum.push(['mul', term]);
+            }
+        }
+        if (narrNum.length > 0) {
+            for (const term of narrNum) {
+                arrNum.push(term);
+            }
+        }
+        const newOperand = [];
+        const arrNum_length = arrNum.length;
+        switch (arrNum_length) {
+            case 0: {
+                newOperand.push(['natural', '1']);
+                break;
+            }
+            case 1: {
+                newOperand.push(arrNum[0][1]);
+                break;
+            }
+            default: {
+                newOperand.push(mulCommutative(['mulchain', ...arrNum]));
+            }
+        }
+
+        const newDen = [];
+        for (const nn of newVarDen) {
+            nn[2][1] === '1' ? newDen.push(nn[1])
+            : newDen.push(nn);
+        }
+        const arrDen = [];
+        if (newDen.length > 0) {
+            for (const term of newDen) {
+                arrDen.push(['mul', term]);
+            }
+        }
+        if (narrDen.length > 0) {
+            for (const term of narrDen) {
+                arrDen.push(term);
+            }
+        }
+        const arrDen_length = arrDen.length;
+        switch (arrDen_length) {
+            case 0: {
+                return newOperand[0];
+            }
+            case 1: {
+                return [operator, ...newOperand, arrDen[0][1]];
+            }
+            default: {
+                return [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])];
+            }
+        }
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(fracSimpVar(v));
+    for (const term of operand) {
+        newOperand.push(fracSimpVar(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 /*

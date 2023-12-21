@@ -4,11 +4,11 @@ export function makeOneSideOfEqIneqZero(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'equation': {
-            const tree_1 = tree.slice(1);
-            for (const subtree of tree_1) {
+            const [, ...operand] = tree;
+            for (const subtree of operand) {
                 if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
                     return tree;
                 }
@@ -16,52 +16,52 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             // From here on, we are guaranteed that
             // no side in the chain of equalities is already identically zero
 
-            const tree_1_entries = tree_1.entries();
+            const operand_entries = operand.entries();
             const newOperand = [];
-            for (const [k, v] of tree_1_entries) {
-                let temp;
-                if (k === 0) {
+            for (const [key, term] of operand_entries) {
+                let temp = [];
+                if (key === 0) {
                     temp = ['natural', '0'];
                 } else {
-                    temp = v;
-                    if (v[0] !== 'addchain') {
-                        temp = ['addchain', ['add', v]];
+                    temp = term;
+                    if (term[0] !== 'addchain') {
+                        temp = ['addchain', ['add', term]];
                     }
-                    temp.push(['sub', tree_1[0]]);
+                    temp.push(['sub', operand[0]]);
                 }
                 newOperand.push(temp);
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
         case 'inequality': {
-            const tree_1 = tree.slice(1);
-            for (const subtree of tree_1) {
+            const [, ...operand] = tree;
+            for (const subtree of operand) {
                 if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
-                    return [operator].concat(tree_1);
+                    return [operator, ...operand];
                 }
             }
             // From here on, we are guaranteed that
             // no side in the chain of inequalities is already identically zero
 
-            const tree_1_entries = tree_1.entries();
+            const operand_entries = operand.entries();
             const newOperand = [];
-            for (const [k, v] of tree_1_entries) {
+            for (const [key, term] of operand_entries) {
                 let temp;
-                if (k === 0) {
+                if (key === 0) {
                     temp = ['natural', '0'];
                 } else {
-                    temp = v;
-                    if (!['lt', 'le', 'ge', 'gt'].includes(v) &&
-                        !termExists('infinity', v)) {
-                        if (v[0] !== 'addchain') {
-                            temp = ['addchain', ['add', v]];
+                    temp = term;
+                    if (!['lt', 'le', 'ge', 'gt'].includes(term) &&
+                        !termExists('infinity', term)) {
+                        if (term[0] !== 'addchain') {
+                            temp = ['addchain', ['add', term]];
                         }
-                        temp.push(['sub', tree_1[0]]);
+                        temp.push(['sub', operand[0]]);
                     }
                 }
                 newOperand.push(temp);
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
         default: {
             return tree;

@@ -2,26 +2,25 @@ export function powerFrac(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'power') {
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'fraction') {
-            operator = 'fraction';
+        const [, ...operand] = tree;
+        if (operand[0][0] === 'fraction') {
             const newOperand = [];
-            const tree_1_0 = tree_1[0];
-            for (const t1 of tree_1_0) {
-                if (Array.isArray(t1)) {
-                    newOperand.push(['power', t1, tree_1[1]]);
+            const operand_0 = operand[0];
+            for (const term_0 of operand_0) {
+                if (Array.isArray(term_0)) {
+                    newOperand.push(['power', term_0, operand[1]]);
                 }
             }
-            return [operator].concat(newOperand);
+            return ['fraction', ...newOperand];
         }
         return tree;
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(powerFrac(v));
+    for (const term of operand) {
+        newOperand.push(powerFrac(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

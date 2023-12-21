@@ -2,16 +2,12 @@ export function posiSign(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const operator = tree[0];
+    const [operator, ...operand] = tree;
     if (operator === 'positive') {
-       return tree.slice(1)[0];
+       return operand[0];
     }
-    const tree_1 = tree.slice(1);
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(posiSign(v));
-    }
-    return [operator].concat(newOperand);
+    const newOperand = operand.map(term => posiSign(term));
+    return [operator, ...newOperand];
 }
 
 /*

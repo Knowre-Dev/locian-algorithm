@@ -7,32 +7,31 @@ export function sub_addFactorNegative(tree = null) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     switch (operator) {
         case 'addchain': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const t of tree_1) {
-                newOperand.push(addFactorNegative(addCommutative(t)));
+            for (const term of operand) {
+                newOperand.push(addFactorNegative(addCommutative(term)));
             }
-
-            return addFactorNegative(addAdjacentSigns(['addchain'].concat(newOperand)));
+            return addFactorNegative(addAdjacentSigns(['addchain', ...newOperand]));
         }
         case 'equation': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(sub_addFactorNegative(v));
+            for (const term of operand) {
+                newOperand.push(sub_addFactorNegative(term));
             }
-            return ['equation'].concat(newOperand);
+            return ['equation', ...newOperand];
         }
         case 'inequality': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(sub_addFactorNegative(v));
+            for (const term of operand) {
+                newOperand.push(sub_addFactorNegative(term));
             }
-            return ['inequality'].concat(newOperand);
+            return ['inequality', ...newOperand];
         }
         default: {
             return addFactorNegative(tree);

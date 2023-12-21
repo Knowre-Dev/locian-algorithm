@@ -2,54 +2,45 @@ export function addIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        for (const v of tree_1) {
-            if (!(v[1][0] === 'natural' && v[1][1] === '0')) {
-                newOperand.push(v);
+        const [, ...operand] = tree;
+        const newOperand = [];
+        for (const term of operand) {
+            if (!(term[1][0] === 'natural' && term[1][1] === '0')) {
+                newOperand.push(term);
             }
         }
         const newOperand_length = newOperand.length;
         switch (newOperand_length) {
             case 0: {
-                operator = 'natural';
-                newOperand = ['0'];
-                break;
+                return ['natural', '0'];
             }
             case 1: {
                 switch (newOperand[0][0]) {
                     case 'add': {
-                        operator = newOperand[0][1].shift();
-                        newOperand = newOperand[0][1];
-                        break;
+                        return newOperand[0][1];
                     }
                     case 'sub': {
-                        operator = 'negative';
-                        newOperand = [newOperand[0][1]];
-                        break;
+                        return ['negative', newOperand[0][1]];
                     }
                     case 'addsub': {
-                        operator = 'pm';
-                        newOperand = [newOperand[0][1]];
-                        break;
+                        return ['pm', newOperand[0][1]];
                     }
                     case 'subadd': {
-                        operator = 'mp';
-                        newOperand = [newOperand[0][1]];
-                        break;
+                        return ['mp', newOperand[0][1]];
+                    }
+                    default: {
+                        return [operator, ...newOperand];
                     }
                 }
-                break;
+            }
+            default: {
+                return [operator, ...newOperand];
             }
         }
-        return [operator].concat(newOperand);
     }
-    const tree_1 = tree.slice(1);
-    const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(addIdentity(v));
-    }
-    return [operator].concat(newOperand);
+    const [, ...operand] = tree;
+    const newOperand = operand.map(term => addIdentity(term));
+    return [operator, ...newOperand];
 }

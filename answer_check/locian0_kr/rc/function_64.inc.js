@@ -3,21 +3,20 @@ export function varReverse(tree, types = [null], parent = null) {
         return tree;
     }
 
-    const operator = tree[0];
-    const tree_1 = tree.slice(1);
-    const tree_1_entries = tree_1.entries();
-    for (const [k, v] of tree_1_entries) {
-        tree_1[k] = varReverse(v, types, operator);
+    const [operator, ...operand] = tree;
+    const operand_entries = operand.entries();
+    for (const [key, term] of operand_entries) {
+        operand[key] = varReverse(term, types, operator);
     }
     if (operator === 'mulchain' && types.includes(parent)) {
         let vars = [];
 
-        for (const v of tree_1) {
-            if (v[0] === 'mul' && v[1][0] === 'variable' && v.length === 2) {
-                vars.push(v[1][1]);
-            } else {
-                return [operator].concat(tree_1);
+        for (const term of operand) {
+            const is_variable = (term[0] === 'mul' && term[1][0] === 'variable' && term.length === 2);
+            if (!is_variable) {
+                return [operator, ...operand];
             }
+            vars.push(term[1][1]);
         }
 
         if (vars[0] > vars[vars.length - 1]) {
@@ -26,14 +25,14 @@ export function varReverse(tree, types = [null], parent = null) {
 
         const result = [];
 
-        for (const v of vars) {
-            result.push(['mul', ['variable', v]]);
+        for (const vari of vars) {
+            result.push(['mul', ['variable', vari]]);
         }
 
-        return [operator + '_fixed'].concat(result);
+        return [operator + '_fixed', ...result];
     }
 
-    return [operator].concat(tree_1);
+    return [operator, ...operand];
 }
 
 /*

@@ -4,25 +4,25 @@ export function addNegaToSub(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const newOperand = [];
-        const tree_1_entries = tree_1.entries();
-        for (const [k, v] of tree_1_entries) {
-            k === 0 ? (v[0] === 'add' && v[1][0] === 'negative') ? newOperand.push(['sub', v[1][1]])
-                : (v[0] === 'add' && v[1][0] === 'positive') ? newOperand.push(['add', v[1][1]])
-                : newOperand.push(v)
-            : newOperand.push(v);
+        const operand_entries = operand.entries();
+        for (const [key, term] of operand_entries) {
+            key === 0 ? (term[0] === 'add' && term[1][0] === 'negative') ? newOperand.push(['sub', term[1][1]])
+                : (term[0] === 'add' && term[1][0] === 'positive') ? newOperand.push(['add', term[1][1]])
+                : newOperand.push(term)
+            : newOperand.push(term);
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(addNegative(v));
+    for (const term of operand) {
+        newOperand.push(addNegative(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 /*

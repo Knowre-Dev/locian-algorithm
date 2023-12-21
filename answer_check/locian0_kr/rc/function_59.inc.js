@@ -3,24 +3,18 @@ export function powIdentity(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'power') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        if (tree_1[1][0] === 'natural' && tree_1[1][1] === '1') {
-            operator = tree_1[0].shift();
-            newOperand = tree_1[0];
-        } else {
-            newOperand = tree_1;
-        }
-        return [operator].concat(newOperand);
+        const [, ...operand] = tree;
+        const is_one = operand[1][0] === 'natural' && operand[1][1] === '1';
+        return is_one ? operand[0] : tree;
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(powIdentity(v));
+    for (const term of operand) {
+        newOperand.push(powIdentity(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 /*
 import {LatexToTree, compareMathTree} from '../checkmath.js';

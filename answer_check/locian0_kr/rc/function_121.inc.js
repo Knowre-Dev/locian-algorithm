@@ -3,27 +3,26 @@ export function mulPowSeparation(tree = null) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
 
     if (operator === 'power') {
-        const tree_1 = tree.slice(1);
-        if (tree_1[0][0] === 'mulchain') {
-            operator = 'mulchain';
+        const [, ...operand] = tree;
+        if (operand[0][0] === 'mulchain') {
             const newOperand = [];
-            const tree_1_0 = tree_1[0];
-            for (const t1 of tree_1_0) {
-                if (Array.isArray(t1)) {
-                    newOperand.push([t1[0], ['power', t1[1], tree_1[1]]]);
+            const operand_0 = operand[0];
+            for (const term_0 of operand_0) {
+                if (Array.isArray(term_0)) {
+                    newOperand.push([term_0[0], ['power', term_0[1], operand[1]]]);
                 }
             }
-            return [operator].concat(newOperand);
+            return ['mulchain', ...newOperand];
         }
         return tree;
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(mulPowSeparation(v));
+    for (const term of operand) {
+        newOperand.push(mulPowSeparation(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

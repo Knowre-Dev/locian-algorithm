@@ -5,52 +5,36 @@ export function rdecToFrac(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const operator = tree[0];
     if (operator === 'rdecimal') {
-        const tree_1 = tree.slice(1);
-        let newOperand = [];
-        if (tree_1[1] === '') {
-            const int = tree_1[0];
-            const rdec = tree_1[2];
-            let num;
-            let mul;
+        const [, ...operand] = tree;
+        if (operand[1] === '') {
+            const int = operand[0];
+            const rdec = operand[2];
+            let num = parseInt(int) * Math.pow(10, rdec.length) + parseInt(rdec) - parseInt(int);
             if (int === '0') {
                 num = parseInt(rdec);
-            } else {
-                mul = parseInt(int) * Math.pow(10, rdec.length) + parseInt(rdec);
-                num = mul - parseInt(int);
             }
             const den = (9 * Math.pow(10, rdec.length - 1)).toString();
-            const frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
-            operator = frac.shift();
-            newOperand = frac;
-        } else {
-            const int = tree_1[0];
-            const dec = tree_1[1];
-            const rdec = tree_1[2];
-            let mul;
-            let num;
-            const rdec_length = rdec.length;
-            if (int === '0') {
-                mul = parseInt(dec) * Math.pow(10, rdec_length) + parseInt(rdec);
-                num = mul - parseInt(dec);
-            } else {
-                mul = parseInt(int + dec) * Math.pow(10, rdec_length) + parseInt(rdec);
-                num = mul - parseInt(int + dec);
-            }
-            const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
-            const frac = fracSimp(['fraction', ['natural', num], ['natural', den]]);
-            operator = frac.shift();
-            newOperand = frac;
+            return fracSimp(['fraction', ['natural', num], ['natural', den]]);
         }
-        return [operator].concat(newOperand);
+        const int = operand[0];
+        const dec = operand[1];
+        const rdec = operand[2];
+        const rdec_length = rdec.length;
+        let num = parseInt(int + dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(int + dec);
+        if (int === '0') {
+            num = parseInt(dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(dec);
+        }
+        const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
+        return fracSimp(['fraction', ['natural', num], ['natural', den]]);
     }
     const newOperand = [];
-    const tree_1 = tree.slice(1);
-    for (const v of tree_1) {
-        newOperand.push(rdecToFrac(v));
+    const [, ...operand] = tree;
+    for (const term of operand) {
+        newOperand.push(rdecToFrac(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

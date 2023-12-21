@@ -3,11 +3,11 @@ export function addAdjacentSigns(tree) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
-        const tree_1 = tree.slice(1);
+        const [, ...operand] = tree;
         const newOperand = [];
-        for (const term of tree_1) {
+        for (const term of operand) {
             const nterm = addAdjacentSigns(term[1]);
             if (nterm[0] === 'negative') {
                 switch (term[0]) {
@@ -27,12 +27,12 @@ export function addAdjacentSigns(tree) {
                 newOperand.push([term[0], nterm]);
             }
         }
-        return [operator].concat(newOperand);
+        return [operator, ...newOperand];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(addAdjacentSigns(v));
+    for (const term of operand) {
+        newOperand.push(addAdjacentSigns(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

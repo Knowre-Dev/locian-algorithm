@@ -5,26 +5,19 @@ export function mfracEquiv(tree = null) {
         return tree;
     }
 
-    let operator = tree[0];
+    const [operator] = tree;
     if (operator === 'mfraction') {
-        const tree_1 = tree.slice(1);
-        const nfrac = fracSimpInt(['fraction', tree_1[1], tree_1[2]]);
+        const [, ...operand] = tree;
+        const nfrac = fracSimpInt(['fraction', operand[1], operand[2]]);
         if (nfrac[0] === 'fraction') {
-            const newOperand = [];
-            newOperand.push(tree_1[0]);
-            newOperand.push(nfrac[1]);
-            newOperand.push(nfrac[2]);
-            return [operator].concat(newOperand);
+            return [operator, operand[0], nfrac[1], nfrac[2]];
         }
-        operator = 'natural';
-        const newOperand = [];
-        newOperand.push((parseInt(tree_1[0][1]) + parseInt(nfrac[1])).toString());
-        return [operator].concat(newOperand);
+        return ['natural', (parseInt(operand[0][1]) + parseInt(nfrac[1])).toString()];
     }
-    const tree_1 = tree.slice(1);
+    const [, ...operand] = tree;
     const newOperand = [];
-    for (const v of tree_1) {
-        newOperand.push(mfracEquiv(v));
+    for (const term of operand) {
+        newOperand.push(mfracEquiv(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }

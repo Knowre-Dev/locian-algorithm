@@ -5,22 +5,21 @@ export function varReverseShift(tree, types = [null], parent = null) {
         return tree;
     }
 
-    const operator = tree[0];
-    const tree_1 = tree.slice(1);
-    const tree_1_entries = tree_1.entries();
-    for (const [k, v] of tree_1_entries) {
-        tree_1[k] = varReverseShift(v, types, operator);
+    const [operator, ...operand] = tree;
+    const operand_entries = operand.entries();
+    for (const [key, term] of operand_entries) {
+        operand[key] = varReverseShift(term, types, operator);
     }
 
     if (operator === 'mulchain' && types.includes(parent)) {
         let vars = [];
 
-        for (const v of tree_1) {
-            if (v[0] === 'mul' && v[1][0] === 'variable' && v.length === 2) {
-                vars.push(v[1][1]);
-            } else {
-                return [operator].concat(tree_1);
+        for (const term of operand) {
+            const is_variable = (term[0] === 'mul' && term[1][0] === 'variable' && term.length === 2);
+            if (!is_variable) {
+                return tree;
             }
+            vars.push(term[1][1]);
         }
         const vars_1 = _.cloneDeep(vars);
         vars_1.sort();
@@ -39,8 +38,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
         for (let i = 0; i < k; i++) {
             result[i + vars_length - k] = ['mul', ['variable', vars[i]]];
         }
-        return [operator + '_fixed'].concat(result);
+        return [operator + '_fixed', ...result];
     }
 
-    return [operator].concat(tree_1);
+    return [operator, ...operand];
 }

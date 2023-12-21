@@ -3,34 +3,34 @@ export function solParenthesis(tree = null) {
         return tree;
     }
 
-    let operator = tree[0];
+    let [operator] = tree;
     switch (operator) {
         case 'mulchain': {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             let mul = true;
             const addchain = [];
             const mono = [];
-            for (const v of tree_1) {
-                if (v[0] === 'mul') {
-                    switch (v[1][0]) {
+            for (const term of operand) {
+                if (term[0] === 'mul') {
+                    switch (term[1][0]) {
                         case 'addchain': {
-                            addchain.push(v[1]);
+                            addchain.push(term[1]);
                             break;
                         }
                         case 'mulchain': {
-                            const expand = solParenthesis(v[1]);
+                            const expand = solParenthesis(term[1]);
                             expand[0] === 'addchain' ? addchain.push(expand)
-                            : mono.push(v);
+                            : mono.push(term);
                             break;
                         }
                         case 'power': {
-                            const expand = solParenthesis(v[1]);
+                            const expand = solParenthesis(term[1]);
                             expand[0] === 'addchain' ? addchain.push(expand)
-                            : mono.push(v);
+                            : mono.push(term);
                             break;
                         }
                         default: {
-                            mono.push(v);
+                            mono.push(term);
                         }
                     }
                 } else {
@@ -39,7 +39,7 @@ export function solParenthesis(tree = null) {
             }
 
             if (mul === false) {
-                return [operator].concat(tree_1)
+                return [operator, ...operand]
             }
             const addchain_length = addchain.length;
             switch (addchain_length) {
@@ -52,11 +52,10 @@ export function solParenthesis(tree = null) {
                     const addchain_0 = addchain[0]
                     for (const term of addchain_0) {
                         if (Array.isArray(term)) {
-                            const merge = mono.concat([['mul', term[1]]]);
-                            newOperand.push([term[0], ['mulchain'].concat(merge)]);
+                            newOperand.push([term[0], ['mulchain', ...mono, ['mul', term[1]]]]);
                         }
                     }
-                    return [operator].concat(newOperand);
+                    return [operator, ...newOperand];
                 }
                 default: {
                     operator = 'addchain';
@@ -64,55 +63,54 @@ export function solParenthesis(tree = null) {
 
                     if (mono.length !== 0) {
                         const merge = ['mulchain', ['mul', first]];
-                        for (const m of mono) {
-                            merge.push(m);
+                        for (const term_m of mono) {
+                            merge.push(term_m);
                         }
                         first = solParenthesis(merge);
                     }
 
-                    for (const a1 of addchain) {
-                        a1.shift();
+                    for (const term_a of addchain) {
+                        term_a.shift();
                         const term = [];
-                        for (const a of a1) {
+                        for (const term_a_1 of term_a) {
                             let merge = [];
-                            for (const f of first) {
+                            for (const term_f of first) {
                                 merge = ['mulchain'];
-                                if (Array.isArray(f) && Array.isArray(a)) {
+                                if (Array.isArray(term_f) && Array.isArray(term_a_1)) {
                                     let flag1;
-                                    JSON.stringify(f[0]) === JSON.stringify(a[0]) ? flag1 = 'add'
+                                    JSON.stringify(term_f[0]) === JSON.stringify(term_a_1[0]) ? flag1 = 'add'
                                     : flag1 = 'sub';
-                                    merge.push(['mul', f[f.length - 1]]);
-                                    merge.push(['mul', a[a.length - 1]]);
+                                    merge.push(['mul', term_f[term_f.length - 1]]);
+                                    merge.push(['mul', term_a_1[term_a_1.length - 1]]);
                                     term.push([flag1, merge]);
                                 }
                             }
-                            merge = [];
                         }
-                        first = ['addchain'].concat(term);
+                        first = ['addchain', ...term];
                     }
-                    return [operator].concat(first.slice(1));
+                    return [operator, ...first.slice(1)];
                 }
             }
         }
         case 'power': {
-            const tree_1 = tree.slice(1);
-            if (tree_1[0][0] === 'addchain' && tree_1[1][0] === 'natural') {
-                const int = parseInt(tree_1[1][1]);
+            const [, ...operand] = tree;
+            if (operand[0][0] === 'addchain' && operand[1][0] === 'natural') {
+                const int = parseInt(operand[1][1]);
                 const arr = [];
                 for (let i = 0; i < int; i++) {
-                    arr.push(['mul', tree_1[0]]);
+                    arr.push(['mul', operand[0]]);
                 }
-                return solParenthesis(['mulchain'].concat(arr));
+                return solParenthesis(['mulchain', ...arr]);
             }
-            return [operator].concat(tree_1);
+            return [operator, ...operand];
         }
         default: {
-            const tree_1 = tree.slice(1);
+            const [, ...operand] = tree;
             const newOperand = [];
-            for (const v of tree_1) {
-                newOperand.push(solParenthesis(v));
+            for (const term of operand) {
+                newOperand.push(solParenthesis(term));
             }
-            return [operator].concat(newOperand);
+            return [operator, ...newOperand];
         }
     }
 }

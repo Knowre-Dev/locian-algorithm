@@ -3,28 +3,27 @@ export function powDecomposition(tree) {
         return tree;
     }
 
-    let operator = tree[0];
-    let newOperand = [];
+    const [operator] = tree;
     if (operator === 'power') {
-        const tree_1 = tree.slice(1);
-        const base = powDecomposition(tree_1[0]);
-        const expo = powDecomposition(tree_1[1]);
+        const [, ...operand] = tree;
+        const newOperand = [];
+        const base = powDecomposition(operand[0]);
+        const expo = powDecomposition(operand[1]);
         if (base[0] === 'addchain' && expo[0] === 'natural') {
-            operator = 'mulchain';
             const expo_int = parseInt(expo[1]);
             for (let i = 0; i < expo_int; i++) {
                 newOperand.push(['mul', base]);
             }
-        } else {
-            newOperand = [base, expo];
+            return ['mulchain', ...newOperand];
         }
-        return [operator].concat(newOperand);
+        return [operator, base, expo];
     }
-    const tree_1 = tree.slice(1);
-    for (const v of tree_1) {
-        newOperand.push(powDecomposition(v));
+    const [, ...operand] = tree;
+    const newOperand = [];
+    for (const term of operand) {
+        newOperand.push(powDecomposition(term));
     }
-    return [operator].concat(newOperand);
+    return [operator, ...newOperand];
 }
 
 /*
