@@ -81,10 +81,7 @@ export function sub_addFactored(tree = null) {
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(sub_addFactored(term));
-            }
+            const newOperand = operand.map(term => sub_addFactored(term));
             return [operator, ...newOperand];
         }
         default: {

@@ -10,10 +10,6 @@ export function fracIdentity(tree) {
         return is_one ? operand[0] : tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(fracIdentity(term));
-    }
-
+    const newOperand = operand.map(term => fracIdentity(term));
     return [operator, ...newOperand];
 }

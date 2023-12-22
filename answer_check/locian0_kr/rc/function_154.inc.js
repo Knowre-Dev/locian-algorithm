@@ -192,10 +192,7 @@ export function exprSimpConst(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(exprSimpConst(term));
-            }
+            const newOperand = operand.map(term => exprSimpConst(term));
             return [operator, ...newOperand];
         }
     }

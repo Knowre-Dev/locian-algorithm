@@ -62,11 +62,7 @@ export function solParenthesis(tree = null) {
                     let first = addchain.shift();
 
                     if (mono.length !== 0) {
-                        const merge = ['mulchain', ['mul', first]];
-                        for (const term_m of mono) {
-                            merge.push(term_m);
-                        }
-                        first = solParenthesis(merge);
+                        first = solParenthesis(['mulchain', ['mul', first]].concat(mono));
                     }
 
                     for (const term_a of addchain) {
@@ -106,10 +102,7 @@ export function solParenthesis(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(solParenthesis(term));
-            }
+            const newOperand = operand.map(term => solParenthesis(term));
             return [operator, ...newOperand];
         }
     }

@@ -12,15 +12,11 @@ export function fracCombine(tree) {
 
     const [operator] = tree;
     if (operator === 'addchain') {
-        const denomArr = findDenominators(tree, true);
+        let denomArr = findDenominators(tree, true);
         if (denomArr.length === 0) {
             return tree;
         }
-
-        const denomArr_entries = denomArr.entries();
-        for (const [key, denom] of denomArr_entries) {
-            denomArr[key] = ['mul', denom];
-        }
+        denomArr = denomArr.map(denom => ['mul', denom]);
         let denom = array2ChainTree(denomArr);
         const find = findGCF(denom);
 
@@ -39,18 +35,11 @@ export function fracCombine(tree) {
             denom = ['mulchain', ...denom_arr];
         }
         const [, ...operand] = tree;
-        const newOperand = [];
-        for (const term of operand) {
-            newOperand.push([term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
-        }
-
+        const newOperand = operand.map(term => [term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
         return ['fraction', array2ChainTree(newOperand), denom];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const subtree of operand) {
-        newOperand.push(fracCombine(subtree));
-    }
+    const newOperand = operand.map(term => fracCombine(term));
     return [operator, ...newOperand];
 }
 

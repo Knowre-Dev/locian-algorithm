@@ -48,10 +48,7 @@ export function fracPlusMinus(tree) {
             : tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(fracPlusMinus(term));
-    }
+    const newOperand = operand.map(term => fracPlusMinus(term));
     return sign === -2 ? ['mp', [operator, ...newOperand]]
         : sign === 2 ? ['pm', [operator, ...newOperand]]
         : [operator, ...newOperand];

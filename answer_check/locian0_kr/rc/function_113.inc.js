@@ -12,12 +12,8 @@ export function mulConstCal(tree = null) {
         for (const term of operand) {
             if (term[1][0] === 'power') {
                 if (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') {
-                    let base = term[1][1][1];
-                    const top = term[1][2][1];
-                    for (let i = 1; i < top; i++) {
-                        base = base * base;
-                    }
-                    nterm.push([term[0], ['natural', base.toString()]]);
+                    const num = Math.pow(term[1][1][1], term[1][2][1]).toString();
+                    nterm.push([term[0], ['natural', num]]);
                 } else {
                     varterm.push(term);
                 }
@@ -46,10 +42,7 @@ export function mulConstCal(tree = null) {
         }
         return tree;
     }
-    const newOperand = [];
     const [, ...operand] = tree;
-    for (const term of operand) {
-        newOperand.push(mulConstCal(term));
-    }
+    const newOperand = operand.map(term => mulConstCal(term));
     return [operator, ...newOperand];
 }

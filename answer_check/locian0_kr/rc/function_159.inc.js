@@ -36,10 +36,7 @@ export function mulAllSidesByCommonDenom(tree = null) {
         }
 
         // Calculate the common denominator to multiply on all sides of the equation
-        let commonD = [];
-        for (const denom of denomArr) {
-            commonD.push(['mul', denom]);
-        }
+        let commonD = denomArr.map(denom => ['mul', denom]);
         commonD = mulIdentity(array2ChainTree(commonD, true));
 
         // Construct a new tree with the common denominator multiplied

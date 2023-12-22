@@ -20,9 +20,6 @@ export function decElimZero(tree) {
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(decElimZero(term));
-    }
+    const newOperand = operand.map(term => decElimZero(term));
     return [operator, ...newOperand];
 }

@@ -10,10 +10,7 @@ export function powIdentity(tree) {
         return is_one ? operand[0] : tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(powIdentity(term));
-    }
+    const newOperand = operand.map(term => powIdentity(term));
     return [operator, ...newOperand];
 }
 /*

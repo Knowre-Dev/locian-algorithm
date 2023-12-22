@@ -7,7 +7,6 @@ export function fracComplex(tree) {
 
     const numArr = [];
     const denArr = [];
-    const newOperand = [];
     if (operator === 'fraction') {
         const [, ...operand] = tree;
         const num = fracComplex(operand[0]);
@@ -47,8 +46,6 @@ export function fracComplex(tree) {
         return [operator, newNum, newDen]
     }
     const [, ...operand] = tree;
-    for (const term of operand) {
-        newOperand.push(fracComplex(term));
-    }
+    const newOperand = operand.map(term => fracComplex(term));
     return [operator, ...newOperand];
 }

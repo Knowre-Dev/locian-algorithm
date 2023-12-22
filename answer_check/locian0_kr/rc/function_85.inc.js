@@ -15,9 +15,6 @@ export function ineqSetNot(tree, vari = ['anything', 'x']) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(ineqSetNot(term));
-    }
+    const newOperand = operand.map(term => ineqSetNot(term));
     return [operator, ...newOperand];
 }

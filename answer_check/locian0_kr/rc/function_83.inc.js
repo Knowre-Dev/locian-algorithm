@@ -30,9 +30,6 @@ export function addAdjacentSigns(tree) {
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(addAdjacentSigns(term));
-    }
+    const newOperand = operand.map(term => addAdjacentSigns(term));
     return [operator, ...newOperand];
 }

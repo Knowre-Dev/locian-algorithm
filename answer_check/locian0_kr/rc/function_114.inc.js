@@ -14,9 +14,6 @@ export function mulToNega(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(mulToNega(term));
-    }
+    const newOperand = operand.map(term => mulToNega(term));
     return [operator, ...newOperand];
 }

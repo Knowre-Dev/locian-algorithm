@@ -294,10 +294,7 @@ export function fracSimpVar(tree) {
         }
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(fracSimpVar(term));
-    }
+    const newOperand = operand.map(term => fracSimpVar(term));
     return [operator, ...newOperand];
 }
 

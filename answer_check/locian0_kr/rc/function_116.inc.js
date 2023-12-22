@@ -81,10 +81,7 @@ export function rootSimpInt(tree) {
         }
         return [operator, ...newOperand];
     }
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(rootSimpInt(term));
-    }
+    const newOperand = operand.map(term => rootSimpInt(term));
     return [operator, ...newOperand];
 }
 

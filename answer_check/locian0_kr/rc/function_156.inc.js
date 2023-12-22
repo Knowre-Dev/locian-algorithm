@@ -34,13 +34,9 @@ export function groupLikeVariableTerms(tree = null) {
         case 'addchain': {
             // Recursive portion
             // added to allow for proper parse in case a power term is present
-            const newtree = [];
+            // const newtree = [];
             let [, ...operand] = tree;
-            for (const term of operand) {
-                newtree.push([term[0], groupLikeVariableTerms(term[1])]);
-            }
-            operand = newtree;
-
+            operand = operand.map(term => [term[0], groupLikeVariableTerms(term[1])])
             // Find all variables in this tree
             const varList = findVars([operator, ...operand]);
             if (varList.length === 0) {
@@ -146,12 +142,7 @@ export function groupLikeVariableTerms(tree = null) {
         case 'mulchain': {
             // Recursive portion
             let [, ...operand] = tree;
-            const newtree = [];
-            for (const term of operand) {
-                newtree.push([term[0], groupLikeVariableTerms(term[1])]);
-            }
-            operand = newtree;
-
+            operand = operand.map(term => [term[0], groupLikeVariableTerms(term[1])]);
             // Combine each repeating term into an exponential term
             const baseArr = [];
             const expoArr = [];
@@ -234,10 +225,7 @@ export function groupLikeVariableTerms(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const subtree of operand) {
-                newOperand.push(groupLikeVariableTerms(subtree));
-            }
+            const newOperand = operand.map(term => groupLikeVariableTerms(term));
             return [operator, ...newOperand];
         }
     }

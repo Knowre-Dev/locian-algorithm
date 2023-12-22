@@ -103,10 +103,7 @@ export function addFactoredForm(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(addFactoredForm(term));
-            }
+            const newOperand = operand.map(term => addFactoredForm(term));
             return [operator, ...newOperand];
         }
     }

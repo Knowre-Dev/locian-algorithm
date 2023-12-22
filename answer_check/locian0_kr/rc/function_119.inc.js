@@ -10,9 +10,6 @@ export function natElimZero(tree = null) {
         return [operator, operand[0].replaceAll(new RegExp('^0+(?!$)', 'g'), '')];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(natElimZero(term));
-    }
+    const newOperand = operand.map(term => natElimZero(term));
     return [operator, ...newOperand];
 }

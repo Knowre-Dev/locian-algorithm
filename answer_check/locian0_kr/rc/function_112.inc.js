@@ -17,20 +17,14 @@ export function powAddFactoredForm(tree = null) {
             const fact = addFactor(base);
             if (fact[0] === 'mulchain') {
                 fact.shift();
-                const newOperand = [];
-                for (const term of fact) {
-                    newOperand.push([term[0], ['power', term[1], expo]]);
-                }
+                const newOperand = fact.map(term => [term[0], ['power', term[1], expo]]);
                 return ['mulchain', ...newOperand];
             }
             return [operator, base, expo];
         }
         return [operator, base, expo];
     }
-    const newOperand = [];
-    const [, ...opereand] = tree;
-    for (const term of opereand) {
-        newOperand.push(powAddFactoredForm(term));
-    }
+    const [, ...operand] = tree;
+    const newOperand = operand.map(term => powAddFactoredForm(term));
     return [operator, ...newOperand];
 }

@@ -15,10 +15,8 @@ export function fracDecimal(tree) {
         const newNum = num / gcf;
         const newDen = den / gcf;
 
-        if (newDen === 1) {
-            return ['natural', newNum.toString()];
-        }
-        return ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
+        return newDen === 1 ? ['natural', newNum.toString()]
+            : ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
     }
     const [, ...operand] = tree;
     const newOperand = operand.map(term => fracDecimal(term));

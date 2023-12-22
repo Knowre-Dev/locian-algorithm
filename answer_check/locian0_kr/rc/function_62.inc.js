@@ -4,11 +4,8 @@ export function varShift(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const [operator, ...operand] = tree;
-    const operand_entries = operand.entries();
-    for (const [key, term] of operand_entries) {
-        operand[key] = varShift(term, types, operator);
-    }
+    let [operator, ...operand] = tree;
+    operand = operand.map(term => varShift(term, types, operator));
 
     if (operator === 'mulchain' && types.includes(parent)) {
         const vars = [];

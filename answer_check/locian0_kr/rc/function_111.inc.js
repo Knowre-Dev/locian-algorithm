@@ -28,9 +28,6 @@ export function powBaseSort(tree = null) {
         return [operator, base, expo];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(powBaseSort(term));
-    }
+    const newOperand = operand.map(term => powBaseSort(term));
     return [operator, ...newOperand];
 }

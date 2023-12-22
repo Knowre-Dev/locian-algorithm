@@ -18,9 +18,6 @@ export function powerFrac(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(powerFrac(term));
-    }
+    const newOperand = operand.map(term => powerFrac(term));
     return [operator, ...newOperand];
 }

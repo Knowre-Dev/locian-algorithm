@@ -31,10 +31,7 @@ export function rootToExp(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(rootToExp(term));
-            }
+            const newOperand = operand.map(term => rootToExp(term));
             return [operator, ...newOperand];
         }
     }

@@ -23,9 +23,6 @@ export function divFrac(tree) {
             : [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(divFrac(term));
-    }
+    const newOperand = operand.map(term => divFrac(term));
     return [operator, ...newOperand];
 }

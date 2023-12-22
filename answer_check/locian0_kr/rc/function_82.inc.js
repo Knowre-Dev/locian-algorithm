@@ -16,9 +16,6 @@ export function mulZero(tree) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(mulZero(term));
-    }
+    const newOperand = operand.map(term => mulZero(term));
     return [operator, ...newOperand];
 }

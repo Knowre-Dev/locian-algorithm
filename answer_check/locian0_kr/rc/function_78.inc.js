@@ -29,11 +29,9 @@ export function rdecToFrac(tree) {
         const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
         return fracSimp(['fraction', ['natural', num], ['natural', den]]);
     }
-    const newOperand = [];
     const [, ...operand] = tree;
-    for (const term of operand) {
-        newOperand.push(rdecToFrac(term));
-    }
+    const newOperand = operand.map(term => rdecToFrac(term));
+
     return [operator, ...newOperand];
 }
 /*

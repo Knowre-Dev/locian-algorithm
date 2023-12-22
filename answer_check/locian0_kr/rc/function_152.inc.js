@@ -130,6 +130,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
         for (const v_name of varNames) {
             if (JSON.stringify(v_name) === JSON.stringify(varname)) {
                 is_included = true;
+                break;
             }
         }
         if (!is_included) {
@@ -205,11 +206,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
         return evaluateOperation(operator, operand, seed, lookupTable);
     }
 
-    const newOperand = [];
-
-    for (const term of operand) {
-        newOperand.push(evaluateExWithSeed(term, seed, lookupTable));
-    }
+    const newOperand = operand.map(term => evaluateExWithSeed(term, seed, lookupTable));
 
     // By the recursion above, we are guaranteed that
     // ALL subexpressions have been evaluated into numerical values
@@ -360,17 +357,8 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             let num
             operand[1] === '' ? num = parseFloat(operand[1] + operand[2])
             : num = parseFloat(operand[1] + (parseFloat(operand[2]) - parseFloat(operand[1])).toString());
-            let denum = '';
-            const operand_2_length = operand[2].length
-            for (let i = 0; i < operand_2_length; i++) {
-                denum += '9';
-            }
-            const operand_1_length = operand[1].length
-            for (let i = 0; i < operand_1_length; i++) {
-                denum += '0';
-            }
+            let denum = '9'.repeat(operand[2].length) + '0'.repeat(operand[1].length);
             denum = parseFloat(denum);
-
             return [intg + (num / denum), 0];
         }
         case 'subscript': {

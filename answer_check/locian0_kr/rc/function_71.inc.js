@@ -34,9 +34,6 @@ export function addNegative(tree) {
         }
         return [operator, ...newOperand];
     }
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(addNegative(term));
-    }
+    const newOperand = operand.map(term => addNegative(term));
     return [operator, ...newOperand];
 }

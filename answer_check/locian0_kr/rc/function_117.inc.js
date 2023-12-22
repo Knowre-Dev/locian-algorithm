@@ -159,10 +159,7 @@ export function addFactoredFormVar(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(addFactoredFormVar(term));
-            }
+            const newOperand = operand.map(term => addFactoredFormVar(term));
             return sub_mulCommutative([operator, ...newOperand]);
         }
     }

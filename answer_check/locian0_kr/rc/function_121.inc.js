@@ -20,9 +20,6 @@ export function mulPowSeparation(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(mulPowSeparation(term));
-    }
+    const newOperand = operand.map(term => mulPowSeparation(term));
     return [operator, ...newOperand];
 }

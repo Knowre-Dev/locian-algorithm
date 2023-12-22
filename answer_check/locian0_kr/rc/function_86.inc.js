@@ -21,10 +21,7 @@ export function decIdentity(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(decIdentity(term));
-            }
+            const newOperand = operand.map(term => decIdentity(term));
             return [operator, ...newOperand];
         }
     }

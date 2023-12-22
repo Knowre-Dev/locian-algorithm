@@ -10,9 +10,6 @@ export function powerOne(tree = null) {
             : tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(powerOne(term));
-    }
+    const newOperand = operand.map(term => powerOne(term));
     return [operator, ...newOperand];
 }

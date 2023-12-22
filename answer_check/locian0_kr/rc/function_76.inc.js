@@ -34,10 +34,7 @@ export function fracSimpInt(tree) {
                         break;
                     }
                     default: {
-                        intNum = 1;
-                        for (const v of arrNum) {
-                            intNum *= v;
-                        }
+                        intNum = arrNum.reduce((a, b) => a * b);
                     }
                 }
                 break;
@@ -72,10 +69,7 @@ export function fracSimpInt(tree) {
                         break;
                     }
                     default: {
-                        intDen = 1;
-                        for (const v of arrDen) {
-                            intDen *= v;
-                        }
+                        intDen = arrDen.reduce((a, b) => a * b);
                     }
                 }
                 break;
@@ -130,10 +124,7 @@ export function fracSimpInt(tree) {
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(fracSimpInt(term));
-    }
+    const newOperand = operand.map(term => fracSimpInt(term));
     return [operator, ...newOperand];
 }
 

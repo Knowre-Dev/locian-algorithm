@@ -60,10 +60,7 @@ export function addFactorNegative(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(addFactorNegative(term));
-            }
+            const newOperand = operand.map(term => addFactorNegative(term));
             return [operator, ...newOperand];
         }
     }

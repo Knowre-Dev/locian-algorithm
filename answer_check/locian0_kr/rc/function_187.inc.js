@@ -4,9 +4,9 @@ export function expToFrac(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    let newOperand = [];
     if (operator === 'power') {
         if (operand[1][0] === 'negative') {
+            let newOperand = [];
             const newPower = operand[1][1];
             // 밑이 분수일 경우
             if (operand[0][0] === 'fraction') {
@@ -27,9 +27,7 @@ export function expToFrac(tree = null) {
         }
         return fracFirst(tree);
     }
-    for (const term of operand) {
-        newOperand.push(expToFrac(term));
-    }
+    const newOperand = operand.map(term => expToFrac(term));
     return fracFirst([operator, ...newOperand]);
 }
 

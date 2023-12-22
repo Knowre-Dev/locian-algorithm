@@ -11,26 +11,17 @@ export function sub_addFactorNegative(tree = null) {
     switch (operator) {
         case 'addchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(addFactorNegative(addCommutative(term)));
-            }
+            const newOperand = operand.map(term => addFactorNegative(addCommutative(term)));
             return addFactorNegative(addAdjacentSigns(['addchain', ...newOperand]));
         }
         case 'equation': {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(sub_addFactorNegative(term));
-            }
+            const newOperand = operand.map(term => sub_addFactorNegative(term));
             return ['equation', ...newOperand];
         }
         case 'inequality': {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(sub_addFactorNegative(term));
-            }
+            const newOperand = operand.map(term => sub_addFactorNegative(term));
             return ['inequality', ...newOperand];
         }
         default: {

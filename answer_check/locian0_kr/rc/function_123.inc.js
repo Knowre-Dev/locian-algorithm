@@ -26,9 +26,6 @@ export function mulFracSeparation(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(mulFracSeparation(term));
-    }
+    const newOperand = operand.map(term => mulFracSeparation(term));
     return [operator, ...newOperand];
 }

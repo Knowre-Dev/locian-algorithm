@@ -33,9 +33,6 @@ export function mulToExp(tree = null) {
         return varNum.length === 1 ? varNum[0][1] : [operator, ...varNum];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(mulToExp(term));
-    }
+    const newOperand = operand.map(term => mulToExp(term));
     return [operator, ...newOperand];
 }

@@ -35,9 +35,6 @@ export function absToMul(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(absToMul(term));
-    }
+    const newOperand = operand.map(term => absToMul(term));
     return [operator, ...newOperand];
 }

@@ -5,11 +5,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
         return tree;
     }
 
-    const [operator, ...operand] = tree;
-    const operand_entries = operand.entries();
-    for (const [key, term] of operand_entries) {
-        operand[key] = varReverseShift(term, types, operator);
-    }
+    let [operator, ...operand] = tree;
+    operand = operand.map(term => varReverseShift(term, types, operator));
 
     if (operator === 'mulchain' && types.includes(parent)) {
         let vars = [];

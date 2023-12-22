@@ -14,10 +14,7 @@ export function addPolyZero(tree) {
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = [];
-    for (const term of operand) {
-        newOperand.push(addPolyZero(term));
-    }
+    const newOperand = operand.map(term => addPolyZero(term));
     return [operator, ...newOperand];
 }
 

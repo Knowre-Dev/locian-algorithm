@@ -8,10 +8,7 @@ export function eqIneqDivPi(tree = null) {
         case 'equation': {
             const [, ...operand] = tree;
             if (checkPi(operand[0]) && checkPi(operand[1])) {
-                const newOperand = [];
-                for (const v of operand) {
-                    newOperand.push(sub_divPi(v, ['variable', 'pi']));
-                }
+                const newOperand = operand.map(term => sub_divPi(term, ['variable', 'pi']));
                 return [operator, ...newOperand];
             }
             return [operator, ...operand];

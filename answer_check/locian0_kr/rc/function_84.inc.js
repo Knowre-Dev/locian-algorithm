@@ -27,10 +27,7 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = [];
-            for (const term of operand) {
-                newOperand.push(intervalSetNot(term));
-            }
+            const newOperand = operand.map(term => intervalSetNot(term));
             return [operator, ...newOperand];
         }
     }

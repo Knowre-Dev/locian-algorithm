@@ -42,11 +42,8 @@ export function sub_mulCommutative(tree = null) {
         }
         return tree;
     }
-    const newOperand = [];
     const [, ...operand] = tree;
-    for (const term of operand) {
-        newOperand.push(sub_mulCommutative(term));
-    }
+    const newOperand = operand.map(term => sub_mulCommutative(term));
     return [operator, ...newOperand];
 }
 
