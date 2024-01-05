@@ -11,10 +11,10 @@ export function rearrangeTree(tree, types = []) {
 
     const [operator, ...operand] = tree;
     const newOperand = [];
-    for (const term of operand) {
+    operand.forEach(term => {
         Array.isArray(term) ? newOperand.push(rearrangeTree(term, types))
             : newOperand.push(term)
-    }
+    });
     if (!types.includes(operator)) {
         return [operator, ...newOperand];
     }
@@ -38,13 +38,13 @@ export function rearrangeTree(tree, types = []) {
             if (rightNum < 0) {
                 const temp = [];
                 const newOperand_reverse = newOperand.reverse();
-                for (const term_reverse of newOperand_reverse) {
+                newOperand_reverse.forEach(term_reverse => {
                     term_reverse === 'gt' ? temp.push('lt')
                     : term_reverse === 'ge' ? temp.push('le')
                     : term_reverse === 'lt' ? temp.push('gt')
                     : term_reverse === 'le' ? temp.push('ge')
                     : temp.push(term_reverse)
-                }
+                });
                 return [operator, ...temp];
             }
             return rightNum === 0 ? 'ERROR-ineq'

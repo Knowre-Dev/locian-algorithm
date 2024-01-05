@@ -21,17 +21,7 @@ export function fracCombine(tree) {
         const find = findGCF(denom);
 
         if (JSON.stringify(find.sym) !== JSON.stringify([])) {
-            const denom_arr = [];
-            const find_entries = Object.entries(find);
-            for (const [key, value] of find_entries) {
-                if (key === 'const') {
-                    denom_arr.push(['mul', value]);
-                } else {
-                    for (const value_1 of value) {
-                        denom_arr.push(['mul', value_1]);
-                    }
-                }
-            }
+            const denom_arr = [['mul', find.const], ...find.sym.map(value_1 => ['mul', value_1])];
             denom = ['mulchain', ...denom_arr];
         }
         const [, ...operand] = tree;

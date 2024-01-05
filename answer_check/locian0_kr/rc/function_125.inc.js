@@ -93,21 +93,16 @@ export function eqIneqMulProp(tree = null) {
                 return [operator, ...newOperand];
             }
             if (con_length === 1) {
-                let is_included = false;
                 for (const term of operand) {
                     if (JSON.stringify(term) === JSON.stringify(['natural', '0'])) {
-                        is_included = true;
-                        break;
+                        const deno = ['natural', con[0]];
+                        const newOperand = [];
+                        for (let i = 0; i < operand_length; i++) {
+                            i % 2 === 0 ? newOperand.push(sub_div(operand[i], deno))
+                            : newOperand.push(operand[i])
+                        }
+                        return [operator, ...newOperand];
                     }
-                }
-                if (is_included) {
-                    const deno = ['natural', con[0]];
-                    const newOperand = [];
-                    for (let i = 0; i < operand_length; i++) {
-                        i % 2 === 0 ? newOperand.push(sub_div(operand[i], deno))
-                        : newOperand.push(operand[i])
-                    }
-                    return [operator, ...newOperand];
                 }
                 return tree;
             }
@@ -148,21 +143,20 @@ export function sub_getConstant(tree) {
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            for (const term of operand) {
+            operand.forEach(term => {
                 if (term[0] === 'mul') {
                     con = [...con, ...sub_getConstant(term[1])];
                 }
-            }
-
+            });
             con = Array.from(new Set(con));
             if (con.includes(1)) {
                     if (con.length !== 1) {
                     const con1 = [];
-                    for (const term_c of con) {
+                    con.forEach(term_c => {
                         if (term_c !== 1) {
                             con1.push(term_c);
                         }
-                    }
+                    });
                     con = con1;
                 }
             }
@@ -170,16 +164,16 @@ export function sub_getConstant(tree) {
         }
         case 'addchain': {
             const [, ...operand] = tree;
-            for (const term of operand) {
+            operand.forEach(term => {
                 con = [...con, ...sub_getConstant(term[1])];
-            }
+            });
             break;
         }
         case 'negative': {
             const [, ...operand] = tree;
-            for (const term of operand) {
+            operand.forEach(term => {
                 con = [...con, ...sub_getConstant(term)];
-            }
+            });
             break;
         }
         case 'power': {

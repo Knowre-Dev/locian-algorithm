@@ -6,7 +6,7 @@ export function 곱셈결합법칙(tree) {
 
     const [operator, ...operand] = tree;
     const newOperand = [];
-    for (const term of operand) {
+    operand.forEach(term => {
         const term_1 = 곱셈결합법칙(term);
         // a(b(cd))-> a(bcd) -> abcd
         const is_mulchain = operator === 'mulchain' && term_1[0] === 'mul' && term_1[1][0] === 'mulchain';
@@ -16,7 +16,7 @@ export function 곱셈결합법칙(tree) {
         } else {
             newOperand.push(term_1);
         }
-    }
+    });
     return [operator, ...newOperand];
 }
 /*

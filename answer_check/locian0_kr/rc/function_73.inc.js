@@ -4,7 +4,6 @@ export function eqMulNeg(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-
     const [operator, ...operand] = tree;
     if (operator === 'equation' &&
         (operand[0][0] === 'negative' || (operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'))) {

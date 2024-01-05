@@ -62,9 +62,8 @@ export function groupLikeVariableTerms(tree = null) {
                 }
 
                 // Go through each unvisited child node in the tree
-                const operand_entries = operand.entries();
                 const key_string = key.toString();
-                for (const [key_operand, term] of operand_entries) {
+                operand.forEach((term, key_operand) => {
                     if (termIndices.includes(key_operand)) {
                         const addOp = term[0]; // this is just 'add', 'sub', etc.
                         // If the term contains variable,
@@ -84,12 +83,11 @@ export function groupLikeVariableTerms(tree = null) {
                                 }
                                 coeff = array2ChainTree(coeff);
                             }
-                            coeffArr[key_string].push([addOp, coeff]);
+                            coeffArr[key_string] = [...coeffArr[key_string], [addOp, coeff]];
                             termIndices.splice(termIndices.indexOf(key_operand), 1);
                         }
                     }
-                } // end going through each unvisited child node in the tree
-
+                }); // end going through each unvisited child node in the tree
                 // Convert each coefficient
                 // into either a single constant or an addchain of constants
 
@@ -100,13 +98,13 @@ export function groupLikeVariableTerms(tree = null) {
 
             // Account for all constant terms, if any
             if (termIndices.length > 0) {
-                for (const index of termIndices) {
-                    coeffArr.const.push(operand[index]);
-                }
+                termIndices.forEach(index => {
+                    coeffArr.const = [...coeffArr.const, operand[index]];
+                });
                 coeffArr.const = array2ChainTree(coeffArr.const);
             }
             // Construct the final list of new operands
-            const newOperand = [];
+            let newOperand = [];
             varList_entries = varList.entries();
             for (const [key_variable, variable] of varList_entries) {
                 // skip if there is no coefficient for this variable
@@ -130,8 +128,8 @@ export function groupLikeVariableTerms(tree = null) {
             // Don't forget any constant term
             if (coeffArr.const.length > 0) {
                 const coeff = coeffArr.const;
-                (coeff[0] === 'negative') ? newOperand.push(['sub', coeff[1]])
-                : newOperand.push(['add', coeff]);
+                newOperand = (coeff[0] === 'negative') ? [...newOperand, ['sub', coeff[1]]]
+                    : [...newOperand, ['add', coeff]];
             }
 
             // If there is only one operand, just output that operand
@@ -171,14 +169,11 @@ export function groupLikeVariableTerms(tree = null) {
 
                 if (tk === -1) {
                     baseArr[ind] = base;
-                    expoArr[ind] = [];
-                    expoArr[ind].push(expo);
+                    expoArr[ind] = [expo];
                     ind++;
                 } else {
-                    if (typeof expoArr[tk] === 'undefined') {
-                        expoArr[tk] = [];
-                    }
-                    expoArr[tk].push(expo);
+                    typeof expoArr[tk] === 'undefined' ? expoArr[tk] = [expo]
+                    : expoArr[tk] = [...expoArr[tk], expo];
                 }
             }
 
@@ -213,15 +208,12 @@ export function groupLikeVariableTerms(tree = null) {
                     : newOperand[0][1];
             }
             // Prepend 1 at the front if all terms are division terms
-            let allDiv = true;
             for (const newOpd of newOperand) {
                 if (newOpd[0] === 'mul') {
-                    allDiv = false;
-                    break;
+                    return [operator, ...newOperand]
                 }
             }
-            return allDiv ? [operator, ...newOperand.unshift(['mul', ['natural', '1']])]
-                : [operator, ...newOperand];
+            return [operator, ['mul', ['natural', '1'], ...newOperand]];
         }
         default: {
             const [, ...operand] = tree;

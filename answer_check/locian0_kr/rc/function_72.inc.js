@@ -17,8 +17,7 @@ export function addFactor(tree) {
                     let con = ['natural', '1'];
                     const syms = [];
                     const [, ...addterm_1] = addterm[1];
-                    const addterm_1_entries = addterm_1.entries();
-                    for (const [km, multerm] of addterm_1_entries) {
+                    addterm_1.forEach((multerm, km) => {
                         if (multerm[0] === 'mul') {
                             if (multerm[1][0] === 'variable') {
                                 syms.push(multerm);
@@ -26,7 +25,7 @@ export function addFactor(tree) {
                                 con = multerm;
                             }
                         }
-                    }
+                    });
                     if (syms.length > 0 && con[1] !== '1') {
                         consArr.push(con);
                     }
@@ -37,7 +36,7 @@ export function addFactor(tree) {
                         let con = ['natural', '1'];
                         const syms = [];
                         const [, ...addterm_11] = addterm[1][1];
-                        for (const multerm of addterm_11) {
+                        addterm_11.forEach(multerm => {
                             if (multerm[0] === 'mul') {
                                 if (multerm[1][0] === 'variable') {
                                     syms.push(multerm);
@@ -45,7 +44,7 @@ export function addFactor(tree) {
                                     con = multerm;
                                 }
                             }
-                        }
+                        });
                         if (syms.length > 0 && con[1] !== '1') {
                             consArr.push(con);
                         }
@@ -60,14 +59,15 @@ export function addFactor(tree) {
             let con = consArr[0][1];
             if (consArr.length !== 1) {
                 let lcm = parseInt(consArr[0][1][1]);
-                for (const term of consArr) {
-                    lcm = (lcm * parseInt(term[1][1])) / EuclidAlg(lcm, parseInt(term[1][1]));
-                }
+                consArr.forEach(term => {
+                    lcm *= parseInt(term[1][1]) / EuclidAlg(lcm, parseInt(term[1][1]));
+                    // lcm = (lcm * parseInt(term[1][1])) / EuclidAlg(lcm, parseInt(term[1][1]));
+                });
                 con = ['natural', lcm.toString()];
             }
 
             const newAdd = ['addchain'];
-            for (const addterm of operand) {
+            operand.forEach(addterm => {
                 if (addterm[1][0] === 'fraction') {
                     if (addterm[1][2][0] !== 'mulchain') {
                         addterm[1][2] = ['mulchain', ['mul', addterm[1][2]]];
@@ -77,8 +77,7 @@ export function addFactor(tree) {
                 } else {
                     newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1], con])]);
                 }
-            }
-
+            });
             return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);
         }
         return addCommutative([operator, ...operand]);

@@ -31,7 +31,6 @@ export function fracSimpVar(tree) {
                             vars[key] = term[1][1];
                             varNum[key] = ['power', term[1], ['natural', '1']];
                         } else {
-                            // let search = vars.indexOf();
                             let search;
                             const vars_entries = vars.entries();
                             for (const [key_vari, vari] of vars_entries) {
@@ -98,17 +97,17 @@ export function fracSimpVar(tree) {
         }
         varDen = Object.values(varDen);
         const newVarNum = [];
-        for (const vn of varNum) {
+        varNum.forEach(vn => {
             if (!varDen.includes(vn)) {
                 newVarNum.push(vn);
             }
-        }
+        });
         const newVarDen = [];
-        for (const vd of varDen) {
+        varDen.forEach(vd => {
             if (!varNum.includes(vd)) {
                 newVarDen.push(vd);
             }
-        }
+        });
         // get new numerator and denominator variables
         newVarNum.sort();// added
         newVarDen.sort();// added
@@ -172,126 +171,75 @@ export function fracSimpVar(tree) {
             }
 
             // put the new variables back into the numerator and denominator
-            const arrNum = [];
+            let arrNum = [];
 
             if (newNum.length > 0) {
-                for (const term of newNum) {
-                    arrNum.push(['mul', term]);
-                }
+                arrNum = [...arrNum, ...newNum.map(term => ['mul', term])];
             }
             if (narrNum.length > 0) {
-                for (const term of narrNum) {
-                    arrNum.push(term);
-                }
+                arrNum = [...arrNum, ...narrNum];
             }
             const newOperand = [];
             arrNum.sort();// added
             const arrNum_length = arrNum.length;
-            switch (arrNum_length) {
-                case 0: {
-                    newOperand.push(['natural', '1']);
-                    break;
-                }
-                case 1: {
-                    newOperand.push(arrNum[0][1]);
-                    break;
-                }
-                default: {
-                    num_key === 0 ? newOperand.push(mulCommutative(['mulchain', ...arrNum]))
-                    : newOperand.push(sub_mulCommutative(['mulchain', ...arrNum]));
-                }
-            }
-
-            const arrDen = [];
+            arrNum_length === 0 ? newOperand.push(['natural', '1'])
+            : arrNum_length === 1 ? newOperand.push(arrNum[0][1])
+            : num_key === 0 ? newOperand.push(mulCommutative(['mulchain', ...arrNum]))
+                : newOperand.push(sub_mulCommutative(['mulchain', ...arrNum]));
+            let arrDen = [];
             if (newDen.length > 0) {
-                for (const term of newDen) {
-                    arrDen.push(['mul', term]);
-                }
+                arrDen = [...arrDen, ...newDen.map(term => ['mul', term])];
             }
 
             if (narrDen.length > 0) {
-                for (const term of narrDen) {
-                    arrDen.push(term);
-                }
+                arrDen = [...arrDen, ...narrDen];
             }
             arrDen.sort(); // added
             const arrDen_length = arrDen.length;
-            switch (arrDen_length) {
-                case 0: {
-                    return newOperand[0];
-                }
-                case 1: {
-                    return [operator, ...newOperand, arrDen[0][1]];
-                }
-                default: {
-                    return den_key === 0 ? [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])]
-                        : [operator, ...newOperand, sub_mulCommutative(['mulchain', ...arrDen])]
-                }
-            }
+            return arrDen_length === 0 ? newOperand[0]
+                : arrDen_length === 1 ? [operator, ...newOperand, arrDen[0][1]]
+                : den_key === 0 ? [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])]
+                    : [operator, ...newOperand, sub_mulCommutative(['mulchain', ...arrDen])];
         }
         if (varDen.length === newVarDen.length && varNum.length === newVarNum.length) {
             return [operator, num, den];
         }
         const newNum = [];
-        for (const nn of newVarNum) {
+        newVarNum.forEach(nn => {
             nn[2][1] === '1' ? newNum.push(nn[1])
             : newNum.push(nn);
-        }
-        const arrNum = [];
+        })
+
+        let arrNum = [];
         if (newNum.length > 0) {
-            for (const term of newNum) {
-                arrNum.push(['mul', term]);
-            }
+            arrNum = [...arrNum, ...newNum.map(term => ['mul', term])];
         }
         if (narrNum.length > 0) {
-            for (const term of narrNum) {
-                arrNum.push(term);
-            }
+            arrNum = [...arrNum, ...narrNum];
         }
         const newOperand = [];
         const arrNum_length = arrNum.length;
-        switch (arrNum_length) {
-            case 0: {
-                newOperand.push(['natural', '1']);
-                break;
-            }
-            case 1: {
-                newOperand.push(arrNum[0][1]);
-                break;
-            }
-            default: {
-                newOperand.push(mulCommutative(['mulchain', ...arrNum]));
-            }
-        }
+        arrNum_length === 0 ? newOperand.push(['natural', '1'])
+        : arrNum_length === 1 ? newOperand.push(arrNum[0][1])
+        : newOperand.push(mulCommutative(['mulchain', ...arrNum]));
 
         const newDen = [];
-        for (const nn of newVarDen) {
+        newVarDen.forEach(nn => {
             nn[2][1] === '1' ? newDen.push(nn[1])
             : newDen.push(nn);
-        }
-        const arrDen = [];
+        });
+
+        let arrDen = [];
         if (newDen.length > 0) {
-            for (const term of newDen) {
-                arrDen.push(['mul', term]);
-            }
+            arrDen = [...arrDen, ...newDen.map(term => ['mul', term])];
         }
         if (narrDen.length > 0) {
-            for (const term of narrDen) {
-                arrDen.push(term);
-            }
+            arrDen = [...arrDen, ...narrDen];
         }
         const arrDen_length = arrDen.length;
-        switch (arrDen_length) {
-            case 0: {
-                return newOperand[0];
-            }
-            case 1: {
-                return [operator, ...newOperand, arrDen[0][1]];
-            }
-            default: {
-                return [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])];
-            }
-        }
+        return arrDen_length === 0 ? newOperand[0]
+            : arrDen_length === 1 ? [operator, ...newOperand, arrDen[0][1]]
+            : [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])];
     }
     const [, ...operand] = tree;
     const newOperand = operand.map(term => fracSimpVar(term));

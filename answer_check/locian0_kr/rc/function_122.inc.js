@@ -8,11 +8,11 @@ export function powerFrac(tree = null) {
         if (operand[0][0] === 'fraction') {
             const newOperand = [];
             const operand_0 = operand[0];
-            for (const term_0 of operand_0) {
+            operand_0.forEach(term_0 => {
                 if (Array.isArray(term_0)) {
                     newOperand.push(['power', term_0, operand[1]]);
                 }
-            }
+            });
             return ['fraction', ...newOperand];
         }
         return tree;

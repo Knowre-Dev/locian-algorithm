@@ -28,6 +28,7 @@ module.exports = {
     'multiline-ternary': 'off',
     'prefer-regex-literals': 'off',
     semi: 'off',
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    'no-labels': 'off'
   }
 }

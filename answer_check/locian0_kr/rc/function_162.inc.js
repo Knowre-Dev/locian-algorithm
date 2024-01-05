@@ -19,58 +19,47 @@ export function sub_addFactored(tree = null) {
         case 'addchain': {
             const [, ...operand] = tree;
             const newOperand = [];
-            const add_term = [];
+            let add_term = [];
             for (const term of operand) {
                 if (term[0] === 'add') {
                     if (term[1][0] === 'addchain') {
-                        const term_1_entries = term[1].entries();
-                        for (const [key, term_term_1] of term_1_entries) {
-                            if (key !== 0) {
-                                add_term.push(term_term_1);
-                            }
-                        }
+                        add_term = [...add_term, ...term[1].slice(1)];
                     } else {
                         if (term[1][0] === 'mulchain') {
                             let addchain = false;
-                            const term_1_entries = term[1].entries();
-                            for (const [key, term_term_1] of term_1_entries) {
-                                if (key !== 0 && term_term_1[1][0] === 'addchain') {
+                            const [, ...term_1] = term[1];
+                            term_1.forEach((term_term_1, key) => {
+                                if (term_term_1[1][0] === 'addchain') {
                                     addchain = term;
                                 }
-                            }
-                            if (addchain !== false) {
-                                add_term.push(addFactoredForm(addFactoredFormVar(addchain)));
-                            } else {
-                                add_term.push(term);
-                            }
+                            });
+                            add_term = addchain !== false ? [...add_term, addFactoredForm(addFactoredFormVar(addchain))]
+                                : [...add_term, term];
                         } else {
-                            add_term.push(term);
+                            add_term = [...add_term, term];
                         }
                     }
                 } else {
                     if (term[1][0] === 'addchain') {
-                        const term_1_entries = term[1].entries();
-                        for (const [key, term_term_1] of term_1_entries) {
-                            if (key !== 0) {
-                                term_term_1[0] === 'add' ? add_term.push(['sub', term_term_1[1]])
-                                : add_term.push(['add', term_term_1[1]]);
-                            }
-                        }
+                        const [, ...operand_term_1] = term[1]
+                        operand_term_1.forEach(term_term_1 => {
+                            add_term = term_term_1[0] === 'add' ? [...add_term, ['sub', term_term_1[1]]]
+                                : [...add_term, ['add', term_term_1[1]]];
+                        });
                     } else {
                         if (term[1][0] === 'mulchain') {
                             let addchain = false;
-                            const term_1_entries = term[1].entries();
-                            for (const [key, term_term_1] of term_1_entries) {
-                                if (key !== 0 && term_term_1[1][0] === 'addchain') {
+                            const [, ...term_1] = term[1];
+                            for (const term_term_1 of term_1) {
+                                if (term_term_1[1][0] === 'addchain') {
                                     addchain = term;
                                     break;
                                 }
                             }
-
-                            addchain !== false ? add_term.push(addFactoredForm(addFactoredFormVar(addchain)))
-                            : add_term.push(term);
+                            add_term = addchain !== false ? [...add_term, addFactoredForm(addFactoredFormVar(addchain))]
+                            : [...add_term, term];
                         } else {
-                            add_term.push(term);
+                            add_term = [...add_term, term];
                         }
                     }
                 }

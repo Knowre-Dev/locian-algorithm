@@ -22,21 +22,16 @@ export function rootSimpInt(tree) {
                 outside *= Math.pow(factor, (power - 1) / 2);
             }
         }
-        if (inside === 1) {
-            return tree;
-        }
-        if (outside === 1) {
-            return [operator, operand[0]];
-        }
-        return ['mulchain',
-            ['mul', ['natural', outside.toString()]],
-            ['mul', ['squareroot', ['natural', inside.toString()]]]
-        ];
+        return inside === 1 ? tree
+            : outside === 1 ? [operator, operand[0]]
+            : ['mulchain', ['mul', ['natural', outside.toString()]],
+                ['mul', ['squareroot', ['natural', inside.toString()]]]
+            ];
     }
     if (operator === 'mulchain') {
         const newOperand = [];
         const cons = [];
-        for (const term of operand) {
+        operand.forEach(term => {
             if (term[0] === 'mul' && term[1][0] === 'squareroot') {
                 const nroot = rootSimpInt(term[1]);
                 switch (nroot[0]) {
@@ -59,7 +54,7 @@ export function rootSimpInt(tree) {
             } else {
                 newOperand.push(term);
             }
-        }
+        });
         const cons_length = cons.length;
         if (cons_length === 1) {
             return [operator, cons[0], ...newOperand];
@@ -67,14 +62,14 @@ export function rootSimpInt(tree) {
         if (cons_length > 1) {
             let num = 1;
             let den = 1;
-            for (const term of cons) {
+            cons.forEach(term => {
                 if (term[1][0] === 'natural') {
                     num *= parseInt(term[1][1]);
                 } else if (term[1][0] === 'fraction') {
                     num *= parseInt(term[1][1][1]);
                     den *= parseInt(term[1][2][1]);
                 }
-            }
+            });
             const mul = den === 1 ? ['mul', ['natural', num.toString()]]
                 : ['mul', ['fraction', ['natural', num.toString()], ['natural', den.toString()]]];
             return [operator, mul, ...newOperand];

@@ -7,31 +7,23 @@ export function eqIneqDivPi(tree = null) {
     switch (operator) {
         case 'equation': {
             const [, ...operand] = tree;
-            if (checkPi(operand[0]) && checkPi(operand[1])) {
-                const newOperand = operand.map(term => sub_divPi(term, ['variable', 'pi']));
-                return [operator, ...newOperand];
-            }
-            return [operator, ...operand];
+            return (checkPi(operand[0]) && checkPi(operand[1])) ? [operator, ...operand.map(term => sub_divPi(term, ['variable', 'pi']))]
+                : [operator, ...operand];
         }
         case 'inequality': {
             const [, ...operand] = tree;
-            let check = true;
             const operand_length = operand.length;
             for (let i = 0; i < operand_length; i++) {
                 if (i % 2 === 0) {
-                    check = checkPi(operand[i]);
-                    if (check === false) {
-                        break;
+                    if (!checkPi(operand[i])) {
+                        return tree
                     }
                 }
             }
-            if (!check) {
-                return [operator, ...operand];
-            }
-            const newOperand = [];
+            let newOperand = [];
             for (let i = 0; i < operand_length; i++) {
-                i % 2 === 0 ? newOperand.push(sub_divPi(operand[i], ['variable', 'pi']))
-                : newOperand.push(operand[i]);
+                newOperand = i % 2 === 0 ? [...newOperand, sub_divPi(operand[i], ['variable', 'pi'])]
+                : [...newOperand, operand[i]];
             }
             return [operator, ...newOperand];
         }

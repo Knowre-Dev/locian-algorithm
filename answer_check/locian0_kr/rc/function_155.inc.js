@@ -15,22 +15,16 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             }
             // From here on, we are guaranteed that
             // no side in the chain of equalities is already identically zero
-
-            const operand_entries = operand.entries();
-            const newOperand = [];
-            for (const [key, term] of operand_entries) {
-                let temp = [];
-                if (key === 0) {
-                    temp = ['natural', '0'];
-                } else {
-                    temp = term;
-                    if (term[0] !== 'addchain') {
-                        temp = ['addchain', ['add', term]];
-                    }
-                    temp.push(['sub', operand[0]]);
+            let newOperand = [['natural', '0']];
+            const [, ...operand_operand] = operand;
+            operand_operand.forEach(term => {
+                let temp = term;
+                if (term[0] !== 'addchain') {
+                    temp = ['addchain', ['add', term]];
                 }
-                newOperand.push(temp);
-            }
+                temp.push(['sub', operand[0]]);
+                newOperand = [...newOperand, temp];
+            })
             return [operator, ...newOperand];
         }
         case 'inequality': {
@@ -43,24 +37,19 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             // From here on, we are guaranteed that
             // no side in the chain of inequalities is already identically zero
 
-            const operand_entries = operand.entries();
-            const newOperand = [];
-            for (const [key, term] of operand_entries) {
-                let temp;
-                if (key === 0) {
-                    temp = ['natural', '0'];
-                } else {
-                    temp = term;
-                    if (!['lt', 'le', 'ge', 'gt'].includes(term) &&
-                        !termExists('infinity', term)) {
-                        if (term[0] !== 'addchain') {
-                            temp = ['addchain', ['add', term]];
-                        }
-                        temp.push(['sub', operand[0]]);
+            let newOperand = [['natural', '0']];
+            const [, ...operand_operand] = operand;
+            operand_operand.forEach(term => {
+                let temp = term;
+                if (!['lt', 'le', 'ge', 'gt'].includes(term) &&
+                    !termExists('infinity', term)) {
+                    if (term[0] !== 'addchain') {
+                        temp = ['addchain', ['add', term]];
                     }
+                    temp.push(['sub', operand[0]]);
                 }
-                newOperand.push(temp);
-            }
+                newOperand = [...newOperand, temp];
+            });
             return [operator, ...newOperand];
         }
         default: {

@@ -18,25 +18,16 @@ export function sub_mulCommutative(tree = null) {
         }
         // 숫자, 문자 섞여있는 경우
         if (!array.includes('addchain')) { // 단항식
-            if (sub_deter(tree) === false) {
-                return tree;
-            }
-            return [operator, ...mulCommutative(tree).slice(1)];
+            return sub_deter(tree) === false ? tree
+                : [operator, ...mulCommutative(tree).slice(1)];
         }
         if (sub_deter(tree) === true) {
-            let deter = true;
             for (const term of operand) {
                 if (term[1][0] === 'addchain') {
-                    if (term[1][1][1][0] === 'mulchain') {
-                        deter = sub_deter(term[1][1][1]);
-                    }
-                    if (deter === false) {
-                        break;
+                    if (term[1][1][1][0] === 'mulchain' && sub_deter(term[1][1][1]) === false) {
+                        return tree;
                     }
                 }
-            }
-            if (deter === false) {
-                return tree;
             }
             return [operator, ...mulCommutative(tree).slice(1)];
         }
@@ -49,10 +40,10 @@ export function sub_mulCommutative(tree = null) {
 
 export function sort_array(array) {
     let arr = [];
-    for (const term of array) {
+    array.forEach(term => {
         !Array.isArray(term) ? arr.push(term)
         : arr = [...arr, ...sort_array(term)];
-    }
+    });
     return arr;
 }
 
@@ -70,19 +61,8 @@ export function sub_deter(tree = null) {
             if (term[0] !== 'mul') {
                 return false;
             }
-            switch (term[1][0]) {
-                case 'natural': {
-                    return false;
-                }
-                case 'decimal': {
-                    return false;
-                }
-                case 'fraction': {
-                    return false;
-                }
-                case 'negative': {
-                    return false;
-                }
+            if (['natural', 'decimal', 'fraction', 'negative'].includes(term[1][0])) {
+                return false;
             }
         }
         return true;

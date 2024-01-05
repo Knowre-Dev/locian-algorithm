@@ -6,13 +6,9 @@ export function eqMulProp(tree) {
     const operator = tree[0];
     if (operator === 'equation') {
         const [, ...operand] = tree;
-        if (operand[0][0] === 'fraction') {
-            return [operator, [operand[0][1][0]]];
-        }
-        if (operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction') {
-            return [operator, []];
-        }
-        return [operator, ...operand];
+        return operand[0][0] === 'fraction' ? [operator, [operand[0][1][0]]]
+            : (operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction') ? [operator, []]
+            : [operator, ...operand];
     }
     return tree;
 }
@@ -35,11 +31,7 @@ export function eqMulPropUS(tree) {
     const gcfArr = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
-    let factor = [['mul', gcfArr.const]];
-    const gcfArr_sym = gcfArr.sym;
-    for (const sym of gcfArr_sym) {
-        factor.push(['mul', sym]);
-    }
+    let factor = [['mul', gcfArr.const], ...gcfArr.sym.map(sym => ['mul', sym])];
     factor = array2ChainTree(factor);
 
     if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) ||

@@ -20,12 +20,6 @@ export function rearrangeTreeEq(A, B) {
     const operator_entries = [operatorA, operatorB].entries();
     for (const [key, term] of operator_entries) {
         switch (term) {
-            case 'add':
-            case 'sub':
-            case 'addsub':
-            case 'subadd': {
-                break;
-            }
             case 'negative': {
                 place[key] = 1;
                 break;

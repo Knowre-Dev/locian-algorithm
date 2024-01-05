@@ -7,29 +7,20 @@ export function mulToExp(tree = null) {
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
         const power = {};
-        const varNum = [];
-        for (const term of operand) {
-            if (term[0] === 'mul') {
-                if (term[1][0] === 'variable') {
-                    if (!Object.prototype.hasOwnProperty.call(power, term[1][1])) {
-                        power[term[1][1]] = [];
-                    }
-                    power[term[1][1]].push(term[1]);
-                } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                    varNum.push(term);
-                } else {
-                    varNum.push(term);
-                }
-            } else {
-                varNum.push(term);
-            }
-        }
+        let varNum = [];
+        operand.forEach(term => {
+            term[0] === 'mul' ? term[1][0] === 'variable' ? power[term[1][1]] = !Object.prototype.hasOwnProperty.call(power, term[1][1]) ? [term[1]]
+                    : [...power[term[1][1]], term[1]]
+                : (term[1][0] === 'power' && term[1][1][0] === 'variable') ? varNum = [...varNum, term]
+                : varNum = [...varNum, term]
+            : varNum = [...varNum, term];
+        });
         const power_values = Object.values(power);
-        for (const term of power_values) {
+        power_values.forEach(term => {
             const term_length = term.length;
-            term_length > 1 ? varNum.push(['mul', ['power', term[0], ['natural', (term_length).toString()]]])
-            : varNum.push(['mul', term[0]]);
-        }
+            varNum = term_length > 1 ? [...varNum, ['mul', ['power', term[0], ['natural', (term_length).toString()]]]]
+            : [...varNum, ['mul', term[0]]];
+        });
         return varNum.length === 1 ? varNum[0][1] : [operator, ...varNum];
     }
     const [, ...operand] = tree;

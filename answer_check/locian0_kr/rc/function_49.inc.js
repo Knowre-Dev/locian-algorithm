@@ -14,7 +14,6 @@ export function fracDecimal(tree) {
         const gcf = EuclidAlg(num, den);
         const newNum = num / gcf;
         const newDen = den / gcf;
-
         return newDen === 1 ? ['natural', newNum.toString()]
             : ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
     }

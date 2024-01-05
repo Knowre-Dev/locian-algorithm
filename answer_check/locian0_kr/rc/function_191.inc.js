@@ -4,11 +4,8 @@ export function nthrootToSquareroot(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    if (operator === 'nthroot' && JSON.stringify(operand[0]) === JSON.stringify([])) {
-        return ['squareroot', operand[1]];
-    }
-    const newOperand = operand.map(term => nthrootToSquareroot(term));
-    return [operator, ...newOperand];
+    return (operator === 'nthroot' && JSON.stringify(operand[0]) === JSON.stringify([])) ? ['squareroot', operand[1]]
+        : [operator, ...operand.map(term => nthrootToSquareroot(term))];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

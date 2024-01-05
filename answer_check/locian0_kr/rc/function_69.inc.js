@@ -24,25 +24,10 @@ export function fracComplex(tree) {
             denArr.push(den);
         }
 
-        let newNum = [];
-        if (numArr.length > 1) {
-            newNum = ['mulchain'];
-            for (const term of numArr) {
-                newNum.push(['mul', term]);
-            }
-        } else {
-            newNum = numArr[0];
-        }
-
-        let newDen = [];
-        if (denArr.length > 1) {
-            newDen = ['mulchain'];
-            for (const term of denArr) {
-                newDen.push(['mul', term]);
-            }
-        } else {
-            newDen = denArr[0];
-        }
+        const newNum = numArr.length > 1 ? ['mulchain', ...numArr.map(term => ['mul', term])]
+            : numArr[0];
+        const newDen = denArr.length > 1 ? ['mulchain', ...denArr.map(term => ['mul', term])]
+            : denArr[0];
         return [operator, newNum, newDen]
     }
     const [, ...operand] = tree;

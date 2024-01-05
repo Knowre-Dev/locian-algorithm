@@ -6,11 +6,11 @@ export function addPolyZero(tree) {
     if (operator === 'addchain') {
         const [, ...operand] = tree;
         const newOperand = [];
-        for (const term of operand) {
+        operand.forEach(term => {
             term[0] === 'sub' ? checkZeroEquiv(term[1]) ? newOperand.push(['add', term[1]])
                 : newOperand.push(term)
             : newOperand.push(term);
-        }
+        });
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
@@ -29,7 +29,7 @@ export function checkZeroEquiv(tree) {
             return checkZeroEquiv(tree[1]);
         }
         case 'mulchain': {
-            const operand = tree[1];
+            const [, operand] = tree;
             for (const term of operand) {
                 if (term[0] === 'natural' && term[1] === '0') {
                     return true;
@@ -39,10 +39,7 @@ export function checkZeroEquiv(tree) {
         }
         case 'natural': {
             const [, ...operand] = tree;
-            if (operand[0] === '0') {
-                return true;
-            }
-            return false;
+            return operand[0] === '0';
         }
         default: {
             return false;

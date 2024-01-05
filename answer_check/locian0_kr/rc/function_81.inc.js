@@ -12,17 +12,15 @@ export function addFactorNegative(tree) {
             const [, ...operand] = tree;
             const newOperand = [];
             newOperand.push(addFactorNegative(operand[0]));
-            if (newOperand[0][0] === 'negative') {
-                return newOperand[0][1];
-            }
-            return [operator, ...newOperand];
+            return newOperand[0][0] === 'negative' ? newOperand[0][1]
+                : [operator, ...newOperand];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
             let sign = 1;
             const termArr = [];
             const factArr = [];
-            for (const term of operand) {
+            operand.forEach(term => {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'addchain') {
                         let addchain = term[1];
@@ -37,26 +35,16 @@ export function addFactorNegative(tree) {
                 } else {
                     termArr.push(term);
                 }
-            }
-            const newOperand = [];
-            for (const term of termArr) {
-                newOperand.push(term);
-            }
-            for (const term of factArr) {
-                newOperand.push(term);
-            }
+            });
+           const newOperand = [...termArr, ...factArr];
             return sign === -1 ? ['negative', [operator, ...newOperand]]
                 : [operator, ...newOperand];
         }
         case 'addchain': {
             const [, ...operand] = tree;
-            let sign = 1;
-            let addchain = ['addchain', ...operand];
-            if (addchain[1][0] === 'sub') {
-                addchain = addNegative(['negative', addchain]);
-                sign *= -1;
-            }
-            return sign === -1 ? ['negative', addchain] : addchain;
+            const addchain = ['addchain', ...operand];
+            return addchain[1][0] === 'sub' ? ['negative', addNegative(['negative', addchain])]
+                : addchain;
         }
         default: {
             const [, ...operand] = tree;

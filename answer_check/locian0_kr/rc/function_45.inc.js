@@ -5,7 +5,7 @@ export function addAssociative(tree) {
 
     const [operator, ...operand] = tree;
     const newOperand = [];
-    for (const term of operand) {
+    operand.forEach(term => {
         const term_1 = addAssociative(term);
         const is_addchain = operator === 'addchain' && term_1[0] === 'add' && term_1[1][0] === 'addchain';
         if (is_addchain) {
@@ -14,8 +14,7 @@ export function addAssociative(tree) {
         } else {
             newOperand.push(term_1);
         }
-    }
-
+    });
     return [operator, ...newOperand];
 }
 /*

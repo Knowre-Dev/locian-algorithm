@@ -11,10 +11,8 @@ export function rdecToFrac(tree) {
         if (operand[1] === '') {
             const int = operand[0];
             const rdec = operand[2];
-            let num = parseInt(int) * Math.pow(10, rdec.length) + parseInt(rdec) - parseInt(int);
-            if (int === '0') {
-                num = parseInt(rdec);
-            }
+            const num = int === '0' ? parseInt(rdec)
+                : parseInt(int) * Math.pow(10, rdec.length) + parseInt(rdec) - parseInt(int);
             const den = (9 * Math.pow(10, rdec.length - 1)).toString();
             return fracSimp(['fraction', ['natural', num], ['natural', den]]);
         }
@@ -22,10 +20,8 @@ export function rdecToFrac(tree) {
         const dec = operand[1];
         const rdec = operand[2];
         const rdec_length = rdec.length;
-        let num = parseInt(int + dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(int + dec);
-        if (int === '0') {
-            num = parseInt(dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(dec);
-        }
+        const num = int === '0' ? parseInt(dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(dec)
+            : parseInt(int + dec) * Math.pow(10, rdec_length) + parseInt(rdec) - parseInt(int + dec);
         const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
         return fracSimp(['fraction', ['natural', num], ['natural', den]]);
     }

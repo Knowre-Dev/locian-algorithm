@@ -20,12 +20,7 @@ export function varReverse(tree, types = [null], parent = null) {
             vars = vars.reverse();
         }
 
-        const result = [];
-
-        for (const vari of vars) {
-            result.push(['mul', ['variable', vari]]);
-        }
-
+        const result = vars.map(vari => ['mul', ['variable', vari]]);
         return [operator + '_fixed', ...result];
     }
 

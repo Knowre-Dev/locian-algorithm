@@ -19,24 +19,14 @@ export function fracSimpInt(tree) {
             case 'mulchain': {
                 const arrNum = [];
                 const [, ...num_1] = num;
-                for (const term of num_1) {
+                num_1.forEach(term => {
                     (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum.push(parseInt(term[1][1]))
                     : narrNum.push(term)
-                }
+                });
                 const arrNum_length = arrNum.length;
-                switch (arrNum_length) {
-                    case 0: {
-                        intNum = 1;
-                        break;
-                    }
-                    case 1: {
-                        intNum = arrNum[0];
-                        break;
-                    }
-                    default: {
-                        intNum = arrNum.reduce((a, b) => a * b);
-                    }
-                }
+                intNum = arrNum_length === 0 ? 1
+                    : arrNum_length === 1 ? arrNum[0]
+                    : arrNum.reduce((a, b) => a * b);
                 break;
             }
             default: {
@@ -54,24 +44,14 @@ export function fracSimpInt(tree) {
             }
             case 'mulchain': {
                 const [, ...den_1] = den;
-                for (const term of den_1) {
+                den_1.forEach(term => {
                     (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen.push(parseInt(term[1][1]))
                     : narrDen.push(term)
-                }
+                });
                 const arrDen_length = arrDen.length;
-                switch (arrDen_length) {
-                    case 0: {
-                        intDen = 1;
-                        break;
-                    }
-                    case 1: {
-                        intDen = arrDen[0];
-                        break;
-                    }
-                    default: {
-                        intDen = arrDen.reduce((a, b) => a * b);
-                    }
-                }
+                intDen = arrDen_length === 0 ? 1
+                    : arrDen_length === 1 ? arrDen[0]
+                    : arrDen.reduce((a, b) => a * b);
                 break;
             }
             default: {
@@ -90,10 +70,10 @@ export function fracSimpInt(tree) {
             }
             case 'mulchain': {
                 if (newNum !== '1') {
-                    narrNum.unshift(['mul', ['natural', newNum]]);
+                    narrNum = [['mul', ['natural', newNum]], ...narrNum];
                 }
                 narrNum.length === 1 ? narrNum = narrNum[0][1]
-                : narrNum.unshift('mulchain')
+                : narrNum = ['mulchain', ...narrNum];
                 newOperand.push(narrNum);
                 break;
             }
@@ -110,10 +90,10 @@ export function fracSimpInt(tree) {
             }
             case 'mulchain': {
                 if (newDen !== '1') {
-                    narrDen.unshift(['mul', ['natural', newDen]]);
+                    narrDen = [['mul', ['natural', newDen]], ...narrDen];
                 }
                 narrDen.length === 1 ? narrDen = narrDen[0][1]
-                : narrDen.unshift('mulchain')
+                : narrDen = ['mulchain', ...narrDen];
                 newOperand.push(narrDen);
                 break;
             }

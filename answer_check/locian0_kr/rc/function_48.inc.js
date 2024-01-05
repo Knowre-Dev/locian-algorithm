@@ -8,7 +8,7 @@ export function fracExpress(tree) {
         let num = [];
         let den = [];
         let nega = false;
-        for (const term of operand) {
+        operand.forEach(term => {
             if (term[1][0] === 'fraction') {
                 if (term[1][1][0] === 'mulchain') {
                     num = [...num, ...term[1][1].slice(1)];
@@ -27,14 +27,14 @@ export function fracExpress(tree) {
                 term[1][0] === 'mulchain' ? num = [...num, ...term[1].slice(1)]
                     : num.push([term[0], term[1]])
             }
-        }
+        });
         const num_length = num.length;
         num_length === 1 ? num = num[0][1]
         : num_length === 0 ? num = ['natural', '1']
-        : num.unshift('mulchain')
+        : num = ['mulchain', ...num];
 
         den.length === 1 ? den = den[0][1]
-        : den.unshift('mulchain')
+        : den = ['mulchain', ...den];
 
         if (den.length > 1) {
             return nega ? ['negative', ['fraction', num, den]]

@@ -11,14 +11,14 @@ export function mulFracSeparation(tree = null) {
             if (operand[0][0] === 'natural' && operand[0][1] === '1') {
                 const operand_1 = operand[1];
                 const newOperand = [];
-                for (const term_1 of operand_1) {
+                operand_1.forEach(term_1 => {
                     if (Array.isArray(term_1)) {
                         newOperand.push([
                             term_1[0],
                             ['fraction', operand[0], term_1[1]]
                         ]);
                     }
-                }
+                });
                 return ['mulchain', ...newOperand];
             }
             return tree;

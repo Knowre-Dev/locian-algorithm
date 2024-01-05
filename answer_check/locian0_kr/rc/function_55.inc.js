@@ -6,39 +6,19 @@ export function addIdentity(tree) {
     if (operator === 'addchain') {
         const [, ...operand] = tree;
         const newOperand = [];
-        for (const term of operand) {
+        operand.forEach(term => {
             if (!(term[1][0] === 'natural' && term[1][1] === '0')) {
                 newOperand.push(term);
             }
-        }
+        });
         const newOperand_length = newOperand.length;
-        switch (newOperand_length) {
-            case 0: {
-                return ['natural', '0'];
-            }
-            case 1: {
-                switch (newOperand[0][0]) {
-                    case 'add': {
-                        return newOperand[0][1];
-                    }
-                    case 'sub': {
-                        return ['negative', newOperand[0][1]];
-                    }
-                    case 'addsub': {
-                        return ['pm', newOperand[0][1]];
-                    }
-                    case 'subadd': {
-                        return ['mp', newOperand[0][1]];
-                    }
-                    default: {
-                        return [operator, ...newOperand];
-                    }
-                }
-            }
-            default: {
-                return [operator, ...newOperand];
-            }
-        }
+        return newOperand_length === 0 ? ['natural', '0']
+            : newOperand_length === 1 ? newOperand[0][0] === 'add' ? newOperand[0][1]
+                : newOperand[0][0] === 'sub' ? ['negative', newOperand[0][1]]
+                : newOperand[0][0] === 'addsub' ? ['pm', newOperand[0][1]]
+                : newOperand[0][0] === 'subadd' ? ['mp', newOperand[0][1]]
+                : [operator, ...newOperand]
+            : [operator, ...newOperand];
     }
     const [, ...operand] = tree;
     const newOperand = operand.map(term => addIdentity(term));

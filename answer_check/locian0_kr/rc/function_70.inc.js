@@ -14,11 +14,6 @@ export function addFactoredForm(tree) {
             const term = addFactoredForm(operand[0]);
             return term[0] === 'negative' ? term[1]
                 : [operator, term];
-            /*
-            const newOperand = [addFactoredForm(operand[0])];
-            return newOperand[0][0] === 'negative' ? newOperand[0][1]
-                : [operator, ...newOperand];
-                */
         }
         case 'mulchain': {
             const termArr = [];
@@ -62,21 +57,16 @@ export function addFactoredForm(tree) {
             if (add === false) {
                 return sign === -1 ? ['negative', tree] : tree;
             }
-            const newOperand = [];
+            let newOperand = [];
             let val = 1;
-            for (const term of consArr) {
+            consArr.forEach(term => {
                 val *= parseInt(term[1][1]);
-            }
+            });
             const con = ['mul', ['natural', val.toString()]];
             if (val !== 1) {
                 newOperand.push(con);
             }
-            for (const term of termArr) {
-                newOperand.push(term);
-            }
-            for (const term of factArr) {
-                newOperand.push(term);
-            }
+            newOperand = [...newOperand, ...termArr, ...factArr];
             return sign === -1 ? ['negative', [operator, ...newOperand]]
                 : [operator, ...newOperand];
         }

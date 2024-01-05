@@ -12,11 +12,10 @@ export function powAddFactoredForm(tree = null) {
         const [, ...operand] = tree;
         const base = sub_mulCommutative(addCommutative(operand[0]));
         const expo = operand[1];
-
         if (base[0] === 'addchain' && expo[0] === 'natural') {
-            const fact = addFactor(base);
+            let fact = addFactor(base);
             if (fact[0] === 'mulchain') {
-                fact.shift();
+                [, ...fact] = fact;
                 const newOperand = fact.map(term => [term[0], ['power', term[1], expo]]);
                 return ['mulchain', ...newOperand];
             }

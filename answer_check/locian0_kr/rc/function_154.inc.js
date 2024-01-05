@@ -64,10 +64,14 @@ export function exprSimpConst(tree = null) {
             if (subresult[0] === 'negative') {
                 subresult = subresult[1];
             }
+            return isNumeric(subresult, true) ? subresult
+                : [operator, subresult];
+            /*
             if (isNumeric(subresult, true)) {
                 return subresult;
             }
             return [operator, subresult];
+            */
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
@@ -75,10 +79,7 @@ export function exprSimpConst(tree = null) {
             if (operand[0][0] === 'power' &&
                 operand[1][0] === 'power' &&
                 operand[0][2] === operand[1][2]) {
-                const newtree = [
-                    'power',
-                    ['fraction', operand[0][1], operand[1][1]],
-                    operand[0][2]
+                const newtree = ['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]
                 ];
                 return exprSimpConst(newtree);
             }
@@ -108,7 +109,7 @@ export function exprSimpConst(tree = null) {
 
             [, ...operand] = operand;
             const termArr = [];
-            for (const term of operand) {
+            operand.forEach(term => {
                 let op = term[0];
                 let subtree = exprSimpConst(term[1]);
                 if (subtree[0] === 'negative') {
@@ -121,7 +122,7 @@ export function exprSimpConst(tree = null) {
                     }
                 }
                 termArr.push([op, subtree]);
-            }
+            });
             return array2ChainTree(termArr, true);
         }
         case 'mulchain': { // fin
@@ -129,7 +130,7 @@ export function exprSimpConst(tree = null) {
             [, ...operand] = mulAssociative(array2ChainTree(operand));
             const termArr = [];
             let sign = 1;
-            for (const term of operand) {
+            operand.forEach(term => {
                 let subtree = exprSimpConst(term[1]);
                 // Take all negative signs out to the front
                 if (Array.isArray(subtree)) {
@@ -139,7 +140,7 @@ export function exprSimpConst(tree = null) {
                     }
                 }
                 termArr.push([term[0], subtree]);
-            }
+            });
             const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(termArr, true))));
             return sign < 0 ? ['negative', newtree] : newtree;
         }
@@ -171,7 +172,7 @@ export function exprSimpConst(tree = null) {
             if (expotree[0] === 'natural' && oddExpoFlag && evenRootFlag) {
                 basetree = ['absolute', basetree];
             }
-            const mtermArr = [];
+            let mtermArr = [];
             // Convert fraction to division just to make coding easier
             // The if statement below is omitted out (epark 20180830)
             // because this causes NAN output for inputs like ((103/100)^t),
@@ -180,9 +181,7 @@ export function exprSimpConst(tree = null) {
 
             if (basetree[0] === 'mulchain') {
                 const [, ...operand_basetree] = basetree;
-                for (const term of operand_basetree) {
-                    mtermArr.push([term[0], exprSimpConst(['power', term[1], expotree])]);
-                }
+                mtermArr = [...mtermArr, ...operand_basetree.map(term => [term[0], exprSimpConst(['power', term[1], expotree])])];
             } else {
                 mtermArr.push(['mul', ['power', basetree, expotree]]);
             }
