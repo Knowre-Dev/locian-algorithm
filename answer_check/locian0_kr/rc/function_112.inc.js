@@ -24,6 +24,5 @@ export function powAddFactoredForm(tree = null) {
         return [operator, base, expo];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => powAddFactoredForm(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => powAddFactoredForm(term))];
 }

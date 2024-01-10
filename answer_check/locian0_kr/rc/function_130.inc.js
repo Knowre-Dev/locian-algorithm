@@ -16,13 +16,11 @@ export function sub_addFactorNegative(tree = null) {
         }
         case 'equation': {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => sub_addFactorNegative(term));
-            return ['equation', ...newOperand];
+           return ['equation', ...operand.map(term => sub_addFactorNegative(term))];
         }
         case 'inequality': {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => sub_addFactorNegative(term));
-            return ['inequality', ...newOperand];
+            return ['inequality', ...operand.map(term => sub_addFactorNegative(term))];
         }
         default: {
             return addFactorNegative(tree);

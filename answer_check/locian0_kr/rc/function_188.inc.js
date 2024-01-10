@@ -30,8 +30,7 @@ export function rootToExp(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => rootToExp(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => rootToExp(term))];
         }
     }
 }

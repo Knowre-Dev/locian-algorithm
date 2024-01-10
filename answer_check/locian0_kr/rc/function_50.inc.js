@@ -11,6 +11,5 @@ export function negParenthesis(tree) {
         return [operator, ...operand];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => negParenthesis(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => negParenthesis(term))];
 }

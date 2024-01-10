@@ -38,15 +38,15 @@ export function eqMulPropUS(tree) {
         JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
         return tree; // No need to divide by 1
     }
-    const newtree = [tree[0]];
+    let newtree = [tree[0]];
     const [, ...operand] = tree;
     for (const subtree of operand) {
         if (!Array.isArray(subtree)) {
             // this block executes for inequality signs (e.g., 'le', 'ge')
-            newtree.push(subtree);
+            newtree = [...newtree, subtree];
             continue;
         }
-        newtree.push(multFactor(subtree, ['div', factor], true));
+        newtree = [...newtree, multFactor(subtree, ['div', factor], true)];
     }
     return mulNegative(newtree);
 

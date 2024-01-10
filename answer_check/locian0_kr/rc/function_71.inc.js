@@ -8,32 +8,31 @@ export function addNegative(tree) {
         let addchain = addNegative(operand[0]);
         if (addchain[0] === 'addchain') {
             [operator, ...addchain] = addchain;
-            const newOperand = [];
+            let newOperand = [];
             addchain.forEach(term => {
-                term[0] === 'add' ? newOperand.push(['sub', term[1]])
-                : term[0] === 'sub' ? newOperand.push(['add', term[1]])
-                : newOperand.push(term)
+                newOperand = term[0] === 'add' ? [...newOperand, ['sub', term[1]]]
+                    : term[0] === 'sub' ? [...newOperand, ['add', term[1]]]
+                    : [...newOperand, term];
             });
             return [operator, ...newOperand];
         }
         return tree;
     }
     if (operator === 'addchain') {
-        const newOperand = [];
+        let newOperand = [];
         operand.forEach(term => {
             if (term[0] === 'sub' && term[1][0] === 'addchain') {
                 const [, ...term_1] = term[1];
                 term_1.forEach(inner => {
-                    inner[0] === 'add' ? newOperand.push(['sub', inner[1]])
-                    : inner[0] === 'sub' ? newOperand.push(['add', inner[1]])
-                    : newOperand.push(inner)
+                    newOperand = inner[0] === 'add' ? [...newOperand, ['sub', inner[1]]]
+                    : inner[0] === 'sub' ? [...newOperand, ['add', inner[1]]]
+                    : [...newOperand, inner]
                 });
             } else {
-                newOperand.push(term);
+                newOperand = [...newOperand, term];
             }
         });
         return [operator, ...newOperand];
     }
-    const newOperand = operand.map(term => addNegative(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => addNegative(term))];
 }

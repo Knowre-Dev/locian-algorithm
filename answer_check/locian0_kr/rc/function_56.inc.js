@@ -13,7 +13,7 @@ export function mulIdentity(tree) {
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
+            let newOperand = [];
             let sign = 1;
             for (const term of operand) {
                 if (term[1][0] === 'natural' && term[1][1] === '1') {
@@ -21,7 +21,7 @@ export function mulIdentity(tree) {
                 } else if (term[1][0] === 'negative' && term[1][1][0] === 'natural' && term[1][1][1] === '1') {
                     sign = -1;
                 } else {
-                    newOperand.push(mulIdentity(term));
+                    newOperand = [...newOperand, mulIdentity(term)];
                 }
             }
             return newOperand.length === 1 ? sign === -1 ? ['negative', newOperand[0][1]]
@@ -31,8 +31,7 @@ export function mulIdentity(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => mulIdentity(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => mulIdentity(term))];
         }
     }
 }

@@ -22,7 +22,7 @@ export function makeOneSideOfEqIneqZero(tree = null) {
                 if (term[0] !== 'addchain') {
                     temp = ['addchain', ['add', term]];
                 }
-                temp.push(['sub', operand[0]]);
+                temp = [...temp, ['sub', operand[0]]];
                 newOperand = [...newOperand, temp];
             })
             return [operator, ...newOperand];
@@ -46,7 +46,7 @@ export function makeOneSideOfEqIneqZero(tree = null) {
                     if (term[0] !== 'addchain') {
                         temp = ['addchain', ['add', term]];
                     }
-                    temp.push(['sub', operand[0]]);
+                    temp = [...temp, ['sub', operand[0]]];
                 }
                 newOperand = [...newOperand, temp];
             });

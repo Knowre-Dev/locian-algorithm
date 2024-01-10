@@ -5,10 +5,10 @@ export function addIdentity(tree) {
     const [operator] = tree;
     if (operator === 'addchain') {
         const [, ...operand] = tree;
-        const newOperand = [];
+        let newOperand = [];
         operand.forEach(term => {
             if (!(term[1][0] === 'natural' && term[1][1] === '0')) {
-                newOperand.push(term);
+                newOperand = [...newOperand, term];
             }
         });
         const newOperand_length = newOperand.length;
@@ -21,6 +21,5 @@ export function addIdentity(tree) {
             : [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => addIdentity(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => addIdentity(term))];
 }

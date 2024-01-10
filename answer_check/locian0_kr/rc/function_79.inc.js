@@ -6,7 +6,6 @@ export function decElimZero(tree) {
     let operator = tree[0];
     if (operator === 'decimal') {
         const [, ...operand] = tree;
-        const newOperand = [];
         const decArr = operand[0].split('');
         while (decArr[decArr.length - 1] === '0') {
             decArr.splice(-1);
@@ -16,10 +15,8 @@ export function decElimZero(tree) {
             operator = 'natural';
             decArr.splice(-1);
         }
-        newOperand.push(decArr.join(''));
-        return [operator, ...newOperand];
+        return [operator, decArr.join('')];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => decElimZero(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => decElimZero(term))];
 }

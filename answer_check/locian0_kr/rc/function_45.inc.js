@@ -4,16 +4,12 @@ export function addAssociative(tree) {
     }
 
     const [operator, ...operand] = tree;
-    const newOperand = [];
+    let newOperand = [];
     operand.forEach(term => {
         const term_1 = addAssociative(term);
         const is_addchain = operator === 'addchain' && term_1[0] === 'add' && term_1[1][0] === 'addchain';
-        if (is_addchain) {
-            const [, ...term_rest] = term_1[1];
-            newOperand.push(...term_rest);
-        } else {
-            newOperand.push(term_1);
-        }
+        newOperand = is_addchain ? [...newOperand, ...term_1[1].slice(1)]
+            : [...newOperand, term_1];
     });
     return [operator, ...newOperand];
 }

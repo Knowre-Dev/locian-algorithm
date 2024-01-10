@@ -76,11 +76,11 @@ export function groupLikeVariableTerms(tree = null) {
                                 coeff = ['natural', '1'];
                             } else if (term[1][0] === 'mulchain') {
                                 const [, ...term_1] = term[1];
-                                for (const term_term_1 of term_1) {
+                                term_1.forEach(term_term_1 => {
                                     if (JSON.stringify(variable) !== JSON.stringify(term_term_1[1])) {
-                                        coeff.push(term_term_1);
+                                        coeff = [...coeff, term_term_1];
                                     }
-                                }
+                                });
                                 coeff = array2ChainTree(coeff);
                             }
                             coeffArr[key_string] = [...coeffArr[key_string], [addOp, coeff]];
@@ -122,8 +122,8 @@ export function groupLikeVariableTerms(tree = null) {
                         coeff = coeff[1];
                     }
                 }
-                (JSON.stringify(coeff) === JSON.stringify(['natural', '1'])) ? newOperand.push([addOp, variable]) // Omit coefficient of 1
-                : newOperand.push([addOp, ['mulchain', ['mul', coeff], ['mul', variable]]]);
+                newOperand = (JSON.stringify(coeff) === JSON.stringify(['natural', '1'])) ? [...newOperand, [addOp, variable]] // Omit coefficient of 1
+                    : [...newOperand, [addOp, ['mulchain', ['mul', coeff], ['mul', variable]]]];
             }
             // Don't forget any constant term
             if (coeffArr.const.length > 0) {
@@ -177,11 +177,11 @@ export function groupLikeVariableTerms(tree = null) {
                 }
             }
 
-            const range = [];
+            let range = [];
             for (let i = 0; i < ind; i++) {
-                range.push(i);
+                range = [...range, i];
             }
-            const newOperand = [];
+            let newOperand = [];
             for (const k of range) {
                 expoArr[k] = array2ChainTree(expoArr[k]);
                 expoArr[k] = exprSimpConst(expoArr[k]);
@@ -197,7 +197,7 @@ export function groupLikeVariableTerms(tree = null) {
                 if (JSON.stringify(mTerm[1][2]) === JSON.stringify(['natural', '1'])) {
                     mTerm[1] = mTerm[1][1];
                 }
-                newOperand.push(mTerm);
+                newOperand = [...newOperand, mTerm];
             }
 
             // Snippet 1
@@ -217,8 +217,7 @@ export function groupLikeVariableTerms(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => groupLikeVariableTerms(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => groupLikeVariableTerms(term))];
         }
     }
 }

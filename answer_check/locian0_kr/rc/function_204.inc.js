@@ -10,9 +10,9 @@ export function addNegaToSub(tree = null) {
         let newOperand = [];
 
         const [operator_operand] = operand;
-        (operator_operand[0] === 'add' && operator_operand[1][0] === 'negative') ? newOperand.push(['sub', operator_operand[1][1]])
-        : (operator_operand[0] === 'add' && operator_operand[1][0] === 'positive') ? newOperand.push(['add', operator_operand[1][1]])
-        : newOperand.push(operator_operand)
+        newOperand = (operator_operand[0] === 'add' && operator_operand[1][0] === 'negative') ? [...newOperand, ['sub', operator_operand[1][1]]]
+            : (operator_operand[0] === 'add' && operator_operand[1][0] === 'positive') ? [...newOperand, ['add', operator_operand[1][1]]]
+            : [...newOperand, operator_operand]
         newOperand = [...newOperand, ...operand.slice(1)];
         return [operator, ...newOperand];
     }

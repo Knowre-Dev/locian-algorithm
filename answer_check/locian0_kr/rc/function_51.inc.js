@@ -6,8 +6,7 @@ export function posiSign(tree) {
     if (operator === 'positive') {
        return operand[0];
     }
-    const newOperand = operand.map(term => posiSign(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => posiSign(term))];
 }
 
 /*

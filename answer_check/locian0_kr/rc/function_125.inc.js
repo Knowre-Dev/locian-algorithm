@@ -68,11 +68,11 @@ export function eqIneqMulProp(tree = null) {
                 if (div === 1) {
                     return tree;
                 }
-                const newOperand = [];
+                let newOperand = [];
                 const deno = ['natural', div.toString()];
                 for (let i = 0; i < operand_length; i++) {
-                    i % 2 === 0 ? newOperand.push(sub_div(operand[i], deno))
-                    : newOperand.push(operand[i])
+                    newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
+                        : [...newOperand, operand[i]];
                 }
                 return [operator, ...newOperand];
             }
@@ -84,11 +84,11 @@ export function eqIneqMulProp(tree = null) {
                 if (div === 1) {
                     return tree;
                 }
-                const newOperand = [];
+                let newOperand = [];
                 const deno = ['natural', div.toString()];
                 for (let i = 0; i < operand_length; i++) {
-                    i % 2 === 0 ? newOperand.push(sub_div(operand[i], deno))
-                    : newOperand.push(operand[i])
+                    newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
+                        : [...newOperand, operand[i]];
                 }
                 return [operator, ...newOperand];
             }
@@ -96,10 +96,10 @@ export function eqIneqMulProp(tree = null) {
                 for (const term of operand) {
                     if (JSON.stringify(term) === JSON.stringify(['natural', '0'])) {
                         const deno = ['natural', con[0]];
-                        const newOperand = [];
+                        let newOperand = [];
                         for (let i = 0; i < operand_length; i++) {
-                            i % 2 === 0 ? newOperand.push(sub_div(operand[i], deno))
-                            : newOperand.push(operand[i])
+                            newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
+                            : [...newOperand, operand[i]];
                         }
                         return [operator, ...newOperand];
                     }
@@ -151,10 +151,10 @@ export function sub_getConstant(tree) {
             con = Array.from(new Set(con));
             if (con.includes(1)) {
                     if (con.length !== 1) {
-                    const con1 = [];
+                    let con1 = [];
                     con.forEach(term_c => {
                         if (term_c !== 1) {
-                            con1.push(term_c);
+                            con1 = [...con1, term_c];
                         }
                     });
                     con = con1;
@@ -177,11 +177,11 @@ export function sub_getConstant(tree) {
             break;
         }
         case 'power': {
-            con.push(1);
+            con = [...con, 1];
             break;
         }
         case 'variable': {
-            con.push(1);
+            con = [...con, 1];
             break;
         }
     }

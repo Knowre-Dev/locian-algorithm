@@ -7,13 +7,12 @@ export function mulConstCal(tree = null) {
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
         let nterm = [];
-        const varterm = [];
-
+        let varterm = [];
         operand.forEach(term => {
-            term[1][0] === 'power' ? (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') ? nterm.push([term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]])
-                : varterm.push(term)
-            : term[1][0] === 'natural' ? nterm.push(term)
-            : varterm.push(term);
+            term[1][0] === 'power' ? (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') ? nterm = [...nterm, [term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]]]
+                : varterm = [...varterm, term]
+            : term[1][0] === 'natural' ? nterm = [...nterm, term]
+            : varterm = [...varterm, term];
         });
         if (nterm.length !== 0) {
             const [first] = nterm;
@@ -32,6 +31,5 @@ export function mulConstCal(tree = null) {
         return tree;
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => mulConstCal(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => mulConstCal(term))];
 }

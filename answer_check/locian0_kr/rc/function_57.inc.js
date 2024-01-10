@@ -6,15 +6,14 @@ export function divIdentity(tree) {
     const [operator] = tree;
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
-        const newOperand = [];
+        let newOperand = [];
         operand.forEach(term => {
             if (term[0] !== 'div' || term[1][0] !== 'natural' || term[1][1] !== '1') {
-                newOperand.push(term);
+                newOperand = [...newOperand, term];
             }
         });
         return newOperand.length === 1 ? newOperand[0][1] : [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => divIdentity(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => divIdentity(term))];
 }

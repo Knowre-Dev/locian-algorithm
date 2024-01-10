@@ -22,19 +22,18 @@ export function expToFrac(tree = null) {
         }
         return fracFirst(tree);
     }
-    const newOperand = operand.map(term => expToFrac(term));
-    return fracFirst([operator, ...newOperand]);
+    return fracFirst([operator, ...operand.map(term => expToFrac(term))]);
 }
 
 export function fracFirst(tree) {
     const [operator] = tree;
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
-        const frac = [];
-        const other = [];
+        let frac = [];
+        let other = [];
         operand.forEach(term => {
-            (term[0] === 'mul' && term[1][0] === 'fraction') ? frac.push(term)
-            : other.push(term);
+            (term[0] === 'mul' && term[1][0] === 'fraction') ? frac = [...frac, term]
+            : other = [...other, term];
         });
         return [operator, ...frac, ...other];
     }

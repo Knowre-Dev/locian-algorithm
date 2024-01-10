@@ -39,31 +39,31 @@ export function fracNegative(tree) {
         }
         case 'addchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
+            let newOperand = [];
             operand.forEach(term => {
                 if (term[1][0] === 'fraction') {
                     const nterm = fracNegative(term[1]);
-                    nterm[0] === 'negative' ? term[0] === 'add' ? newOperand.push(['sub', nterm[1]])
-                        : term[0] === 'sub' ? newOperand.push(['add', nterm[1]])
-                        : newOperand.push([term[0], nterm[1]])
-                    : newOperand.push([term[0], nterm]);
+                    newOperand = nterm[0] === 'negative' ? term[0] === 'add' ? [...newOperand, ['sub', nterm[1]]]
+                        : term[0] === 'sub' ? [...newOperand, ['add', nterm[1]]]
+                        : [...newOperand, [term[0], nterm[1]]]
+                    : [...newOperand, [term[0], nterm]];
                 } else {
-                    newOperand.push(term);
+                    newOperand = [...newOperand, term];
                 }
             });
             return [operator, ...newOperand];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
+            let newOperand = [];
             let sign = 1;
             operand.forEach(term => {
                 const nterm = fracNegative(term[1]);
                 if (nterm[0] === 'negative') {
                     sign *= -1;
-                    newOperand.push([term[0], nterm[1]]);
+                    newOperand = [...newOperand, [term[0], nterm[1]]];
                 } else {
-                    newOperand.push([term[0], nterm]);
+                    newOperand = [...newOperand, [term[0], nterm]];
                 }
             });
             return sign === -1 ? ['negative', [operator, ...newOperand]]
@@ -71,8 +71,7 @@ export function fracNegative(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => fracNegative(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => fracNegative(term))];
         }
     }
 }

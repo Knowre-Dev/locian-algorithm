@@ -13,7 +13,7 @@ export function fracSeparation(tree) {
         const simple = (JSON.stringify(fracSimp(merge)) === JSON.stringify(merge) && JSON.stringify(fracSimpVar(merge)) === JSON.stringify(merge));
         const den = fracSeparation(operand[1]);
         const [, ...operand_0] = operand[0];
-        const newOperand = [];
+        let newOperand = [];
         operand_0.forEach(term => {
             let sign;
             let nden;
@@ -32,11 +32,10 @@ export function fracSeparation(tree) {
                 sign = term[0];
                 nden = den;
             }
-            simple ? newOperand.push([sign, fracSimp(['fraction', fracSeparation(term[1]), nden])])
-            : newOperand.push([sign, ['fraction', fracSeparation(term[1]), nden]]);
+            newOperand = simple ? [...newOperand, [sign, fracSimp(['fraction', fracSeparation(term[1]), nden])]]
+                : [...newOperand, [sign, ['fraction', fracSeparation(term[1]), nden]]];
         });
         return ['addchain', ...newOperand];
     }
-    const newOperand = operand.map(term => fracSeparation(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => fracSeparation(term))];
 }

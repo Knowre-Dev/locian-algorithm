@@ -13,6 +13,5 @@ export function mfracEquiv(tree = null) {
             : ['natural', (parseInt(operand[0][1]) + parseInt(nfrac[1])).toString()];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => mfracEquiv(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => mfracEquiv(term))];
 }

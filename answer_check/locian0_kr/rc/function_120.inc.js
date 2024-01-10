@@ -10,6 +10,5 @@ export function powerOne(tree = null) {
             : tree;
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => powerOne(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => powerOne(term))];
 }

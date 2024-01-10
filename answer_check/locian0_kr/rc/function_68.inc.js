@@ -6,13 +6,13 @@ export function powDecomposition(tree) {
     const [operator] = tree;
     if (operator === 'power') {
         const [, ...operand] = tree;
-        const newOperand = [];
+        let newOperand = [];
         const base = powDecomposition(operand[0]);
         const expo = powDecomposition(operand[1]);
         if (base[0] === 'addchain' && expo[0] === 'natural') {
             const expo_int = parseInt(expo[1]);
             for (let i = 0; i < expo_int; i++) {
-                newOperand.push(['mul', base]);
+                newOperand = [...newOperand, ['mul', base]];
             }
             return ['mulchain', ...newOperand];
         }

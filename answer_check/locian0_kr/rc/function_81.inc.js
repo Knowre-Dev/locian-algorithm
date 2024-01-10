@@ -10,16 +10,16 @@ export function addFactorNegative(tree) {
     switch (operator) {
         case 'negative': {
             const [, ...operand] = tree;
-            const newOperand = [];
-            newOperand.push(addFactorNegative(operand[0]));
+            // const newOperand = [];
+            const newOperand = [addFactorNegative(operand[0])];
             return newOperand[0][0] === 'negative' ? newOperand[0][1]
                 : [operator, ...newOperand];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
             let sign = 1;
-            const termArr = [];
-            const factArr = [];
+            let termArr = [];
+            let factArr = [];
             operand.forEach(term => {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'addchain') {
@@ -28,12 +28,12 @@ export function addFactorNegative(tree) {
                             addchain = addNegative(['negative', addchain]);
                             sign *= -1;
                         }
-                        factArr.push(['mul', addchain]);
+                        factArr = [...factArr, ['mul', addchain]];
                     } else {
-                        termArr.push(term);
+                        termArr = [...termArr, term];
                     }
                 } else {
-                    termArr.push(term);
+                    termArr = [...termArr, term];
                 }
             });
            const newOperand = [...termArr, ...factArr];
@@ -48,8 +48,7 @@ export function addFactorNegative(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => addFactorNegative(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => addFactorNegative(term))];
         }
     }
 }

@@ -26,9 +26,7 @@ export function rdecToFrac(tree) {
         return fracSimp(['fraction', ['natural', num], ['natural', den]]);
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => rdecToFrac(term));
-
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => rdecToFrac(term))];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

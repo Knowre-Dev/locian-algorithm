@@ -10,13 +10,12 @@ export function varReverseShift(tree, types = [null], parent = null) {
 
     if (operator === 'mulchain' && types.includes(parent)) {
         let vars = [];
-
         for (const term of operand) {
             const is_variable = (term[0] === 'mul' && term[1][0] === 'variable' && term.length === 2);
             if (!is_variable) {
                 return tree;
             }
-            vars.push(term[1][1]);
+            vars = [...vars, term[1][1]];
         }
         const vars_1 = _.cloneDeep(vars);
         vars_1.sort();

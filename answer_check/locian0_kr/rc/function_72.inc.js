@@ -10,43 +10,43 @@ export function addFactor(tree) {
     if (operator === 'addchain') {
         // extract all constant coefficents (not in denominator)
         const [, ...operand] = tree;
-        const consArr = [];
+        let consArr = [];
         for (const addterm of operand) {
             switch (addterm[1][0]) {
                 case 'mulchain': {
                     let con = ['natural', '1'];
-                    const syms = [];
+                    let syms = [];
                     const [, ...addterm_1] = addterm[1];
                     addterm_1.forEach((multerm, km) => {
                         if (multerm[0] === 'mul') {
                             if (multerm[1][0] === 'variable') {
-                                syms.push(multerm);
+                                syms = [...syms, multerm];
                             } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0' && km === 0) {
                                 con = multerm;
                             }
                         }
                     });
                     if (syms.length > 0 && con[1] !== '1') {
-                        consArr.push(con);
+                        consArr = [...consArr, con];
                     }
                     break;
                 }
                 case 'fraction': {
                     if (addterm[1][1][0] === 'mulchain') {
                         let con = ['natural', '1'];
-                        const syms = [];
+                        let syms = [];
                         const [, ...addterm_11] = addterm[1][1];
                         addterm_11.forEach(multerm => {
                             if (multerm[0] === 'mul') {
                                 if (multerm[1][0] === 'variable') {
-                                    syms.push(multerm);
+                                    syms = [...syms, multerm];
                                 } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0') {
                                     con = multerm;
                                 }
                             }
                         });
                         if (syms.length > 0 && con[1] !== '1') {
-                            consArr.push(con);
+                            consArr = [...consArr, con];
                         }
                     }
                     break;
@@ -66,16 +66,16 @@ export function addFactor(tree) {
                 con = ['natural', lcm.toString()];
             }
 
-            const newAdd = ['addchain'];
+            let newAdd = ['addchain'];
             operand.forEach(addterm => {
                 if (addterm[1][0] === 'fraction') {
                     if (addterm[1][2][0] !== 'mulchain') {
                         addterm[1][2] = ['mulchain', ['mul', addterm[1][2]]];
                     }
                     const den = [...addterm[1][2], ...consArr];
-                    newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1][1], den])]);
+                    newAdd = [...newAdd, [addterm[0], fracSimpInt(['fraction', addterm[1][1], den])]];
                 } else {
-                    newAdd.push([addterm[0], fracSimpInt(['fraction', addterm[1], con])]);
+                    newAdd = [...newAdd, [addterm[0], fracSimpInt(['fraction', addterm[1], con])]];
                 }
             });
             return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);

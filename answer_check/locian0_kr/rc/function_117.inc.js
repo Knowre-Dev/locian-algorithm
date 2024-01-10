@@ -6,12 +6,9 @@ export function addFactoredFormVar(tree = null) {
         return tree;
     }
 
-    const deter = sub_deter(tree);
-
-    if (!deter) {
+    if (!sub_deter(tree)) {
         return tree;
     }
-
     let [operator] = tree;
     switch (operator) {
         case 'addchain': {
@@ -20,37 +17,37 @@ export function addFactoredFormVar(tree = null) {
             operand.forEach(term => {
                 if (term[1][0] === 'power') {
                     if (term[1][1][0] === 'variable' && term[1][2][0] === 'natural') {
-                        const mul_term = [];
+                        let mul_term = [];
                         const max = parseInt(term[1][2][1])
                         for (let i = 0; i < max; i++) {
-                            mul_term.push(['mul', term[1][1]]);
+                            mul_term = [...mul_term, ['mul', term[1][1]]];
                         }
                         term = [term[0], ['mulchain', ...mul_term]];
                     }
                 }
                 switch (term[1][0]) {
                     case 'variable': {
-                        vars.push(term[1][1]);
+                        vars = [...vars, term[1][1]];
                         break;
                     }
                     case 'mulchain': {
-                        const var_mul = [];
+                        let var_mul = [];
                         const [, ...term_1] = term[1];
                         term_1.forEach(term_term_1 => {
                             if (term_term_1[1][0] === 'variable') {
-                                var_mul.push(term_term_1[1][1]);
+                                var_mul = [...var_mul, term_term_1[1][1]];
                             } else if (term_term_1[1][0] === 'power' && term_term_1[1][1][0] === 'variable' && term_term_1[1][2][0] === 'natural') {
                                 const max = parseInt(term_term_1[1][2][1]);
                                 for (let i = 0; i < max; i++) {
-                                    var_mul.push(term_term_1[1][1][1]);
+                                    var_mul = [...var_mul, term_term_1[1][1][1]];
                                 }
                             }
                         });
-                        vars.push(var_mul);
+                        vars = [...vars, var_mul];
                         break;
                     }
                     default: {
-                        vars.push('1');
+                        vars = [...vars, '1'];
                     }
                 }
             });
@@ -68,16 +65,16 @@ export function addFactoredFormVar(tree = null) {
                     vari = [vari];
                 }
                 unique.forEach(term_unique => {
-                    const key1 = [];
+                    let key1 = [];
                     first.forEach((term_1, key_1) => {
                         if (term_1 === term_unique) {
-                            key1.push(key_1);
+                            key1 = [...key1, key_1];
                         }
                     });
-                    const key2 = [];
+                    let key2 = [];
                     vari.forEach((term_2, key_2) => {
                         if (term_2 === term_unique) {
-                            key2.push(key_2);
+                            key2 = [...key2, key_2];
                         }
                     });
                     const key1_length = key1.length;
@@ -104,38 +101,38 @@ export function addFactoredFormVar(tree = null) {
                 }
                 case 1: {
                     operator = 'mulchain';
-                    const div = [['variable', first[0]]];
-                    const div_1 = [];
+                    let div = [['variable', first[0]]];
+                    let div_1 = [];
                     operand.forEach(t => {
                         const frac = fracSimpVar(['fraction', t[1], ['variable', first[0]]]);
-                        div_1.push([t[0], frac]);
+                        div_1 = [...div_1, [t[0], frac]];
                     });
-                    div.push(['addchain', ...div_1]);
+                    div = [...div, ['addchain', ...div_1]];
                     newOperand = [...newOperand, ...div.map(term_div => ['mul', term_div])];
                     return sub_mulCommutative([operator, ...newOperand]);
                 }
                 default: {
                     operator = 'mulchain';
-                    const div = [];
+                    let div = [];
                     unique.forEach(term_unique => {
-                        const find_keys = [];
+                        let find_keys = [];
                         first.forEach((term_1, key_1) => {
                             if (term_1 === term_unique) {
-                                find_keys.push(key_1);
+                                find_keys = [...find_keys, key_1];
                             }
                         });
-                        find_keys.length > 1 ? div.push(['power', ['variable', term_unique], ['natural', find_keys.length.toString()]])
-                        : div.push(['variable', term_unique]);
+                        div = find_keys.length > 1 ? [...div, ['power', ['variable', term_unique], ['natural', find_keys.length.toString()]]]
+                            : [...div, ['variable', term_unique]];
                     });
-                    const div_1 = [];
+                    let div_1 = [];
                     operand.forEach(term => {
                         let frac = term[1];
                         div.forEach(term_div => {
                             frac = fracSimpVar(['fraction', frac, term_div]);
                         });
-                        div_1.push([term[0], frac]);
+                        div_1 = [...div_1, [term[0], frac]];
                     });
-                    div.push(['addchain', ...div_1]);
+                    div = [...div, ['addchain', ...div_1]];
                     newOperand = [...newOperand, ...div.map(term_div => ['mul', term_div])];
                     return sub_mulCommutative([operator, ...newOperand]);
                 }
@@ -143,17 +140,16 @@ export function addFactoredFormVar(tree = null) {
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            const newOperand = [];
+            let newOperand = [];
             operand.forEach(term => {
-                term[1][0] === 'addchain' ? newOperand.push(addFactoredFormVar(term))
-                : newOperand.push(term);
+                newOperand = term[1][0] === 'addchain' ? [...newOperand, addFactoredFormVar(term)]
+                    : [...newOperand, term];
             });
             return sub_mulCommutative([operator, ...newOperand]);
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => addFactoredFormVar(term));
-            return sub_mulCommutative([operator, ...newOperand]);
+            return sub_mulCommutative([operator, ...operand.map(term => addFactoredFormVar(term))]);
         }
     }
 }

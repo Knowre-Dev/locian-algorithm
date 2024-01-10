@@ -8,8 +8,7 @@ export function fracMfrac(tree) {
         const num = ['natural', (parseInt(operand[0][1]) * parseInt(operand[2][1]) + parseInt(operand[1][1])).toString()];
         return ['fraction', num, operand[2]];
     }
-    const newOperand = operand.map(term => fracMfrac(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => fracMfrac(term))];
 }
 
 /*

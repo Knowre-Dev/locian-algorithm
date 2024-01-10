@@ -16,30 +16,30 @@ export function addFactor_1(tree = null) {
     if (operator === 'addchain') {
         const [, ...operand] = tree;
         let power = false;
-        const consArr = [];
+        let consArr = [];
         operand.forEach(addterm => {
             if (addterm[1][0] === 'mulchain') {
                 let con = ['natural', '1'];
-                const syms = [];
+                let syms = [];
                 const [, ...addterm_1] = addterm[1];
                 addterm_1.forEach((term_addterm_1, key_addterm_1) => {
                     if (term_addterm_1[0] === 'mul') {
                         if (term_addterm_1[1][0] === 'variable') {
-                            syms.push(term_addterm_1);
+                            syms = [...syms, term_addterm_1];
                         } else if (term_addterm_1[1][0] === 'squareroot') {
-                            syms.push(term_addterm_1);
+                            syms = [...syms, term_addterm_1];
                         } else if (term_addterm_1[1][0] === 'natural' && term_addterm_1[1][1] !== '0' && key_addterm_1 === 0) {
                             con = term_addterm_1;
                         } else if (term_addterm_1[1][0] === 'power' && term_addterm_1[1][1][0] === 'variable') {
-                            syms.push(term_addterm_1);
+                            syms = [...syms, term_addterm_1];
                         }
                     }
                 });
                 if (syms.length > 0 && con[1] !== '1') {
-                    consArr.push(con);
+                    consArr = [...consArr, con];
                 }
             } else if (addterm[1][0] === 'fraction') {
-                const syms = [];
+                let syms = [];
                 let con = [];
                 if (addterm[1][1][0] === 'mulchain') {
                     con = ['natural', '1'];
@@ -47,9 +47,9 @@ export function addFactor_1(tree = null) {
                     addterm_11.forEach(term_addterm_11 => {
                         if (term_addterm_11[0] === 'mul') {
                             if (term_addterm_11[1][0] === 'variable') {
-                                syms.push(term_addterm_11);
+                                syms = [...syms, term_addterm_11];
                             } else if (term_addterm_11[1][0] === 'squareroot') {
-                                syms.push(term_addterm_11);
+                                syms = [...syms, term_addterm_11];
                             } else if (term_addterm_11[1][0] === 'natural' && term_addterm_11[1][1] !== '0') {
                                 con = term_addterm_11;
                             }
@@ -60,10 +60,10 @@ export function addFactor_1(tree = null) {
                 }
 
                 if (syms.length > 0 && con[1] !== '1') {
-                    consArr.push(con);
+                    consArr = [...consArr, con];
                 }
             } else if (addterm[1][0] === 'natural' && addterm[1][1] !== '1') {
-                consArr.push(addterm);
+                consArr = [...consArr, addterm];
             } else if (addterm[1][0] === 'power') {
                 power = true;
             }
@@ -85,17 +85,17 @@ export function addFactor_1(tree = null) {
                 }
             }
             if (con[1] === '1') {
-                return addCommutative(tree);// newOperand = tree_1;
+                return addCommutative(tree);
             }
-            const newAdd = ['addchain'];
+            let newAdd = ['addchain'];
             operand.forEach(term => {
                 if (term[1][0] === 'fraction') {
                     if (term[1][2][0] !== 'mulchain') {
                         term[1][2] = ['mulchain', ['mul', term[1][2]]];
                     }
-                    newAdd.push([term[0], fracSimpInt(['fraction', term[1][1], [...term[1][2], ...[['mul', con]]]])]);
+                    newAdd = [...newAdd, [term[0], fracSimpInt(['fraction', term[1][1], [...term[1][2], ...[['mul', con]]]])]];
                 } else {
-                    newAdd.push([term[0], fracSimpInt(['fraction', term[1], con])]);
+                    newAdd = [...newAdd, [term[0], fracSimpInt(['fraction', term[1], con])]];
                 }
             });
             return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);

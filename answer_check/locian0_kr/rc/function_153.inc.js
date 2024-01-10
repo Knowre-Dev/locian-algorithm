@@ -29,8 +29,7 @@ export function fracCombine(tree) {
         return ['fraction', array2ChainTree(newOperand), denom];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => fracCombine(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => fracCombine(term))];
 }
 
 /*

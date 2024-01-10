@@ -66,12 +66,6 @@ export function exprSimpConst(tree = null) {
             }
             return isNumeric(subresult, true) ? subresult
                 : [operator, subresult];
-            /*
-            if (isNumeric(subresult, true)) {
-                return subresult;
-            }
-            return [operator, subresult];
-            */
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
@@ -108,7 +102,7 @@ export function exprSimpConst(tree = null) {
             }
 
             [, ...operand] = operand;
-            const termArr = [];
+            let termArr = [];
             operand.forEach(term => {
                 let op = term[0];
                 let subtree = exprSimpConst(term[1]);
@@ -121,14 +115,14 @@ export function exprSimpConst(tree = null) {
                         subtree = subtree[1];
                     }
                 }
-                termArr.push([op, subtree]);
+                termArr = [...termArr, [op, subtree]];
             });
             return array2ChainTree(termArr, true);
         }
         case 'mulchain': { // fin
             let [, ...operand] = tree;
             [, ...operand] = mulAssociative(array2ChainTree(operand));
-            const termArr = [];
+            let termArr = [];
             let sign = 1;
             operand.forEach(term => {
                 let subtree = exprSimpConst(term[1]);
@@ -139,7 +133,7 @@ export function exprSimpConst(tree = null) {
                         subtree = subtree[1];
                     }
                 }
-                termArr.push([term[0], subtree]);
+                termArr = [...termArr, [term[0], subtree]];
             });
             const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(termArr, true))));
             return sign < 0 ? ['negative', newtree] : newtree;
@@ -183,7 +177,7 @@ export function exprSimpConst(tree = null) {
                 const [, ...operand_basetree] = basetree;
                 mtermArr = [...mtermArr, ...operand_basetree.map(term => [term[0], exprSimpConst(['power', term[1], expotree])])];
             } else {
-                mtermArr.push(['mul', ['power', basetree, expotree]]);
+                mtermArr = [...mtermArr, ['mul', ['power', basetree, expotree]]];
             }
 
             // Remove any power of 1 before returning
@@ -191,8 +185,7 @@ export function exprSimpConst(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => exprSimpConst(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => exprSimpConst(term))];
         }
     }
 }

@@ -5,23 +5,23 @@ export function fracComplex(tree) {
 
     const [operator] = tree;
 
-    const numArr = [];
-    const denArr = [];
+    let numArr = [];
+    let denArr = [];
     if (operator === 'fraction') {
         const [, ...operand] = tree;
         const num = fracComplex(operand[0]);
         const den = fracComplex(operand[1]);
         if (num[0] === 'fraction') {
-            numArr.push(num[1]);
-            denArr.push(num[2]);
+            numArr = [...numArr, num[1]];
+            denArr = [...denArr, num[2]];
         } else {
-            numArr.push(num);
+            numArr = [...numArr, num];
         }
         if (den[0] === 'fraction') {
-            denArr.push(den[1]);
-            numArr.push(den[2]);
+            denArr = [...denArr, den[1]];
+            numArr = [...numArr, den[2]];
         } else {
-            denArr.push(den);
+            denArr = [...denArr, den];
         }
 
         const newNum = numArr.length > 1 ? ['mulchain', ...numArr.map(term => ['mul', term])]
@@ -31,6 +31,5 @@ export function fracComplex(tree) {
         return [operator, newNum, newDen]
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => fracComplex(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => fracComplex(term))];
 }

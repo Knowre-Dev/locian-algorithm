@@ -5,17 +5,13 @@ export function 곱셈결합법칙(tree) {
     }
 
     const [operator, ...operand] = tree;
-    const newOperand = [];
+    let newOperand = [];
     operand.forEach(term => {
         const term_1 = 곱셈결합법칙(term);
         // a(b(cd))-> a(bcd) -> abcd
         const is_mulchain = operator === 'mulchain' && term_1[0] === 'mul' && term_1[1][0] === 'mulchain';
-        if (is_mulchain) {
-            const [, ...term_rest] = term_1[1];
-            newOperand.push(...term_rest);
-        } else {
-            newOperand.push(term_1);
-        }
+        newOperand = is_mulchain ? [...newOperand, ...term_1[1].slice(1)]
+            : [...newOperand, term_1];
     });
     return [operator, ...newOperand];
 }

@@ -18,8 +18,7 @@ export function fracDecimal(tree) {
             : ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => fracDecimal(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => fracDecimal(term))];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

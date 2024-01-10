@@ -17,8 +17,7 @@ export function decIdentity(tree) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => decIdentity(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => decIdentity(term))];
         }
     }
 }

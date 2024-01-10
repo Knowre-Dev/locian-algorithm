@@ -41,8 +41,8 @@ export function sub_mulCommutative(tree = null) {
 export function sort_array(array) {
     let arr = [];
     array.forEach(term => {
-        !Array.isArray(term) ? arr.push(term)
-        : arr = [...arr, ...sort_array(term)];
+        arr = !Array.isArray(term) ? [...arr, term]
+        : [...arr, ...sort_array(term)];
     });
     return arr;
 }

@@ -13,7 +13,7 @@ export function varReverse(tree, types = [null], parent = null) {
             if (!is_variable) {
                 return [operator, ...operand];
             }
-            vars.push(term[1][1]);
+            vars = [...vars, term[1][1]];
         }
 
         if (vars[0] > vars[vars.length - 1]) {

@@ -19,35 +19,37 @@ export function evaluateEx_new(tree) {
                 JSON.stringify(tree[5]) === JSON.stringify(['negative', ['infinity']])) {
                 return tree;
             }
-            const newTree = ['inequality'];
-            const newOperands = [];
+            let newTree = ['inequality'];
+            let newOperand = [];
             if (tree[2] === 'gt' || tree[2] === 'ge') {
                 const [, ...operand] = tree;
+                const length = tree.length - 2;
                 operand.forEach((term, key) => {
-                    key === tree.length - 2 ? newOperands.push(['natural', '0'])
-                    : key % 2 === 1 ? newOperands.push(term)
-                    : newOperands.push(evaluateEx_new(
-                            ['addchain', ['add', term], ['sub', tree[tree.length - 1]]]
-                        ));
+                    newOperand = key === length ? [...newOperand, ['natural', '0']]
+                        : key % 2 === 1 ? [...newOperand, term]
+                        : [...newOperand, evaluateEx_new(
+                                ['addchain', ['add', term], ['sub', tree[tree.length - 1]]]
+                        )];
                 });
-                return [...newTree, ...newOperands];
+                return [...newTree, ...newOperand];
             }
             const operand_reverse = tree.slice(1).reverse();
+            const length = tree.length - 2;
             operand_reverse.forEach((term, key) => {
-                key === tree.length - 2 ? newOperands.push(['natural', '0'])
-                : key % 2 === 1 ? newTree.push(term === 'lt' ? 'gt' : 'ge')
-                : newTree.push(evaluateEx_new(
+                key === length ? newOperand = [...newOperand, ['natural', '0']]
+                : newTree = key % 2 === 1 ? [...newTree, term === 'lt' ? 'gt' : 'ge']
+                : [...newTree, evaluateEx_new(
                         ['addchain', ['add', term], ['sub', tree[1]]]
-                    ));
+                    )];
             });
-            return [...newTree, ...newOperands];
+            return [...newTree, ...newOperand];
         }
         case 'equation':
         case 'neq':
         case 'ratio':
         case 'orchain':
         default: {
-            const newTree = ['eval'];
+            let newTree = ['eval'];
             const seedArr = [-2, -1, 1, 2, 3];
             for (const seed of seedArr) {
                 const evalresult = evaluateExWithSeed(tree, seed);
@@ -69,7 +71,7 @@ export function evaluateEx_new(tree) {
                         return tree;
                     }
                 }
-                newTree.push(evalresult);
+                newTree = [...newTree, evalresult];
             }
             return newTree;
         }
@@ -119,7 +121,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
     // This is because evaluateOperation() already has a way to deal with
     // subscripts in a way that we desire
     // (i.e., same let name with different subscript treated as different)
-    const varNames = [];
+    let varNames = [];
     loop_2: for (const variable of varList) {
         // Use a helper function to set variable name string for lookup table
         // (will also be used at evaluateVariable() to find the correct entry)
@@ -130,7 +132,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                 continue loop_2;
             }
         }
-        varNames.push(varname);
+        varNames = [...varNames, varname];
     }
 
     // Sort the variable names
@@ -376,10 +378,10 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             //          the returned value is really the principal value Log z of the input z=x+iy
         }
         case 'log': {
-            const newOperand = [];
-            newOperand.push(evaluateOperation('ln', [operand[0]], seed, lookupTable));
-            typeof operand[1] !== 'undefined' ? newOperand.push(evaluateOperation('ln', [operand[1]], seed, lookupTable))
-            : newOperand.push(evaluateOperation('ln', [[10, 0]], seed, lookupTable))
+            // const newOperand = [];
+            let newOperand = [evaluateOperation('ln', [operand[0]], seed, lookupTable)];
+            newOperand = typeof operand[1] !== 'undefined' ? [...newOperand, evaluateOperation('ln', [operand[1]], seed, lookupTable)]
+                : [...newOperand, evaluateOperation('ln', [[10, 0]], seed, lookupTable)];
             return evaluateOperation('fraction', newOperand, seed, lookupTable);
         }
         case 'summation': {
@@ -420,10 +422,10 @@ export function replace(tree, from, to) {
         return to;
     }
     const [operator, ...operand] = tree;
-    const newOperand = [];
+    let newOperand = [];
     operand.forEach(term => {
-        Array.isArray(term) ? newOperand.push(replace(term, from, to))
-        : newOperand.push(term)
+        newOperand = Array.isArray(term) ? [...newOperand, replace(term, from, to)]
+        : [...newOperand, term];
     });
     return [operator, ...newOperand];
 }
@@ -559,12 +561,12 @@ export function array2ChainTree(arr, evalNumeric = false) {
     }
     // Optional: Evaluate all numerical terms into a single term
     if (evalNumeric) {
-        const numericArr = [];
-        const nonnumericArr = [];
+        let numericArr = [];
+        let nonnumericArr = [];
         arr.forEach(term => {
             const subtree = term[1];
-            isNumeric(subtree, false, false) ? numericArr.push([term[0], subtree])
-            : nonnumericArr.push([term[0], subtree]);
+            isNumeric(subtree, false, false) ? numericArr = [...numericArr, [term[0], subtree]]
+            : nonnumericArr = [...nonnumericArr, [term[0], subtree]];
         });
         let numRes = array2ChainTree(numericArr);
         arr = nonnumericArr;
@@ -748,11 +750,11 @@ Author: epark
 */
 
 export function evalNumericValues_addChain(operand) {
-    const operand_1 = [];
-    const operand_2 = [];
+    let operand_1 = [];
+    let operand_2 = [];
     operand.forEach(term => {
-        (term[0] === 'add' || term[0] === 'sub') ? operand_1.push(term)
-        : operand_2.push(['addsub', term[1]]);
+        (term[0] === 'add' || term[0] === 'sub') ? operand_1 = [...operand_1, term]
+        : operand_2 = [...operand_2, ['addsub', term[1]]];
     });
     if (JSON.stringify(operand_1) === JSON.stringify([])) {
         return ['addchain', ...operand_2];
@@ -874,7 +876,7 @@ export function evalNumericValues_power(operand) {
         }
     });
     // Evaluation
-    const mtermArr = []; // construct as a mulchain, and then simplify later
+    let mtermArr = []; // construct as a mulchain, and then simplify later
     // work with absolute value of base for now, will see why later
     const bVal = parseInt(basetree[1]);
     const xNval = parseInt(expFrac[0][1]);
@@ -896,23 +898,23 @@ export function evalNumericValues_power(operand) {
     // Add the mul terms to mtermArr
     if (rtRes === Math.floor(rtRes)) {
         intRes *= rtRes;
-        mtermArr.push(['mul', ['natural', intRes.toString()]]);
+        mtermArr = [...mtermArr, ['mul', ['natural', intRes.toString()]]];
     } else {
         if (intRes !== 1) {
-            mtermArr.push(['mul', ['natural', intRes.toString()]]);
+            mtermArr = [...mtermArr, ['mul', ['natural', intRes.toString()]]];
         }
         const subtree = [
             'power',
             ['natural', bVal.toString()],
             ['fraction', ['natural', (xNval % xDval).toString()], ['natural', xDval.toString()]]
         ];
-        mtermArr.push(['mul', subtree]);
+        mtermArr = [...mtermArr, ['mul', subtree]];
     }
 
     // Deal with imaginary number case and negative result case here
     let resSign;
     if (imaginaryFlag) {
-        mtermArr.push(['mul', ['variable', 'i']]);
+        mtermArr = [...mtermArr, ['mul', ['variable', 'i']]];
         const intSign = Math.floor(xNval / xDval) % 2 === 0 ? 1 : sign;
         const rtSign = (xNval % xDval) % 2 === 0 ? 1 : sign;
         resSign = intSign * rtSign;
@@ -945,9 +947,8 @@ Author: epark
 */
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 export function findDenominators(tree, unique = false, positive = false) {
-    const denomArr = [];
     if (!Array.isArray(tree)) {
-        return denomArr;
+        return [];
     }
     const [operator] = tree;
     if (operator === 'fraction') {
@@ -956,24 +957,24 @@ export function findDenominators(tree, unique = false, positive = false) {
         if (positive && denom[0] === 'negative') {
             denom = denom[1];
         }
-        denomArr.push(denom);
-        return denomArr;
+        return [denom];
+        // return denomArr;
     }
 
     const [, ...operand] = tree;
+    let denomArr = [];
     for (const tree of operand) {
         const subDenArr = findDenominators(tree, unique);
-        for (const dtree of subDenArr) {
-            let is_included = false;
-            for (const v of denomArr) {
-                if (JSON.stringify(v) === JSON.stringify(dtree)) {
-                    is_included = true;
-                    break;
+        loop_2: for (const dtree of subDenArr) {
+            for (const value of denomArr) {
+                if (JSON.stringify(value) === JSON.stringify(dtree)) {
+                    if (!unique) {
+                        denomArr = [...denomArr, dtree];
+                    }
+                    continue loop_2;
                 }
             }
-            if (!unique || !is_included) {
-                denomArr.push(dtree);
-            }
+            denomArr = [...denomArr, dtree];
         }
     }
     return denomArr;
@@ -1040,13 +1041,13 @@ export function findGCF(tree = null) {
             return commonFactorArr;
         }
         case 'variable': {
-            commonFactorArr.sym.push(tree);
+            commonFactorArr.sym = [...commonFactorArr.sym, tree];
             return commonFactorArr;
         }
         case 'mulchain': {
             const [, ...operand] = tree;
             let constF = 1;
-            const symFArr = [];
+            let symFArr = [];
             for (const term of operand) {
                 // only consider multiplications (divisions would end up in denominators)
                 if (term[0] === 'mul') {
@@ -1063,7 +1064,7 @@ export function findGCF(tree = null) {
                                 continue loop_2;
                             }
                         }
-                        symFArr.push(symb);
+                        symFArr = [...symFArr, symb];
                     }
                 }
             }
@@ -1097,11 +1098,11 @@ export function findGCF(tree = null) {
                     commonFactorArr.const = ['natural', gcf.toString()];
                     // For variables,
                     // only count the vars already in commonFactorArr['sym']
-                    const symFArr = [];
+                    let symFArr = [];
                     subCFArr.sym.forEach(symb => {
                         commonFactorArr.sym.forEach(symb_1 => {
                             if (JSON.stringify(symb) === JSON.stringify(symb_1)) {
-                                symFArr.push(symb);
+                                symFArr = [...symFArr, symb];
                             }
                         });
                     });
@@ -1149,7 +1150,7 @@ export function findVars(tree, option = false) {
     if (!Array.isArray(tree)) {
         return [];
     }
-    const varList = [];
+    let varList = [];
     if (option === true) {
         if (isNumeric(tree)) {
             return [];
@@ -1168,7 +1169,7 @@ export function findVars(tree, option = false) {
                         continue loop_2;
                     }
                 }
-                varList.push(variable);
+                varList = [...varList, variable];
             }
         }
         return varList;
@@ -1181,10 +1182,6 @@ export function findVars(tree, option = false) {
         }
         case 'variable': {
             return [...varList, tree];
-            /*
-            varList.push(tree);
-            return varList;
-            */
         }
         case 'power': {
             return findVars(tree[1], option).length > 0 ? [...varList, tree]
@@ -1202,7 +1199,7 @@ export function findVars(tree, option = false) {
                     subtree = subtree[1];
                 }
                 if (findVars(subtree, option).length > 0) {
-                    varTerm.push([term[0], subtree]);
+                    varTerm = [...varTerm, [term[0], subtree]];
                     // This way, same variable multiplied twice (e.g., ['variable', 'x'])
                     // will be parsed as a mulchain
                     // (e.g., ['mulchain', ['mul', ['variable', 'x']], ['mul', ['variable', 'x']]])
@@ -1222,13 +1219,12 @@ export function findVars(tree, option = false) {
                 }
                 const subVarList = findVars(subtree, option);
                 loop_2: for (const subtree of subVarList) {
-                    // let is_included = false;
                     for (const vari of varList) {
                         if (JSON.stringify(vari) === JSON.stringify(subtree)) {
                             continue loop_2;
                         }
                     }
-                    varList.push(subtree);
+                    varList = [...varList, subtree];
                 }
             }
             return varList;
@@ -1355,19 +1351,19 @@ export function multFactor(tree, fterm, simplifyFrac = false) {
                 : tree;
         }
         case 'addchain': {
-            const newtree = ['addchain'];
+            let newtree = ['addchain'];
             const [, ...operand] = tree;
             operand.forEach(aterm => {
                 aterm[1] = multFactor(aterm[1], fterm, simplifyFrac);
-                newtree.push(aterm);
+                newtree = [...newtree, aterm];
             });
             tree = addAdjacentSigns(newtree);
             return simplifyFrac ? fracSimpVar(fracSimpInt(fracNegative(tree)))
                 : tree;
         }
         default: {
-            fterm[0] === 'mul' ? tree = combine2ChainTree(fterm[1], tree, 'mul')
-            : tree = ['fraction', tree, fterm[1]];
+            tree = fterm[0] === 'mul' ? combine2ChainTree(fterm[1], tree, 'mul')
+                : ['fraction', tree, fterm[1]];
             tree = mulNegative(tree);
             return simplifyFrac ? fracSimpVar(fracSimpInt(fracNegative(tree)))
             : tree;

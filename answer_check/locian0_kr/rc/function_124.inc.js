@@ -18,14 +18,14 @@ export function ineqMulNeg(tree = null) {
         }
         const operand_length = operand.length;
         for (let i = 1; i < operand_length; i++) {
-            i % 2 !== 0 ? operand[i] === 'gt' ? newOperand.push('lt')
-                : operand[i] === 'ge' ? newOperand.push('le')
-                : operand[i] === 'lt' ? newOperand.push('gt')
-                : newOperand.push('ge')
-            : operand[i][0] === 'negative' ? newOperand.push(operand[i][1])
-                : operand[i][0] === 'addchain' ? newOperand.push(addNegative(['negative', operand[i]]))
-                : (operand[i][0] === 'natural' && operand[i][1] === '0') ? newOperand.push(operand[i])
-                : newOperand.push(['negative', operand[i]]);
+            newOperand = i % 2 !== 0 ? operand[i] === 'gt' ? [...newOperand, 'lt']
+                    : operand[i] === 'ge' ? [...newOperand, 'le']
+                    : operand[i] === 'lt' ? [...newOperand, 'gt']
+                    : [...newOperand, 'ge']
+                : operand[i][0] === 'negative' ? [...newOperand, operand[i][1]]
+                    : operand[i][0] === 'addchain' ? [...newOperand, addNegative(['negative', operand[i]])]
+                    : (operand[i][0] === 'natural' && operand[i][1] === '0') ? [...newOperand, operand[i]]
+                    : [...newOperand, ['negative', operand[i]]];
         }
         return [operator, ...newOperand];
     }
@@ -63,15 +63,15 @@ export function ineqMulNegUS(tree) {
     } else {
         return [operator, ...operand];
     }
-    const newOperand = [];
+    let newOperand = [];
     operand.forEach(subtree => {
-        JSON.stringify(subtree) === JSON.stringify(['natural', '0']) ? newOperand.push(subtree)
-        : subtree === 'gt' ? newOperand.push('lt')
-        : subtree === 'ge' ? newOperand.push('le')
-        : subtree === 'le' ? newOperand.push('ge')
-        : subtree === 'lt' ? newOperand.push('gt')
-        : subtree[0] === 'negative' ? newOperand.push(subtree[1])
-        : newOperand.push(addNegative(['negative', subtree]));
+        newOperand = JSON.stringify(subtree) === JSON.stringify(['natural', '0']) ? [...newOperand, subtree]
+            : subtree === 'gt' ? [...newOperand, 'lt']
+            : subtree === 'ge' ? [...newOperand, 'le']
+            : subtree === 'le' ? [...newOperand, 'ge']
+            : subtree === 'lt' ? [...newOperand, 'gt']
+            : subtree[0] === 'negative' ? [...newOperand, subtree[1]]
+            : [...newOperand, addNegative(['negative', subtree])];
     });
     return [operator, ...newOperand];
 }

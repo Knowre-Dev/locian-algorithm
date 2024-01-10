@@ -5,17 +5,16 @@ export function addPolyZero(tree) {
     const [operator] = tree;
     if (operator === 'addchain') {
         const [, ...operand] = tree;
-        const newOperand = [];
+        let newOperand = [];
         operand.forEach(term => {
-            term[0] === 'sub' ? checkZeroEquiv(term[1]) ? newOperand.push(['add', term[1]])
-                : newOperand.push(term)
-            : newOperand.push(term);
+            newOperand = term[0] === 'sub' ? checkZeroEquiv(term[1]) ? [...newOperand, ['add', term[1]]]
+                    : [...newOperand, term]
+                : [...newOperand, term];
         });
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => addPolyZero(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => addPolyZero(term))];
 }
 
 export function checkZeroEquiv(tree) {
@@ -46,3 +45,18 @@ export function checkZeroEquiv(tree) {
         }
     }
 }
+
+/*
+import { LatexToTree, compareMathTree } from '../checkmath.js';
+
+let tree_1 = LatexToTree('0x+x');
+let tree_2 = LatexToTree('-0x+x');
+tree_1 = addPolyZero(tree_1);
+tree_2 = addPolyZero(tree_2);
+const result_1 = JSON.stringify(tree_1, null, 4);
+const result_2 = JSON.stringify(tree_2, null, 4);
+const result = compareMathTree(tree_1, tree_2);
+console.log(result_1);
+console.log(result_2);
+console.log(result);
+*/

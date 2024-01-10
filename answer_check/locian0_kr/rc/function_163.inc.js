@@ -63,15 +63,14 @@ export function solParenthesis(tree = null) {
                     }
                     addchain.forEach(term_a => {
                         [, ...term_a] = term_a;
-                        const term = [];
+                        let term = [];
                         term_a.forEach(term_a_1 => {
                             first.forEach(term_f => {
                                 if (Array.isArray(term_f) && Array.isArray(term_a_1)) {
-                                    // let flag1;
                                     const flag1 = JSON.stringify(term_f[0]) === JSON.stringify(term_a_1[0]) ? 'add'
                                         : 'sub';
                                     const merge = ['mulchain', ['mul', term_f[term_f.length - 1]], ['mul', term_a_1[term_a_1.length - 1]]];
-                                    term.push([flag1, merge]);
+                                    term = [...term, [flag1, merge]];
                                 }
                             });
                         });
@@ -95,8 +94,7 @@ export function solParenthesis(tree = null) {
         }
         default: {
             const [, ...operand] = tree;
-            const newOperand = operand.map(term => solParenthesis(term));
-            return [operator, ...newOperand];
+            return [operator, ...operand.map(term => solParenthesis(term))];
         }
     }
 }

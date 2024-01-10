@@ -29,30 +29,30 @@ export function rootSimpInt(tree) {
             ];
     }
     if (operator === 'mulchain') {
-        const newOperand = [];
-        const cons = [];
+        let newOperand = [];
+        let cons = [];
         operand.forEach(term => {
             if (term[0] === 'mul' && term[1][0] === 'squareroot') {
                 const nroot = rootSimpInt(term[1]);
                 switch (nroot[0]) {
                     case 'natural': {
-                        cons.push(['mul', nroot]);
+                        cons = [...cons, ['mul', nroot]];
                         break;
                     }
                     case 'mulchain': {
-                        cons.push(nroot[1]);
-                        newOperand.push(nroot[2]);
+                        cons = [...cons, nroot[1]];
+                        newOperand = [...newOperand, nroot[2]];
                         break;
                     }
                     case 'squareroot': {
-                        newOperand.push(['mul', nroot]);
+                        newOperand = [...newOperand, ['mul', nroot]];
                         break;
                     }
                 }
             } else if (term[0] === 'mul' && ['natural', 'fraction'].includes(term[1][0])) {
-                cons.push(term);
+                cons = [...cons, term];
             } else {
-                newOperand.push(term);
+                newOperand = [...newOperand, term];
             }
         });
         const cons_length = cons.length;
@@ -76,8 +76,7 @@ export function rootSimpInt(tree) {
         }
         return [operator, ...newOperand];
     }
-    const newOperand = operand.map(term => rootSimpInt(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => rootSimpInt(term))];
 }
 
 export function pfactor(n) {
