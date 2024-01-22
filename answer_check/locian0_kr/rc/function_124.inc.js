@@ -16,16 +16,18 @@ export function ineqMulNeg(tree = null) {
         } else {
             return tree;
         }
-        const operand_length = operand.length;
-        for (let i = 1; i < operand_length; i++) {
-            newOperand = i % 2 !== 0 ? operand[i] === 'gt' ? [...newOperand, 'lt']
-                    : operand[i] === 'ge' ? [...newOperand, 'le']
-                    : operand[i] === 'lt' ? [...newOperand, 'gt']
-                    : [...newOperand, 'ge']
-                : operand[i][0] === 'negative' ? [...newOperand, operand[i][1]]
-                    : operand[i][0] === 'addchain' ? [...newOperand, addNegative(['negative', operand[i]])]
-                    : (operand[i][0] === 'natural' && operand[i][1] === '0') ? [...newOperand, operand[i]]
-                    : [...newOperand, ['negative', operand[i]]];
+        const max = Math.floor(operand.length / 2);
+        for (let i = 1; i <= max; i++) {
+            const term_odd = operand[2 * i - 1];
+            newOperand = term_odd === 'gt' ? [...newOperand, 'lt']
+                : term_odd === 'ge' ? [...newOperand, 'le']
+                : term_odd === 'lt' ? [...newOperand, 'gt']
+                : [...newOperand, 'ge']
+            const term_even = operand[2 * i];
+            newOperand = term_even[0] === 'negative' ? [...newOperand, term_even[1]]
+                : term_even[0] === 'addchain' ? [...newOperand, addNegative(['negative', term_even])]
+                : (JSON.stringify(term_even) === JSON.stringify(['natural', '0'])) ? [...newOperand, term_even]
+                : [...newOperand, ['negative', term_even]];
         }
         return [operator, ...newOperand];
     }
@@ -64,8 +66,9 @@ export function ineqMulNegUS(tree) {
         return [operator, ...operand];
     }
     let newOperand = [];
+    const zero = JSON.stringify(['natural', '0']);
     operand.forEach(subtree => {
-        newOperand = JSON.stringify(subtree) === JSON.stringify(['natural', '0']) ? [...newOperand, subtree]
+        newOperand = JSON.stringify(subtree) === zero ? [...newOperand, subtree]
             : subtree === 'gt' ? [...newOperand, 'lt']
             : subtree === 'ge' ? [...newOperand, 'le']
             : subtree === 'le' ? [...newOperand, 'ge']

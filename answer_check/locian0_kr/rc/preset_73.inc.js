@@ -5,7 +5,6 @@ import { mulCommutative } from '../rc/function_46.inc.js';
 export function 곱셈_교환법칙(tree = null) {
     const laco = new Laco();
     laco.initialize(tree);
-
     laco.apply(mulCommutative);
     return laco.finalize();
 }

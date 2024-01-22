@@ -19,17 +19,15 @@ export function varShift(tree, types = [null], parent = null) {
         const vars_1 = _.cloneDeep(vars);
         vars_1.sort();
         const k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
-        const result = [];
-
+        let newOperand = [];
         const vars_length = vars.length;
         for (let i = k; i < vars_length; i++) {
-            result[i - k] = ['mul', ['variable', vars[i]]];
+            newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
         }
         for (let i = 0; i < k; i++) {
-            result[i + vars_length - k] = ['mul', ['variable', vars[i]]];
+            newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
         }
-
-        return [operator + '_fixed', ...result];
+        return [operator + '_fixed', ...newOperand];
     }
 
     return [operator, ...operand];

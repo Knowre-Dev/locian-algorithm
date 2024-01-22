@@ -11,17 +11,17 @@ export function fracPlusMinus(tree) {
         switch (num[0]) {
             case 'negative': {
                 sign = -1;
-                num = num[1];
+                [, num] = num;
                 break;
             }
             case 'mp': {
                 sign = -2;
-                num = num[1];
+                [, num] = num;
                 break;
             }
             case 'pm': {
                 sign = 2;
-                num = num[1];
+                [, num] = num;
                 break;
             }
         }
@@ -29,17 +29,17 @@ export function fracPlusMinus(tree) {
         switch (den[0]) {
             case 'negative': {
                 sign *= -1;
-                den = den[1];
+                [, den] = den;
                 break;
             }
             case 'mp': {
                 sign = Math.abs(sign) === 1 ? -2 : sign * (-1);
-                den = den[1];
+                [, den] = den;
                 break;
             }
             case 'pm': {
                 sign = Math.abs(sign) === 1 ? 2 : sign;
-                den = den[1];
+                [, den] = den;
                 break;
             }
         }

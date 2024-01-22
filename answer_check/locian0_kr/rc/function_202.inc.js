@@ -13,18 +13,18 @@ export function eqIneqDivPi(tree = null) {
         case 'inequality': {
             const [, ...operand] = tree;
             const operand_length = operand.length;
-            for (let i = 0; i < operand_length; i++) {
-                if (i % 2 === 0) {
-                    if (!checkPi(operand[i])) {
-                        return tree
-                    }
+            const max = Math.floor(operand_length / 2);
+            for (let i = 0; i <= max; i++) {
+                if (!checkPi(operand[2 * i])) {
+                    return tree
                 }
             }
+
             let newOperand = [];
-            for (let i = 0; i < operand_length; i++) {
-                newOperand = i % 2 === 0 ? [...newOperand, sub_divPi(operand[i], ['variable', 'pi'])]
-                : [...newOperand, operand[i]];
+            for (let i = 0; i < max; i++) {
+                newOperand = [...newOperand, sub_divPi(operand[2 * i], ['variable', 'pi']), operand[2 * i + 1]];
             }
+            newOperand = [...newOperand, sub_divPi(operand[2 * max], ['variable', 'pi'])];
             return [operator, ...newOperand];
         }
         default: {
@@ -52,12 +52,10 @@ import { fracSeparation } from '../rc/function_54.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 
 export function sub_divPi(tree, div) {
-    if (tree[0] === 'natural' && tree[1] === '0') {
+    if (JSON.stringify(tree) === JSON.stringify(['natural', '0'])) {
         return tree;
     }
-
-    const frac = fracNegative(['fraction', tree, div]);
-    return fracSimpVar(fracSeparation(frac));
+    return fracSimpVar(fracSeparation(fracNegative(['fraction', tree, div])));
 }
 
 export function checkPi(tree) {
@@ -71,8 +69,8 @@ export function checkPi(tree) {
                 break;
             }
             case 'mulchain': {
-                for (const t of operand) {
-                    if (t[0] === 'mul' && checkPi(t[1])) {
+                for (const term of operand) {
+                    if (term[0] === 'mul' && checkPi(term[1])) {
                         return true;
                     }
                 }
@@ -82,7 +80,7 @@ export function checkPi(tree) {
                 let check = true;
                 for (const term of operand) {
                     check = checkPi(term);
-                    if (check === false) {
+                    if (!check) {
                         return check;
                     }
                 }
@@ -92,7 +90,7 @@ export function checkPi(tree) {
                 let check = true;
                 for (const term of operand) {
                     check = checkPi(term);
-                    if (check === false) {
+                    if (!check) {
                         return check;
                     }
                 }
@@ -102,7 +100,7 @@ export function checkPi(tree) {
                 let check = true;
                 for (const term of operand) {
                     check = checkPi(term);
-                    if (check === false) {
+                    if (!check) {
                         return check;
                     }
                 }

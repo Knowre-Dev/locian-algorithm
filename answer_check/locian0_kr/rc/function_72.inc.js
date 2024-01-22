@@ -6,23 +6,28 @@ export function addFactor(tree) {
         return tree;
     }
 
-    const operator = tree[0];
+    const [operator] = tree;
     if (operator === 'addchain') {
         // extract all constant coefficents (not in denominator)
         const [, ...operand] = tree;
         let consArr = [];
-        for (const addterm of operand) {
+        operand.forEach(addterm => {
             switch (addterm[1][0]) {
                 case 'mulchain': {
                     let con = ['natural', '1'];
                     let syms = [];
-                    const [, ...addterm_1] = addterm[1];
-                    addterm_1.forEach((multerm, km) => {
+                    const [, [, term_1, ...addterm_2]] = addterm;
+                    if (term_1[0] === 'mul') {
+                        if (term_1[1][0] === 'variable') {
+                            syms = [...syms, term_1];
+                        } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
+                            con = term_1;
+                        }
+                    }
+                    addterm_2.forEach(multerm => {
                         if (multerm[0] === 'mul') {
                             if (multerm[1][0] === 'variable') {
                                 syms = [...syms, multerm];
-                            } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0' && km === 0) {
-                                con = multerm;
                             }
                         }
                     });
@@ -52,7 +57,7 @@ export function addFactor(tree) {
                     break;
                 }
             }
-        }
+        });
 
         // divide each term by the constant coefficients
         if (consArr.length !== 0) {
@@ -61,7 +66,6 @@ export function addFactor(tree) {
                 let lcm = parseInt(consArr[0][1][1]);
                 consArr.forEach(term => {
                     lcm *= parseInt(term[1][1]) / EuclidAlg(lcm, parseInt(term[1][1]));
-                    // lcm = (lcm * parseInt(term[1][1])) / EuclidAlg(lcm, parseInt(term[1][1]));
                 });
                 con = ['natural', lcm.toString()];
             }

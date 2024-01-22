@@ -11,22 +11,19 @@ export function mulConstCal(tree = null) {
         operand.forEach(term => {
             term[1][0] === 'power' ? (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') ? nterm = [...nterm, [term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]]]
                 : varterm = [...varterm, term]
-            : term[1][0] === 'natural' ? nterm = [...nterm, term]
-            : varterm = [...varterm, term];
+                : term[1][0] === 'natural' ? nterm = [...nterm, term]
+                : varterm = [...varterm, term];
         });
         if (nterm.length !== 0) {
             const [first] = nterm;
             [, ...nterm] = nterm;
-            let value = first[1][1];
+            let [, [, value]] = first;
             nterm.forEach(nt => {
-                if (nt[0] === 'mul') {
-                    value *= nt[1][1]
-                } else if (nt[0] === 'div') {
-                    value /= nt[1][1];
-                }
+                nt[0] === 'mul' ? value *= nt[1][1]
+                : value /= nt[1][1];
             });
             return varterm.length === 0 ? ['natural', value.toString()]
-            : [operator, ['mul', ['natural', value.toString()]], ...varterm];
+                : [operator, ['mul', ['natural', value.toString()]], ...varterm];
         }
         return tree;
     }

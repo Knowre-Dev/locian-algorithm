@@ -32,7 +32,7 @@ export function addFactoredFormVar(tree = null) {
                     }
                     case 'mulchain': {
                         let var_mul = [];
-                        const [, ...term_1] = term[1];
+                        const [, [, ...term_1]] = term;
                         term_1.forEach(term_term_1 => {
                             if (term_term_1[1][0] === 'variable') {
                                 var_mul = [...var_mul, term_term_1[1][1]];
@@ -94,7 +94,6 @@ export function addFactoredFormVar(tree = null) {
             });
             first = first.filter(x => typeof x !== 'undefined');
             const first_length = first.length;
-            let newOperand = [];
             switch (first_length) {
                 case 0: {
                     return sub_mulCommutative(tree);
@@ -108,7 +107,7 @@ export function addFactoredFormVar(tree = null) {
                         div_1 = [...div_1, [t[0], frac]];
                     });
                     div = [...div, ['addchain', ...div_1]];
-                    newOperand = [...newOperand, ...div.map(term_div => ['mul', term_div])];
+                    const newOperand = div.map(term_div => ['mul', term_div]);
                     return sub_mulCommutative([operator, ...newOperand]);
                 }
                 default: {
@@ -133,7 +132,7 @@ export function addFactoredFormVar(tree = null) {
                         div_1 = [...div_1, [term[0], frac]];
                     });
                     div = [...div, ['addchain', ...div_1]];
-                    newOperand = [...newOperand, ...div.map(term_div => ['mul', term_div])];
+                    const newOperand = div.map(term_div => ['mul', term_div]);
                     return sub_mulCommutative([operator, ...newOperand]);
                 }
             }

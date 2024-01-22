@@ -10,9 +10,10 @@ export function fracSeparation(tree) {
     const [operator, ...operand] = tree;
     if (operator === 'fraction' && operand[0][0] === 'addchain') {
         const merge = ['fraction', addFactoredForm(operand[0]), addFactoredForm(operand[1])];
-        const simple = (JSON.stringify(fracSimp(merge)) === JSON.stringify(merge) && JSON.stringify(fracSimpVar(merge)) === JSON.stringify(merge));
+        const merge_1 = JSON.stringify(merge);
+        const simple = (JSON.stringify(fracSimp(merge)) === merge_1 && JSON.stringify(fracSimpVar(merge)) === merge_1);
         const den = fracSeparation(operand[1]);
-        const [, ...operand_0] = operand[0];
+        const [[, ...operand_0]] = operand;
         let newOperand = [];
         operand_0.forEach(term => {
             let sign;

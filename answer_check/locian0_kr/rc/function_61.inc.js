@@ -5,7 +5,7 @@ export function rearrangeTree(tree, types = []) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    if (JSON.stringify(tree) === JSON.stringify([])) {
+    if (tree.length === 0) {
         return tree;
     }
 
@@ -30,10 +30,10 @@ export function rearrangeTree(tree, types = []) {
         }
         case 'inequality': {
             let rightNum = 0;
-            const newOperand_length = newOperand.length;
-            for (let i = 1; i < newOperand_length; i += 2) {
-                (newOperand[i] === 'gt' || newOperand[i] === 'ge') ? rightNum++
-                    : rightNum--
+            const max = Math.floor(newOperand.length / 2);
+            for (let i = 1; i <= max; i++) {
+                ['gt', 'ge'].includes(newOperand[2 * i - 1]) ? rightNum++
+                : rightNum--
             }
             if (rightNum < 0) {
                 let temp = [];

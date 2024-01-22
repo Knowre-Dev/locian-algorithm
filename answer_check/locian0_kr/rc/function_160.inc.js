@@ -5,9 +5,9 @@ export function mulNegative(tree) {
     const [operator] = tree;
     switch (operator) {
         case 'negative': {
-            const newsubtree = mulNegative(tree[1]);
-            return newsubtree[0] === 'negative' ? newsubtree[1]
-                : [operator, newsubtree];
+            const newOperand = mulNegative(tree[1]);
+            return newOperand[0] === 'negative' ? newOperand[1]
+                : [operator, newOperand];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
@@ -16,7 +16,7 @@ export function mulNegative(tree) {
             operand.forEach(mterm => {
                 if (mterm[1][0] === 'negative') {
                     sign *= -1;
-                    mterm[1] = mterm[1][1];
+                    [, [, mterm[1]]] = mterm;
                 }
                 newOperand = [...newOperand, mterm];
             });
@@ -31,7 +31,7 @@ export function mulNegative(tree) {
                 let ner_term = mulNegative(term);
                 if (operator === 'fraction' && ner_term[0] === 'negative') {
                     sign *= -1;
-                    ner_term = ner_term[1];
+                    [, ner_term] = ner_term;
                 }
                 newOperand = [...newOperand, ner_term];
             });

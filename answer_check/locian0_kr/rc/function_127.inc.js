@@ -11,8 +11,8 @@ export function ineqRearrange(tree = null) {
             const operand_reverse = operand.reverse();
             operand_reverse.forEach(term_reverse => {
                 newOperand = Array.isArray(term_reverse) ? term_reverse[0] === 'negative' ? [...newOperand, term_reverse[1]]
-                    : [...newOperand, ['negative', term_reverse]]
-                : [...newOperand, term_reverse];
+                        : [...newOperand, ['negative', term_reverse]]
+                    : [...newOperand, term_reverse];
             });
             return [operator, ...newOperand];
         }

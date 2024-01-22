@@ -17,8 +17,9 @@ export function rearrangeTreeEq(A, B) {
     const [operatorB, ...operandB] = B[0] === 'negative' ? B[1] : B;
 
     const place = [0, 0];
-    const operator_entries = [operatorA, operatorB].entries();
-    for (const [key, term] of operator_entries) {
+    const operators = [operatorA, operatorB];
+
+    operators.forEach((term, key) => {
         switch (term) {
             case 'negative': {
                 place[key] = 1;
@@ -28,11 +29,8 @@ export function rearrangeTreeEq(A, B) {
                 place[key] = 2;
                 break;
             }
-            default: {
-                break;
-            }
         }
-    }
+    });
 
     if (place[0] < place[1]) {
         return 1;

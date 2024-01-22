@@ -9,7 +9,8 @@ export function sub_addFactored(tree = null) {
     }
 
     // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
-    if (JSON.stringify(tree) !== JSON.stringify(fracSimp(tree)) || JSON.stringify(tree) !== JSON.stringify(fracSimpVar(tree))) {
+    const tree_1 = JSON.stringify(tree)
+    if (tree_1 !== JSON.stringify(fracSimp(tree)) || tree_1 !== JSON.stringify(fracSimpVar(tree))) {
         return tree;
     }
 
@@ -20,51 +21,47 @@ export function sub_addFactored(tree = null) {
             const [, ...operand] = tree;
             const newOperand = [];
             let add_term = [];
-            for (const term of operand) {
+            loop_2: for (const term of operand) {
                 if (term[0] === 'add') {
                     if (term[1][0] === 'addchain') {
                         add_term = [...add_term, ...term[1].slice(1)];
                     } else {
                         if (term[1][0] === 'mulchain') {
-                            let addchain = false;
-                            const [, ...term_1] = term[1];
-                            term_1.forEach((term_term_1, key) => {
+                            const [, [, ...term_1]] = term;
+                            for (const term_term_1 of term_1) {
                                 if (term_term_1[1][0] === 'addchain') {
-                                    addchain = term;
+                                    add_term = [...add_term, addFactoredForm(addFactoredFormVar(term))]
+                                    continue loop_2;
                                 }
-                            });
-                            add_term = addchain !== false ? [...add_term, addFactoredForm(addFactoredFormVar(addchain))]
-                                : [...add_term, term];
+                            }
+                            add_term = [...add_term, term];
                         } else {
                             add_term = [...add_term, term];
                         }
                     }
                 } else {
                     if (term[1][0] === 'addchain') {
-                        const [, ...operand_term_1] = term[1]
+                        const [, [, ...operand_term_1]] = term;
                         operand_term_1.forEach(term_term_1 => {
                             add_term = term_term_1[0] === 'add' ? [...add_term, ['sub', term_term_1[1]]]
                                 : [...add_term, ['add', term_term_1[1]]];
                         });
                     } else {
                         if (term[1][0] === 'mulchain') {
-                            let addchain = false;
-                            const [, ...term_1] = term[1];
+                            const [, [, ...term_1]] = term;
                             for (const term_term_1 of term_1) {
                                 if (term_term_1[1][0] === 'addchain') {
-                                    addchain = term;
-                                    break;
+                                    add_term = [...add_term, addFactoredForm(addFactoredFormVar(term))];
+                                    continue loop_2;
                                 }
                             }
-                            add_term = addchain !== false ? [...add_term, addFactoredForm(addFactoredFormVar(addchain))]
-                            : [...add_term, term];
+                            add_term = [...add_term, term];
                         } else {
                             add_term = [...add_term, term];
                         }
                     }
                 }
             }
-
             return add_term.length !== 0 ? addFactoredFormVar(['addchain', ...add_term])
                 : [operator, ...newOperand];
         }

@@ -62,7 +62,7 @@ export function exprSimpConst(tree = null) {
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
             let subresult = exprSimpConst(tree[1]);
             if (subresult[0] === 'negative') {
-                subresult = subresult[1];
+                [, subresult] = subresult;
             }
             return isNumeric(subresult, true) ? subresult
                 : [operator, subresult];
@@ -70,9 +70,7 @@ export function exprSimpConst(tree = null) {
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
             const [, ...operand] = tree;
-            if (operand[0][0] === 'power' &&
-                operand[1][0] === 'power' &&
-                operand[0][2] === operand[1][2]) {
+            if (operand[0][0] === 'power' && operand[1][0] === 'power' && operand[0][2] === operand[1][2]) {
                 const newtree = ['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]
                 ];
                 return exprSimpConst(newtree);
@@ -104,16 +102,12 @@ export function exprSimpConst(tree = null) {
             [, ...operand] = operand;
             let termArr = [];
             operand.forEach(term => {
-                let op = term[0];
+                let [op] = term;
                 let subtree = exprSimpConst(term[1]);
                 if (subtree[0] === 'negative') {
-                    if (op === 'add') {
-                        op = 'sub';
-                        subtree = subtree[1];
-                    } else if (op === 'sub') {
-                        op = 'add';
-                        subtree = subtree[1];
-                    }
+                    [, subtree] = subtree;
+                    op = op === 'add' ? 'sub'
+                        : 'add';
                 }
                 termArr = [...termArr, [op, subtree]];
             });
@@ -127,16 +121,14 @@ export function exprSimpConst(tree = null) {
             operand.forEach(term => {
                 let subtree = exprSimpConst(term[1]);
                 // Take all negative signs out to the front
-                if (Array.isArray(subtree)) {
-                    if (subtree[0] === 'negative') {
-                        sign = -sign;
-                        subtree = subtree[1];
-                    }
+                if (Array.isArray(subtree) && subtree[0] === 'negative') {
+                    sign *= -1;
+                    [, subtree] = subtree;
                 }
                 termArr = [...termArr, [term[0], subtree]];
             });
             const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(termArr, true))));
-            return sign < 0 ? ['negative', newtree] : newtree;
+            return sign === -1 ? ['negative', newtree] : newtree;
         }
         case 'power': {
             // Possible output types:
@@ -157,7 +149,7 @@ export function exprSimpConst(tree = null) {
             if (basetree[0] === 'power') {
                 expotree = ['mulchain', ['mul', basetree[2]], ['mul', expotree]];
                 expotree = exprSimpConst(mulAssociative(expotree));
-                basetree = basetree[1];
+                [, basetree] = basetree;
             }
             // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
             // Reflect this by modifying basetree as applicable

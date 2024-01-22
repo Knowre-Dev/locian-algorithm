@@ -19,8 +19,7 @@ export function powDecomposition(tree) {
         return [operator, base, expo];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => powDecomposition(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => powDecomposition(term))];
 }
 
 /*

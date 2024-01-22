@@ -7,17 +7,17 @@ export function expToFrac(tree = null) {
     if (operator === 'power') {
         if (operand[1][0] === 'negative') {
             let newOperand = [];
-            const newPower = operand[1][1];
+            const [, [, newPower]] = operand;
             // 밑이 분수일 경우
             if (operand[0][0] === 'fraction') {
                 newOperand = (operand[0][1][0] === 'natural' && operand[0][1][1] === '1') ? operand[0][2]
-                : ['fraction', operand[0][2], operand[0][1]];
+                    : ['fraction', operand[0][2], operand[0][1]];
                 return (newPower[0] === 'natural' && newPower[1] === '1') ? newOperand
-                : ['power', ...[newOperand], newPower];
+                    : ['power', newOperand, newPower];
             }
             // 최종 형태 분수, 1/(exp) 의 형태
             newOperand = (newPower[0] === 'natural' && newPower[1] === '1') ? ['fraction', ['natural', '1'], operand[0]]
-            : ['fraction', ['natural', '1'], ['power', operand[0], newPower]];
+                : ['fraction', ['natural', '1'], ['power', operand[0], newPower]];
             return newOperand;
         }
         return fracFirst(tree);

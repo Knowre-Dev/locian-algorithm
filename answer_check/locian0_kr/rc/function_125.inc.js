@@ -9,13 +9,24 @@ export function eqIneqMulProp(tree = null) {
     switch (operator) {
         case 'equation': {
             const [, ...operand] = tree;
-            // let newOperand = [];
-            let con = [...sub_getConstant(operand[0]), ...sub_getConstant(operand[1])];
+           let con = [...sub_getConstant(operand[0]), ...sub_getConstant(operand[1])];
             con = Array.from(new Set(con));
             if (con.includes(1)) {
                 return [operator, ...operand];
             }
             const con_length = con.length;
+            if (con_length === 1) {
+                const zero = JSON.stringify(['natural', '0']);
+                if (JSON.stringify(operand[0]) === zero) {
+                    const deno = ['natural', con[0]];
+                    return [operator, ...sub_div(operand[0], deno), sub_div(operand[1], deno)];
+                }
+                if (JSON.stringify(operand[1]) === zero) {
+                    const deno = ['natural', con[0]];
+                    return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
+                }
+                return tree;
+            }
             if (con_length === 2) {
                 const div = EuclidAlg(con[0], con[1]);
                 if (div === 1) {
@@ -25,26 +36,15 @@ export function eqIneqMulProp(tree = null) {
                 return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
             }
             if (con_length > 2) {
-                let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
-                for (let i = 2; i < con_length; i++) {
-                    div = EuclidAlg(div, parseInt(con[i]));
-                }
+                let div = parseInt(con[0]);
+                con.forEach(term => {
+                    div = EuclidAlg(div, parseInt(term));
+                });
                 if (div === 1) {
                     return tree;
                 }
                 const deno = ['natural', div.toString()];
                 return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
-            }
-            if (con_length === 1) {
-                if (JSON.stringify(operand[0]) === JSON.stringify(['natural', '0'])) {
-                    const deno = ['natural', con[0]];
-                    return [operator, ...sub_div(operand[0], deno), sub_div(operand[1], deno)];
-                }
-                if (JSON.stringify(operand[1]) === JSON.stringify(['natural', '0'])) {
-                    const deno = ['natural', con[0]];
-                    return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
-                }
-                return tree;
             }
             return tree;
         }
@@ -52,17 +52,31 @@ export function eqIneqMulProp(tree = null) {
             const [, ...operand] = tree;
             let con = [];
             const operand_length = operand.length;
-            for (let i = 0; i < operand_length; i++) {
-                if (i % 2 === 0) {
-                    con = [...con, ...sub_getConstant(operand[i])];
-                }
+            const max = Math.floor(operand_length / 2);
+            for (let i = 0; i <= max; i++) {
+                con = [...con, ...sub_getConstant(operand[2 * i])];
             }
-
             con = [...new Set(con)];
             if (con.includes(1)) {
                 return tree;
             }
             const con_length = con.length;
+            if (con_length === 1) {
+                const zero = JSON.stringify(['natural', '0']);
+                for (const term of operand) {
+                    if (JSON.stringify(term) === zero) {
+                        const deno = ['natural', con[0]];
+                        let newOperand = [];
+                        const max = Math.floor(operand_length / 2);
+                        for (let i = 0; i < max; i++) {
+                            newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
+                        }
+                        newOperand = [...newOperand, sub_div(operand[2 * max], deno)];
+                        return [operator, ...newOperand];
+                    }
+                }
+                return tree;
+            }
             if (con_length === 2) {
                 const div = EuclidAlg(con[0], con[1]);
                 if (div === 1) {
@@ -70,41 +84,29 @@ export function eqIneqMulProp(tree = null) {
                 }
                 let newOperand = [];
                 const deno = ['natural', div.toString()];
-                for (let i = 0; i < operand_length; i++) {
-                    newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
-                        : [...newOperand, operand[i]];
+                const max = Math.floor(operand_length / 2);
+                for (let i = 0; i < max; i++) {
+                    newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
                 }
+                newOperand = [...newOperand, sub_div(operand[2 * max], deno)];
                 return [operator, ...newOperand];
             }
             if (con_length > 2) {
-                let div = EuclidAlg(parseInt(con[0]), parseInt(con[1]));
-                for (let i = 2; i < con_length; i++) {
-                    div = EuclidAlg(div, parseInt(con[i]));
-                }
+                let div = con[0];
+                con.forEach(term => {
+                    div = EuclidAlg(div, term);
+                });
                 if (div === 1) {
                     return tree;
                 }
                 let newOperand = [];
                 const deno = ['natural', div.toString()];
-                for (let i = 0; i < operand_length; i++) {
-                    newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
-                        : [...newOperand, operand[i]];
+                const max = Math.floor(operand_length / 2);
+                for (let i = 0; i < max; i++) {
+                    newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
                 }
+                newOperand = [...newOperand, sub_div(operand[2 * max], deno)]
                 return [operator, ...newOperand];
-            }
-            if (con_length === 1) {
-                for (const term of operand) {
-                    if (JSON.stringify(term) === JSON.stringify(['natural', '0'])) {
-                        const deno = ['natural', con[0]];
-                        let newOperand = [];
-                        for (let i = 0; i < operand_length; i++) {
-                            newOperand = i % 2 === 0 ? [...newOperand, sub_div(operand[i], deno)]
-                            : [...newOperand, operand[i]];
-                        }
-                        return [operator, ...newOperand];
-                    }
-                }
-                return tree;
             }
             return tree;
         }
@@ -176,10 +178,7 @@ export function sub_getConstant(tree) {
             });
             break;
         }
-        case 'power': {
-            con = [...con, 1];
-            break;
-        }
+        case 'power':
         case 'variable': {
             con = [...con, 1];
             break;

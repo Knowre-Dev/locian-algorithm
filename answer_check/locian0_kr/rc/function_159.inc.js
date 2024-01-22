@@ -41,17 +41,20 @@ export function mulAllSidesByCommonDenom(tree = null) {
             return tree;
         }
         let newOperand = [];
+        const zero = JSON.stringify(['natural', '0']);
         operand.forEach(side => {
-            if (JSON.stringify(side) === JSON.stringify(['natural', '0'])) {
+            if (JSON.stringify(side) === zero) {
                 newOperand = [...newOperand, side];
             } else if (side[0] === 'addchain') {
                 let termArr = [];
                 const [, ...side_1] = side;
+                const one = JSON.stringify(['natural', '1']);
+                const minus_one = JSON.stringify(['negative', ['natural', '1']]);
                 side_1.forEach(aterm => {
                     let newTree;
-                    if (JSON.stringify(aterm[1]) === JSON.stringify(['natural', '1'])) {
+                    if (JSON.stringify(aterm[1]) === one) {
                         newTree = commonD;
-                    } else if (JSON.stringify(aterm[1]) === JSON.stringify(['negative', ['natural', '1']])) {
+                    } else if (JSON.stringify(aterm[1]) === minus_one) {
                         newTree = ['negative', commonD];
                     } else {
                         newTree = multFactor(aterm[1], ['mul', commonD], true);
@@ -65,7 +68,7 @@ export function mulAllSidesByCommonDenom(tree = null) {
             } else {
                 const newSide = multFactor(side, ['mul', commonD]);
                 newOperand = (isNumeric(side) && isNumeric(commonD)) ? [...newOperand, evalNumericValues(newSide)]
-                    : newOperand = [...newOperand, newSide];
+                    : [...newOperand, newSide];
             }
         });
         return [operator, ...newOperand];

@@ -65,9 +65,10 @@ export function solParenthesis(tree = null) {
                         [, ...term_a] = term_a;
                         let term = [];
                         term_a.forEach(term_a_1 => {
+                            const term_a_1_0 = JSON.stringify(term_a_1[0]);
                             first.forEach(term_f => {
                                 if (Array.isArray(term_f) && Array.isArray(term_a_1)) {
-                                    const flag1 = JSON.stringify(term_f[0]) === JSON.stringify(term_a_1[0]) ? 'add'
+                                    const flag1 = JSON.stringify(term_f[0]) === term_a_1_0 ? 'add'
                                         : 'sub';
                                     const merge = ['mulchain', ['mul', term_f[term_f.length - 1]], ['mul', term_a_1[term_a_1.length - 1]]];
                                     term = [...term, [flag1, merge]];

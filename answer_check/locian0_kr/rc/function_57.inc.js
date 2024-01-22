@@ -7,8 +7,9 @@ export function divIdentity(tree) {
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
         let newOperand = [];
+        const div_one = JSON.stringify(['div', ['natural', '1']]);
         operand.forEach(term => {
-            if (term[0] !== 'div' || term[1][0] !== 'natural' || term[1][1] !== '1') {
+            if (JSON.stringify(term) !== div_one) {
                 newOperand = [...newOperand, term];
             }
         });

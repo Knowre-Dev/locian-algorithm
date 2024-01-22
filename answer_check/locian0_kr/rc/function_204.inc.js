@@ -17,8 +17,7 @@ export function addNegaToSub(tree = null) {
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
-    const newOperand = operand.map(term => addNegative(term));
-    return [operator, ...newOperand];
+    return [operator, ...operand.map(term => addNegative(term))];
 }
 
 /*

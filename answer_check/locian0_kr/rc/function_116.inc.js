@@ -8,20 +8,18 @@ export function rootSimpInt(tree) {
         const factors = pfactor(parseInt(operand[0][1]));
         let inside = 1;
         let outside = 1;
-        const factors_entries = factors.entries();
-        for (const [factor, power] of factors_entries) {
-            if (power === undefined) {
-                continue;
+        factors.forEach((power, factor) => {
+            if (power !== undefined) {
+                if (power === 1) {
+                    inside *= factor;
+                } else if (power % 2 === 0) {
+                    outside *= Math.pow(factor, power / 2);
+                } else {
+                    inside *= factor;
+                    outside *= Math.pow(factor, (power - 1) / 2);
+                }
             }
-            if (power === 1) {
-                inside *= factor;
-            } else if (power % 2 === 0) {
-                outside *= Math.pow(factor, power / 2);
-            } else {
-                inside *= factor;
-                outside *= Math.pow(factor, (power - 1) / 2);
-            }
-        }
+        });
         return inside === 1 ? tree
             : outside === 1 ? [operator, operand[0]]
             : ['mulchain', ['mul', ['natural', outside.toString()]],

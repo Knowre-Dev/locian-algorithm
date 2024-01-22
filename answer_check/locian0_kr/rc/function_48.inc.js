@@ -35,12 +35,9 @@ export function fracExpress(tree) {
 
         den = den.length === 1 ? den[0][1]
             : ['mulchain', ...den];
-
-        if (den.length > 1) {
-            return nega ? ['negative', ['fraction', num, den]]
-                : ['fraction', num, den];
-        }
-        return nega ? ['negative', num]
+        return den.length > 1 ? nega ? ['negative', ['fraction', num, den]]
+            : ['fraction', num, den]
+            : nega ? ['negative', num]
             : num;
     }
     return [operator, ...operand.map(term => fracExpress(term))];

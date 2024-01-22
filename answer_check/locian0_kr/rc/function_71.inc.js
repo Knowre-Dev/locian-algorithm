@@ -22,11 +22,11 @@ export function addNegative(tree) {
         let newOperand = [];
         operand.forEach(term => {
             if (term[0] === 'sub' && term[1][0] === 'addchain') {
-                const [, ...term_1] = term[1];
+                const [, [, ...term_1]] = term;
                 term_1.forEach(inner => {
                     newOperand = inner[0] === 'add' ? [...newOperand, ['sub', inner[1]]]
-                    : inner[0] === 'sub' ? [...newOperand, ['add', inner[1]]]
-                    : [...newOperand, inner]
+                        : inner[0] === 'sub' ? [...newOperand, ['add', inner[1]]]
+                        : [...newOperand, inner]
                 });
             } else {
                 newOperand = [...newOperand, term];

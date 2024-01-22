@@ -3,7 +3,7 @@ export function fracSimpInt(tree) {
         return tree;
     }
 
-    let operator = tree[0];
+    const operator = tree[0];
     if (operator === 'fraction') {
         const [, ...operand] = tree;
         const num = fracSimpInt(operand[0]);
@@ -73,7 +73,7 @@ export function fracSimpInt(tree) {
                     narrNum = [['mul', ['natural', newNum]], ...narrNum];
                 }
                 narrNum = narrNum.length === 1 ? narrNum[0][1]
-                : ['mulchain', ...narrNum];
+                    : ['mulchain', ...narrNum];
                 newOperand = [...newOperand, narrNum];
                 break;
             }
@@ -81,27 +81,23 @@ export function fracSimpInt(tree) {
                 newOperand = [...newOperand, num];
             }
         }
-
         switch (den[0]) {
             case 'natural': {
-                newDen === '1' ? [operator, ...newOperand] = newOperand[0]
-                : newOperand = [...newOperand, ['natural', newDen]];
-                break;
+                return newDen === '1' ? newOperand[0]
+                    : [operator, ...newOperand, ['natural', newDen]];
             }
             case 'mulchain': {
                 if (newDen !== '1') {
                     narrDen = [['mul', ['natural', newDen]], ...narrDen];
                 }
-                narrDen.length === 1 ? narrDen = narrDen[0][1]
-                : narrDen = ['mulchain', ...narrDen];
-                newOperand = [...newOperand, narrDen];
-                break;
+                narrDen = narrDen.length === 1 ? narrDen[0][1]
+                    : ['mulchain', ...narrDen];
+                return [operator, ...newOperand, narrDen];
             }
             default: {
-                newOperand = [...newOperand, den];
+                return [operator, ...newOperand, den];
             }
         }
-        return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
     return [operator, ...operand.map(term => fracSimpInt(term))];

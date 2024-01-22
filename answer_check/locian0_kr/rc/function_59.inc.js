@@ -6,8 +6,8 @@ export function powIdentity(tree) {
     const [operator] = tree;
     if (operator === 'power') {
         const [, ...operand] = tree;
-        const is_one = operand[1][0] === 'natural' && operand[1][1] === '1';
-        return is_one ? operand[0] : tree;
+        return JSON.stringify(operand[1]) === JSON.stringify(['natural', '1']) ? operand[0]
+            : tree;
     }
     const [, ...operand] = tree;
     return [operator, ...operand.map(term => powIdentity(term))];

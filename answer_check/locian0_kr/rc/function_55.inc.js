@@ -6,8 +6,9 @@ export function addIdentity(tree) {
     if (operator === 'addchain') {
         const [, ...operand] = tree;
         let newOperand = [];
+        const zero = JSON.stringify(['natural', '0']);
         operand.forEach(term => {
-            if (!(term[1][0] === 'natural' && term[1][1] === '0')) {
+            if (JSON.stringify(term[1]) !== zero) {
                 newOperand = [...newOperand, term];
             }
         });

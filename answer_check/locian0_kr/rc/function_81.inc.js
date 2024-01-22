@@ -6,12 +6,10 @@ export function addFactorNegative(tree) {
     }
 
     const [operator] = tree;
-
     switch (operator) {
         case 'negative': {
             const [, ...operand] = tree;
-            // const newOperand = [];
-            const newOperand = [addFactorNegative(operand[0])];
+           const newOperand = [addFactorNegative(operand[0])];
             return newOperand[0][0] === 'negative' ? newOperand[0][1]
                 : [operator, ...newOperand];
         }
@@ -23,7 +21,7 @@ export function addFactorNegative(tree) {
             operand.forEach(term => {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'addchain') {
-                        let addchain = term[1];
+                        let [, addchain] = term;
                         if (addchain[1][0] === 'sub') {
                             addchain = addNegative(['negative', addchain]);
                             sign *= -1;

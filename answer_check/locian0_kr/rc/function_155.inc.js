@@ -22,34 +22,36 @@ export function makeOneSideOfEqIneqZero(tree = null) {
                 if (term[0] !== 'addchain') {
                     temp = ['addchain', ['add', term]];
                 }
-                temp = [...temp, ['sub', operand[0]]];
-                newOperand = [...newOperand, temp];
+                newOperand = [...newOperand, [...temp, ['sub', operand[0]]]];
             })
             return [operator, ...newOperand];
         }
         case 'inequality': {
             const [, ...operand] = tree;
-            for (const subtree of operand) {
-                if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
-                    return [operator, ...operand];
+            const zero = JSON.stringify(['natural', '0']);
+            let max = Math.floor(operand.length / 2);
+            for (let i = 0; i <= max; i++) {
+                if (JSON.stringify(operand[2 * i]) === zero) {
+                    return tree;
                 }
             }
             // From here on, we are guaranteed that
             // no side in the chain of inequalities is already identically zero
 
             let newOperand = [['natural', '0']];
-            const [, ...operand_operand] = operand;
-            operand_operand.forEach(term => {
-                let temp = term;
-                if (!['lt', 'le', 'ge', 'gt'].includes(term) &&
-                    !termExists('infinity', term)) {
+            const [term_0, ...operand_1] = operand;
+            max = Math.floor(operand_1.length / 2);
+            for (let i = 0; i < max; i++) {
+                newOperand = [...newOperand, operand_1[2 * i]];
+                let term = operand_1[2 * i + 1];
+                if (!termExists('infinity', term)) {
                     if (term[0] !== 'addchain') {
-                        temp = ['addchain', ['add', term]];
+                        term = ['addchain', ['add', term]];
                     }
-                    temp = [...temp, ['sub', operand[0]]];
+                    term = [...term, ['sub', term_0]];
                 }
-                newOperand = [...newOperand, temp];
-            });
+                newOperand = [...newOperand, term];
+            }
             return [operator, ...newOperand];
         }
         default: {

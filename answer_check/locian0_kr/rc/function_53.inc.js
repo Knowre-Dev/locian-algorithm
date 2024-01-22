@@ -20,10 +20,10 @@ export function fracNegative(tree) {
             let den = fracNegative(operand[1]);
 
             if (num[0] === 'negative') {
-                sign *= -1;
-                num = num[1];
+                sign = -1;
+                [, num] = num;
             } else if (num[0] === 'addchain' && num[1][0] === 'sub') {
-                sign *= -1;
+                sign = -1;
                 num = addNegative(['negative', num]);
             }
 

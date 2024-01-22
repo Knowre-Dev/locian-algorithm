@@ -250,8 +250,8 @@ export function LatexToTree(A, node = null, node_idx = null) {
         const match_0 = match[0];
         match_0.forEach(value => {
             newA = newA.replaceAll(
-                    new RegExp(forregex(value), 'g'),
-                    partL + node_idx + partR
+                new RegExp(forregex(value), 'g'),
+                partL + node_idx + partR
             );
             node_1[node_idx] = ['decimal', value];
             node_idx++;
@@ -278,8 +278,9 @@ export function LatexToTree(A, node = null, node_idx = null) {
                     '(?![0-9]*' +
                     forregex(partR) +
                     ')',
-                    'g'),
-                    partL + node_idx + partR
+                    'g'
+                ),
+                partL + node_idx + partR
             );
             node_1[node_idx] = ['natural', value];
             node_idx++;
@@ -305,7 +306,8 @@ export function LatexToTree(A, node = null, node_idx = null) {
         match_0.forEach(value => {
             newA = newA.replaceAll(
                     new RegExp(forregex(value), 'g'),
-                    partL + node_idx + partR);
+                    partL + node_idx + partR
+                );
             node_1[node_idx] = ['variable', value];
             node_idx++;
         });
@@ -330,11 +332,11 @@ export function LatexToTree(A, node = null, node_idx = null) {
     match = match_all(newA, regex);
     if (match.length !== 0) {
         const match_0_entries = match[0].entries();
-        for (const [k, v] of match_0_entries) {
+        for (const [key, value] of match_0_entries) {
             newA = newA.replaceAll(
-                new RegExp(forregex(v), 'g'),
+                new RegExp(forregex(value), 'g'),
                 partL + node_idx + partR);
-            switch (match[1][k]) {
+            switch (match[1][key]) {
                 case cmd.get('pi').toString(): {
                     node_1[node_idx] = ['variable', 'pi'];
                     break;
@@ -390,11 +392,11 @@ export function LatexToTree(A, node = null, node_idx = null) {
 
     if (match.length !== 0) {
         const match_0_entries = match[0].entries();
-        for (const [k, v] of match_0_entries) {
+        for (const [key, value] of match_0_entries) {
             newA = newA.replaceAll(
-                    new RegExp(forregex(v), 'g'),
+                    new RegExp(forregex(value), 'g'),
                     partL + node_idx + partR);
-            switch (match[1][k]) {
+            switch (match[1][key]) {
                 case cmd.get('R').toString(): {
                     node_1[node_idx] = ['setname', 'real'];
                     break;
@@ -444,12 +446,9 @@ export function LatexToTree(A, node = null, node_idx = null) {
                     node_1,
                     node_idx
                 );
-                if (match[1][key] === '(' &&
-                    match[3][key] === ')' &&
-                    tempTree[0] === 'array') {
+                if (match[1][key] === '(' && match[3][key] === ')' && tempTree[0] === 'array') {
                     tempTree[0] = 'tuple';
-                } else if (tempTree.length === 3 &&
-                    tempTree[0] === 'array') {
+                } else if (tempTree.length === 3 && tempTree[0] === 'array') {
                     tempTree = [
                         'interval',
                         match[1][key],
@@ -531,10 +530,10 @@ export function LatexToTree(A, node = null, node_idx = null) {
 
         if (match.length !== 0) {
             const match_0_entries = match[0].entries();
-            for (const [k, v] of match_0_entries) {
-                newA = newA.replaceAll(v, partL + node_idx + partR);
+            for (const [key, value] of match_0_entries) {
+                newA = newA.replaceAll(value, partL + node_idx + partR);
                 let typeName;
-                switch (match[1][k]) {
+                switch (match[1][key]) {
                     case cmd.get('sqrt').toString(): {
                         typeName = 'squareroot';
                         break;
@@ -586,7 +585,7 @@ export function LatexToTree(A, node = null, node_idx = null) {
                 }
                 node_1[node_idx] = [
                         typeName,
-                        node_1[match[2][k]]
+                        node_1[match[2][key]]
                 ];
                 node_idx++;
             }
@@ -677,7 +676,8 @@ export function LatexToTree(A, node = null, node_idx = null) {
             '([1-9][0-9]*)' +
             forregex(partR) +
             ')*)',
-            'g');
+            'g'
+        );
         match = match_all(newA, regex);
 
         if (match.length !== 0) {
@@ -688,7 +688,7 @@ export function LatexToTree(A, node = null, node_idx = null) {
                     'log',
                     sub_LatexToTree(match[3][key], node_1, node_idx),
                     node_1[match[2][key]]
-                ]
+                ];
                 node_idx++;
             });
         }
@@ -839,7 +839,7 @@ function sub_LatexToTree(newA, node, node_idx) {
     // array
     let arr = newA.split(new RegExp(signComma, 'g'));
     if (arr.length > 1) {
-        return ['array'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['array', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
     // inequality
     regex = new RegExp(
@@ -859,34 +859,33 @@ function sub_LatexToTree(newA, node, node_idx) {
     arr = newA.split(regex);
     if (arr.length !== 1) {
         result = ['inequality'];
-        const arr_entries = arr.entries()
-        for (const [k, v] of arr_entries) {
-            if (k % 2 === 0) {
-                result.push(sub_LatexToTree(v, node_1, node_idx));
-            } else {
-                switch (parseInt(v)) {
-                    case cmd.get('gt') : {
-                        result.push('gt');
-                        break;
-                    }
-                    case cmd.get('ge') : {
-                        result.push('ge');
-                        break;
-                    }
-                    case cmd.get('lt') : {
-                        result.push('lt');
-                        break;
-                    }
-                    case cmd.get('le') : {
-                        result.push('le');
-                        break;
-                    }
-                    default: {
-                        result.push('ERROR');
-                    }
+        const max = Math.floor(arr.length / 2);
+        for (let i = 0; i < max; i++) {
+            const j = 2 * i + 1
+            result[j] = sub_LatexToTree(arr[2 * i], node_1, node_idx);
+            switch (parseInt(arr[2 * i + 1])) {
+                case cmd.get('gt') : {
+                    result[j + 1] = 'gt';
+                    break;
+                }
+                case cmd.get('ge') : {
+                    result[j + 1] = 'ge';
+                    break;
+                }
+                case cmd.get('lt') : {
+                    result[j + 1] = 'lt';
+                    break;
+                }
+                case cmd.get('le') : {
+                    result[j + 1] = 'le';
+                    break;
+                }
+                default: {
+                    result[j + 1] = 'ERROR';
                 }
             }
         }
+        result[2 * max + 1] = sub_LatexToTree(arr[2 * max], node_1, node_idx);
         return result;
     }
 
@@ -900,19 +899,19 @@ function sub_LatexToTree(newA, node, node_idx) {
     arr = newA.split(regex);
 
     if (arr.length !== 1) {
-        return ['neq'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['neq', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     arr = newA.split(new RegExp(signEquation, 'g'));
 
     if (arr.length !== 1) {
-        return ['equation'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['equation', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     arr = newA.split(signRatio);
 
     if (arr.length !== 1) {
-        return ['ratio'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['ratio', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     regex = new RegExp(
@@ -924,7 +923,7 @@ function sub_LatexToTree(newA, node, node_idx) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['composition'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['composition', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     // addchain
@@ -950,20 +949,19 @@ function sub_LatexToTree(newA, node, node_idx) {
     arr = newA.split(regex);
     if (arr.length !== 1) {
         result = [];
-        const arr_length = arr.length;
-        for (let i = 0; i < arr_length; i += 2) {
-            if (i === 0 && arr[i] === '') {
-                // empty
-            } else if (i === 0) {
-                result.push(['add', sub_LatexToTree(arr[i], node_1, node_idx)]);
-            } else if (arr[i - 1] === signPlus) {
-                result.push(['add', sub_LatexToTree(arr[i], node_1, node_idx)]);
-            } else if (arr[i - 1] === signMinus) {
-                result.push(['sub', sub_LatexToTree(arr[i], node_1, node_idx)]);
-            } else if (arr[i - 1] === partL + '0' + cmd.get('pm') + partR) {
-                result.push(['addsub', sub_LatexToTree(arr[i], node_1, node_idx)]);
-            } else if (arr[i - 1] === partL + '0' + cmd.get('mp') + partR) {
-                result.push(['subadd', sub_LatexToTree(arr[i], node_1, node_idx)]);
+        const max = Math.floor(arr.length / 2);
+        if (arr[0] !== '') {
+            result = [...result, ['add', sub_LatexToTree(arr[0], node_1, node_idx)]];
+        }
+        for (let i = 1; i <= max; i++) {
+            if (arr[2 * i - 1] === signPlus) {
+                result = [...result, ['add', sub_LatexToTree(arr[2 * i], node_1, node_idx)]];
+            } else if (arr[2 * i - 1] === signMinus) {
+                result = [...result, ['sub', sub_LatexToTree(arr[2 * i], node_1, node_idx)]];
+            } else if (arr[2 * i - 1] === partL + '0' + cmd.get('pm') + partR) {
+                result = [...result, ['addsub', sub_LatexToTree(arr[2 * i], node_1, node_idx)]];
+            } else if (arr[2 * i - 1] === partL + '0' + cmd.get('mp') + partR) {
+                result = [...result, ['subadd', sub_LatexToTree(arr[2 * i], node_1, node_idx)]];
             }
         }
         if (result.length === 1) {
@@ -986,7 +984,7 @@ function sub_LatexToTree(newA, node, node_idx) {
                 }
             }
         } else {
-            result = ['addchain'].concat(result);
+            result = ['addchain', ...result];
         }
         return result;
     }
@@ -1005,12 +1003,12 @@ function sub_LatexToTree(newA, node, node_idx) {
     arr = newA.split(regex);
 
     if (arr.length !== 1) {
-        result = ['mulchain'];
         const arr_length = arr.length;
-        for (let i = 0; i < arr_length; i += 2) {
-            i === 0 ? result.push(['mul', sub_LatexToTree(arr[i], node_1, node_idx)])
-            : arr[i - 1] === cmd.get('times').toString() ? result.push(['mul', sub_LatexToTree(arr[i], node_1, node_idx)])
-            : result.push(['div', sub_LatexToTree(arr[i], node_1, node_idx)])
+        const max = Math.floor(arr_length / 2);
+        result = ['mulchain', ['mul', sub_LatexToTree(arr[0], node_1, node_idx)]];
+        for (let i = 1; i <= max; i++) {
+            result = arr[2 * i - 1] === cmd.get('times').toString() ? [...result, ['mul', sub_LatexToTree(arr[2 * i], node_1, node_idx)]]
+                : [...result, ['div', sub_LatexToTree(arr[2 * i], node_1, node_idx)]];
         }
         return result;
     }
@@ -1025,7 +1023,7 @@ function sub_LatexToTree(newA, node, node_idx) {
     arr = newA.split(regex);
 
     if (arr.length !== 1) {
-        return ['cap'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['cap', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     regex = new RegExp(
@@ -1037,7 +1035,7 @@ function sub_LatexToTree(newA, node, node_idx) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['cup'].concat(arr.map(value => sub_LatexToTree(value, node_1, node_idx)));
+        return ['cup', ...arr.map(value => sub_LatexToTree(value, node_1, node_idx))];
     }
 
     regex = new RegExp(
@@ -1049,7 +1047,7 @@ function sub_LatexToTree(newA, node, node_idx) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['mulchain'].concat(arr.map(value => ['mul', sub_LatexToTree(value, node_1, node_idx)]));
+        return ['mulchain', ...arr.map(value => ['mul', sub_LatexToTree(value, node_1, node_idx)])];
     }
 
     regex = new RegExp(
@@ -1066,7 +1064,7 @@ function sub_LatexToTree(newA, node, node_idx) {
             return false;
         }
 
-        result.push(['mul', node_1[match[1][0]]]);
+        result = [...result, ['mul', node_1[match[1][0]]]];
         const length = match[0].length;
         let index = match[0][1].length;
         let op = '';
@@ -1087,7 +1085,7 @@ function sub_LatexToTree(newA, node, node_idx) {
                     break;
                 }
             }
-            result.push([op, node_1[match[1][i]]]);
+            result = [...result, [op, node_1[match[1][i]]]];
             index += match[0][i].length;
         }
     }
@@ -1099,18 +1097,18 @@ javascript version preg_match_all
 */
 export function match_all(string, regexp) {
     const matches = Array.from(string.matchAll(regexp));
-    const result = [];
+    let result = [];
     let index = 0;
     matches.forEach(match => {
         if (index === 0) {
             const match_length = match.length;
             for (let i = 0; i < match_length; i++) {
-                result.push([]);
+                result = [...result, []];
             }
         }
         ++index;
         match.forEach((value, key) => {
-            result[key].push(value);
+            result[key] = [...result[key], value];
         });
     });
     return result;
@@ -1146,11 +1144,11 @@ export function compareMathTree(treeA, treeB) {
             let result = true;
             let num_nullResult = 0;
             const treeA_entries = treeA.entries();
-            for (const [k, v] of treeA_entries) {
-                if (k === 0) {
+            for (const [key, value] of treeA_entries) {
+                if (key === 0) {
                     continue;
                 }
-                if (v === null && treeB[k] === null) {
+                if (value === null && treeB[key] === null) {
                     num_nullResult++;
                     continue;
                 }
@@ -1160,12 +1158,12 @@ export function compareMathTree(treeA, treeB) {
                 let BReSci;
                 let AImSci;
                 let BImSci;
-                if (v[0] === 'equation') {
-                    AReSci = (parseFloat(v[1][0]) - parseFloat(v[2][0])).toExponential(4);
-                    BReSci = (parseFloat(treeB[k][1][0]) - parseFloat(treeB[k][2][0])).toExponential(4);
+                if (value[0] === 'equation') {
+                    AReSci = (parseFloat(value[1][0]) - parseFloat(value[2][0])).toExponential(4);
+                    BReSci = (parseFloat(treeB[key][1][0]) - parseFloat(treeB[key][2][0])).toExponential(4);
 
-                    AImSci = (parseFloat(v[1][1]) - parseFloat(v[2][1])).toExponential(4);
-                    BImSci = (parseFloat(treeB[k][1][1]) - parseFloat(treeB[k][2][1])).toExponential(4);
+                    AImSci = (parseFloat(value[1][1]) - parseFloat(value[2][1])).toExponential(4);
+                    BImSci = (parseFloat(treeB[key][1][1]) - parseFloat(treeB[key][2][1])).toExponential(4);
 
                     if (AReSci === -1 * BReSci && AImSci === -1 * BImSci) {
                         BReSci = AReSci;
@@ -1173,11 +1171,11 @@ export function compareMathTree(treeA, treeB) {
                     }
                 } else {
                     // 150818 larwein - 유효숫자 범위 줄임
-                    AReSci = parseFloat(v[0]).toExponential(4);
-                    BReSci = parseFloat(treeB[k][0]).toExponential(4);
+                    AReSci = parseFloat(value[0]).toExponential(4);
+                    BReSci = parseFloat(treeB[key][0]).toExponential(4);
 
-                    AImSci = parseFloat(v[1]).toExponential(4);
-                    BImSci = parseFloat(treeB[k][1]).toExponential(4);
+                    AImSci = parseFloat(value[1]).toExponential(4);
+                    BImSci = parseFloat(treeB[key][1]).toExponential(4);
                 }
                 if (AReSci !== BReSci || AImSci !== BImSci) {
                     result = false;

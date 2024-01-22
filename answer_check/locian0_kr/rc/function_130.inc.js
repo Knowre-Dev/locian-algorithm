@@ -12,15 +12,12 @@ export function sub_addFactorNegative(tree = null) {
         case 'addchain': {
             const [, ...operand] = tree;
             const newOperand = operand.map(term => addFactorNegative(addCommutative(term)));
-            return addFactorNegative(addAdjacentSigns(['addchain', ...newOperand]));
+            return addFactorNegative(addAdjacentSigns([operator, ...newOperand]));
         }
-        case 'equation': {
-            const [, ...operand] = tree;
-           return ['equation', ...operand.map(term => sub_addFactorNegative(term))];
-        }
+        case 'equation':
         case 'inequality': {
             const [, ...operand] = tree;
-            return ['inequality', ...operand.map(term => sub_addFactorNegative(term))];
+            return [operator, ...operand.map(term => sub_addFactorNegative(term))];
         }
         default: {
             return addFactorNegative(tree);

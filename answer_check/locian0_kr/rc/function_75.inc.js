@@ -33,21 +33,17 @@ export function eqMulPropUS(tree) {
     // so as to guarantee correct inequality directions
     let factor = [['mul', gcfArr.const], ...gcfArr.sym.map(sym => ['mul', sym])];
     factor = array2ChainTree(factor);
-
-    if (JSON.stringify(factor) === JSON.stringify(['natural', '1']) ||
-        JSON.stringify(factor) === JSON.stringify(['natural', '0'])) {
+    const factor_1 = JSON.stringify(factor);
+    if (factor_1 === JSON.stringify(['natural', '1']) || factor_1 === JSON.stringify(['natural', '0'])) {
         return tree; // No need to divide by 1
     }
     let newtree = [tree[0]];
     const [, ...operand] = tree;
-    for (const subtree of operand) {
-        if (!Array.isArray(subtree)) {
-            // this block executes for inequality signs (e.g., 'le', 'ge')
-            newtree = [...newtree, subtree];
-            continue;
-        }
-        newtree = [...newtree, multFactor(subtree, ['div', factor], true)];
-    }
+    operand.forEach(term => {
+        // this block executes for inequality signs (e.g., 'le', 'ge')
+        newtree = Array.isArray(term) ? [...newtree, multFactor(term, ['div', factor], true)]
+            : [...newtree, term];
+    });
     return mulNegative(newtree);
 
     // NOTE: This function does not support division by negative common factor

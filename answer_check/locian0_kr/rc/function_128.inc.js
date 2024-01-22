@@ -21,15 +21,24 @@ export function addFactor_1(tree = null) {
             if (addterm[1][0] === 'mulchain') {
                 let con = ['natural', '1'];
                 let syms = [];
-                const [, ...addterm_1] = addterm[1];
-                addterm_1.forEach((term_addterm_1, key_addterm_1) => {
+                const [, [, term_1, ...addterm_2]] = addterm;
+                if (term_1[0] === 'mul') {
+                    if (term_1[1][0] === 'variable') {
+                        syms = [...syms, term_1];
+                    } else if (term_1[1][0] === 'squareroot') {
+                        syms = [...syms, term_1];
+                    } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
+                        con = term_1;
+                    } else if (term_1[1][0] === 'power' && term_1[1][1][0] === 'variable') {
+                        syms = [...syms, term_1];
+                    }
+                }
+                addterm_2.forEach(term_addterm_1 => {
                     if (term_addterm_1[0] === 'mul') {
                         if (term_addterm_1[1][0] === 'variable') {
                             syms = [...syms, term_addterm_1];
                         } else if (term_addterm_1[1][0] === 'squareroot') {
                             syms = [...syms, term_addterm_1];
-                        } else if (term_addterm_1[1][0] === 'natural' && term_addterm_1[1][1] !== '0' && key_addterm_1 === 0) {
-                            con = term_addterm_1;
                         } else if (term_addterm_1[1][0] === 'power' && term_addterm_1[1][1][0] === 'variable') {
                             syms = [...syms, term_addterm_1];
                         }

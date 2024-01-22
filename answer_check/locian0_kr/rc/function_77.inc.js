@@ -23,8 +23,7 @@ export function fracSimpVar(tree) {
         } else if (num[0] === 'mulchain') {
             const vars = [];
             const [, ...num_1] = num;
-            const num_1_entries = num_1.entries()
-            for (const [key, term] of num_1_entries) {
+            num_1.forEach((term, key) => {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
                         if (!vars.includes(term[1][1])) {
@@ -32,15 +31,16 @@ export function fracSimpVar(tree) {
                             varNum[key] = ['power', term[1], ['natural', '1']];
                         } else {
                             const vars_entries = vars.entries();
+                            const term_11 = JSON.stringify(term[1][1]);
                             for (const [key_vari, vari] of vars_entries) {
-                                if (JSON.stringify(vari) === JSON.stringify(term[1][1])) {
+                                if (JSON.stringify(vari) === term_11) {
                                     varNum[key_vari] = ['power', term[1], ['natural', (parseInt(varNum[key_vari][2][1]) + 1).toString()]];
                                     break;
                                 }
                             }
                         }
                     } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                        varNum[key] = term[1];
+                        [, varNum[key]] = term;
                     } else {
                         num_key = key;
                         narrNum = [...narrNum, term];
@@ -49,7 +49,7 @@ export function fracSimpVar(tree) {
                     num_key = key;
                     narrNum = [...narrNum, term];
                 }
-            }
+            });
             varNum = Object.values(varNum);
         }
         // get the variables in the denominator
@@ -63,8 +63,7 @@ export function fracSimpVar(tree) {
         } else if (den[0] === 'mulchain') {
             const vars = [];
             const [, ...den_1] = den;
-            const den_1_entries = den_1.entries();
-            for (const [key, term] of den_1_entries) {
+            den_1.forEach((term, key) => {
                 if (term[0] === 'mul') {
                     if (term[1][0] === 'variable') {
                         if (!vars.includes(term[1][1])) {
@@ -72,9 +71,10 @@ export function fracSimpVar(tree) {
                             varDen[key] = ['power', term[1], ['natural', '1']];
                         } else {
                             const vars_entries = vars.entries();
+                            const term_11 = JSON.stringify(term[1][1]);
                             for (const [key_vari, vari] of vars_entries) {
-                                if (JSON.stringify(vari) === JSON.stringify(term[1][1])) {
-                                    varDen[key_vari][2][1] = (parseInt(varDen[key_vari][2][1]) + 1).toString()
+                                if (JSON.stringify(vari) === term_11) {
+                                    varDen[key_vari][2][1] = (parseInt(varDen[key_vari][2][1]) + 1).toString();
                                     break;
                                 }
                             }
@@ -89,7 +89,7 @@ export function fracSimpVar(tree) {
                     den_key = key;
                     narrDen = [...narrDen, term];
                 }
-            }
+            });
         }
         varDen = Object.values(varDen);
         let newVarNum = [];
@@ -107,13 +107,13 @@ export function fracSimpVar(tree) {
         // get new numerator and denominator variables
         newVarNum.sort();// added
         newVarDen.sort();// added
+        const newVarNum_length = newVarNum.length;
+        const newVarDen_length = newVarDen.length;
         if (newVarNum.length !== 0 && newVarDen.length !== 0) {
             let numk = 0;
             let deni = 0;
             let newNum = [];
             let newDen = [];
-            const newVarNum_length = newVarNum.length;
-            const newVarDen_length = newVarDen.length;
             for (let k = numk; k < newVarNum_length; k++) {
                 for (let i = deni; i < newVarDen_length; i++) {
                     if (newVarNum[k][1][1] < newVarDen[i][1][1]) {
@@ -126,7 +126,6 @@ export function fracSimpVar(tree) {
                                     : [...newDen, newVarDen[j]];
                             }
                         }
-
                         break;
                     } else if (newVarNum[k][1][1] === newVarDen[i][1][1]) {
                         const expo = parseInt(newVarNum[k][2][1]) - parseInt(newVarDen[i][2][1]);
@@ -180,7 +179,7 @@ export function fracSimpVar(tree) {
             const newOperand = arrNum_length === 0 ? [['natural', '1']]
                 : arrNum_length === 1 ? [arrNum[0][1]]
                 : num_key === 0 ? [mulCommutative(['mulchain', ...arrNum])]
-                    : [sub_mulCommutative(['mulchain', ...arrNum])];
+                : [sub_mulCommutative(['mulchain', ...arrNum])];
             let arrDen = [];
             if (newDen.length > 0) {
                 arrDen = [...arrDen, ...newDen.map(term => ['mul', term])];
@@ -194,9 +193,9 @@ export function fracSimpVar(tree) {
             return arrDen_length === 0 ? newOperand[0]
                 : arrDen_length === 1 ? [operator, ...newOperand, arrDen[0][1]]
                 : den_key === 0 ? [operator, ...newOperand, mulCommutative(['mulchain', ...arrDen])]
-                    : [operator, ...newOperand, sub_mulCommutative(['mulchain', ...arrDen])];
+                : [operator, ...newOperand, sub_mulCommutative(['mulchain', ...arrDen])];
         }
-        if (varDen.length === newVarDen.length && varNum.length === newVarNum.length) {
+        if (varDen.length === newVarDen_length && varNum.length === newVarNum_length) {
             return [operator, num, den];
         }
         let newNum = [];
@@ -214,8 +213,8 @@ export function fracSimpVar(tree) {
         }
         const arrNum_length = arrNum.length;
         const newOperand = arrNum_length === 0 ? [['natural', '1']]
-        : arrNum_length === 1 ? [arrNum[0][1]]
-        : [mulCommutative(['mulchain', ...arrNum])];
+            : arrNum_length === 1 ? [arrNum[0][1]]
+            : [mulCommutative(['mulchain', ...arrNum])];
 
         let newDen = [];
         newVarDen.forEach(nn => {

@@ -29,16 +29,16 @@ export function checkZeroEquiv(tree) {
         }
         case 'mulchain': {
             const [, operand] = tree;
+            const zero = JSON.stringify(['natural', '0']);
             for (const term of operand) {
-                if (term[0] === 'natural' && term[1] === '0') {
+                if (JSON.stringify(term) === zero) {
                     return true;
                 }
             }
             return false;
         }
         case 'natural': {
-            const [, ...operand] = tree;
-            return operand[0] === '0';
+            return tree[1] === '0';
         }
         default: {
             return false;
