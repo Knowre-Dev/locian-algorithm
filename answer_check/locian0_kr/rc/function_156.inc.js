@@ -73,11 +73,7 @@ export function groupLikeVariableTerms(tree = null) {
                                     coeff = ['natural', '1'];
                                 } else if (term[1][0] === 'mulchain') {
                                     const [, [, ...term_1]] = term;
-                                    term_1.forEach(term_term_1 => {
-                                        if (JSON.stringify(variable) !== JSON.stringify(term_term_1[1])) {
-                                            coeff = [...coeff, term_term_1];
-                                        }
-                                    });
+                                    coeff = term_1.filter(term_term_1 => JSON.stringify(variable) !== JSON.stringify(term_term_1[1]));
                                     coeff = array2ChainTree(coeff);
                                 }
                                 coeffArr[key_string] = [...coeffArr[key_string], [addOp, coeff]];
@@ -95,9 +91,7 @@ export function groupLikeVariableTerms(tree = null) {
             });
             // Account for all constant terms, if any
             if (termIndices.length > 0) {
-                termIndices.forEach(index => {
-                    coeffArr.const = [...coeffArr.const, operand[index]];
-                });
+                coeffArr.const = termIndices.map(index => operand[index]);
                 coeffArr.const = array2ChainTree(coeffArr.const);
             }
             // Construct the final list of new operands
@@ -189,12 +183,8 @@ export function groupLikeVariableTerms(tree = null) {
                     : newOperand[0][1];
             }
             // Prepend 1 at the front if all terms are division terms
-            for (const newOpd of newOperand) {
-                if (newOpd[0] === 'mul') {
-                    return [operator, ...newOperand]
-                }
-            }
-            return [operator, ['mul', ['natural', '1'], ...newOperand]];
+            return newOperand.some(newOpd => newOpd[0] === 'mul') ? [operator, ...newOperand]
+                : [operator, ['mul', ['natural', '1'], ...newOperand]];
         }
         default: {
             const [, ...operand] = tree;

@@ -53,10 +53,7 @@ export function addFactoredForm(tree) {
                 return sign === -1 ? ['negative', tree]
                     : tree;
             }
-            let val = 1;
-            consArr.forEach(term => {
-                val *= parseInt(term[1][1]);
-            });
+            const val = consArr.reduce((a, b) => a * b[1][1], 1);
             const newOperand = val !== 1 ? [['mul', ['natural', val.toString()]], ...termArr, ...factArr]
                 : [...termArr, ...factArr];
             return sign === -1 ? ['negative', [operator, ...newOperand]]

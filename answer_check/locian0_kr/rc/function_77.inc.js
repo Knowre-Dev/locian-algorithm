@@ -30,14 +30,8 @@ export function fracSimpVar(tree) {
                             vars[key] = term[1][1];
                             varNum[key] = ['power', term[1], ['natural', '1']];
                         } else {
-                            const vars_entries = vars.entries();
-                            const term_11 = JSON.stringify(term[1][1]);
-                            for (const [key_vari, vari] of vars_entries) {
-                                if (JSON.stringify(vari) === term_11) {
-                                    varNum[key_vari] = ['power', term[1], ['natural', (parseInt(varNum[key_vari][2][1]) + 1).toString()]];
-                                    break;
-                                }
-                            }
+                            const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
+                            varNum[key_vari] = ['power', term[1], ['natural', (varNum[key_vari][2][1] + 1).toString()]];
                         }
                     } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
                         [, varNum[key]] = term;
@@ -70,14 +64,8 @@ export function fracSimpVar(tree) {
                             vars[key] = term[1][1];
                             varDen[key] = ['power', term[1], ['natural', '1']];
                         } else {
-                            const vars_entries = vars.entries();
-                            const term_11 = JSON.stringify(term[1][1]);
-                            for (const [key_vari, vari] of vars_entries) {
-                                if (JSON.stringify(vari) === term_11) {
-                                    varDen[key_vari][2][1] = (parseInt(varDen[key_vari][2][1]) + 1).toString();
-                                    break;
-                                }
-                            }
+                            const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
+                            varDen[key_vari][2][1] = (varDen[key_vari][2][1] + 1).toString();
                         }
                     } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
                         varDen[key] = term[1];
@@ -92,18 +80,8 @@ export function fracSimpVar(tree) {
             });
         }
         varDen = Object.values(varDen);
-        let newVarNum = [];
-        varNum.forEach(vn => {
-            if (!varDen.includes(vn)) {
-                newVarNum = [...newVarNum, vn];
-            }
-        });
-        let newVarDen = [];
-        varDen.forEach(vd => {
-            if (!varNum.includes(vd)) {
-                newVarDen = [...newVarDen, vd];
-            }
-        });
+        const newVarNum = varNum.filter(vn => !varDen.includes(vn));
+        const newVarDen = varDen.filter(vd => !varNum.includes(vd));
         // get new numerator and denominator variables
         newVarNum.sort();// added
         newVarDen.sort();// added
@@ -128,7 +106,7 @@ export function fracSimpVar(tree) {
                         }
                         break;
                     } else if (newVarNum[k][1][1] === newVarDen[i][1][1]) {
-                        const expo = parseInt(newVarNum[k][2][1]) - parseInt(newVarDen[i][2][1]);
+                        const expo = newVarNum[k][2][1] - newVarDen[i][2][1];
                         if (expo > 0) {
                             newNum = expo === 1 ? [...newNum, ['variable', newVarNum[k][1][1]]]
                                 : [...newNum, ['power', ['variable', newVarNum[k][1][1]], ['natural', expo.toString()]]];
@@ -198,11 +176,8 @@ export function fracSimpVar(tree) {
         if (varDen.length === newVarDen_length && varNum.length === newVarNum_length) {
             return [operator, num, den];
         }
-        let newNum = [];
-        newVarNum.forEach(nn => {
-            newNum = nn[2][1] === '1' ? [...newNum, nn[1]]
-                : [...newNum, nn];
-        })
+        const newNum = newVarNum.map(nn => nn[2][1] === '1' ? nn[1]
+                : nn);
 
         let arrNum = [];
         if (newNum.length > 0) {
@@ -215,13 +190,8 @@ export function fracSimpVar(tree) {
         const newOperand = arrNum_length === 0 ? [['natural', '1']]
             : arrNum_length === 1 ? [arrNum[0][1]]
             : [mulCommutative(['mulchain', ...arrNum])];
-
-        let newDen = [];
-        newVarDen.forEach(nn => {
-            newDen = nn[2][1] === '1' ? [...newDen, nn[1]]
-                : [...newDen, nn];
-        });
-
+        const newDen = newVarDen.map(nn => nn[2][1] === '1' ? nn[1]
+                : nn);
         let arrDen = [];
         if (newDen.length > 0) {
             arrDen = [...arrDen, ...newDen.map(term => ['mul', term])];

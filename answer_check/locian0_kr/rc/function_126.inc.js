@@ -65,21 +65,8 @@ export function sub_deter(tree = null) {
     const [operator] = tree;
     if (operator === 'mulchain') {
         const [, , ...operand] = tree;
-        for (const term of operand) {
-            if (term[0] === 'div') {
-                return false;
-            }
-            if (['natural', 'decimal', 'fraction', 'negative'].includes(term[1][0])) {
-                return false;
-            }
-        }
-        return true;
+        return !operand.some(term => (term[0] === 'div' || ['natural', 'decimal', 'fraction', 'negative'].includes(term[1][0])));
     }
     const [, ...operand] = tree;
-    for (const term of operand) {
-        if (!sub_deter(term)) {
-            return false;
-        }
-    }
-    return true;
+    return !operand.some(term => !sub_deter(term));
 }

@@ -36,10 +36,9 @@ export function eqIneqMulProp(tree = null) {
                 return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
             }
             if (con_length > 2) {
-                let div = parseInt(con[0]);
-                con.forEach(term => {
-                    div = EuclidAlg(div, parseInt(term));
-                });
+                let div = con[0];
+                const [, ...con_rest] = con;
+                div = con_rest.reduce((a, b) => EuclidAlg(a, b), div);
                 if (div === 1) {
                     return tree;
                 }
@@ -93,9 +92,8 @@ export function eqIneqMulProp(tree = null) {
             }
             if (con_length > 2) {
                 let div = con[0];
-                con.forEach(term => {
-                    div = EuclidAlg(div, term);
-                });
+                const [, ...con_rest] = con
+                div = con_rest.reduce((a, b) => EuclidAlg(a, b), div);
                 if (div === 1) {
                     return tree;
                 }
@@ -133,58 +131,39 @@ export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return [];
     }
-    let con = [];
     const [operator] = tree;
     switch (operator) {
         case 'natural': {
             const [, ...operand] = tree;
-            if (operand[0] !== '0') {
-                con = [parseInt(operand[0])];
-            }
-            break;
+            return operand[0] !== '0' ? [parseInt(operand[0])]
+                : [];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            operand.forEach(term => {
-                if (term[0] === 'mul') {
-                    con = [...con, ...sub_getConstant(term[1])];
-                }
-            });
+            let con = operand.reduce((terms, term) => term[0] === 'mul' ? [...terms, ...sub_getConstant(term[1])]
+                : terms, []);
             con = Array.from(new Set(con));
-            if (con.includes(1)) {
-                    if (con.length !== 1) {
-                    let con1 = [];
-                    con.forEach(term_c => {
-                        if (term_c !== 1) {
-                            con1 = [...con1, term_c];
-                        }
-                    });
-                    con = con1;
-                }
+            if (con.includes(1) && con.length !== 1) {
+                con = con.filter(term_c => term_c !== 1);
             }
-            break;
+            return con;
         }
         case 'addchain': {
             const [, ...operand] = tree;
-            operand.forEach(term => {
-                con = [...con, ...sub_getConstant(term[1])];
-            });
-            break;
+            return operand.reduce((a, b) => [...a, ...sub_getConstant(b[1])], []);
         }
         case 'negative': {
             const [, ...operand] = tree;
-            operand.forEach(term => {
-                con = [...con, ...sub_getConstant(term)];
-            });
-            break;
+            return operand.reduce((a, b) => [...a, ...sub_getConstant(b)], []);
         }
         case 'power':
         case 'variable': {
-            con = [...con, 1];
-            break;
+            return [1];
+        }
+        default: {
+            return [];
         }
     }
-    return con;
 }
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

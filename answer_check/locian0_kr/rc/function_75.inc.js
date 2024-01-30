@@ -39,11 +39,9 @@ export function eqMulPropUS(tree) {
     }
     let newtree = [tree[0]];
     const [, ...operand] = tree;
-    operand.forEach(term => {
-        // this block executes for inequality signs (e.g., 'le', 'ge')
-        newtree = Array.isArray(term) ? [...newtree, multFactor(term, ['div', factor], true)]
-            : [...newtree, term];
-    });
+    // this block executes for inequality signs (e.g., 'le', 'ge')
+    newtree = [...newtree, ...operand.map(term => Array.isArray(term) ? multFactor(term, ['div', factor], true)
+                : term)];
     return mulNegative(newtree);
 
     // NOTE: This function does not support division by negative common factor

@@ -9,13 +9,10 @@ export function rootToExp(tree = null) {
             const [, ...operand] = tree;
             switch (operand[1][0]) {
                 case 'mulchain': { // 루트 안이 곱셈식일 경우
-                    let newOperand = [];
                     const [, operand_1] = operand;
-                    operand_1.forEach(term => {
-                        newOperand = Array.isArray(term) ? [...newOperand, [term[0], rootToExp(['nthroot', operand[0], term[1]])]]
-                            : [...newOperand, term];
-                    });
-                    return newOperand;
+                    return operand_1.map(term =>
+                        Array.isArray(term) ? [term[0], rootToExp(['nthroot', operand[0], term[1]])]
+                            : term);
                 }
                 case 'power': { // 루트 안이 거듭제곱일 경우
                     return ['power', operand[1][1], ['fraction', operand[1][2], operand[0]]];

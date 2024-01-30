@@ -9,13 +9,9 @@ export function mulFracSeparation(tree = null) {
         const [, ...operand] = tree;
         if (operand[1][0] === 'mulchain') {
             if (operand[0][0] === 'natural' && operand[0][1] === '1') {
-                const [, operand_1] = operand;
-                let newOperand = [];
-                operand_1.forEach(term_1 => {
-                    if (Array.isArray(term_1)) {
-                        newOperand = [...newOperand, [term_1[0], ['fraction', operand[0], term_1[1]]]];
-                    }
-                });
+                // const [, operand_1] = operand;
+                const newOperand = operand[1].reduce((terms, term_1) => Array.isArray(term_1) ? [...terms, [term_1[0], ['fraction', operand[0], term_1[1]]]]
+                    : terms, []);
                 return ['mulchain', ...newOperand];
             }
             return tree;

@@ -7,13 +7,8 @@ export function mulPowSeparation(tree = null) {
     if (operator === 'power') {
         const [, ...operand] = tree;
         if (operand[0][0] === 'mulchain') {
-            let newOperand = [];
-            const [operand_0] = operand;
-            operand_0.forEach(term_0 => {
-                if (Array.isArray(term_0)) {
-                    newOperand = [...newOperand, [term_0[0], ['power', term_0[1], operand[1]]]];
-                }
-            });
+            const newOperand = operand[0].reduce((terms, term_0) => Array.isArray(term_0) ? [...terms, [term_0[0], ['power', term_0[1], operand[1]]]]
+                : terms, [])
             return ['mulchain', ...newOperand];
         }
         return tree;

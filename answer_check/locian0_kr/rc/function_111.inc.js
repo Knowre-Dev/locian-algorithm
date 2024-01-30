@@ -13,11 +13,8 @@ export function powBaseSort(tree = null) {
         if (base[0] === 'addchain' && expo[1] % 2 === 0) {
             if (base[1][0] === 'sub') {
                 [, ...base] = base;
-                let newBaseTerm = [];
-                base.forEach(term => {
-                    newBaseTerm = term[0] === 'sub' ? [...newBaseTerm, ['add', term[1]]]
-                        : [...newBaseTerm, ['sub', term[1]]];
-                });
+                const newBaseTerm = base.map(term => term[0] === 'sub' ? ['add', term[1]]
+                    : ['sub', term[1]]);
                 return [operator, ['addchain', ...newBaseTerm], expo];
             }
             return [operator, base, expo];

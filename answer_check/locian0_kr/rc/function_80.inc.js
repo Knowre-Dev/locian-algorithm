@@ -5,12 +5,8 @@ export function addPolyZero(tree) {
     const [operator] = tree;
     if (operator === 'addchain') {
         const [, ...operand] = tree;
-        let newOperand = [];
-        operand.forEach(term => {
-            newOperand = term[0] === 'sub' ? checkZeroEquiv(term[1]) ? [...newOperand, ['add', term[1]]]
-                    : [...newOperand, term]
-                : [...newOperand, term];
-        });
+        const newOperand = operand.map(term => (term[0] === 'sub' && checkZeroEquiv(term[1])) ? ['add', term[1]]
+            : term);
         return [operator, ...newOperand];
     }
     const [, ...operand] = tree;
@@ -29,13 +25,7 @@ export function checkZeroEquiv(tree) {
         }
         case 'mulchain': {
             const [, operand] = tree;
-            const zero = JSON.stringify(['natural', '0']);
-            for (const term of operand) {
-                if (JSON.stringify(term) === zero) {
-                    return true;
-                }
-            }
-            return false;
+            return operand.some(term => JSON.stringify(term) === JSON.stringify(['natural', '0']));
         }
         case 'natural': {
             return tree[1] === '0';

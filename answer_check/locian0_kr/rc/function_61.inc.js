@@ -10,11 +10,9 @@ export function rearrangeTree(tree, types = []) {
     }
 
     const [operator, ...operand] = tree;
-    let newOperand = [];
-    operand.forEach(term => {
-        newOperand = Array.isArray(term) ? [...newOperand, rearrangeTree(term, types)]
-            : [...newOperand, term];
-    });
+    const newOperand = operand.map(term =>
+        Array.isArray(term) ? rearrangeTree(term, types)
+        : term);
     if (!types.includes(operator)) {
         return [operator, ...newOperand];
     }
@@ -36,15 +34,13 @@ export function rearrangeTree(tree, types = []) {
                 : rightNum--
             }
             if (rightNum < 0) {
-                let temp = [];
                 const newOperand_reverse = newOperand.reverse();
-                newOperand_reverse.forEach(term_reverse => {
-                    temp = term_reverse === 'gt' ? [...temp, 'lt']
-                        : term_reverse === 'ge' ? [...temp, 'le']
-                        : term_reverse === 'lt' ? [...temp, 'gt']
-                        : term_reverse === 'le' ? [...temp, 'ge']
-                        : [...temp, term_reverse];
-                });
+                const temp = newOperand_reverse.map(term_reverse =>
+                    term_reverse === 'gt' ? 'lt'
+                    : term_reverse === 'ge' ? 'le'
+                    : term_reverse === 'lt' ? 'gt'
+                    : term_reverse === 'le' ? 'ge'
+                    : term_reverse);
                 return [operator, ...temp];
             }
             return rightNum === 0 ? 'ERROR-ineq'

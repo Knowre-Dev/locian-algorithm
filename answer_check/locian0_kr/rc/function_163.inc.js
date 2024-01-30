@@ -46,13 +46,9 @@ export function solParenthesis(tree = null) {
                     return tree;
                 }
                 case 1: {
-                    let newOperand = [];
-                    const addchain_0 = addchain[0]
-                    addchain_0.forEach(term => {
-                        if (Array.isArray(term)) {
-                            newOperand = [...newOperand, [term[0], ['mulchain', ...mono, ['mul', term[1]]]]];
-                        }
-                    });
+                    const newOperand = addchain[0].reduce((terms, term) => Array.isArray(term)
+                        ? [...terms, [term[0], ['mulchain', ...mono, ['mul', term[1]]]]]
+                        : terms, []);
                     return ['addchain', ...newOperand];
                 }
                 default: {
@@ -84,9 +80,9 @@ export function solParenthesis(tree = null) {
         case 'power': {
             const [, ...operand] = tree;
             if (operand[0][0] === 'addchain' && operand[1][0] === 'natural') {
-                const int = parseInt(operand[1][1]);
+                const max = operand[1][1];
                 let arr = [];
-                for (let i = 0; i < int; i++) {
+                for (let i = 0; i < max; i++) {
                     arr = [...arr, ['mul', operand[0]]];
                 }
                 return solParenthesis(['mulchain', ...arr]);

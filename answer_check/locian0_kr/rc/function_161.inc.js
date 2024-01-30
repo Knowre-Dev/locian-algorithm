@@ -10,10 +10,9 @@ export function divFrac(tree) {
         }
         let newOperand = [operand[0]];
         const [, ...operand_1] = operand;
-        operand_1.forEach(term => {
-            newOperand = (term[0] === 'div' && newOperand.pop()[0] === 'mul') ? [...newOperand, ['mul', ['fraction', divFrac(newOperand.pop()[1]), divFrac(term[1])]]]
-                : [...newOperand, divFrac(term)];
-        });
+        newOperand = [...newOperand, ...operand_1.map(term =>
+            (term[0] === 'div' && newOperand.pop()[0] === 'mul') ? ['mul', ['fraction', divFrac(newOperand.pop()[1]), divFrac(term[1])]]
+            : divFrac(term))];
         return newOperand.length === 1 ? newOperand[0][1]
             : [operator, ...newOperand];
     }

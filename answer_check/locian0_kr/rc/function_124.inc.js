@@ -65,17 +65,14 @@ export function ineqMulNegUS(tree) {
     } else {
         return [operator, ...operand];
     }
-    let newOperand = [];
     const zero = JSON.stringify(['natural', '0']);
-    operand.forEach(subtree => {
-        newOperand = JSON.stringify(subtree) === zero ? [...newOperand, subtree]
-            : subtree === 'gt' ? [...newOperand, 'lt']
-            : subtree === 'ge' ? [...newOperand, 'le']
-            : subtree === 'le' ? [...newOperand, 'ge']
-            : subtree === 'lt' ? [...newOperand, 'gt']
-            : subtree[0] === 'negative' ? [...newOperand, subtree[1]]
-            : [...newOperand, addNegative(['negative', subtree])];
-    });
+    const newOperand = operand.map(term => JSON.stringify(term) === zero ? term
+            : term === 'gt' ? 'lt'
+            : term === 'ge' ? 'le'
+            : term === 'le' ? 'ge'
+            : term === 'lt' ? 'gt'
+            : term[0] === 'negative' ? term[1]
+            : addNegative(['negative', term]));
     return [operator, ...newOperand];
 }
 

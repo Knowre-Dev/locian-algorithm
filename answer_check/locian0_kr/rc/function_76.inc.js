@@ -13,14 +13,14 @@ export function fracSimpInt(tree) {
         let narrNum = [];
         switch (num[0]) {
             case 'natural': {
-                intNum = parseInt(num[1]);
+                intNum = num[1];
                 break;
             }
             case 'mulchain': {
                 let arrNum = [];
                 const [, ...num_1] = num;
                 num_1.forEach(term => {
-                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum = [...arrNum, parseInt(term[1][1])]
+                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrNum = [...arrNum, term[1][1]]
                     : narrNum = [...narrNum, term];
                 });
                 const arrNum_length = arrNum.length;
@@ -39,13 +39,13 @@ export function fracSimpInt(tree) {
 
         switch (den[0]) {
             case 'natural': {
-                intDen = parseInt(den[1]);
+                intDen = den[1];
                 break;
             }
             case 'mulchain': {
                 const [, ...den_1] = den;
                 den_1.forEach(term => {
-                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen = [...arrDen, parseInt(term[1][1])]
+                    (term[0] === 'mul' && term[1][0] === 'natural') ? arrDen = [...arrDen, term[1][1]]
                     : narrDen = [...narrDen, term];
                 });
                 const arrDen_length = arrDen.length;

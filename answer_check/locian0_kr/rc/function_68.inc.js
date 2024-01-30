@@ -10,8 +10,8 @@ export function powDecomposition(tree) {
         const base = powDecomposition(operand[0]);
         const expo = powDecomposition(operand[1]);
         if (base[0] === 'addchain' && expo[0] === 'natural') {
-            const expo_int = parseInt(expo[1]);
-            for (let i = 0; i < expo_int; i++) {
+            const max = expo[1];
+            for (let i = 0; i < max; i++) {
                 newOperand = [...newOperand, ['mul', base]];
             }
             return ['mulchain', ...newOperand];

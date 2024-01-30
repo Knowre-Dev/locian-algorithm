@@ -86,10 +86,9 @@ export function addFactor_1(tree = null) {
                 if (power === true) {
                     con = ['natural', '1'];
                 } else {
-                    let gcd = parseInt(consArr[0][1][1]);
-                    consArr.forEach(term => {
-                        gcd = EuclidAlg(gcd, parseInt(term[1][1]));
-                    });
+                    let gcd = consArr[0][1][1];
+                    const [, ...consArr_rest] = consArr;
+                    gcd = consArr_rest.reduce((a, b) => EuclidAlg(a, b[1][1]), gcd);
                     con = ['natural', gcd.toString()];
                 }
             }

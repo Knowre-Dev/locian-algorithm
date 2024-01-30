@@ -24,13 +24,7 @@ export function addFactor(tree) {
                             con = term_1;
                         }
                     }
-                    addterm_2.forEach(multerm => {
-                        if (multerm[0] === 'mul') {
-                            if (multerm[1][0] === 'variable') {
-                                syms = [...syms, multerm];
-                            }
-                        }
-                    });
+                    syms = [...syms, ...addterm_2.filter(multerm => (multerm[0] === 'mul' && multerm[1][0] === 'variable'))];
                     if (syms.length > 0 && con[1] !== '1') {
                         consArr = [...consArr, con];
                     }
@@ -63,10 +57,9 @@ export function addFactor(tree) {
         if (consArr.length !== 0) {
             let con = consArr[0][1];
             if (consArr.length !== 1) {
-                let lcm = parseInt(consArr[0][1][1]);
-                consArr.forEach(term => {
-                    lcm *= parseInt(term[1][1]) / EuclidAlg(lcm, parseInt(term[1][1]));
-                });
+                let lcm = consArr[0][1][1];
+                const [, ...consArr_rest] = consArr;
+                lcm = consArr_rest.reduce((a, b) => b[1][1] / EuclidAlg(a, b[1][1]), lcm);
                 con = ['natural', lcm.toString()];
             }
 

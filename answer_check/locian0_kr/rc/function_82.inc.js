@@ -8,12 +8,8 @@ export function mulZero(tree) {
     const [operator] = tree;
     if (operator === 'mulchain') {
         const [, ...operand] = tree;
-        for (const term of operand) {
-            if (checkZeroEquiv(term[1])) {
-                return ['natural', '0'];
-            }
-        }
-        return tree;
+        return operand.some(term => checkZeroEquiv(term[1])) ? ['natural', '0']
+            : tree;
     }
     const [, ...operand] = tree;
     return [operator, ...operand.map(term => mulZero(term))];

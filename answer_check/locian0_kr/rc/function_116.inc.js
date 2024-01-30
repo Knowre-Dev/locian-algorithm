@@ -5,7 +5,7 @@ export function rootSimpInt(tree) {
 
     const [operator, ...operand] = tree;
     if (operator === 'squareroot' && operand[0][0] === 'natural') {
-        const factors = pfactor(parseInt(operand[0][1]));
+        const factors = pfactor(operand[0][1]);
         let inside = 1;
         let outside = 1;
         factors.forEach((power, factor) => {
@@ -62,10 +62,10 @@ export function rootSimpInt(tree) {
             let den = 1;
             cons.forEach(term => {
                 if (term[1][0] === 'natural') {
-                    num *= parseInt(term[1][1]);
+                    num *= term[1][1];
                 } else if (term[1][0] === 'fraction') {
-                    num *= parseInt(term[1][1][1]);
-                    den *= parseInt(term[1][2][1]);
+                    num *= term[1][1][1];
+                    den *= term[1][2][1];
                 }
             });
             const mul = den === 1 ? ['mul', ['natural', num.toString()]]

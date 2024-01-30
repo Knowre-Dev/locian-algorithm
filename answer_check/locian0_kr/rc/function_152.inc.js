@@ -122,17 +122,13 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
     // subscripts in a way that we desire
     // (i.e., same let name with different subscript treated as different)
     let varNames = [];
-    loop_2: for (const variable of varList) {
+    for (const variable of varList) {
         // Use a helper function to set variable name string for lookup table
         // (will also be used at evaluateVariable() to find the correct entry)
         const varname = getVarName(variable);
-        const varname_string = JSON.stringify(varname);
-        for (const v_name of varNames) {
-            if (JSON.stringify(v_name) === varname_string) {
-                continue loop_2;
-            }
+        if (varNames.every(v_name => JSON.stringify(v_name) !== JSON.stringify(varname))) {
+            varNames = [...varNames, varname];
         }
-        varNames = [...varNames, varname];
     }
 
     // Sort the variable names
@@ -278,14 +274,11 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             return [-operand[0][0], -operand[0][1]];
         }
         case 'addchain': {
-            const sum = [0, 0];
-            operand.forEach(term => {
-                if (Array.isArray(term)) {
-                    sum[0] += !isNaN(term[0]) ? term[0] : 0;
-                    sum[1] += !isNaN(term[1]) ? term[1] : 0;
-                }
-            });
-            return sum;
+            // const sum = [0, 0];
+            return operand.reduce((sum, term) => Array.isArray(term)
+                ? [!isNaN(term[0]) ? sum[0] + term[0] : sum[0],
+                    !isNaN(term[1]) ? sum[1] + term[1] : sum[1]]
+                : sum, [0, 0]);
         }
         case 'div': {
             // division by a complex number z is equivalent to
@@ -294,15 +287,10 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             return [operand[0][0] / modulusSq, -operand[0][1] / modulusSq];
         }
         case 'mulchain': {
-            const prod = [1, 0];
             // Complex number multiplication
             // (a+bi)(c+di) = (ac-bd) + (ad+bc)i
-            operand.forEach(factor => {
-                const temp = [prod[0], prod[1]];
-                prod[0] = temp[0] * factor[0] - temp[1] * factor[1];
-                prod[1] = temp[0] * factor[1] + temp[1] * factor[0];
-            });
-            return prod;
+            return operand.reduce((a, b) =>
+                [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]], [1, 0]);
         }
         case 'fraction': {
             if (isNaN(operand[0][0]) ||
@@ -348,11 +336,10 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             return [modulus, 0];
         }
         case 'rdecimal': {
-            const intg = parseFloat(operand[0]);
-            const num = operand[1] === '' ? parseFloat(operand[1] + operand[2])
-                : parseFloat(operand[1] + (parseFloat(operand[2]) - parseFloat(operand[1])).toString());
-            let denum = '9'.repeat(operand[2].length) + '0'.repeat(operand[1].length);
-            denum = parseFloat(denum);
+            const intg = operand[0];
+            const num = operand[1] === '' ? operand[1] + operand[2]
+                : parseFloat(operand[1] + (operand[2] - operand[1]).toString());
+            const denum = '9'.repeat(operand[2].length) + '0'.repeat(operand[1].length);
             return [intg + (num / denum), 0];
         }
         case 'subscript': {
@@ -417,11 +404,9 @@ export function replace(tree, from, to) {
         return to;
     }
     const [operator, ...operand] = tree;
-    let newOperand = [];
-    operand.forEach(term => {
-        newOperand = Array.isArray(term) ? [...newOperand, replace(term, from, to)]
-            : [...newOperand, term];
-    });
+    const newOperand = operand.map(term =>
+        Array.isArray(term) ? replace(term, from, to)
+        : term);
     return [operator, ...newOperand];
 }
 
@@ -432,9 +417,8 @@ which is passed as an argument
 */
 export function evaluateVariable(variable, lookupTable = {}) {
     const varname = getVarName(variable);
-    const varname_string = JSON.stringify(varname);
     for (const key in lookupTable) {
-        if (JSON.stringify(key) === varname_string) {
+        if (JSON.stringify(key) === JSON.stringify(varname)) {
             return lookupTable[varname];
         }
     }
@@ -742,7 +726,7 @@ export function evalNumericValues_addChain(operand) {
     let operand_1 = [];
     let operand_2 = [];
     operand.forEach(term => {
-        (term[0] === 'add' || term[0] === 'sub') ? operand_1 = [...operand_1, term]
+        ['add', 'sub'].includes(term[0]) ? operand_1 = [...operand_1, term]
         : operand_2 = [...operand_2, ['addsub', term[1]]];
     });
     if (JSON.stringify(operand_1) === JSON.stringify([])) {
@@ -763,11 +747,11 @@ export function evalNumericValues_addChain(operand) {
             [, subtree] = subtree;
         }
 
-        let nVal = parseInt(subtree[1]);
+        let nVal = subtree[1];
         let dVal = 1;
         if (subtree[0] === 'fraction') {
-            nVal = parseInt(subtree[1][1]);
-            dVal = parseInt(subtree[2][1]);
+            nVal = subtree[1][1];
+            dVal = subtree[2][1];
         }
         // Update denom to the LCD of all terms considered so far
         const updateFactor = dVal / EuclidAlg(denom, dVal);
@@ -809,11 +793,11 @@ export function evalNumericValues_mulChain(operand) {
             sign = -1;
             [, subtree] = subtree;
         }
-        let nVal = parseInt(subtree[1]);
+        let nVal = subtree[1];
         let dVal = 1;
         if (subtree[0] === 'fraction') {
-            nVal = parseInt(subtree[1][1]);
-            dVal = parseInt(subtree[2][1]);
+            nVal = subtree[1][1];
+            dVal = subtree[2][1];
         }
         // Update the current numerator and denominator
         if (term[0] === 'div') {
@@ -867,9 +851,9 @@ export function evalNumericValues_power(operand) {
     // Evaluation
     let mtermArr = []; // construct as a mulchain, and then simplify later
     // work with absolute value of base for now, will see why later
-    const bVal = parseInt(basetree[1]);
-    const xNval = parseInt(expFrac[0][1]);
-    const xDval = parseInt(expFrac[1][1]);
+    const bVal = basetree[1];
+    const xNval = expFrac[0][1];
+    const xDval = expFrac[1][1];
     // Watch out for any imaginary number case
     const imaginaryFlag = (sign === -1) && (xNval % 2 === 1) && (xDval % 2 === 0);
     // Factor out any integer result possible
@@ -954,18 +938,9 @@ export function findDenominators(tree, unique = false, positive = false) {
     let denomArr = [];
     operand.forEach(term => {
         const subDenArr = findDenominators(term, unique);
-        loop_2: for (const dterm of subDenArr) {
-            const dterm_string = JSON.stringify(dterm);
-            for (const value of denomArr) {
-                if (JSON.stringify(value) === dterm_string) {
-                    if (!unique) {
-                        denomArr = [...denomArr, dterm];
-                    }
-                    continue loop_2;
-                }
-            }
-            denomArr = [...denomArr, dterm];
-        }
+        denomArr = [...denomArr,
+            ...subDenArr.reduce((terms, dterm) => (!unique && denomArr.some(value => JSON.stringify(value) === JSON.stringify(dterm))) ? [...terms, dterm, dterm]
+                : [...terms, dterm], denomArr)];
     });
     return denomArr;
 }
@@ -1041,22 +1016,12 @@ export function findGCF(tree = null) {
             operand.forEach(term => {
                 // only consider multiplications (divisions would end up in denominators)
                 if (term[0] === 'mul') {
-                    const [, subtree] = term;
-                    const subCFArr = findGCF(subtree);
-
-                    if (JSON.stringify(subCFArr.const) !== JSON.stringify([])) {
-                        constF *= parseInt(subCFArr.const[1]);
+                    const subCFArr = findGCF(term[1]);
+                    if (subCFArr.const.length !== 0) {
+                        constF *= subCFArr.const[1];
                     }
-                    const subCFArr_sym = subCFArr.sym;
-                    loop_2: for (const symb of subCFArr_sym) {
-                        const symb_string = JSON.stringify(symb);
-                        for (const sym of symFArr) {
-                            if (JSON.stringify(sym) === symb_string) {
-                                continue loop_2;
-                            }
-                        }
-                        symFArr = [...symFArr, symb];
-                    }
+                   symFArr = subCFArr.sym.reduce((terms, symb) => terms.every(sym => JSON.stringify(sym) !== JSON.stringify(symb)) ? [...terms, symb]
+                        : terms, symFArr);
                 }
             });
 
@@ -1086,16 +1051,7 @@ export function findGCF(tree = null) {
                     commonFactorArr.const = ['natural', gcf.toString()];
                     // For variables,
                     // only count the vars already in commonFactorArr['sym']
-                    let symFArr = [];
-                    subCFArr.sym.forEach(symb => {
-                        const symb_stirng = JSON.stringify(symb);
-                        commonFactorArr.sym.forEach(symb_1 => {
-                            if (symb_stirng === JSON.stringify(symb_1)) {
-                                symFArr = [...symFArr, symb];
-                            }
-                        });
-                    });
-                    commonFactorArr.sym = symFArr;
+                    commonFactorArr.sym = subCFArr.sym.reduce((a, b) => [...a, ...commonFactorArr.sym.filter(symb_1 => JSON.stringify(b) === JSON.stringify(symb_1))], []);
                 }
             });
             return commonFactorArr;
@@ -1139,7 +1095,6 @@ export function findVars(tree, option = false) {
     if (!Array.isArray(tree)) {
         return [];
     }
-    let varList = [];
     if (option === true) {
         if (isNumeric(tree)) {
             return [];
@@ -1147,34 +1102,26 @@ export function findVars(tree, option = false) {
         if (tree[0] === 'variable') {
             return [tree];
         }
+        let varList = [];
         const [, ...operand] = tree;
         operand.forEach(term => {
             const subtree = ['addchain', 'mulchain'].includes(tree[0]) ? term[1] : term;
             const subVarList = findVars(subtree, option);
-            loop_2: for (const variable of subVarList) {
-                const variable_string = JSON.stringify(variable);
-                for (const vari of varList) {
-                    if (JSON.stringify(vari) === variable_string) {
-                        continue loop_2;
-                    }
-                }
-                varList = [...varList, variable];
-            }
+            varList = [...varList, ...subVarList.filter(variable => varList.every(vari => (JSON.stringify(vari) !== JSON.stringify(variable))))];
         });
         return varList;
     }
-
     const [operator] = tree;
     switch (operator) {
         case 'natural': {
-            return varList;
+            return [];
         }
         case 'variable': {
-            return [...varList, tree];
+            return [tree];
         }
         case 'power': {
-            return findVars(tree[1], option).length > 0 ? [...varList, tree]
-                : varList;
+            return findVars(tree[1], option).length > 0 ? [tree]
+                : [];
         }
         case 'negative': {
             return findVars(tree[1], option);
@@ -1196,31 +1143,24 @@ export function findVars(tree, option = false) {
                 }
             });
             varTerm = array2ChainTree(varTerm);
-            return varTerm.length > 0 ? [...varList, varTerm]
-                : varList;
+            return varTerm.length > 0 ? [varTerm]
+                : [];
         }
         case 'addchain': {
             const [, ...operand] = tree;
+            let varList = [];
             operand.forEach(term => {
                 let [, subtree] = term;
                 if (subtree[0] === 'negative') {
                     [, subtree] = subtree;
                 }
                 const subVarList = findVars(subtree, option);
-                loop_2: for (const subtree of subVarList) {
-                    const subtree_string = JSON.stringify(subtree);
-                    for (const vari of varList) {
-                        if (JSON.stringify(vari) === subtree_string) {
-                            continue loop_2;
-                        }
-                    }
-                    varList = [...varList, subtree];
-                }
+                varList = [...varList, ...subVarList.filter(subtree => varList.every(vari => JSON.stringify(vari) !== JSON.stringify(subtree)))];
             });
             return varList;
         }
         default: {
-            return varList;
+            return [];
         }
     }
 }
@@ -1412,12 +1352,8 @@ export function termExists(term, tree, recursive = true, excPolyTerm = false) {
     for (const subtree of tree) {
         if (termExists(term, subtree, recursive, excPolyTerm)) {
             const [, ...operand_subtree] = subtree;
-            for (const term_subtree of operand_subtree) {
-                if (JSON.stringify(term_subtree) === term_string) {
-                    return !(subtree[0] === 'power' && excPolyTerm);
-                }
-            }
-            return true;
+            return operand_subtree.some(term_subtree => JSON.stringify(term_subtree) === term_string) ? !(subtree[0] === 'power' && excPolyTerm)
+                : true;
         }
     }
 }
@@ -1491,70 +1427,38 @@ export function validMathTree(tree) {
                 return false;
             }
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if (!validMathTree(['natural', term])) {
-                    return false;
-                }
-            }
-            return true;
+            return operand.evey(term => validMathTree(['natural', term]));
         }
         case 'anything':
         case 'variable': {
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if ('0'.charCodeAt(0) <= term.charCodeAt(0) && term.charCodeAt(0) <= '9'.charCodeAt(0)) {
-                    return false;
-                }
-            }
-            return true;
+            return !operand.some(term => ('0'.charCodeAt(0) <= term.charCodeAt(0) && term.charCodeAt(0) <= '9'.charCodeAt(0)));
         }
         case 'addchain': {
             if (tree.length === 1) {
                 return false;
             }
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if (term.length !== 2 ||
-                    !['add', 'sub', 'addsub', 'subadd'].includes(term[0]) ||
-                    !validMathTree(term[1])) {
-                    return false;
-                }
-            }
-            return true;
+            return operand.every(term => (term.length === 2 && ['add', 'sub', 'addsub', 'subadd'].includes(term[0]) && validMathTree(term[1])));
         }
         case 'mulchain': {
             if (tree.length === 1) {
                 return false;
             }
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if (term.length !== 2 || !['mul', 'div'].includes(term[0]) || !validMathTree(term[1])) {
-                    return false;
-                }
-            }
-            return true;
+            return operand.every(term => (term.length === 2 && ['mul', 'div'].includes(term[0]) && validMathTree(term[1])));
         }
         case 'equation': {
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if (!validMathTree(term)) {
-                    return false;
-                }
-            }
-            return true;
+            return operand.every(term => validMathTree(term));
         }
         case 'inequality': {
             const [, ...operand] = tree;
-            for (const term of operand) {
-                if (!validMathTree(term) && !['lt', 'gt', 'le', 'ge'].includes(term)) {
-                    return false;
-                }
-            }
-            return true;
+            return operand.every(term => (validMathTree(term) || ['lt', 'gt', 'le', 'ge'].includes(term)));
         }
         case 'interval': {
             return tree.length !== 5 ? false
-                : !['[', '('].includes(tree[1]) || ![']', ')'].includes(tree[4]) ? false
+                : !(['[', '('].includes(tree[1]) && [']', ')'].includes(tree[4])) ? false
                 : validMathTree(tree[2]) && validMathTree(tree[3])
         }
         default: {

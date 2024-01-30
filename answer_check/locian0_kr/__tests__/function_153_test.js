@@ -24,5 +24,3 @@ describe("Table Data Tests", () => {
 		});
 	});
 });
-
-

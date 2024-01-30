@@ -1,5 +1,3 @@
-import { EuclidAlg } from '../rc/function_76.inc.js';
-
 export function fracDecimal(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -9,20 +7,30 @@ export function fracDecimal(tree) {
     if (operator === 'decimal') {
         const [, ...operand] = tree;
         const val = operand[0].split('.');
-        const num = parseInt(val[0] + val[1]);
-        const den = Math.pow(10, val[1].length);
-        const gcf = EuclidAlg(num, den);
-        const newNum = num / gcf;
-        const newDen = den / gcf;
-        return newDen === 1 ? ['natural', newNum.toString()]
-            : ['fraction', ['natural', newNum.toString()], ['natural', newDen.toString()]];
+        let num = parseInt(val[0] + val[1]);
+        const exp = val[1].length;
+        let exp_2 = 0;
+        let exp_5 = 0;
+        while (num % 2 === 0 && exp_2 < exp) {
+            num /= 2;
+            exp_2++;
+        }
+        while (num % 5 === 0 && exp_5 < exp) {
+            num /= 5;
+            exp_5++;
+        }
+        if (exp === exp_2 && exp === exp_5) {
+            return ['natural', num.toString()];
+        }
+        const den = Math.pow(2, exp - exp_2) * Math.pow(5, exp - exp_5);
+        return ['fraction', ['natural', num.toString()], ['natural', den.toString()]];
     }
     const [, ...operand] = tree;
     return [operator, ...operand.map(term => fracDecimal(term))];
 }
 /*
 import {LatexToTree} from '../checkmath.js';
-let latex1 = '1\\le \\frac{x}{2}+3\\le 3.4';
+let latex1 = '3.2';
 let tree1 = LatexToTree(latex1);
 let tree11 = fracDecimal(tree1);
 let result1 = JSON.stringify(tree11, null, 4);
