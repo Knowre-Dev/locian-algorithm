@@ -1209,7 +1209,9 @@ function: compare two trees
 input: treeA - tree, treeB - tree
 ouput: true, false
 */
-
+/*
+1
+*/
 export function is_equal_tree(tree_1, tree_2) {
     const tree_11 = tree_1;
     const tree_21 = tree_2;
