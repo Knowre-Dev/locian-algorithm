@@ -1,8 +1,6 @@
 import { rearrangeTree } from '../rc/function_61.inc.js';
-
 export function ineqIdentity(tree) {
-    return Array.isArray(tree) ? rearrangeTree(tree, ['inequality'])
-        : tree
+    return rearrangeTree(tree, ['inequality']);
 }
 
 /*

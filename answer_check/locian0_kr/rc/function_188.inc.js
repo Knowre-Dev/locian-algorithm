@@ -3,15 +3,15 @@ export function rootToExp(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'nthroot': {
-            const [, ...operand] = tree;
             switch (operand[1][0]) {
                 case 'mulchain': { // 루트 안이 곱셈식일 경우
                     const [, operand_1] = operand;
                     return operand_1.map(term =>
-                        Array.isArray(term) ? [term[0], rootToExp(['nthroot', operand[0], term[1]])]
+                        Array.isArray(term)
+                            ? [term[0], rootToExp(['nthroot', operand[0], term[1]])]
                             : term);
                 }
                 case 'power': { // 루트 안이 거듭제곱일 경우
@@ -23,10 +23,9 @@ export function rootToExp(tree = null) {
             }
         }
         case 'squareroot': {
-            return rootToExp(['nthroot', ['natural', '2'], ...tree.slice(1)]);
+            return rootToExp(['nthroot', ['natural', '2'], ...operand]);
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => rootToExp(term))];
         }
     }

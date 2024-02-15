@@ -2,24 +2,21 @@ import { rearrangeTreeEq } from '../rc/function_60.inc.js';
 import { rearrangeTreeAdd } from '../rc/function_74.inc.js';
 
 export function rearrangeTree(tree, types = []) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-    if (tree.length === 0) {
+    if (!Array.isArray(tree) || tree.length === 0) {
         return tree;
     }
 
     const [operator, ...operand] = tree;
-    const newOperand = operand.map(term =>
-        Array.isArray(term) ? rearrangeTree(term, types)
-        : term);
+    const newOperand = operand.map(term => rearrangeTree(term, types));
     if (!types.includes(operator)) {
         return [operator, ...newOperand];
     }
     switch (operator) {
         case 'array':
-        case 'mulchain':
+        case 'cap':
+        case 'cup':
         case 'equation':
+        case 'mulchain':
         case 'neq': {
             return [operator, ...newOperand.sort(rearrangeTreeEq)];
         }
@@ -30,25 +27,27 @@ export function rearrangeTree(tree, types = []) {
             let rightNum = 0;
             const max = Math.floor(newOperand.length / 2);
             for (let i = 1; i <= max; i++) {
-                ['gt', 'ge'].includes(newOperand[2 * i - 1]) ? rightNum++
-                : rightNum--
+                ['gt', 'ge'].includes(newOperand[2 * i - 1])
+                    ? rightNum++
+                    : rightNum--
             }
             if (rightNum < 0) {
                 const newOperand_reverse = newOperand.reverse();
                 const temp = newOperand_reverse.map(term_reverse =>
-                    term_reverse === 'gt' ? 'lt'
-                    : term_reverse === 'ge' ? 'le'
-                    : term_reverse === 'lt' ? 'gt'
-                    : term_reverse === 'le' ? 'ge'
-                    : term_reverse);
+                    term_reverse === 'gt'
+                        ? 'lt'
+                        : term_reverse === 'ge'
+                            ? 'le'
+                            : term_reverse === 'lt'
+                                ? 'gt'
+                                : term_reverse === 'le'
+                                    ? 'ge'
+                                    : term_reverse);
                 return [operator, ...temp];
             }
-            return rightNum === 0 ? 'ERROR-ineq'
+            return rightNum === 0
+                ? 'ERROR-ineq'
                 : [operator, ...newOperand];
-        }
-        case 'cap':
-        case 'cup': {
-           return [operator, ...newOperand.sort(rearrangeTreeEq)];
         }
         default: {
             return [operator, ...newOperand];

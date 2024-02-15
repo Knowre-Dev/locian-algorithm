@@ -4,27 +4,23 @@ export function varReverse(tree, types = [null], parent = null) {
     }
 
     let [operator, ...operand] = tree;
+    if (!(operator === 'mulchain' && types.includes(parent))) {
+        return tree;
+    }
     operand = operand.map(term => varReverse(term, types, operator));
-    if (operator === 'mulchain' && types.includes(parent)) {
-        let vars = [];
-
-        for (const term of operand) {
-            const is_variable = (term[0] === 'mul' && term[1][0] === 'variable' && term.length === 2);
-            if (!is_variable) {
-                return [operator, ...operand];
-            }
-            vars = [...vars, term[1][1]];
+    let vars = [];
+    for (const term of operand) {
+        const is_variable = term[0] === 'mul' && term[1][0] === 'variable' && term.length === 2;
+        if (!is_variable) {
+            return [operator, ...operand];
         }
-
-        if (vars[0] > vars[vars.length - 1]) {
-            vars = vars.reverse();
-        }
-
-        const result = vars.map(vari => ['mul', ['variable', vari]]);
-        return [operator + '_fixed', ...result];
+        vars = [...vars, term[1][1]];
     }
 
-    return [operator, ...operand];
+    if (vars[0] > vars[vars.length - 1]) {
+        vars = vars.reverse();
+    }
+    return [operator + '_fixed', ...vars.map(vari => ['mul', ['variable', vari]])];
 }
 
 /*

@@ -1132,24 +1132,27 @@ export function compareMathTree(treeA, treeB) {
     if (!Array.isArray(treeA)) {
         return (JSON.stringify(treeA) === JSON.stringify(treeB));
     }
-
     if (treeA[0] === 'anything') {
         treeA = treeB;
     } else if (treeB[0] === 'anything') {
         treeB = treeA;
     }
-
+    if (treeA.length === 1) {
+        return true;
+    }
     if (treeA[0] === treeB[0] && treeA.length === treeB.length) {
         if (treeA[0] === 'eval') {
             let result = true;
             let num_nullResult = 0;
-            const treeA_entries = treeA.entries();
-            for (const [key, value] of treeA_entries) {
-                if (key === 0) {
-                    continue;
-                }
-                if (value === null && treeB[key] === null) {
+            const [, ...operandA] = treeA;
+            const [, ...operandB] = treeB;
+            const operandA_entries = operandA.entries();
+            for (const [key, value] of operandA_entries) {
+                if (value === null && operandB[key] === null) {
                     num_nullResult++;
+                    if (num_nullResult === 4) {
+                        return false;
+                    }
                     continue;
                 }
 
@@ -1160,10 +1163,10 @@ export function compareMathTree(treeA, treeB) {
                 let BImSci;
                 if (value[0] === 'equation') {
                     AReSci = (parseFloat(value[1][0]) - parseFloat(value[2][0])).toExponential(4);
-                    BReSci = (parseFloat(treeB[key][1][0]) - parseFloat(treeB[key][2][0])).toExponential(4);
+                    BReSci = (parseFloat(operandB[key][1][0]) - parseFloat(operandB[key][2][0])).toExponential(4);
 
                     AImSci = (parseFloat(value[1][1]) - parseFloat(value[2][1])).toExponential(4);
-                    BImSci = (parseFloat(treeB[key][1][1]) - parseFloat(treeB[key][2][1])).toExponential(4);
+                    BImSci = (parseFloat(operandB[key][1][1]) - parseFloat(operandB[key][2][1])).toExponential(4);
 
                     if (AReSci === -1 * BReSci && AImSci === -1 * BImSci) {
                         BReSci = AReSci;
@@ -1172,36 +1175,22 @@ export function compareMathTree(treeA, treeB) {
                 } else {
                     // 150818 larwein - 유효숫자 범위 줄임
                     AReSci = parseFloat(value[0]).toExponential(4);
-                    BReSci = parseFloat(treeB[key][0]).toExponential(4);
+                    BReSci = parseFloat(operandB[key][0]).toExponential(4);
 
                     AImSci = parseFloat(value[1]).toExponential(4);
-                    BImSci = parseFloat(treeB[key][1]).toExponential(4);
+                    BImSci = parseFloat(operandB[key][1]).toExponential(4);
                 }
                 if (AReSci !== BReSci || AImSci !== BImSci) {
                     result = false;
                 }
             }
-            if (num_nullResult === 4) {
-                result = false;
-            }
-
             return result;
         }
-        if (treeA.length === 1) {
-            return true;
-        }
-        [, ...treeA] = treeA;
-        [, ...treeB] = treeB;
-        const treeA_entries = treeA.entries();
-        for (const [key, value] of treeA_entries) {
-            if (!compareMathTree(value, treeB[key])) {
-                return false;
-            }
-        }
-    } else {
-        return false;
+        const [, ...operandA] = treeA;
+        const [, ...operandB] = treeB;
+        return operandA.every((value, key) => compareMathTree(value, operandB[key]));
     }
-    return true;
+    return false;
 }
 
 /*
@@ -1209,9 +1198,7 @@ function: compare two trees
 input: treeA - tree, treeB - tree
 ouput: true, false
 */
-/*
-1
-*/
+
 export function is_equal_tree(tree_1, tree_2) {
     const tree_11 = tree_1;
     const tree_21 = tree_2;

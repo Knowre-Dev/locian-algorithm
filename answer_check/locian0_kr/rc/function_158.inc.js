@@ -3,9 +3,8 @@ export function fracPlusMinus(tree) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     if (operator === 'fraction') {
-        const [, ...operand] = tree;
         let num = fracPlusMinus(operand[0]);
         let sign = 1;
         switch (num[0]) {
@@ -33,20 +32,25 @@ export function fracPlusMinus(tree) {
                 break;
             }
             case 'mp': {
-                sign = Math.abs(sign) === 1 ? -2 : sign * (-1);
+                sign = Math.abs(sign) === 1
+                    ? -2
+                    : sign * (-1);
                 [, den] = den;
                 break;
             }
             case 'pm': {
-                sign = Math.abs(sign) === 1 ? 2 : sign;
+                sign = Math.abs(sign) === 1
+                    ? 2
+                    : sign;
                 [, den] = den;
                 break;
             }
         }
-        return sign === -2 ? ['mp', [operator, num, den]]
-            : sign === 2 ? ['pm', [operator, num, den]]
-            : tree;
+        return sign === -2
+            ? ['mp', [operator, num, den]]
+            : sign === 2
+                ? ['pm', [operator, num, den]]
+                : tree;
     }
-    const [, ...operand] = tree;
     return [operator, ...operand.map(term => fracPlusMinus(term))];
 }

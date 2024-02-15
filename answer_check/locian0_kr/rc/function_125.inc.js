@@ -1,8 +1,56 @@
-import { EuclidAlg, fracSimpInt } from '../rc/function_76.inc.js';
+import { fracNegative } from '../rc/function_53.inc.js';
+import { fracSeparation } from '../rc/function_54.inc.js';
+import { fracSimpInt } from '../rc/function_76.inc.js';
 
 export function eqIneqMulProp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
+    }
+
+    function sub_div(tree, deno) {
+        const frac = ['fraction', tree, deno];
+        return fracSimpInt(fracSeparation(fracNegative(frac)));
+    }
+    function sub_getConstant(tree) {
+        if (!Array.isArray(tree)) {
+            return [];
+        }
+        const [operator] = tree;
+        switch (operator) {
+            case 'natural': {
+                const [, ...operand] = tree;
+                return operand[0] !== '0'
+                    ? [parseInt(operand[0])]
+                    : [];
+            }
+            case 'mulchain': {
+                const [, ...operand] = tree;
+                let con = operand.reduce((terms, term) => term[0] === 'mul'
+                    ? [...terms, ...sub_getConstant(term[1])]
+                    : terms,
+                []);
+                con = Array.from(new Set(con));
+                if (con.includes(1) && con.length !== 1) {
+                    con = con.filter(term_c => term_c !== 1);
+                }
+                return con;
+            }
+            case 'addchain': {
+                const [, ...operand] = tree;
+                return operand.reduce((a, b) => [...a, ...sub_getConstant(b[1])], []);
+            }
+            case 'negative': {
+                const [, ...operand] = tree;
+                return operand.reduce((a, b) => [...a, ...sub_getConstant(b)], []);
+            }
+            case 'power':
+            case 'variable': {
+                return [1];
+            }
+            default: {
+                return [];
+            }
+        }
     }
 
     const [operator] = tree;
@@ -28,7 +76,14 @@ export function eqIneqMulProp(tree = null) {
                 return tree;
             }
             if (con_length === 2) {
-                const div = EuclidAlg(con[0], con[1]);
+                let A = con[0];
+                let B = con[1];
+                while (B !== 0) {
+                    const temp = B;
+                    B = A % B;
+                    A = temp;
+                }
+                const div = A;
                 if (div === 1) {
                     return tree;
                 }
@@ -38,7 +93,15 @@ export function eqIneqMulProp(tree = null) {
             if (con_length > 2) {
                 let div = con[0];
                 const [, ...con_rest] = con;
-                div = con_rest.reduce((a, b) => EuclidAlg(a, b), div);
+                div = con_rest.reduce(function (A, B) {
+                        while (B !== 0) {
+                            const temp = B;
+                            B = A % B;
+                            A = temp;
+                        }
+                        return A;
+                    },
+                div);
                 if (div === 1) {
                     return tree;
                 }
@@ -77,7 +140,14 @@ export function eqIneqMulProp(tree = null) {
                 return tree;
             }
             if (con_length === 2) {
-                const div = EuclidAlg(con[0], con[1]);
+                let A = con[0];
+                let B = con[1];
+                while (B !== 0) {
+                    const temp = B;
+                    B = A % B;
+                    A = temp;
+                }
+                const div = A;
                 if (div === 1) {
                     return tree;
                 }
@@ -93,7 +163,15 @@ export function eqIneqMulProp(tree = null) {
             if (con_length > 2) {
                 let div = con[0];
                 const [, ...con_rest] = con
-                div = con_rest.reduce((a, b) => EuclidAlg(a, b), div);
+                div = con_rest.reduce(function (A, B) {
+                        while (B !== 0) {
+                            const temp = B;
+                            B = A % B;
+                            A = temp;
+                        }
+                        return A;
+                    },
+                div);
                 if (div === 1) {
                     return tree;
                 }
@@ -127,6 +205,7 @@ console.log(result1 === result2);
 console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
+/*
 export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return [];
@@ -135,13 +214,16 @@ export function sub_getConstant(tree) {
     switch (operator) {
         case 'natural': {
             const [, ...operand] = tree;
-            return operand[0] !== '0' ? [parseInt(operand[0])]
+            return operand[0] !== '0'
+                ? [parseInt(operand[0])]
                 : [];
         }
         case 'mulchain': {
             const [, ...operand] = tree;
-            let con = operand.reduce((terms, term) => term[0] === 'mul' ? [...terms, ...sub_getConstant(term[1])]
-                : terms, []);
+            let con = operand.reduce((terms, term) => term[0] === 'mul'
+                ? [...terms, ...sub_getConstant(term[1])]
+                : terms,
+            []);
             con = Array.from(new Set(con));
             if (con.includes(1) && con.length !== 1) {
                 con = con.filter(term_c => term_c !== 1);
@@ -165,6 +247,7 @@ export function sub_getConstant(tree) {
         }
     }
 }
+*/
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
 let latex_1 = '2+b+3a';
@@ -180,10 +263,9 @@ console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
 
-import { fracNegative } from '../rc/function_53.inc.js';
-import { fracSeparation } from '../rc/function_54.inc.js';
-
+/*
 export function sub_div(tree, deno) {
     const frac = ['fraction', tree, deno];
     return fracSimpInt(fracSeparation(fracNegative(frac)));
 }
+*/

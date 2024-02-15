@@ -18,7 +18,8 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             let newOperand = [['natural', '0']];
             const [, ...operand_operand] = operand;
             operand_operand.forEach(term => {
-                const temp = term[0] === 'addchain' ? term
+                const temp = term[0] === 'addchain'
+                    ? term
                     : ['addchain', ['add', term]];
                 newOperand = [...newOperand, [...temp, ['sub', operand[0]]]];
             })

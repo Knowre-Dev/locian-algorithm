@@ -2,15 +2,12 @@ export function powIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-
-    const [operator] = tree;
-    if (operator === 'power') {
-        const [, ...operand] = tree;
-        return JSON.stringify(operand[1]) === JSON.stringify(['natural', '1']) ? operand[0]
-            : tree;
-    }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => powIdentity(term))];
+    const [operator, ...operand] = tree;
+    return operator === 'power'
+        ? JSON.stringify(operand[1]) === JSON.stringify(['natural', '1'])
+            ? operand[0]
+            : tree
+        : [operator, ...operand.map(term => powIdentity(term))];
 }
 /*
 import {LatexToTree, compareMathTree} from '../checkmath.js';

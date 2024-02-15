@@ -4,7 +4,8 @@ export function nthrootToSquareroot(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    return (operator === 'nthroot' && JSON.stringify(operand[0]) === JSON.stringify([])) ? ['squareroot', operand[1]]
+    return operator === 'nthroot' && operand[0].length === 0
+        ? ['squareroot', operand[1]]
         : [operator, ...operand.map(term => nthrootToSquareroot(term))];
 }
 /*

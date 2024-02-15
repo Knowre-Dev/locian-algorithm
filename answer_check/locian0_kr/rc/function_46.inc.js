@@ -1,8 +1,6 @@
 import { rearrangeTree } from '../rc/function_61.inc.js';
-
 export function mulCommutative(tree) {
-    return Array.isArray(tree) ? rearrangeTree(tree, ['mulchain'])
-        : tree;
+    return rearrangeTree(tree, ['mulchain']);
 }
 
 /*

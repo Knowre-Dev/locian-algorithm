@@ -3,21 +3,17 @@ export function mulFracSeparation(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
 
-    if (operator === 'fraction') {
-        const [, ...operand] = tree;
-        if (operand[1][0] === 'mulchain') {
-            if (operand[0][0] === 'natural' && operand[0][1] === '1') {
-                // const [, operand_1] = operand;
-                const newOperand = operand[1].reduce((terms, term_1) => Array.isArray(term_1) ? [...terms, [term_1[0], ['fraction', operand[0], term_1[1]]]]
-                    : terms, []);
-                return ['mulchain', ...newOperand];
-            }
-            return tree;
-        }
-        return tree;
+    if (operator !== 'fraction') {
+        return [operator, ...operand.map(term => mulFracSeparation(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => mulFracSeparation(term))];
+    if (operand[1][0] === 'mulchain' && JSON.stringify(operand[0]) === JSON.stringify(['natural', '1'])) {
+        const newOperand = operand[1].reduce((terms, term_1) => Array.isArray(term_1)
+            ? [...terms, [term_1[0], ['fraction', operand[0], term_1[1]]]]
+            : terms,
+        []);
+        return ['mulchain', ...newOperand];
+    }
+    return tree;
 }

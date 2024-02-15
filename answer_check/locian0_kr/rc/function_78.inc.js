@@ -5,25 +5,25 @@ export function rdecToFrac(tree) {
         return tree;
     }
 
-    const operator = tree[0];
-    if (operator === 'rdecimal') {
-        const [, ...operand] = tree;
-        if (operand[1] === '') {
-            const [int, , rdec] = operand;
-            const num = int === '0' ? rdec
-                : int * Math.pow(10, rdec.length) + rdec - int;
-            const den = (9 * Math.pow(10, rdec.length - 1)).toString();
-            return fracSimp(['fraction', ['natural', num], ['natural', den]]);
-        }
-        const [int, dec, rdec] = operand;
-        const rdec_length = rdec.length;
-        const num = int === '0' ? dec * Math.pow(10, rdec_length) + rdec - dec
-            : (int + dec) * Math.pow(10, rdec_length) + rdec - (int + dec);
-        const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
+    const [operator, ...operand] = tree;
+    if (operator !== 'rdecimal') {
+        return [operator, ...operand.map(term => rdecToFrac(term))];
+    }
+    if (operand[1] === '') {
+        const [int, , rdec] = operand;
+        const num = int === '0'
+            ? rdec
+            : int * Math.pow(10, rdec.length) + rdec - int;
+        const den = (9 * Math.pow(10, rdec.length - 1)).toString();
         return fracSimp(['fraction', ['natural', num], ['natural', den]]);
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => rdecToFrac(term))];
+    const [int, dec, rdec] = operand;
+    const rdec_length = rdec.length;
+    const num = int === '0'
+        ? dec * Math.pow(10, rdec_length) + rdec - dec
+        : (int + dec) * Math.pow(10, rdec_length) + rdec - (int + dec);
+    const den = (9 * Math.pow(10, rdec_length + dec.length - 1)).toString();
+    return fracSimp(['fraction', ['natural', num], ['natural', den]]);
 }
 /*
 import {LatexToTree} from '../checkmath.js';

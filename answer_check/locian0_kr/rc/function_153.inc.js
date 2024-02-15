@@ -6,30 +6,28 @@ import { array2ChainTree, findDenominators, findGCF, multFactor } from '../rc/fu
 import { mulAssociative } from '../rc/function_157.inc.js';
 
 export function fracCombine(tree) {
-    if (!Array.isArray(tree) || tree.length < 1) {
+    if (!Array.isArray(tree) || tree.length === 0) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'addchain') {
-        let denomArr = findDenominators(tree, true);
-        if (denomArr.length === 0) {
-            return tree;
-        }
-        denomArr = denomArr.map(denom => ['mul', denom]);
-        let denom = array2ChainTree(denomArr);
-        const find = findGCF(denom);
-
-        if (JSON.stringify(find.sym) !== JSON.stringify([])) {
-            const denom_arr = [['mul', find.const], ...find.sym.map(value_1 => ['mul', value_1])];
-            denom = ['mulchain', ...denom_arr];
-        }
-        const [, ...operand] = tree;
-        const newOperand = operand.map(term => [term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
-        return ['fraction', array2ChainTree(newOperand), denom];
+    const [operator, ...operand] = tree;
+    if (operator !== 'addchain') {
+        return [operator, ...operand.map(term => fracCombine(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => fracCombine(term))];
+    let denomArr = findDenominators(tree, true);
+    if (denomArr.length === 0) {
+        return tree;
+    }
+    denomArr = denomArr.map(denom => ['mul', denom]);
+    let denom = array2ChainTree(denomArr);
+    const find = findGCF(denom);
+
+    if (find.sym.length !== 0) {
+        const denom_arr = [['mul', find.const], ...find.sym.map(value_1 => ['mul', value_1])];
+        denom = ['mulchain', ...denom_arr];
+    }
+    const newOperand = operand.map(term => [term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
+    return ['fraction', array2ChainTree(newOperand), denom];
 }
 
 /*

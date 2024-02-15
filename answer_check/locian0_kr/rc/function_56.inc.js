@@ -3,16 +3,15 @@ export function mulIdentity(tree) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'negative': {
-            const [, ...operand] = tree;
             const newOperand = [mulIdentity(operand[0])];
-            return newOperand[0][0] === 'negative' ? newOperand[0][1]
+            return newOperand[0][0] === 'negative'
+                ? newOperand[0][1]
                 : [operator, ...newOperand];
         }
         case 'mulchain': {
-            const [, ...operand] = tree;
             let newOperand = [];
             let sign = 1;
             const minus_one = JSON.stringify(['negative', ['natural', '1']]);
@@ -25,13 +24,15 @@ export function mulIdentity(tree) {
                     newOperand = [...newOperand, mulIdentity(term)];
                 }
             });
-            return newOperand.length === 1 ? sign === -1 ? ['negative', newOperand[0][1]]
+            return newOperand.length === 1
+                ? sign === -1
+                    ? ['negative', newOperand[0][1]]
                     : newOperand[0][1]
-                    : sign === -1 ? ['negative', [operator, ...newOperand]]
+                : sign === -1
+                    ? ['negative', [operator, ...newOperand]]
                     : [operator, ...newOperand];
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => mulIdentity(term))];
         }
     }

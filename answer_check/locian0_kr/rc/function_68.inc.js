@@ -3,23 +3,21 @@ export function powDecomposition(tree) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'power') {
-        const [, ...operand] = tree;
-        let newOperand = [];
-        const base = powDecomposition(operand[0]);
-        const expo = powDecomposition(operand[1]);
-        if (base[0] === 'addchain' && expo[0] === 'natural') {
-            const max = expo[1];
-            for (let i = 0; i < max; i++) {
-                newOperand = [...newOperand, ['mul', base]];
-            }
-            return ['mulchain', ...newOperand];
-        }
-        return [operator, base, expo];
+    const [operator, ...operand] = tree;
+    if (operator !== 'power') {
+        return [operator, ...operand.map(term => powDecomposition(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => powDecomposition(term))];
+    let newOperand = [];
+    const base = powDecomposition(operand[0]);
+    const expo = powDecomposition(operand[1]);
+    if (base[0] === 'addchain' && expo[0] === 'natural') {
+        const max = expo[1];
+        for (let i = 0; i < max; i++) {
+            newOperand = [...newOperand, ['mul', base]];
+        }
+        return ['mulchain', ...newOperand];
+    }
+    return [operator, base, expo];
 }
 
 /*

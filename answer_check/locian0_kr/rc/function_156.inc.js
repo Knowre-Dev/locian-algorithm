@@ -110,20 +110,23 @@ export function groupLikeVariableTerms(tree = null) {
                             coeff = coeff[1];
                         }
                     }
-                    newOperand = (JSON.stringify(coeff) === JSON.stringify(['natural', '1'])) ? [...newOperand, [addOp, variable]] // Omit coefficient of 1
+                    newOperand = (JSON.stringify(coeff) === JSON.stringify(['natural', '1']))
+                        ? [...newOperand, [addOp, variable]] // Omit coefficient of 1
                         : [...newOperand, [addOp, ['mulchain', ['mul', coeff], ['mul', variable]]]];
                 }
             });
             // Don't forget any constant term
             if (coeffArr.const.length > 0) {
                 const coeff = coeffArr.const;
-                newOperand = (coeff[0] === 'negative') ? [...newOperand, ['sub', coeff[1]]]
+                newOperand = (coeff[0] === 'negative')
+                    ? [...newOperand, ['sub', coeff[1]]]
                     : [...newOperand, ['add', coeff]];
             }
 
             // If there is only one operand, just output that operand
             // with an appropriate sign as applicable
-            return newOperand.length === 1 ? array2ChainTree(newOperand)
+            return newOperand.length === 1
+                ? array2ChainTree(newOperand)
                 : [operator, ...newOperand];
         }
         case 'mulchain': {
@@ -149,7 +152,8 @@ export function groupLikeVariableTerms(tree = null) {
                 const base_string = JSON.stringify(base);
                 for (const [key, value] of baseArr_entries) {
                     if (base_string === JSON.stringify(value)) {
-                        expoArr[key] = typeof expoArr[key] === 'undefined' ? [expo]
+                        expoArr[key] = typeof expoArr[key] === 'undefined'
+                            ? [expo]
                             : [...expoArr[key], expo];
                         continue loop_2;
                     }
@@ -179,11 +183,13 @@ export function groupLikeVariableTerms(tree = null) {
             // If there is only one operand, just output that operand
             // with inversion, as applicable
             if (newOperand.length === 1) {
-                return newOperand[0][0] === 'div' ? ['fraction', ['natural', '1'], newOperand[0][1]]
+                return newOperand[0][0] === 'div'
+                    ? ['fraction', ['natural', '1'], newOperand[0][1]]
                     : newOperand[0][1];
             }
             // Prepend 1 at the front if all terms are division terms
-            return newOperand.some(newOpd => newOpd[0] === 'mul') ? [operator, ...newOperand]
+            return newOperand.some(newOpd => newOpd[0] === 'mul')
+                ? [operator, ...newOperand]
                 : [operator, ['mul', ['natural', '1'], ...newOperand]];
         }
         default: {

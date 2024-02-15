@@ -2,17 +2,13 @@ import { fracSimpVar } from '../rc/function_77.inc.js';
 import { sub_deter, sub_mulCommutative } from '../rc/function_126.inc.js';
 
 export function addFactoredFormVar(tree = null) {
-    if (!Array.isArray(tree)) {
+    if (!Array.isArray(tree) || !sub_deter(tree)) {
         return tree;
     }
 
-    if (!sub_deter(tree)) {
-        return tree;
-    }
-    let [operator] = tree;
+    let [operator, ...operand] = tree;
     switch (operator) {
         case 'addchain': {
-            const [, ...operand] = tree;
             let vars = [];
             operand.forEach(term => {
                 if (term[1][0] === 'power') {
@@ -65,10 +61,14 @@ export function addFactoredFormVar(tree = null) {
                     vari = [vari];
                 }
                 unique.forEach(term_unique => {
-                    const key1 = first.reduce((keys, term_1, key_1) => term_1 === term_unique ? [...keys, key_1]
-                        : keys, []);
-                    const key2 = vari.reduce((keys, term_2, key_2) => term_2 === term_unique ? [...keys, key_2]
-                        : keys, []);
+                    const key1 = first.reduce((keys, term_1, key_1) => term_1 === term_unique
+                        ? [...keys, key_1]
+                        : keys,
+                    []);
+                    const key2 = vari.reduce((keys, term_2, key_2) => term_2 === term_unique
+                        ? [...keys, key_2]
+                        : keys,
+                    []);
                     const key1_length = key1.length;
                     const key2_length = key2.length;
                     if (key2_length === 0) {
@@ -102,9 +102,12 @@ export function addFactoredFormVar(tree = null) {
                     operator = 'mulchain';
                     let div = [];
                     unique.forEach(term_unique => {
-                        const find_keys = first.reduce((keys, term_1, key_1) => term_1 === term_unique ? [...keys, key_1]
-                            : keys, []);
-                        div = find_keys.length > 1 ? [...div, ['power', ['variable', term_unique], ['natural', find_keys.length.toString()]]]
+                        const find_keys = first.reduce((keys, term_1, key_1) => term_1 === term_unique
+                            ? [...keys, key_1]
+                            : keys,
+                        []);
+                        div = find_keys.length > 1
+                            ? [...div, ['power', ['variable', term_unique], ['natural', find_keys.length.toString()]]]
                             : [...div, ['variable', term_unique]];
                     });
                     const div_1 = operand.map(term => [term[0], div.reduce((a, b) => fracSimpVar(['fraction', a, b]), term[1])]);
@@ -115,13 +118,12 @@ export function addFactoredFormVar(tree = null) {
             }
         }
         case 'mulchain': {
-            const [, ...operand] = tree;
-            const newOperand = operand.map(term => term[1][0] === 'addchain' ? addFactoredFormVar(term)
+            const newOperand = operand.map(term => term[1][0] === 'addchain'
+                ? addFactoredFormVar(term)
                 : term);
             return sub_mulCommutative([operator, ...newOperand]);
         }
         default: {
-            const [, ...operand] = tree;
             return sub_mulCommutative([operator, ...operand.map(term => addFactoredFormVar(term))]);
         }
     }

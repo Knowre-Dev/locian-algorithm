@@ -3,10 +3,9 @@ export function solParenthesis(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'mulchain': {
-            const [, ...operand] = tree;
             let mul = true;
             let addchain = [];
             let mono = [];
@@ -17,16 +16,12 @@ export function solParenthesis(tree = null) {
                             addchain = [...addchain, term[1]];
                             break;
                         }
-                        case 'mulchain': {
-                            const expand = solParenthesis(term[1]);
-                            expand[0] === 'addchain' ? addchain = [...addchain, expand]
-                            : mono = [...mono, term];
-                            break;
-                        }
+                        case 'mulchain':
                         case 'power': {
                             const expand = solParenthesis(term[1]);
-                            expand[0] === 'addchain' ? addchain = [...addchain, expand]
-                            : mono = [...mono, term];
+                            expand[0] === 'addchain'
+                                ? addchain = [...addchain, expand]
+                                : mono = [...mono, term];
                             break;
                         }
                         default: {
@@ -38,7 +33,7 @@ export function solParenthesis(tree = null) {
                 }
             });
             if (mul === false) {
-                return [operator, ...operand]
+                return tree;
             }
             const addchain_length = addchain.length;
             switch (addchain_length) {
@@ -64,7 +59,8 @@ export function solParenthesis(tree = null) {
                             const term_a_1_0 = JSON.stringify(term_a_1[0]);
                             first.forEach(term_f => {
                                 if (Array.isArray(term_f) && Array.isArray(term_a_1)) {
-                                    const flag1 = JSON.stringify(term_f[0]) === term_a_1_0 ? 'add'
+                                    const flag1 = JSON.stringify(term_f[0]) === term_a_1_0
+                                        ? 'add'
                                         : 'sub';
                                     const merge = ['mulchain', ['mul', term_f[term_f.length - 1]], ['mul', term_a_1[term_a_1.length - 1]]];
                                     term = [...term, [flag1, merge]];
@@ -78,7 +74,6 @@ export function solParenthesis(tree = null) {
             }
         }
         case 'power': {
-            const [, ...operand] = tree;
             if (operand[0][0] === 'addchain' && operand[1][0] === 'natural') {
                 const max = operand[1][1];
                 let arr = [];
@@ -87,10 +82,9 @@ export function solParenthesis(tree = null) {
                 }
                 return solParenthesis(['mulchain', ...arr]);
             }
-            return [operator, ...operand];
+            return tree;
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => solParenthesis(term))];
         }
     }

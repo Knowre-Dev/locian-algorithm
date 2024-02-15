@@ -3,10 +3,9 @@ export function posiSign(tree) {
         return tree;
     }
     const [operator, ...operand] = tree;
-    if (operator === 'positive') {
-       return operand[0];
-    }
-    return [operator, ...operand.map(term => posiSign(term))];
+    return operator === 'positive'
+        ? operand[0]
+        : [operator, ...operand.map(term => posiSign(term))];
 }
 
 /*

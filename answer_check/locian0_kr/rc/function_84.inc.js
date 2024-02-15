@@ -3,30 +3,31 @@ export function intervalSetNot(tree, vari = ['anything', 'x']) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'interval': {
-            const [, ...operand] = tree;
             const newOperand = [
                 operand[2],
-                operand[3] === ')' ? 'gt' : 'ge',
+                operand[3] === ')'
+                    ? 'gt'
+                    : 'ge',
                 vari,
-                operand[0] === '(' ? 'gt' : 'ge',
+                operand[0] === '('
+                    ? 'gt'
+                    : 'ge',
                 operand[1]
             ];
             return ['inequality', ...newOperand];
         }
         case 'tuple': {
-            const [, ...operand] = tree;
             return ['inequality', operand[1], 'gt', vari, 'gt', operand[0]];
         }
         case 'setname': {
-            const [, ...operand] = tree;
-            return operand[0] === 'real' ? ['inequality', ['infinity'], 'gt', vari, 'gt', ['negative', ['infinity']]]
+            return operand[0] === 'real'
+                ? ['inequality', ['infinity'], 'gt', vari, 'gt', ['negative', ['infinity']]]
                 : [operator, ...[]];
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => intervalSetNot(term))];
         }
     }

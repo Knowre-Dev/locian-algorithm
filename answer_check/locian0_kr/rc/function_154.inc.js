@@ -22,10 +22,7 @@ import { mulAssociative } from '../rc/function_157.inc.js';
 import { divFrac } from '../rc/function_161.inc.js';
 
 export function exprSimpConst(tree = null) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-    if (tree.length === 0) {
+    if (!Array.isArray(tree) || tree.length === 0) {
         return tree;
     }
 
@@ -51,10 +48,10 @@ export function exprSimpConst(tree = null) {
         case 'negative': { // fin
             // Possible output type: ANYTHING
             const subresult = exprSimpConst(tree[1]);
-            if (subresult[0] === 'negative') {
-                return subresult[1];
-            }
-            return [operator, subresult];
+
+            return subresult[0] === 'negative'
+                ? subresult[1]
+                : [operator, subresult];
         }
         case 'absolute': { // fin
             // Possible output types:
@@ -64,13 +61,15 @@ export function exprSimpConst(tree = null) {
             if (subresult[0] === 'negative') {
                 [, subresult] = subresult;
             }
-            return isNumeric(subresult, true) ? subresult
+            return isNumeric(subresult, true)
+                ? subresult
                 : [operator, subresult];
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
             const [, ...operand] = tree;
-            if (operand[0][0] === 'power' && operand[1][0] === 'power' && operand[0][2] === operand[1][2]) {
+            const is_power = operand[0][0] === 'power' && operand[1][0] === 'power' && operand[0][2] === operand[1][2];
+            if (is_power) {
                 const newtree = ['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]
                 ];
                 return exprSimpConst(newtree);
@@ -106,7 +105,8 @@ export function exprSimpConst(tree = null) {
                 let subtree = exprSimpConst(term[1]);
                 if (subtree[0] === 'negative') {
                     [, subtree] = subtree;
-                    op = op === 'add' ? 'sub'
+                    op = op === 'add'
+                        ? 'sub'
                         : 'add';
                 }
                 termArr = [...termArr, [op, subtree]];
@@ -128,7 +128,9 @@ export function exprSimpConst(tree = null) {
                 termArr = [...termArr, [term[0], subtree]];
             });
             const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(termArr, true))));
-            return sign === -1 ? ['negative', newtree] : newtree;
+            return sign === -1
+                ? ['negative', newtree]
+                : newtree;
         }
         case 'power': {
             // Possible output types:

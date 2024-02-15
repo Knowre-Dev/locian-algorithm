@@ -8,11 +8,15 @@ export function rearrangeTreeAdd(A, B) {
         return -1;
     }
     if (!Array.isArray(A) && !Array.isArray(B)) {
-        return typeof A > typeof B ? 1
-            : typeof A < typeof B ? -1
-            : A > B ? 1
-            : A < B ? -1
-            : 0
+        return typeof A > typeof B
+            ? 1
+            : typeof A < typeof B
+                ? -1
+                : A > B
+                    ? 1
+                    : A < B
+                        ? -1
+                        : 0
     }
     const [operatorA, ...operandA] = A;
     const [operatorB, ...operandB] = B;

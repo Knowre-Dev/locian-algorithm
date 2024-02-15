@@ -3,25 +3,21 @@ export function eqMulProp(tree) {
         return tree;
     }
 
-    const operator = tree[0];
-    if (operator === 'equation') {
-        const [, ...operand] = tree;
-        return operand[0][0] === 'fraction' ? [operator, [operand[0][1][0]]]
-            : (operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction') ? [operator, []]
-            : [operator, ...operand];
-    }
-    return tree;
+    const [operator, ...operand] = tree;
+    return operator === 'equation'
+        ? operand[0][0] === 'fraction'
+            ? [operator, [operand[0][1][0]]]
+            : operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction'
+                ? [operator, []]
+                : [operator, ...operand]
+        : tree;
 }
 
 import { array2ChainTree, findGCF, multFactor } from '../rc/function_152.inc.js';
 import { mulNegative } from '../rc/function_160.inc.js';
 
 export function eqMulPropUS(tree) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-
-    if (!['equation', 'inequality'].includes(tree[0])) {
+    if (!Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0])) {
         return tree;
     }
 
@@ -40,8 +36,9 @@ export function eqMulPropUS(tree) {
     let newtree = [tree[0]];
     const [, ...operand] = tree;
     // this block executes for inequality signs (e.g., 'le', 'ge')
-    newtree = [...newtree, ...operand.map(term => Array.isArray(term) ? multFactor(term, ['div', factor], true)
-                : term)];
+    newtree = [...newtree, ...operand.map(term => Array.isArray(term)
+            ? multFactor(term, ['div', factor], true)
+            : term)];
     return mulNegative(newtree);
 
     // NOTE: This function does not support division by negative common factor

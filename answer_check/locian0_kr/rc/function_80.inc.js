@@ -2,15 +2,14 @@ export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const [operator] = tree;
-    if (operator === 'addchain') {
-        const [, ...operand] = tree;
-        const newOperand = operand.map(term => (term[0] === 'sub' && checkZeroEquiv(term[1])) ? ['add', term[1]]
-            : term);
-        return [operator, ...newOperand];
+    const [operator, ...operand] = tree;
+    if (operator !== 'addchain') {
+        return [operator, ...operand.map(term => addPolyZero(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => addPolyZero(term))];
+    const newOperand = operand.map(term => term[0] === 'sub' && checkZeroEquiv(term[1])
+        ? ['add', term[1]]
+        : term);
+    return [operator, ...newOperand];
 }
 
 export function checkZeroEquiv(tree) {

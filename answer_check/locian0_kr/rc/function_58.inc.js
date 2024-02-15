@@ -3,12 +3,10 @@ export function fracIdentity(tree) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'fraction') {
-        const [, ...operand] = tree;
-        return JSON.stringify(operand[1]) === JSON.stringify(['natural', '1']) ? operand[0]
-            : tree;
-    }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => fracIdentity(term))];
+    const [operator, ...operand] = tree;
+    return operator === 'fraction'
+        ? JSON.stringify(operand[1]) === JSON.stringify(['natural', '1'])
+            ? operand[0]
+            : tree
+        : [operator, ...operand.map(term => fracIdentity(term))];
 }

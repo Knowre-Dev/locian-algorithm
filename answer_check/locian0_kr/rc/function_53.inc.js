@@ -5,16 +5,15 @@ export function fracNegative(tree) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'negative': {
-            const [, ...operand] = tree;
             const term = fracNegative(operand[0]);
-            return term[0] === 'negative' ? term[1]
+            return term[0] === 'negative'
+                ? term[1]
                 : [operator, term];
         }
         case 'fraction': {
-            const [, ...operand] = tree;
             let sign = 1;
             let num = fracNegative(operand[0]);
             let den = fracNegative(operand[1]);
@@ -34,19 +33,22 @@ export function fracNegative(tree) {
                 sign *= -1;
                 den = addNegative(['negative', den]);
             }
-            return sign === -1 ? ['negative', [operator, num, den]]
+            return sign === -1
+                ? ['negative', [operator, num, den]]
                 : [operator, num, den];
         }
         case 'addchain': {
-            const [, ...operand] = tree;
             let newOperand = [];
             operand.forEach(term => {
                 if (term[1][0] === 'fraction') {
                     const nterm = fracNegative(term[1]);
-                    newOperand = nterm[0] === 'negative' ? term[0] === 'add' ? [...newOperand, ['sub', nterm[1]]]
-                        : term[0] === 'sub' ? [...newOperand, ['add', nterm[1]]]
-                        : [...newOperand, [term[0], nterm[1]]]
-                    : [...newOperand, [term[0], nterm]];
+                    newOperand = nterm[0] === 'negative'
+                        ? term[0] === 'add'
+                            ? [...newOperand, ['sub', nterm[1]]]
+                            : term[0] === 'sub'
+                                ? [...newOperand, ['add', nterm[1]]]
+                                : [...newOperand, [term[0], nterm[1]]]
+                        : [...newOperand, [term[0], nterm]];
                 } else {
                     newOperand = [...newOperand, term];
                 }
@@ -54,7 +56,6 @@ export function fracNegative(tree) {
             return [operator, ...newOperand];
         }
         case 'mulchain': {
-            const [, ...operand] = tree;
             let newOperand = [];
             let sign = 1;
             operand.forEach(term => {
@@ -66,11 +67,11 @@ export function fracNegative(tree) {
                     newOperand = [...newOperand, [term[0], nterm]];
                 }
             });
-            return sign === -1 ? ['negative', [operator, ...newOperand]]
+            return sign === -1
+                ? ['negative', [operator, ...newOperand]]
                 : [operator, ...newOperand];
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => fracNegative(term))];
         }
     }

@@ -7,21 +7,19 @@ export function powAddFactoredForm(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'power') {
-        const [, ...operand] = tree;
-        const base = sub_mulCommutative(addCommutative(operand[0]));
-        const [, expo] = operand;
-        if (base[0] === 'addchain' && expo[0] === 'natural') {
-            let fact = addFactor(base);
-            if (fact[0] === 'mulchain') {
-                [, ...fact] = fact;
-                return ['mulchain', ...fact.map(term => [term[0], ['power', term[1], expo]])];
-            }
-            return [operator, base, expo];
-        }
-        return [operator, base, expo];
+    const [operator, ...operand] = tree;
+    if (operator !== 'power') {
+        return [operator, ...operand.map(term => powAddFactoredForm(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => powAddFactoredForm(term))];
+    const base = sub_mulCommutative(addCommutative(operand[0]));
+    const [, expo] = operand;
+    const condition = base[0] === 'addchain' && expo[0] === 'natural';
+    if (!condition) {
+        return [operator, base, expo];
+     }
+    const [operator_1, ...operand_1] = addFactor(base);
+    if (operator_1 === 'mulchain') {
+        return ['mulchain', ...operand_1.map(term => [term[0], ['power', term[1], expo]])];
+    }
+    return [operator, base, expo];
 }

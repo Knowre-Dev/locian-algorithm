@@ -3,30 +3,33 @@ export function mulConstCal(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'mulchain') {
-        const [, ...operand] = tree;
-        let nterm = [];
-        let varterm = [];
-        operand.forEach(term => {
-            term[1][0] === 'power' ? (term[1][1][0] === 'natural' && term[1][2][0] === 'natural') ? nterm = [...nterm, [term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]]]
+    const [operator, ...operand] = tree;
+    if (operator !== 'mulchain') {
+        return [operator, ...operand.map(term => mulConstCal(term))];
+    }
+    let nterm = [];
+    let varterm = [];
+    operand.forEach(term => {
+        term[1][0] === 'power'
+            ? term[1][1][0] === 'natural' && term[1][2][0] === 'natural'
+                ? nterm = [...nterm, [term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]]]
                 : varterm = [...varterm, term]
-                : term[1][0] === 'natural' ? nterm = [...nterm, term]
+            : term[1][0] === 'natural'
+                ? nterm = [...nterm, term]
                 : varterm = [...varterm, term];
-        });
-        if (nterm.length !== 0) {
-            const [first] = nterm;
-            [, ...nterm] = nterm;
-            let [, [, value]] = first;
-            nterm.forEach(nt => {
-                nt[0] === 'mul' ? value *= nt[1][1]
-                : value /= nt[1][1];
-            });
-            return varterm.length === 0 ? ['natural', value.toString()]
-                : [operator, ['mul', ['natural', value.toString()]], ...varterm];
-        }
+    });
+    if (nterm.length === 0) {
         return tree;
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => mulConstCal(term))];
+    const [first] = nterm;
+    [, ...nterm] = nterm;
+    let [, [, value]] = first;
+    nterm.forEach(nt => {
+        nt[0] === 'mul'
+            ? value *= nt[1][1]
+            : value /= nt[1][1];
+    });
+    return varterm.length === 0
+        ? ['natural', value.toString()]
+        : [operator, ['mul', ['natural', value.toString()]], ...varterm];
 }

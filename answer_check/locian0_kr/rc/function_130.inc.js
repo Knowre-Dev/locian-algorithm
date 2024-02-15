@@ -7,16 +7,14 @@ export function sub_addFactorNegative(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'addchain': {
-            const [, ...operand] = tree;
             const newOperand = operand.map(term => addFactorNegative(addCommutative(term)));
             return addFactorNegative(addAdjacentSigns([operator, ...newOperand]));
         }
         case 'equation':
         case 'inequality': {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => sub_addFactorNegative(term))];
         }
         default: {

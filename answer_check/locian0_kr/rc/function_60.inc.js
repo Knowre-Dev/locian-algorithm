@@ -6,15 +6,23 @@ export function rearrangeTreeEq(A, B) {
         return -1;
     }
     if (!Array.isArray(A) && !Array.isArray(B)) {
-        return typeof A > typeof B ? 1
-            : typeof A < typeof B ? -1
-            : A > B ? 1
-            : A < B ? -1
-            : 0;
+        return typeof A > typeof B
+            ? 1
+            : typeof A < typeof B
+                ? -1
+                : A > B
+                    ? 1
+                    : A < B
+                        ? -1
+                        : 0;
     }
 
-    const [operatorA, ...operandA] = A[0] === 'negative' ? A[1] : A;
-    const [operatorB, ...operandB] = B[0] === 'negative' ? B[1] : B;
+    const [operatorA, ...operandA] = A[0] === 'negative'
+        ? A[1]
+        : A;
+    const [operatorB, ...operandB] = B[0] === 'negative'
+        ? B[1]
+        : B;
 
     const place = [0, 0];
     const operators = [operatorA, operatorB];

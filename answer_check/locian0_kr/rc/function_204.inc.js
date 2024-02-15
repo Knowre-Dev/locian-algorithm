@@ -4,20 +4,18 @@ export function addNegaToSub(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const [operator] = tree;
-    if (operator === 'addchain') {
-        const [, ...operand] = tree;
-        let newOperand = [];
-
-        const [operator_operand] = operand;
-        newOperand = (operator_operand[0] === 'add' && operator_operand[1][0] === 'negative') ? [...newOperand, ['sub', operator_operand[1][1]]]
-            : (operator_operand[0] === 'add' && operator_operand[1][0] === 'positive') ? [...newOperand, ['add', operator_operand[1][1]]]
-            : [...newOperand, operator_operand]
-        newOperand = [...newOperand, ...operand.slice(1)];
-        return [operator, ...newOperand];
+    const [operator, ...operand] = tree;
+    if (operator !== 'addchain') {
+        return [operator, ...operand.map(term => addNegative(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => addNegative(term))];
+    let newOperand = [];
+    const [operator_1, ...operand_1] = operand;
+    newOperand = operator_1[0] === 'add' && operator_1[1][0] === 'negative'
+        ? [...newOperand, ['sub', operator_1[1][1]]]
+        : (operator_1[0] === 'add' && operator_1[1][0] === 'positive')
+            ? [...newOperand, ['add', operator_1[1][1]]]
+            : [...newOperand, operator_1];
+    return [operator, ...newOperand, ...operand_1];
 }
 
 /*

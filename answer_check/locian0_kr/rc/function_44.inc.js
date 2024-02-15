@@ -10,7 +10,8 @@ export function 곱셈결합법칙(tree) {
         const term_1 = 곱셈결합법칙(term);
         // a(b(cd))-> a(bcd) -> abcd
         const is_mulchain = operator === 'mulchain' && term_1[0] === 'mul' && term_1[1][0] === 'mulchain';
-        newOperand = is_mulchain ? [...newOperand, ...term_1[1].slice(1)]
+        newOperand = is_mulchain
+            ? [...newOperand, ...term_1[1].slice(1)]
             : [...newOperand, term_1];
     });
     return [operator, ...newOperand];

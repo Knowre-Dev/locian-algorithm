@@ -5,37 +5,26 @@ export function sub_mulCommutative(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
-    if (operator === 'mulchain') {
-        const [, ...operand] = tree;
-        const array = operand.flat(Infinity);
-        if (!array.includes('natural') && !array.includes('decimal')) { // 문자만 있는 경우
-            return [operator, ...mulCommutative(tree).slice(1)];
-        }
-        // 숫자가 있는 경우
-        if (!array.includes('variable')) { // 숫자만 있는 경우
-            return [operator, ...mulCommutative(tree).slice(1)];
-        }
-        // 숫자, 문자 섞여있는 경우
-        if (!array.includes('addchain')) { // 단항식
-            return !sub_deter(tree) ? tree
-                : [operator, ...mulCommutative(tree).slice(1)];
-        }
-        if (sub_deter(tree) === true) {
-            for (const term of operand) {
-                if (term[1][0] === 'addchain') {
-                    if (term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1])) {
-                        return tree;
-                    }
-                }
-            }
-            return [operator, ...mulCommutative(tree).slice(1)];
-        }
-        return tree;
+    const [operator, ...operand] = tree;
+    if (operator !== 'mulchain') {
+        return [operator, ...operand.map(term => sub_mulCommutative(term))];
     }
-    const [, ...operand] = tree;
-    return [operator, ...operand.map(term => sub_mulCommutative(term))];
+    const array = operand.flat(Infinity);
+    return !array.includes('natural') && !array.includes('decimal')
+        ? [operator, ...mulCommutative(tree).slice(1)] // 문자만 있는 경우
+        : !array.includes('variable') // 숫자만 있는 경우
+            ? [operator, ...mulCommutative(tree).slice(1)]
+            : !array.includes('addchain') // 숫자, 문자 섞여있는 경우
+                ? sub_deter(tree) // 단항식
+                    ? [operator, ...mulCommutative(tree).slice(1)]
+                    : tree
+                : sub_deter(tree)
+                    ? operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1]))
+                        ? tree
+                        : [operator, ...mulCommutative(tree).slice(1)]
+                    : tree;
 }
+
 /*
 deleted function
 export function sort_array(array) {

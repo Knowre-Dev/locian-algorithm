@@ -4,11 +4,11 @@ export function fracMfrac(tree) {
     }
 
     const [operator, ...operand] = tree;
-    if (operator === 'mfraction' && operand[1][1] < operand[2][1]) {
-        const num = ['natural', (parseInt(operand[0][1]) * parseInt(operand[2][1]) + parseInt(operand[1][1])).toString()];
-        return ['fraction', num, operand[2]];
+    if (!(operator === 'mfraction' && operand[1][1] < operand[2][1])) {
+        return [operator, ...operand.map(term => fracMfrac(term))];
     }
-    return [operator, ...operand.map(term => fracMfrac(term))];
+    const num = ['natural', (parseInt(operand[0][1]) * parseInt(operand[2][1]) + parseInt(operand[1][1])).toString()];
+    return ['fraction', num, operand[2]];
 }
 
 /*
