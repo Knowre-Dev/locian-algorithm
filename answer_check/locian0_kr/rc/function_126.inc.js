@@ -10,19 +10,10 @@ export function sub_mulCommutative(tree = null) {
         return [operator, ...operand.map(term => sub_mulCommutative(term))];
     }
     const array = operand.flat(Infinity);
-    return !array.includes('natural') && !array.includes('decimal')
-        ? [operator, ...mulCommutative(tree).slice(1)] // 문자만 있는 경우
-        : !array.includes('variable') // 숫자만 있는 경우
-            ? [operator, ...mulCommutative(tree).slice(1)]
-            : !array.includes('addchain') // 숫자, 문자 섞여있는 경우
-                ? sub_deter(tree) // 단항식
-                    ? [operator, ...mulCommutative(tree).slice(1)]
-                    : tree
-                : sub_deter(tree)
-                    ? operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1]))
-                        ? tree
-                        : [operator, ...mulCommutative(tree).slice(1)]
-                    : tree;
+    const condition = array.some(value => ['natural', 'decimal'].includes(value)) && array.includes('variable') && (!sub_deter(tree) || operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1])));
+    return condition
+        ? tree
+        : [operator, ...mulCommutative(tree).slice(1)]
 }
 
 /*

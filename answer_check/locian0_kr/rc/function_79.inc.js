@@ -3,17 +3,12 @@ export function decElimZero(tree) {
         return tree;
     }
 
-    let [operator, ...operand] = tree;
+    const [operator, ...operand] = tree;
     if (operator !== 'decimal') {
         return [operator, ...operand.map(term => decElimZero(term))];
     }
-    const decArr = operand[0].split('');
-    while (decArr[decArr.length - 1] === '0') {
-        decArr.splice(-1);
-    }
-    if (decArr[decArr.length - 1] === '.') {
-        operator = 'natural';
-        decArr.splice(-1);
-    }
-    return [operator, decArr.join('')];
+    const number = operand[0].replace(/0+$/, '');
+    return number.charAt(number.length - 1) === '.'
+        ? ['natural', number.replace(/.$/, '')]
+        : [operator, number];
 }

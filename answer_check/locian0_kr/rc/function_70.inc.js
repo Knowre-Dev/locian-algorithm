@@ -1,5 +1,4 @@
-//
-import { addNegative } from '../rc/function_71.inc.js';
+// import { addNegative } from '../rc/function_71.inc.js';
 import { addFactor_1 } from '../rc/function_128.inc.js';
 
 export function addFactoredForm(tree) {
@@ -22,28 +21,31 @@ export function addFactoredForm(tree) {
             let factArr = [];
             let consArr = [];
             operand.forEach((term, key) => {
-                if (term[0] === 'mul') {
-                    if (term[1][0] === 'addchain') {
-                        const fact = addFactor_1(term[1]);
-                        let addchain = [];
-                        const [fact_0] = fact;
-                        if (fact_0 === 'mulchain') {
-                            consArr = [...consArr, fact[1]];
-                            addchain = fact[2][1];
-                        } else if (fact_0 === 'addchain') {
-                            addchain = fact;
-                        }
-                        if (addchain[1][0] === 'sub') {
-                            addchain = addNegative(['negative', addchain]);
-                            sign *= -1;
-                        }
-                        factArr = [...factArr, ['mul', addchain]];
-                        add = true;
-                    } else if (term[1][0] === 'natural' && key === 0) {
-                        consArr = [...consArr, term];
-                    } else {
-                        termArr = [...termArr, term];
+                if (term[0] === 'mul' && term[1][0] === 'addchain') {
+                    const fact = addFactor_1(term[1]);
+                    let addchain;
+                    const [operator_1] = fact;
+                    if (operator_1 === 'mulchain') {
+                        consArr = [...consArr, fact[1]];
+                        [, , [, addchain]] = fact;
+                    } else if (operator_1 === 'addchain') {
+                        addchain = fact;
                     }
+                    if (addchain[1][0] === 'sub') {
+                        const ops = new Map([
+                            ['add', 'sub'],
+                            ['sub', 'add']
+                        ]);
+                        addchain = addchain.map(term => ops.get(term[0])
+                            ? [ops.get(term[0]), term[1]]
+                            : term);
+                        // addchain = addNegative(['negative', addchain]);
+                        sign *= -1;
+                    }
+                    factArr = [...factArr, ['mul', addchain]];
+                    add = true;
+                } else if (term[0] === 'mul' && term[1][0] === 'natural' && key === 0) {
+                    consArr = [...consArr, term];
                 } else {
                     termArr = [...termArr, term];
                 }
@@ -62,16 +64,22 @@ export function addFactoredForm(tree) {
                 : [operator, ...newOperand];
         }
         case 'addchain': {
-            const fact = addFactor_1(['addchain', ...operand]);
+            const fact = addFactor_1(tree);
             let con = [];
             let addchain = fact;
             let sign = 1;
             if (fact[0] === 'mulchain') {
-                con = fact[1];
-                addchain = fact[2][1];
+                [, con, [, addchain]] = fact;
             }
             if (addchain[1][0] === 'sub') {
-                addchain = addNegative(['negative', addchain]);
+                const ops = new Map([
+                    ['add', 'sub'],
+                    ['sub', 'add']
+                ]);
+                addchain = addchain.map(term => ops.get(term[0])
+                    ? [ops.get(term[0]), term[1]]
+                    : term);
+                // addchain = addNegative(['negative', addchain]);
                 sign *= -1;
             }
             return fact[0] === 'mulchain'

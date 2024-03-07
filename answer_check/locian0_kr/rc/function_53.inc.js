@@ -28,7 +28,7 @@ export function fracNegative(tree) {
 
             if (den[0] === 'negative') {
                 sign *= -1;
-                den = den[1];
+                [, den] = den;
             } else if (den[0] === 'addchain' && den[1][0] === 'sub') {
                 sign *= -1;
                 den = addNegative(['negative', den]);

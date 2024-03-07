@@ -22,13 +22,13 @@ export function varReverseShift(tree, types = [null], parent = null) {
     vars_1.sort();
     let k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
     const vars_length = vars.length;
-    const condition_1 = (typeof vars[k - 1] !== 'undefined'
+    const term_1 = typeof vars[k - 1] !== 'undefined'
         ? vars[k - 1]
-        : vars[vars_length - 1]) <
-    (typeof vars[k + 1] !== 'undefined'
+        : vars[vars_length - 1];
+    const term_2 = typeof vars[k + 1] !== 'undefined'
         ? vars[k + 1]
-        : vars[0]);
-    if (condition_1) {
+        : vars[0]
+    if (term_1 < term_2) {
         k = vars_length - 1 - k;
         vars = vars.reverse();
     }

@@ -7,184 +7,80 @@ export function eqIneqMulProp(tree = null) {
         return tree;
     }
 
-    function sub_div(tree, deno) {
-        const frac = ['fraction', tree, deno];
-        return fracSimpInt(fracSeparation(fracNegative(frac)));
-    }
-    function sub_getConstant(tree) {
-        if (!Array.isArray(tree)) {
-            return [];
-        }
-        const [operator] = tree;
-        switch (operator) {
-            case 'natural': {
-                const [, ...operand] = tree;
-                return operand[0] !== '0'
-                    ? [parseInt(operand[0])]
-                    : [];
-            }
-            case 'mulchain': {
-                const [, ...operand] = tree;
-                let con = operand.reduce((terms, term) => term[0] === 'mul'
-                    ? [...terms, ...sub_getConstant(term[1])]
-                    : terms,
-                []);
-                con = Array.from(new Set(con));
-                if (con.includes(1) && con.length !== 1) {
-                    con = con.filter(term_c => term_c !== 1);
-                }
-                return con;
-            }
-            case 'addchain': {
-                const [, ...operand] = tree;
-                return operand.reduce((a, b) => [...a, ...sub_getConstant(b[1])], []);
-            }
-            case 'negative': {
-                const [, ...operand] = tree;
-                return operand.reduce((a, b) => [...a, ...sub_getConstant(b)], []);
-            }
-            case 'power':
-            case 'variable': {
-                return [1];
-            }
-            default: {
-                return [];
-            }
-        }
-    }
-
     const [operator] = tree;
+    const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
     switch (operator) {
         case 'equation': {
             const [, ...operand] = tree;
-           let con = [...sub_getConstant(operand[0]), ...sub_getConstant(operand[1])];
+            let con = [...sub_getConstant(operand[0]), ...sub_getConstant(operand[1])];
             con = Array.from(new Set(con));
-            if (con.includes(1)) {
-                return [operator, ...operand];
-            }
             const con_length = con.length;
-            if (con_length === 1) {
-                const zero = JSON.stringify(['natural', '0']);
-                if (JSON.stringify(operand[0]) === zero) {
-                    const deno = ['natural', con[0]];
-                    return [operator, ...sub_div(operand[0], deno), sub_div(operand[1], deno)];
-                }
-                if (JSON.stringify(operand[1]) === zero) {
-                    const deno = ['natural', con[0]];
-                    return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
-                }
+
+            if (con.includes(1) || con_length === 0) {
                 return tree;
             }
-            if (con_length === 2) {
-                let A = con[0];
-                let B = con[1];
-                while (B !== 0) {
-                    const temp = B;
-                    B = A % B;
-                    A = temp;
-                }
-                const div = A;
-                if (div === 1) {
-                    return tree;
-                }
-                const deno = ['natural', div.toString()];
-                return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
+            if (con_length === 1) {
+                const zero = JSON.stringify(['natural', '0']);
+                const deno = ['natural', con[0]];
+                return JSON.stringify(operand[0]) === zero
+                    ? [operator, ...frac_function(['fraction', operand[0], deno]), frac_function(['fraction', operand[1], deno])]
+                    : JSON.stringify(operand[1]) === zero
+                        ? [operator, frac_function(['fraction', operand[0], deno]), frac_function(['fraction', operand[1], deno])]
+                        : tree;
             }
-            if (con_length > 2) {
-                let div = con[0];
-                const [, ...con_rest] = con;
-                div = con_rest.reduce(function (A, B) {
-                        while (B !== 0) {
-                            const temp = B;
-                            B = A % B;
-                            A = temp;
-                        }
-                        return A;
-                    },
-                div);
-                if (div === 1) {
-                    return tree;
-                }
-                const deno = ['natural', div.toString()];
-                return [operator, sub_div(operand[0], deno), sub_div(operand[1], deno)];
-            }
-            return tree;
+            let [div, ...con_rest] = con;
+            div = con_rest.reduce(function (A, B) {
+                    while (B !== 0) {
+                        [A, B] = [B, A % B];
+                    }
+                    return A;
+                },
+            div);
+            return div === 1
+                ? tree
+                : [operator, frac_function(['fraction', operand[0], ['natural', div.toString()]]), frac_function(['fraction', operand[1], ['natural', div.toString()]])];
         }
         case 'inequality': {
             const [, ...operand] = tree;
             let con = [];
-            const operand_length = operand.length;
-            const max = Math.floor(operand_length / 2);
+            const max = Math.floor(operand.length / 2);
             for (let i = 0; i <= max; i++) {
                 con = [...con, ...sub_getConstant(operand[2 * i])];
             }
             con = [...new Set(con)];
-            if (con.includes(1)) {
+            const con_length = con.length;
+            if (con.includes(1) || con_length === 0) {
                 return tree;
             }
-            const con_length = con.length;
             if (con_length === 1) {
                 const zero = JSON.stringify(['natural', '0']);
-                for (const term of operand) {
-                    if (JSON.stringify(term) === zero) {
-                        const deno = ['natural', con[0]];
-                        let newOperand = [];
-                        const max = Math.floor(operand_length / 2);
-                        for (let i = 0; i < max; i++) {
-                            newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
-                        }
-                        newOperand = [...newOperand, sub_div(operand[2 * max], deno)];
-                        return [operator, ...newOperand];
+                if (operand.some(term => JSON.stringify(term) === zero)) {
+                    const deno = ['natural', con[0]];
+                    let newOperand = [frac_function(['fraction', operand[0], deno])];
+                    for (let i = 1; i <= max; i++) {
+                        newOperand = [...newOperand, operand[2 * i - 1], frac_function(['fraction', operand[2 * i], deno])];
                     }
+                    return [operator, ...newOperand];
                 }
                 return tree;
             }
-            if (con_length === 2) {
-                let A = con[0];
-                let B = con[1];
-                while (B !== 0) {
-                    const temp = B;
-                    B = A % B;
-                    A = temp;
-                }
-                const div = A;
-                if (div === 1) {
-                    return tree;
-                }
-                let newOperand = [];
-                const deno = ['natural', div.toString()];
-                const max = Math.floor(operand_length / 2);
-                for (let i = 0; i < max; i++) {
-                    newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
-                }
-                newOperand = [...newOperand, sub_div(operand[2 * max], deno)];
-                return [operator, ...newOperand];
+            let [div, ...con_rest] = con
+            div = con_rest.reduce(function (A, B) {
+                    while (B !== 0) {
+                        [A, B] = [B, A % B];
+                    }
+                    return A;
+                },
+            div);
+            if (div === 1) {
+                return tree;
             }
-            if (con_length > 2) {
-                let div = con[0];
-                const [, ...con_rest] = con
-                div = con_rest.reduce(function (A, B) {
-                        while (B !== 0) {
-                            const temp = B;
-                            B = A % B;
-                            A = temp;
-                        }
-                        return A;
-                    },
-                div);
-                if (div === 1) {
-                    return tree;
-                }
-                let newOperand = [];
-                const deno = ['natural', div.toString()];
-                const max = Math.floor(operand_length / 2);
-                for (let i = 0; i < max; i++) {
-                    newOperand = [...newOperand, sub_div(operand[2 * i], deno), operand[2 * i + 1]];
-                }
-                newOperand = [...newOperand, sub_div(operand[2 * max], deno)]
-                return [operator, ...newOperand];
+            const deno = ['natural', div.toString()];
+            let newOperand = [frac_function(['fraction', operand[0], deno])];
+            for (let i = 1; i <= max; i++) {
+                newOperand = [...newOperand, operand[2 * i - 1], frac_function(['fraction', operand[2 * i], deno])];
             }
-            return tree;
+            return [operator, ...newOperand];
         }
         default: {
             return tree;
@@ -205,7 +101,7 @@ console.log(result1 === result2);
 console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
-/*
+
 export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return [];
@@ -247,7 +143,7 @@ export function sub_getConstant(tree) {
         }
     }
 }
-*/
+
 /*
 import {LatexToTree, match_all} from '../checkmath.js';
 let latex_1 = '2+b+3a';
@@ -262,7 +158,6 @@ console.log(result1 === result2);
 console.log(JSON.stringify(tree_11, null, 4));
 console.log(JSON.stringify(tree_21, null, 4));
 */
-
 /*
 export function sub_div(tree, deno) {
     const frac = ['fraction', tree, deno];

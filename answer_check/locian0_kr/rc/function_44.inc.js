@@ -9,9 +9,10 @@ export function 곱셈결합법칙(tree) {
     operand.forEach(term => {
         const term_1 = 곱셈결합법칙(term);
         // a(b(cd))-> a(bcd) -> abcd
-        const is_mulchain = operator === 'mulchain' && term_1[0] === 'mul' && term_1[1][0] === 'mulchain';
+        const [operator_term_1, ...operand_term_1] = term_1;
+        const is_mulchain = operator === 'mulchain' && operator_term_1 === 'mul' && operand_term_1[0][0] === 'mulchain';
         newOperand = is_mulchain
-            ? [...newOperand, ...term_1[1].slice(1)]
+            ? [...newOperand, ...operand_term_1[0].slice(1)]
             : [...newOperand, term_1];
     });
     return [operator, ...newOperand];

@@ -18,17 +18,13 @@ export function addFactorNegative(tree) {
             let termArr = [];
             let factArr = [];
             operand.forEach(term => {
-                if (term[0] === 'mul') {
-                    if (term[1][0] === 'addchain') {
-                        let [, addchain] = term;
-                        if (addchain[1][0] === 'sub') {
-                            addchain = addNegative(['negative', addchain]);
-                            sign *= -1;
-                        }
-                        factArr = [...factArr, ['mul', addchain]];
-                    } else {
-                        termArr = [...termArr, term];
+                if (term[0] === 'mul' && term[1][0] === 'addchain') {
+                    let [, addchain] = term;
+                    if (addchain[1][0] === 'sub') {
+                        addchain = addNegative(['negative', addchain]);
+                        sign *= -1;
                     }
+                    factArr = [...factArr, ['mul', addchain]];
                 } else {
                     termArr = [...termArr, term];
                 }

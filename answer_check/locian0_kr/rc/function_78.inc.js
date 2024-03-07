@@ -9,14 +9,6 @@ export function rdecToFrac(tree) {
     if (operator !== 'rdecimal') {
         return [operator, ...operand.map(term => rdecToFrac(term))];
     }
-    if (operand[1] === '') {
-        const [int, , rdec] = operand;
-        const num = int === '0'
-            ? rdec
-            : int * Math.pow(10, rdec.length) + rdec - int;
-        const den = (9 * Math.pow(10, rdec.length - 1)).toString();
-        return fracSimp(['fraction', ['natural', num], ['natural', den]]);
-    }
     const [int, dec, rdec] = operand;
     const rdec_length = rdec.length;
     const num = int === '0'

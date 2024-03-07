@@ -3,24 +3,6 @@ export function expToFrac(tree = null) {
         return tree;
     }
 
-    // function
-    function fracFirst(tree) {
-        const [operator] = tree;
-        if (operator !== 'mulchain') {
-            return tree;
-        }
-        const [, ...operand] = tree;
-        let frac = [];
-        let other = [];
-        operand.forEach(term => {
-            term[0] === 'mul' && term[1][0] === 'fraction'
-                ? frac = [...frac, term]
-                : other = [...other, term];
-        });
-        return [operator, ...frac, ...other];
-    }
-    //
-
     const [operator, ...operand] = tree;
     if (operator !== 'power') {
         return fracFirst([operator, ...operand.map(term => expToFrac(term))]);
@@ -41,12 +23,11 @@ export function expToFrac(tree = null) {
             : ['power', newOperand, newPower];
     }
     // 최종 형태 분수, 1/(exp) 의 형태
-    newOperand = JSON.stringify(newPower) === one
+    return JSON.stringify(newPower) === one
         ? ['fraction', ['natural', '1'], operand[0]]
         : ['fraction', ['natural', '1'], ['power', operand[0], newPower]];
-    return newOperand;
 }
-/*
+
 export function fracFirst(tree) {
     const [operator] = tree;
     if (operator !== 'mulchain') {
@@ -62,4 +43,3 @@ export function fracFirst(tree) {
     });
     return [operator, ...frac, ...other];
 }
-*/

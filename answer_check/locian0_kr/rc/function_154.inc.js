@@ -26,7 +26,7 @@ export function exprSimpConst(tree = null) {
         return tree;
     }
 
-    const [operator] = tree;
+    let [operator, ...operand] = tree;
 
     switch (operator) {
         case 'infinity': // fin
@@ -57,7 +57,7 @@ export function exprSimpConst(tree = null) {
             // Possible output types:
             // absolute,
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
-            let subresult = exprSimpConst(tree[1]);
+            let subresult = exprSimpConst(operand[0]);
             if (subresult[0] === 'negative') {
                 [, subresult] = subresult;
             }
@@ -67,19 +67,16 @@ export function exprSimpConst(tree = null) {
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
-            const [, ...operand] = tree;
+            // const [, ...operand] = tree;
             const is_power = operand[0][0] === 'power' && operand[1][0] === 'power' && operand[0][2] === operand[1][2];
-            if (is_power) {
-                const newtree = ['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]
-                ];
-                return exprSimpConst(newtree);
-            }
-            return fracSimpVar(fracSimpInt(fracNegative(fracComplex([operator, exprSimpConst(operand[0]), exprSimpConst(operand[1])]))));
+            return is_power
+                ? exprSimpConst(['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]])
+                : fracSimpVar(fracSimpInt(fracNegative(fracComplex([operator, exprSimpConst(operand[0]), exprSimpConst(operand[1])]))));
         }
         case 'nthroot':
         case 'squareroot': {
             // rootN is the n in nth root (e.g., 2 for square root, 3 for a cubic root)
-            const [, ...operand] = tree;
+            // const [, ...operand] = tree;
             let rootN = [];
             let radicand = [];
             if (operator === 'squareroot') {
@@ -92,7 +89,6 @@ export function exprSimpConst(tree = null) {
             return exprSimpConst(['power', radicand, fracComplex(['fraction', ['natural', '1'], rootN])]);
         }
         case 'addchain': { // fin
-            let [, ...operand] = tree;
             operand = addNegative(addAssociative(addIdentity(array2ChainTree(operand))));
             if (operand[0] !== 'addchain') {
                 return operand;
@@ -114,7 +110,6 @@ export function exprSimpConst(tree = null) {
             return array2ChainTree(termArr, true);
         }
         case 'mulchain': { // fin
-            let [, ...operand] = tree;
             [, ...operand] = mulAssociative(array2ChainTree(operand));
             let termArr = [];
             let sign = 1;
@@ -135,7 +130,6 @@ export function exprSimpConst(tree = null) {
         case 'power': {
             // Possible output types:
             // negative, fraction, squareroot, power
-            const [, ...operand] = tree;
             let basetree = exprSimpConst(operand[0]);
             let expotree = exprSimpConst(operand[1]);
             // If the original expotree is a fraction with even denominator,
@@ -178,7 +172,6 @@ export function exprSimpConst(tree = null) {
             return powIdentity(divFrac(array2ChainTree(mtermArr, true)));
         }
         default: {
-            const [, ...operand] = tree;
             return [operator, ...operand.map(term => exprSimpConst(term))];
         }
     }

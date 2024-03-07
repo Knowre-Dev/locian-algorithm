@@ -4,11 +4,9 @@ import { fracSimpInt } from '../rc/function_76.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 
 export function addFactor_1(tree = null) {
-    const simple1 = JSON.stringify(fracSimp(tree));
-    const simple2 = JSON.stringify(fracSimpVar(tree));
     const tree1 = JSON.stringify(tree);
     // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
-    if (tree1 !== simple1 || tree1 !== simple2) {
+    if (tree1 !== JSON.stringify(fracSimp(tree)) || tree1 !== JSON.stringify(fracSimpVar(tree))) {
         return tree;
     }
 
@@ -20,62 +18,53 @@ export function addFactor_1(tree = null) {
     let power = false;
     let consArr = [];
     operand.forEach(addterm => {
-        if (addterm[1][0] === 'mulchain') {
+        const [, [operator_1]] = addterm;
+        if (operator_1 === 'mulchain') {
             let con = ['natural', '1'];
             let syms = [];
             const [, [, term_1, ...addterm_2]] = addterm;
             if (term_1[0] === 'mul') {
-                if (term_1[1][0] === 'variable') {
-                    syms = [...syms, term_1];
-                } else if (term_1[1][0] === 'squareroot') {
+                const is_variable = ['variable', 'squareroot'].includes(term_1[1][0]) || (term_1[1][0] === 'power' && term_1[1][1][0] === 'variable');
+                if (is_variable) {
                     syms = [...syms, term_1];
                 } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
                     con = term_1;
-                } else if (term_1[1][0] === 'power' && term_1[1][1][0] === 'variable') {
-                    syms = [...syms, term_1];
                 }
             }
-            addterm_2.forEach(term_addterm_1 => {
-                if (term_addterm_1[0] === 'mul') {
-                    if (term_addterm_1[1][0] === 'variable') {
-                        syms = [...syms, term_addterm_1];
-                    } else if (term_addterm_1[1][0] === 'squareroot') {
-                        syms = [...syms, term_addterm_1];
-                    } else if (term_addterm_1[1][0] === 'power' && term_addterm_1[1][1][0] === 'variable') {
-                        syms = [...syms, term_addterm_1];
-                    }
+            addterm_2.forEach(term_2 => {
+                const is_variable = ['variable', 'squareroot'].includes(term_2[1][0]) || (term_2[1][0] === 'power' && term_2[1][1][0] === 'variable');
+                if (term_2[0] === 'mul' && is_variable) {
+                    syms = [...syms, term_2];
                 }
             });
             if (syms.length > 0 && con[1] !== '1') {
                 consArr = [...consArr, con];
             }
-        } else if (addterm[1][0] === 'fraction') {
-            let syms = [];
+        } else if (operator_1 === 'fraction') {
             let con = [];
+            let syms = [];
             if (addterm[1][1][0] === 'mulchain') {
                 con = ['natural', '1'];
-                const [, ...addterm_11] = addterm[1][1];
-                addterm_11.forEach(term_addterm_11 => {
-                    if (term_addterm_11[0] === 'mul') {
-                        if (term_addterm_11[1][0] === 'variable') {
-                            syms = [...syms, term_addterm_11];
-                        } else if (term_addterm_11[1][0] === 'squareroot') {
-                            syms = [...syms, term_addterm_11];
-                        } else if (term_addterm_11[1][0] === 'natural' && term_addterm_11[1][1] !== '0') {
-                            con = term_addterm_11;
+                const [, [, [, ...addterm_1]]] = addterm;
+                addterm_1.forEach(term_addterm_1 => {
+                    if (term_addterm_1[0] === 'mul') {
+                        if (['variable', 'squareroot'].includes(term_addterm_1[1][0])) {
+                            syms = [...syms, term_addterm_1];
+                        } else if (term_addterm_1[1][0] === 'natural' && term_addterm_1[1][1] !== '0') {
+                            con = term_addterm_1;
                         }
                     }
                 });
             } else if (addterm[1][1][0] === 'natural' && addterm[1][1][1] !== '1') {
-                con = addterm[1];
+                [, con] = addterm;
             }
 
             if (syms.length > 0 && con[1] !== '1') {
                 consArr = [...consArr, con];
             }
-        } else if (addterm[1][0] === 'natural' && addterm[1][1] !== '1') {
+        } else if (operator_1 === 'natural' && addterm[1][1] !== '1') {
             consArr = [...consArr, addterm];
-        } else if (addterm[1][0] === 'power') {
+        } else if (operator_1 === 'power') {
             power = true;
         }
     });
@@ -85,28 +74,22 @@ export function addFactor_1(tree = null) {
         return addCommutative(tree);
     }
     let con = [];
-    if (consArr_length === 1) {
+    if (consArr_length === 1 || power === true) {
         con = ['natural', '1'];
     } else {
-        if (power === true) {
-            con = ['natural', '1'];
-        } else {
-            let gcd = consArr[0][1][1];
-            const [, ...consArr_rest] = consArr;
-            gcd = consArr_rest.reduce(function(a, b) {
-                    let A = a;
-                    let B = b[1][1];
-                    while (B !== 0) {
-                        const temp = B;
-                        B = A % B;
-                        A = temp;
-                    }
-                    return A;
-                },
-            gcd);
-            con = ['natural', gcd.toString()];
-        }
+        let [[, [, gcd]], ...consArr_rest] = consArr;
+        gcd = consArr_rest.reduce(function(a, b) {
+                let A = a;
+                let [, [, B]] = b;
+                while (B !== 0) {
+                    [A, B] = [B, A % B];
+                }
+                return A;
+            },
+        gcd);
+        con = ['natural', gcd.toString()];
     }
+
     if (con[1] === '1') {
         return addCommutative(tree);
     }

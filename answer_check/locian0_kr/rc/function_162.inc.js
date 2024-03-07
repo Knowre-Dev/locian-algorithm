@@ -4,16 +4,14 @@ import { fracSimpVar } from '../rc/function_77.inc.js';
 import { addFactoredFormVar } from '../rc/function_117.inc.js';
 
 export function sub_addFactored(tree = null) {
+    // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
     if (!Array.isArray(tree)) {
         return tree;
     }
-
-    // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
     const tree_1 = JSON.stringify(tree)
     if (tree_1 !== JSON.stringify(fracSimp(tree)) || tree_1 !== JSON.stringify(fracSimpVar(tree))) {
         return tree;
     }
-
     const [operator, ...operand] = tree;
 
     switch (operator) {
@@ -21,37 +19,16 @@ export function sub_addFactored(tree = null) {
             const newOperand = [];
             let add_term = [];
             for (const term of operand) {
-                if (term[0] === 'add') {
-                    if (term[1][0] === 'addchain') {
-                        add_term = [...add_term, ...term[1].slice(1)];
-                    } else {
-                        if (term[1][0] === 'mulchain') {
-                            const [, [, ...operand_term_1]] = term;
-                            add_term = operand_term_1.some(term_term_1 => term_term_1[1][0] === 'addchain')
-                                ? [...add_term, addFactoredForm(addFactoredFormVar(term))]
-                                : [...add_term, term];
-                        } else {
-                            add_term = [...add_term, term];
-                        }
-                    }
-                } else {
-                    if (term[1][0] === 'addchain') {
-                        const [, [, ...operand_term_1]] = term;
-                        add_term = [...add_term, ...operand_term_1.map(term_term_1 => term_term_1[0] === 'add'
+                const [operator_term, [operator_term_1, ...operand_term_1]] = term;
+                add_term = operator_term_1 === 'addchain'
+                    ? operator_term === 'add'
+                        ? [...add_term, ...operand_term_1]
+                        : [...add_term, ...operand_term_1.map(term_term_1 => term_term_1[0] === 'add'
                             ? ['sub', term_term_1[1]]
-                            : ['add', term_term_1[1]])
-                        ];
-                    } else {
-                        if (term[1][0] === 'mulchain') {
-                            const [, [, ...operand_term_1]] = term;
-                            add_term = operand_term_1.some(term_term_1 => term_term_1[1][0] === 'addchain')
-                                ? [...add_term, addFactoredForm(addFactoredFormVar(term))]
-                                : [...add_term, term];
-                        } else {
-                            add_term = [...add_term, term];
-                        }
-                    }
-                }
+                            : ['add', term_term_1[1]])]
+                    : operator_term_1 === 'mulchain' && operand_term_1.some(term_term_1 => term_term_1[1][0] === 'addchain')
+                        ? [...add_term, addFactoredForm(addFactoredFormVar(term))]
+                        : [...add_term, term];
             }
             return add_term.length !== 0
                 ? addFactoredFormVar(['addchain', ...add_term])

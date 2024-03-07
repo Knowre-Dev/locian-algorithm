@@ -6,7 +6,7 @@ export function decIdentity(tree) {
     const [operator, ...operand] = tree;
     switch (operator) {
         case 'decimal': {
-            return operand[0].substr(0, 1) === '.'
+            return operand[0].charAt(0) === '.'
                 ? [operator, '0' + operand[0]]
                 : tree;
         }

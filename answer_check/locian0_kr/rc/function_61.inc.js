@@ -33,16 +33,16 @@ export function rearrangeTree(tree, types = []) {
             }
             if (rightNum < 0) {
                 const newOperand_reverse = newOperand.reverse();
+                const ineqs = new Map([
+                    ['gt', 'lt'],
+                    ['ge', 'le'],
+                    ['lt', 'gt'],
+                    ['le', 'ge']
+                ]);
                 const temp = newOperand_reverse.map(term_reverse =>
-                    term_reverse === 'gt'
-                        ? 'lt'
-                        : term_reverse === 'ge'
-                            ? 'le'
-                            : term_reverse === 'lt'
-                                ? 'gt'
-                                : term_reverse === 'le'
-                                    ? 'ge'
-                                    : term_reverse);
+                    ineqs.get(term_reverse)
+                        ? ineqs.get(term_reverse)
+                        : term_reverse);
                 return [operator, ...temp];
             }
             return rightNum === 0

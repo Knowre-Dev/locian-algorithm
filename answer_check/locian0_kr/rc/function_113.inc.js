@@ -21,9 +21,8 @@ export function mulConstCal(tree = null) {
     if (nterm.length === 0) {
         return tree;
     }
-    const [first] = nterm;
+    let [[, [, value]]] = nterm;
     [, ...nterm] = nterm;
-    let [, [, value]] = first;
     nterm.forEach(nt => {
         nt[0] === 'mul'
             ? value *= nt[1][1]

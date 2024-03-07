@@ -10,13 +10,11 @@ export function mulToExp(tree = null) {
     const power = {};
     let varNum = [];
     operand.forEach(term => {
-        term[0] === 'mul'
-            ? term[1][0] === 'variable'
-                ? power[term[1][1]] = !Object.prototype.hasOwnProperty.call(power, term[1][1])
-                    ? [term[1]]
-                    : [...power[term[1][1]], term[1]]
-                : varNum = [...varNum, term]
-            : varNum = [...varNum, term];
+        term[0] === 'mul' && term[1][0] === 'variable'
+            ? power[term[1][1]] = !Object.prototype.hasOwnProperty.call(power, term[1][1])
+                ? [term[1]]
+                : [...power[term[1][1]], term[1]]
+            : varNum = [...varNum, term]
     });
     Object.values(power).forEach(term => {
         const term_length = term.length;

@@ -49,7 +49,7 @@ export function fracSimpInt(tree) {
         case 'mulchain': {
             const [, ...den_1] = den;
             den_1.forEach(term => {
-                (term[0] === 'mul' && term[1][0] === 'natural')
+                term[0] === 'mul' && term[1][0] === 'natural'
                     ? arrDen = [...arrDen, term[1][1]]
                     : narrDen = [...narrDen, term];
             });
@@ -69,9 +69,7 @@ export function fracSimpInt(tree) {
     let A = intNum;
     let B = intDen;
     while (B !== 0) {
-        const temp = B;
-        B = A % B;
-        A = temp;
+        [A, B] = [B, A % B];
     }
     const gcf = A;
     const newNum = (intNum / gcf).toString();
@@ -119,9 +117,7 @@ export function fracSimpInt(tree) {
 
 export function EuclidAlg(A, B) {
     while (B !== 0) {
-        const temp = B;
-        B = A % B;
-        A = temp;
+        [A, B] = [B, A % B];
     }
     return A;
 }

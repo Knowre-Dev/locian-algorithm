@@ -11,7 +11,7 @@ export function powDecomposition(tree) {
     const base = powDecomposition(operand[0]);
     const expo = powDecomposition(operand[1]);
     if (base[0] === 'addchain' && expo[0] === 'natural') {
-        const max = expo[1];
+        const [, max] = expo;
         for (let i = 0; i < max; i++) {
             newOperand = [...newOperand, ['mul', base]];
         }

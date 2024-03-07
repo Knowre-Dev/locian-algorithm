@@ -4,14 +4,12 @@ export function makeOneSideOfEqIneqZero(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'equation': {
-            const [, ...operand] = tree;
-            for (const subtree of operand) {
-                if (JSON.stringify(subtree) === JSON.stringify(['natural', '0'])) {
-                    return tree;
-                }
+            const zero = JSON.stringify(['natural', '0']);
+            if (operand.some(term => JSON.stringify(term) === zero)) {
+                return tree;
             }
             // From here on, we are guaranteed that
             // no side in the chain of equalities is already identically zero
@@ -26,7 +24,6 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             return [operator, ...newOperand];
         }
         case 'inequality': {
-            const [, ...operand] = tree;
             const zero = JSON.stringify(['natural', '0']);
             let max = Math.floor(operand.length / 2);
             for (let i = 0; i <= max; i++) {
@@ -44,10 +41,9 @@ export function makeOneSideOfEqIneqZero(tree = null) {
                 newOperand = [...newOperand, operand_1[2 * i]];
                 let term = operand_1[2 * i + 1];
                 if (!termExists('infinity', term)) {
-                    if (term[0] !== 'addchain') {
-                        term = ['addchain', ['add', term]];
-                    }
-                    term = [...term, ['sub', term_0]];
+                    term = term[0] !== 'addchain'
+                        ? ['addchain', ['add', term], ['sub', term_0]]
+                        : [...term, ['sub', term_0]];
                 }
                 newOperand = [...newOperand, term];
             }

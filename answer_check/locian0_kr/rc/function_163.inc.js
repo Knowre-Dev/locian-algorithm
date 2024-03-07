@@ -32,7 +32,7 @@ export function solParenthesis(tree = null) {
                     mul = false;
                 }
             });
-            if (mul === false) {
+            if (!mul) {
                 return tree;
             }
             const addchain_length = addchain.length;
@@ -75,7 +75,7 @@ export function solParenthesis(tree = null) {
         }
         case 'power': {
             if (operand[0][0] === 'addchain' && operand[1][0] === 'natural') {
-                const max = operand[1][1];
+                const [, [, max]] = operand;
                 let arr = [];
                 for (let i = 0; i < max; i++) {
                     arr = [...arr, ['mul', operand[0]]];

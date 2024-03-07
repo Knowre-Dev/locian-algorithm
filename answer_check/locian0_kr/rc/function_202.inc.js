@@ -11,37 +11,15 @@ export function eqIneqDivPi(tree = null) {
     if (!['equation', 'inequality'].includes(operator)) {
         return tree;
     }
-
-    function sub_divPi(tree, div) {
-        return JSON.stringify(tree) === JSON.stringify(['natural', '0'])
-            ? tree
-            : fracSimpVar(fracSeparation(fracNegative(['fraction', tree, div])));
-    }
-    function checkPi(tree) {
-        if (Array.isArray(tree)) {
-            const [operator, ...operand] = tree;
-            switch (operator) {
-                case 'natural': {
-                    // 0 이어도 pi 나누기 가능해서 추가
-                    return operand[0] === '0';
-                }
-                case 'variable': {
-                    return operand[0] === 'pi';
-                }
-                case 'mulchain': {
-                    return operand.some(term => term[0] === 'mul' && checkPi(term[1]))
-                }
-                default: {
-                    return operand.some(term => checkPi(term));
-                }
-            }
-        }
-    }
-
+    const frac_function = tree_1 => fracSimpVar(fracSeparation(fracNegative(tree_1)));
+    const zero = JSON.stringify(['natural', '0']);
+    const pi = ['variable', 'pi'];
     switch (operator) {
         case 'equation': {
-            return (checkPi(operand[0]) && checkPi(operand[1]))
-                ? [operator, ...operand.map(term => sub_divPi(term, ['variable', 'pi']))]
+            return checkPi(operand[0]) && checkPi(operand[1])
+                ? [operator, ...operand.map(term => JSON.stringify(term) === zero
+                    ? term
+                    : frac_function(['fraction', term, pi]))]
                 : tree;
         }
         case 'inequality': {
@@ -52,12 +30,16 @@ export function eqIneqDivPi(tree = null) {
                     return tree
                 }
             }
-
-            let newOperand = [];
-            for (let i = 0; i < max; i++) {
-                newOperand = [...newOperand, sub_divPi(operand[2 * i], ['variable', 'pi']), operand[2 * i + 1]];
+            let term = JSON.stringify(operand[0]) === zero
+                ? operand[0]
+                : frac_function(['fraction', operand[0], pi]);
+            let newOperand = [term];
+            for (let i = 1; i <= max; i++) {
+                term = JSON.stringify(operand[2 * i]) === zero
+                    ? operand[2 * i]
+                    : frac_function(['fraction', operand[2 * i], pi]);
+                newOperand = [...newOperand, operand[2 * i - 1], term];
             }
-            newOperand = [...newOperand, sub_divPi(operand[2 * max], ['variable', 'pi'])];
             return [operator, ...newOperand];
         }
     }
@@ -83,7 +65,6 @@ export function sub_divPi(tree, div) {
         : fracSimpVar(fracSeparation(fracNegative(['fraction', tree, div])));
 }
 */
-/*
 export function checkPi(tree) {
     if (Array.isArray(tree)) {
         const [operator, ...operand] = tree;
@@ -96,7 +77,7 @@ export function checkPi(tree) {
                 return operand[0] === 'pi';
             }
             case 'mulchain': {
-                return operand.some(term => term[0] === 'mul' && checkPi(term[1]))
+                return operand.some(term => term[0] === 'mul' && checkPi(term[1]));
             }
             default: {
                 return operand.some(term => checkPi(term));
@@ -104,7 +85,7 @@ export function checkPi(tree) {
         }
     }
 }
-*/
+
 /*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = '125\\pi \\le \\frac{25}{3}\\pi x\\le 200\\pi ';

@@ -1,20 +1,18 @@
 export function rearrangeTreeEq(A, B) {
-    if (Array.isArray(A) && !Array.isArray(B)) {
-        return 1;
-    }
-    if (!Array.isArray(A) && Array.isArray(B)) {
-        return -1;
-    }
-    if (!Array.isArray(A) && !Array.isArray(B)) {
-        return typeof A > typeof B
+    const is_array_A = Array.isArray(A);
+    const is_array_B = Array.isArray(B);
+
+    if (is_array_A !== is_array_B) {
+        return is_array_A
             ? 1
-            : typeof A < typeof B
+            : -1;
+    }
+    if (!is_array_A && !is_array_B) {
+        return typeof A > typeof B || (typeof A === typeof B && A > B)
+            ? 1
+            : typeof A < typeof B || A < B
                 ? -1
-                : A > B
-                    ? 1
-                    : A < B
-                        ? -1
-                        : 0;
+                : 0;
     }
 
     const [operatorA, ...operandA] = A[0] === 'negative'
@@ -23,33 +21,21 @@ export function rearrangeTreeEq(A, B) {
     const [operatorB, ...operandB] = B[0] === 'negative'
         ? B[1]
         : B;
-
-    const place = [0, 0];
-    const operators = [operatorA, operatorB];
-
-    operators.forEach((term, key) => {
-        switch (term) {
-            case 'negative': {
-                place[key] = 1;
-                break;
-            }
-            case 'fraction': {
-                place[key] = 2;
-                break;
-            }
-        }
-    });
-
-    if (place[0] < place[1]) {
+    const place = [];
+    const operators = new Map([
+        ['negative', 1],
+        ['fraction', 2]
+    ]);
+    place[0] = operators.get(operatorA)
+        ? operators.get(operatorA)
+        : 0;
+    place[1] = operators.get(operatorB)
+        ? operators.get(operatorB)
+        : 0;
+    if (place[0] < place[1] || (place[0] === place[1] && operatorA > operatorB)) {
         return 1;
     }
-    if (place[0] > place[1]) {
-        return -1;
-    }
-    if (operatorA > operatorB) {
-        return 1;
-    }
-    if (operatorA < operatorB) {
+    if (place[0] > place[1] || operatorA < operatorB) {
         return -1;
     }
     const operandA_lehgth = operandA.length;
@@ -60,15 +46,12 @@ export function rearrangeTreeEq(A, B) {
     if (operandA_lehgth < operandB_length) {
         return -1;
     }
-
-    const operandA_entries = operandA.entries();
-    for (const [key, termA] of operandA_entries) {
-        const temp = rearrangeTreeEq(termA, operandB[key]);
-        if (temp !== 0) {
-            return temp;
-        }
-    }
-    return 0;
+    let result = 0;
+    operandA.find((termA, key) => {
+        result = rearrangeTreeEq(termA, operandB[key]);
+        return result !== 0;
+    });
+    return result;
 }
 /*
 import {LatexToTree, compareMathTree, is_equal_tree} from "../checkmath.js";

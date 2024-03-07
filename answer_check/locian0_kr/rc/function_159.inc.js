@@ -2,19 +2,14 @@ import { mulIdentity } from '../rc/function_56.inc.js';
 import { array2ChainTree, evalNumericValues, findDenominators, isNumeric, multFactor } from '../rc/function_152.inc.js';
 
 export function mulAllSidesByCommonDenom(tree = null) {
-    if (!Array.isArray(tree)) {
-        return tree;
-    }
-
-    const [operator] = tree;
-    if (!['equation', 'inequality'].includes(operator)) {
+    if (!Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0])) {
         return tree;
     }
     // Remove any complex fractions
     // tree = fracComplex(tree); Gurantee this instead by precondition (better performance)
 
     // Initialize array to store product of all denominators in each side
-    const [, ...operand] = tree;
+    const [operator, ...operand] = tree;
     const denomArr = [];
     operand.forEach((term, key) => {
         // Find all unique denominators in this subtree

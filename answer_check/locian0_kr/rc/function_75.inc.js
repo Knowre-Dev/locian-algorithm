@@ -33,8 +33,8 @@ export function eqMulPropUS(tree) {
     if (factor_1 === JSON.stringify(['natural', '1']) || factor_1 === JSON.stringify(['natural', '0'])) {
         return tree; // No need to divide by 1
     }
-    let newtree = [tree[0]];
-    const [, ...operand] = tree;
+    const [operator, ...operand] = tree;
+    let newtree = [operator];
     // this block executes for inequality signs (e.g., 'le', 'ge')
     newtree = [...newtree, ...operand.map(term => Array.isArray(term)
             ? multFactor(term, ['div', factor], true)

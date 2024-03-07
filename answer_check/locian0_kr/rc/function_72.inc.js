@@ -17,7 +17,7 @@ export function addFactor(tree) {
             case 'mulchain': {
                 let con = ['natural', '1'];
                 let syms = [];
-                const [, [, term_1, ...addterm_2]] = addterm;
+                const [, [, term_1, ...addterm_1]] = addterm;
                 if (term_1[0] === 'mul') {
                     if (term_1[1][0] === 'variable') {
                         syms = [...syms, term_1];
@@ -25,7 +25,7 @@ export function addFactor(tree) {
                         con = term_1;
                     }
                 }
-                syms = [...syms, ...addterm_2.filter(multerm => (multerm[0] === 'mul' && multerm[1][0] === 'variable'))];
+                syms = [...syms, ...addterm_1.filter(multerm => (multerm[0] === 'mul' && multerm[1][0] === 'variable'))];
                 if (syms.length > 0 && con[1] !== '1') {
                     consArr = [...consArr, con];
                 }
@@ -35,8 +35,8 @@ export function addFactor(tree) {
                 if (addterm[1][1][0] === 'mulchain') {
                     let con = ['natural', '1'];
                     let syms = [];
-                    const [, ...addterm_11] = addterm[1][1];
-                    addterm_11.forEach(multerm => {
+                    const [, [, [, ...addterm_2]]] = addterm;
+                    addterm_2.forEach(multerm => {
                         if (multerm[0] === 'mul') {
                             if (multerm[1][0] === 'variable') {
                                 syms = [...syms, multerm];
@@ -56,9 +56,9 @@ export function addFactor(tree) {
 
     // divide each term by the constant coefficients
     if (consArr.length === 0) {
-        return addCommutative(tree)
+        return addCommutative(tree);
     }
-    let con = consArr[0][1];
+    let [[, con]] = consArr;
     if (consArr.length !== 1) {
         let lcm = consArr[0][1][1];
         const [, ...consArr_rest] = consArr;
@@ -66,9 +66,7 @@ export function addFactor(tree) {
                 let A = a;
                 let B = b[1][1];
                 while (B !== 0) {
-                    const temp = B;
-                    B = A % B;
-                    A = temp;
+                    [A, B] = [B, A % B];
                 }
                 const gcd = A;
                 return b[1][1] / gcd;

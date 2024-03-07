@@ -14,7 +14,7 @@ export function addFactoredFormVar(tree = null) {
                 if (term[1][0] === 'power') {
                     if (term[1][1][0] === 'variable' && term[1][2][0] === 'natural') {
                         let mul_term = [];
-                        const max = term[1][2][1];
+                        const [, [, , [, max]]] = term;
                         for (let i = 0; i < max; i++) {
                             mul_term = [...mul_term, ['mul', term[1][1]]];
                         }
@@ -85,8 +85,7 @@ export function addFactoredFormVar(tree = null) {
                 });
             });
             first = first.filter(x => typeof x !== 'undefined');
-            const first_length = first.length;
-            switch (first_length) {
+            switch (first.length) {
                 case 0: {
                     return sub_mulCommutative(tree);
                 }

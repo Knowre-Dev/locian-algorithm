@@ -26,21 +26,16 @@ export function fracSimpVar(tree) {
         const vars = [];
         const [, ...num_1] = num;
         num_1.forEach((term, key) => {
-            if (term[0] === 'mul') {
-                if (term[1][0] === 'variable') {
-                    if (!vars.includes(term[1][1])) {
-                        vars[key] = term[1][1];
-                        varNum[key] = ['power', term[1], ['natural', '1']];
-                    } else {
-                        const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
-                        varNum[key_vari] = ['power', term[1], ['natural', (varNum[key_vari][2][1] + 1).toString()]];
-                    }
-                } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                    [, varNum[key]] = term;
+            if (term[0] === 'mul' && term[1][0] === 'variable') {
+                if (!vars.includes(term[1][1])) {
+                    vars[key] = term[1][1];
+                    varNum[key] = ['power', term[1], ['natural', '1']];
                 } else {
-                    num_key = key;
-                    narrNum = [...narrNum, term];
+                    const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
+                    varNum[key_vari] = ['power', term[1], ['natural', (varNum[key_vari][2][1] + 1).toString()]];
                 }
+            } else if (term[0] === 'mul' && term[1][0] === 'power' && term[1][1][0] === 'variable') {
+                [, varNum[key]] = term;
             } else {
                 num_key = key;
                 narrNum = [...narrNum, term];
@@ -60,21 +55,16 @@ export function fracSimpVar(tree) {
         const vars = [];
         const [, ...den_1] = den;
         den_1.forEach((term, key) => {
-            if (term[0] === 'mul') {
-                if (term[1][0] === 'variable') {
-                    if (!vars.includes(term[1][1])) {
-                        vars[key] = term[1][1];
-                        varDen[key] = ['power', term[1], ['natural', '1']];
-                    } else {
-                        const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
-                        varDen[key_vari][2][1] = (varDen[key_vari][2][1] + 1).toString();
-                    }
-                } else if (term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                    varDen[key] = term[1];
+            if (term[0] === 'mul' && term[1][0] === 'variable') {
+                if (!vars.includes(term[1][1])) {
+                    vars[key] = term[1][1];
+                    varDen[key] = ['power', term[1], ['natural', '1']];
                 } else {
-                    den_key = key;
-                    narrDen = [...narrDen, term];
+                    const key_vari = vars.findIndex(vari => JSON.stringify(vari) === JSON.stringify(term[1][1]));
+                    varDen[key_vari][2][1] = (varDen[key_vari][2][1] + 1).toString();
                 }
+            } else if (term[0] === 'mul' && term[1][0] === 'power' && term[1][1][0] === 'variable') {
+                varDen[key] = term[1];
             } else {
                 den_key = key;
                 narrDen = [...narrDen, term];
@@ -89,7 +79,7 @@ export function fracSimpVar(tree) {
     newVarDen.sort();// added
     const newVarNum_length = newVarNum.length;
     const newVarDen_length = newVarDen.length;
-    if (newVarNum.length !== 0 && newVarDen.length !== 0) {
+    if (newVarNum_length !== 0 && newVarDen_length !== 0) {
         let numk = 0;
         let deni = 0;
         let newNum = [];

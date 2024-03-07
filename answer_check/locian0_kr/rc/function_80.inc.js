@@ -17,17 +17,16 @@ export function checkZeroEquiv(tree) {
         return false;
     }
 
-    const [operator] = tree;
+    const [operator, ...operand] = tree;
     switch (operator) {
         case 'fraction': {
-            return checkZeroEquiv(tree[1]);
+            return checkZeroEquiv(operand[0]);
         }
         case 'mulchain': {
-            const [, operand] = tree;
-            return operand.some(term => JSON.stringify(term) === JSON.stringify(['natural', '0']));
+            return operand[0].some(term => JSON.stringify(term) === JSON.stringify(['natural', '0']));
         }
         case 'natural': {
-            return tree[1] === '0';
+            return operand[0] === '0';
         }
         default: {
             return false;

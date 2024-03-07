@@ -4,8 +4,7 @@ export function fracExpress(tree) {
     }
 
     const [operator, ...operand] = tree;
-    const is_fraction = operator === 'mulchain' && operand[0][1][0] === 'fraction'
-    if (!is_fraction) {
+    if (!(operator === 'mulchain' && operand[0][1][0] === 'fraction')) {
         return [operator, ...operand.map(term => fracExpress(term))];
     }
 

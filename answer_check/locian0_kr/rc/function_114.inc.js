@@ -11,6 +11,6 @@ export function mulToNega(tree = null) {
     if (!is_not_minus_one) {
         return tree;
     }
-    const [first_term, ...term_rest] = operand;
-    return ['negative', ['mulchain', ['mul', first_term[1][1]], ...term_rest]];
+    const [operator_1, ...operand_1] = operand;
+    return ['negative', ['mulchain', ['mul', operator_1[1][1]], ...operand_1]];
 }

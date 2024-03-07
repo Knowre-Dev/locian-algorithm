@@ -7,9 +7,12 @@ export function fracDecimal(tree) {
     if (operator !== 'decimal') {
         return [operator, ...operand.map(term => fracDecimal(term))];
     }
-    const val = operand[0].split('.');
-    let num = parseInt(val[0] + val[1]);
-    const exp = val[1].length;
+    const [int, dec] = operand[0].split('.');
+    if (parseFloat(dec) === 0) {
+        return ['natural', int.toString()];
+    }
+    let num = parseInt(int + dec);
+    const exp = dec.length;
     let exp_2 = 0;
     let exp_5 = 0;
     while (num % 2 === 0 && exp_2 < exp) {
@@ -19,9 +22,6 @@ export function fracDecimal(tree) {
     while (num % 5 === 0 && exp_5 < exp) {
         num /= 5;
         exp_5++;
-    }
-    if (exp === exp_2 && exp === exp_5) {
-        return ['natural', num.toString()];
     }
     const den = Math.pow(2, exp - exp_2) * Math.pow(5, exp - exp_5);
     return ['fraction', ['natural', num.toString()], ['natural', den.toString()]];

@@ -6,7 +6,7 @@ export function ineqMulNeg(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    if (operator !== 'inequality') {
+    if (operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'))) {
         return tree;
     }
 
@@ -15,27 +15,28 @@ export function ineqMulNeg(tree = null) {
         newOperand = [operand[0][1]];
     } else if (operand[0][0] === 'addchain' && operand[0][1][0] === 'sub') {
         newOperand = [addNegative(['negative', operand[0]])];
-    } else {
-        return tree;
     }
     const max = Math.floor(operand.length / 2);
     for (let i = 1; i <= max; i++) {
         const term_odd = operand[2 * i - 1];
-        newOperand = term_odd === 'gt'
-            ? [...newOperand, 'lt']
-            : term_odd === 'ge'
-                ? [...newOperand, 'le']
-                : term_odd === 'lt'
-                    ? [...newOperand, 'gt']
-                    : [...newOperand, 'ge']
+        const ineqs = new Map([
+            ['gt', 'lt'],
+            ['ge', 'le'],
+            ['lt', 'gt'],
+            ['le', 'ge']
+        ]);
+        const op = ineqs.get(term_odd);
+
+        newOperand = [...newOperand, op];
         const term_even = operand[2 * i];
-        newOperand = term_even[0] === 'negative'
-            ? [...newOperand, term_even[1]]
+        const term_add = term_even[0] === 'negative'
+            ? term_even[1]
             : term_even[0] === 'addchain'
-                ? [...newOperand, addNegative(['negative', term_even])]
-                : (JSON.stringify(term_even) === JSON.stringify(['natural', '0']))
-                    ? [...newOperand, term_even]
-                    : [...newOperand, ['negative', term_even]];
+                ? addNegative(['negative', term_even])
+                : JSON.stringify(term_even) === JSON.stringify(['natural', '0'])
+                    ? term_even
+                    : ['negative', term_even];
+        newOperand = [...newOperand, term_add];
     }
     return [operator, ...newOperand];
 }
@@ -45,39 +46,35 @@ export function ineqMulNegUS(tree) {
         return tree;
     }
     const [operator, ...operand] = tree;
-    if (JSON.stringify(operand[0]) === JSON.stringify(['natural', '0'])) {
-        // If you see any nonnegative argument,
-        // just return the whole tree as it was before
-        const [, ...operand_1] = operand;
-        if (operand_1.some(term_1 => Array.isArray(term_1) &&
-            term_1[0] !== 'negative' &&
-            !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'))) {
-            return tree;
-        }
-    } else if (JSON.stringify(operand[operand.length - 1]) === JSON.stringify(['natural', '0'])) {
-        const operand_1 = operand.slice(0, -1);
-        if (operand_1.some(term_1 => Array.isArray(term_1) &&
-            term_1[0] !== 'negative' &&
-            !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'))) {
-            return tree;
-        }
+    const zero = JSON.stringify(['natural', '0']);
+
+    // If you see any nonnegative argument,
+    // just return the whole tree as it was before
+    let operand_1;
+    if (JSON.stringify(operand[0]) === zero) {
+        [, ...operand_1] = operand;
+    } else if (JSON.stringify(operand[operand.length - 1]) === zero) {
+        operand_1 = operand.slice(0, -1);
     } else {
         return tree;
     }
-    const zero = JSON.stringify(['natural', '0']);
+    const condition = operand_1.some(term_1 => Array.isArray(term_1) && term_1[0] !== 'negative' && !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'));
+    if (condition) {
+        return tree;
+    }
+    const ineqs = new Map([
+        ['gt', 'lt'],
+        ['ge', 'le'],
+        ['lt', 'gt'],
+        ['le', 'ge']
+    ]);
     const newOperand = operand.map(term => JSON.stringify(term) === zero
         ? term
-        : term === 'gt'
-            ? 'lt'
-            : term === 'ge'
-                ? 'le'
-                : term === 'le'
-                    ? 'ge'
-                    : term === 'lt'
-                        ? 'gt'
-                        : term[0] === 'negative'
-                            ? term[1]
-                            : addNegative(['negative', term]));
+        : ineqs.get(term)
+            ? ineqs.get(term)
+            : term[0] === 'negative'
+                ? term[1]
+                : addNegative(['negative', term]));
     return [operator, ...newOperand];
 }
 
