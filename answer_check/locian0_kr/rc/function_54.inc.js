@@ -17,15 +17,17 @@ export function fracSeparation(tree) {
     const den = fracSeparation(operand[1]);
     const [[, ...operand_1]] = operand;
     let newOperand = [];
+    const signs = new Map([
+        ['add', 'sub'],
+        ['sub', 'add']
+    ]);
     operand_1.forEach(term => {
         let sign;
         let nden;
         if (den[0] === 'negative') {
-            sign = term[0] === 'add'
-                ? 'sub'
-                : term[0] === 'sub'
-                    ? 'add'
-                    : term[0];
+            sign = signs.get(term[0])
+                ? signs.get(term[0])
+                : term[0];
             nden = den[1];
         } else if (den[0] === 'pm' || term[0] === 'addsub') {
             sign = 'addsub';

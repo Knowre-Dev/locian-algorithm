@@ -60,8 +60,8 @@ export function 식_간단히(tree = null) {
 
 /*
 import {LatexToTree} from '../checkmath.js';
-let latex_1 = '7a^3b-14ab';
-let latex_2 = '7ab(a^2-2)';
+let latex_1 = '5t-\\frac{5}{3}';
+let latex_2 = '\\frac{15t-5}{3}';
 let tree_1 = LatexToTree(latex_1);
 let tree_2 = LatexToTree(latex_2);
 let tree_11 =  식_간단히(tree_1);

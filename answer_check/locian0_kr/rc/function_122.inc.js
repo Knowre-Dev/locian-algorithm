@@ -9,9 +9,10 @@ export function powerFrac(tree = null) {
     if (operand[0][0] !== 'fraction') {
         return tree;
     }
-    const newOperand = operand[0].reduce((terms, term_0) => Array.isArray(term_0)
-        ? [...terms, ['power', term_0, operand[1]]]
+    const [num, den] = operand;
+    const newOperand = num.reduce((terms, term_0) => Array.isArray(term_0)
+        ? [...terms, ['power', term_0, den]]
         : terms,
-    []);
+    []); // num이  addchain || mulchain 인 경우만 frac으로
     return ['fraction', ...newOperand];
 }

@@ -37,7 +37,7 @@ export function rootSimpInt(tree) {
             : outside === 1
                 ? [operator, operand[0]]
                 : ['mulchain', ['mul', ['natural', outside.toString()]],
-                ['mul', ['squareroot', ['natural', inside.toString()]]]];
+                    ['mul', ['squareroot', ['natural', inside.toString()]]]];
     }
     if (operator === 'mulchain') {
         let newOperand = [];

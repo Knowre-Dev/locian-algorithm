@@ -1,6 +1,6 @@
 import { addCommutative } from '../rc/function_47.inc.js';
 import { fracSimpInt } from '../rc/function_76.inc.js';
-
+import { gcd } from '../rc/sub_functions.js'
 export function addFactor(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -60,16 +60,11 @@ export function addFactor(tree) {
     }
     let [[, con]] = consArr;
     if (consArr.length !== 1) {
-        let lcm = consArr[0][1][1];
+        let [, lcm] = con;
         const [, ...consArr_rest] = consArr;
         lcm = consArr_rest.reduce(function (a, b) {
-                let A = a;
-                let B = b[1][1];
-                while (B !== 0) {
-                    [A, B] = [B, A % B];
-                }
-                const gcd = A;
-                return b[1][1] / gcd;
+                const [, [, b_1]] = b;
+                return b[1][1] / gcd(a, b_1);
             },
         lcm)
         con = ['natural', lcm.toString()];

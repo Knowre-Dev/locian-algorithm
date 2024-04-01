@@ -13,7 +13,7 @@ export function sub_mulCommutative(tree = null) {
     const condition = array.some(value => ['natural', 'decimal'].includes(value)) && array.includes('variable') && (!sub_deter(tree) || operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1])));
     return condition
         ? tree
-        : [operator, ...mulCommutative(tree).slice(1)]
+        : mulCommutative(tree);
 }
 
 /*

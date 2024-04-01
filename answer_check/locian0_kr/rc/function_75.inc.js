@@ -9,7 +9,7 @@ export function eqMulProp(tree) {
             ? [operator, [operand[0][1][0]]]
             : operand[0][0] === 'addchain' && operand[0][1][0][0] === 'fraction'
                 ? [operator, []]
-                : [operator, ...operand]
+                : tree
         : tree;
 }
 
@@ -34,12 +34,11 @@ export function eqMulPropUS(tree) {
         return tree; // No need to divide by 1
     }
     const [operator, ...operand] = tree;
-    let newtree = [operator];
     // this block executes for inequality signs (e.g., 'le', 'ge')
-    newtree = [...newtree, ...operand.map(term => Array.isArray(term)
-            ? multFactor(term, ['div', factor], true)
-            : term)];
-    return mulNegative(newtree);
+    const newOperand = operand.map(term => Array.isArray(term)
+        ? multFactor(term, ['div', factor], true)
+        : term);
+    return mulNegative([operator, ...newOperand]);
 
     // NOTE: This function does not support division by negative common factor
     //     Use this function in conjunction with eqMulNeg() and ineqMulNeg()

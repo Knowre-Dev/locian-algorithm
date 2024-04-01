@@ -10,13 +10,11 @@ export function mulConstCal(tree = null) {
     let nterm = [];
     let varterm = [];
     operand.forEach(term => {
-        term[1][0] === 'power'
-            ? term[1][1][0] === 'natural' && term[1][2][0] === 'natural'
+        term[1][0] === 'natural'
+            ? nterm = [...nterm, term]
+            : term[1][0] === 'power' && term[1][1][0] === 'natural' && term[1][2][0] === 'natural'
                 ? nterm = [...nterm, [term[0], ['natural', Math.pow(term[1][1][1], term[1][2][1]).toString()]]]
                 : varterm = [...varterm, term]
-            : term[1][0] === 'natural'
-                ? nterm = [...nterm, term]
-                : varterm = [...varterm, term];
     });
     if (nterm.length === 0) {
         return tree;

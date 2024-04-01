@@ -1,5 +1,5 @@
-import { addNegative } from '../rc/function_71.inc.js';
-
+// import { addNegative } from '../rc/function_71.inc.js';
+import { sign_change } from '../rc/sub_functions.js';
 export function addFactorNegative(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -21,7 +21,7 @@ export function addFactorNegative(tree) {
                 if (term[0] === 'mul' && term[1][0] === 'addchain') {
                     let [, addchain] = term;
                     if (addchain[1][0] === 'sub') {
-                        addchain = addNegative(['negative', addchain]);
+                        addchain = sign_change(addchain);
                         sign *= -1;
                     }
                     factArr = [...factArr, ['mul', addchain]];
@@ -37,7 +37,7 @@ export function addFactorNegative(tree) {
         case 'addchain': {
             const addchain = ['addchain', ...operand];
             return addchain[1][0] === 'sub'
-                ? ['negative', addNegative(['negative', addchain])]
+                ? ['negative', sign_change(addchain)]
                 : addchain;
         }
         default: {

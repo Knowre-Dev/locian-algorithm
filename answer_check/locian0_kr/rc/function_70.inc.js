@@ -1,6 +1,6 @@
 // import { addNegative } from '../rc/function_71.inc.js';
 import { addFactor_1 } from '../rc/function_128.inc.js';
-
+import { sign_change } from '../rc/sub_functions.js';
 export function addFactoredForm(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -32,14 +32,7 @@ export function addFactoredForm(tree) {
                         addchain = fact;
                     }
                     if (addchain[1][0] === 'sub') {
-                        const ops = new Map([
-                            ['add', 'sub'],
-                            ['sub', 'add']
-                        ]);
-                        addchain = addchain.map(term => ops.get(term[0])
-                            ? [ops.get(term[0]), term[1]]
-                            : term);
-                        // addchain = addNegative(['negative', addchain]);
+                        addchain = sign_change(addchain);
                         sign *= -1;
                     }
                     factArr = [...factArr, ['mul', addchain]];
@@ -72,14 +65,7 @@ export function addFactoredForm(tree) {
                 [, con, [, addchain]] = fact;
             }
             if (addchain[1][0] === 'sub') {
-                const ops = new Map([
-                    ['add', 'sub'],
-                    ['sub', 'add']
-                ]);
-                addchain = addchain.map(term => ops.get(term[0])
-                    ? [ops.get(term[0]), term[1]]
-                    : term);
-                // addchain = addNegative(['negative', addchain]);
+                addchain = sign_change(addchain);
                 sign *= -1;
             }
             return fact[0] === 'mulchain'
@@ -87,8 +73,8 @@ export function addFactoredForm(tree) {
                     ? ['negative', ['mulchain', con, ['mul', addchain]]]
                     : ['mulchain', con, ['mul', addchain]]
                 : sign === -1
-                    ? ['negative', [operator, ...addchain.slice(1)]]
-                    : [operator, ...addchain.slice(1)];
+                    ? ['negative', addchain]
+                    : addchain;
         }
         default: {
             return [operator, ...operand.map(term => addFactoredForm(term))];

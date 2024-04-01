@@ -1,7 +1,7 @@
 import { fracNegative } from '../rc/function_53.inc.js';
 import { fracSeparation } from '../rc/function_54.inc.js';
 import { fracSimpInt } from '../rc/function_76.inc.js';
-
+import { gcd } from '../rc/sub_functions.js'
 export function eqIneqMulProp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -13,7 +13,7 @@ export function eqIneqMulProp(tree = null) {
         case 'equation': {
             const [, ...operand] = tree;
             let con = [...sub_getConstant(operand[0]), ...sub_getConstant(operand[1])];
-            con = Array.from(new Set(con));
+            con = [...new Set(con)];
             const con_length = con.length;
 
             if (con.includes(1) || con_length === 0) {
@@ -29,13 +29,7 @@ export function eqIneqMulProp(tree = null) {
                         : tree;
             }
             let [div, ...con_rest] = con;
-            div = con_rest.reduce(function (A, B) {
-                    while (B !== 0) {
-                        [A, B] = [B, A % B];
-                    }
-                    return A;
-                },
-            div);
+            div = con_rest.reduce((a, b) => gcd(a, b), div);
             return div === 1
                 ? tree
                 : [operator, frac_function(['fraction', operand[0], ['natural', div.toString()]]), frac_function(['fraction', operand[1], ['natural', div.toString()]])];
@@ -65,13 +59,7 @@ export function eqIneqMulProp(tree = null) {
                 return tree;
             }
             let [div, ...con_rest] = con
-            div = con_rest.reduce(function (A, B) {
-                    while (B !== 0) {
-                        [A, B] = [B, A % B];
-                    }
-                    return A;
-                },
-            div);
+            div = con_rest.reduce((a, b) => gcd(a, b), div);
             if (div === 1) {
                 return tree;
             }
@@ -120,7 +108,7 @@ export function sub_getConstant(tree) {
                 ? [...terms, ...sub_getConstant(term[1])]
                 : terms,
             []);
-            con = Array.from(new Set(con));
+            con = [...new Set(con)];
             if (con.includes(1) && con.length !== 1) {
                 con = con.filter(term_c => term_c !== 1);
             }

@@ -8,14 +8,16 @@ export function addAdjacentSigns(tree) {
         return [operator, ...operand.map(term => addAdjacentSigns(term))];
     }
     let newOperand = [];
+    const signs = new Map([
+        ['add', 'sub'],
+        ['sub', 'add']
+    ]);
     operand.forEach(term => {
         const nterm = addAdjacentSigns(term[1]);
         newOperand = nterm[0] === 'negative'
-            ? term[0] === 'add'
-                ? [...newOperand, ['sub', nterm[1]]]
-                : term[0] === 'sub'
-                    ? [...newOperand, ['add', nterm[1]]]
-                    : [...newOperand, [term[0], nterm[1]]]
+            ? signs.get(term[0])
+                ? [...newOperand, [signs.get(term[0]), nterm[1]]]
+                : [...newOperand, [term[0], nterm[1]]]
             : [...newOperand, [term[0], nterm]];
     });
     return [operator, ...newOperand];

@@ -1,5 +1,4 @@
 import { addNegative } from '../rc/function_71.inc.js';
-
 export function eqMulNeg(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -17,7 +16,7 @@ export function eqMulNeg(tree) {
         ? [...newOperand, operand[1][1]]
         : operand[1][0] === 'addchain'
             ? [...newOperand, addNegative(['negative', operand[1]])]
-            : (operand[1][0] === 'natural' && operand[1][1] === '0')
+            : operand[1][0] === 'natural' && operand[1][1] === '0'
                 ? [...newOperand, operand[1]]
                 : [...newOperand, ['negative', operand[1]]];
     return [operator, ...newOperand];

@@ -1,3 +1,4 @@
+import { gcd } from '../rc/sub_functions.js'
 export function fracSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -9,96 +10,69 @@ export function fracSimpInt(tree) {
     }
     const num = fracSimpInt(operand[0]);
     const den = fracSimpInt(operand[1]);
-    let intNum;
-    let intDen;
+    let intNum = 1;
     let narrNum = [];
     switch (num[0]) {
         case 'natural': {
-            intNum = num[1];
+            [, intNum] = num;
             break;
         }
         case 'mulchain': {
-            let arrNum = [];
+            let arrNum = [1];
             const [, ...num_1] = num;
             num_1.forEach(term => {
                 term[0] === 'mul' && term[1][0] === 'natural'
                     ? arrNum = [...arrNum, term[1][1]]
                     : narrNum = [...narrNum, term];
             });
-            const arrNum_length = arrNum.length;
-            intNum = arrNum_length === 0
-                ? 1
-                : arrNum_length === 1
-                    ? arrNum[0]
-                    : arrNum.reduce((a, b) => a * b);
+            intNum = arrNum.reduce((a, b) => a * b);
             break;
-        }
-        default: {
-            intNum = 1;
         }
     }
 
-    let arrDen = [];
+    let intDen = 1;
     let narrDen = [];
-
     switch (den[0]) {
         case 'natural': {
-            intDen = den[1];
+            [, intDen] = den;
             break;
         }
         case 'mulchain': {
             const [, ...den_1] = den;
+            let arrDen = [1];
             den_1.forEach(term => {
                 term[0] === 'mul' && term[1][0] === 'natural'
                     ? arrDen = [...arrDen, term[1][1]]
                     : narrDen = [...narrDen, term];
             });
-            const arrDen_length = arrDen.length;
-            intDen = arrDen_length === 0
-                ? 1
-                : arrDen_length === 1
-                    ? arrDen[0]
-                    : arrDen.reduce((a, b) => a * b);
+            intDen = arrDen.reduce((a, b) => a * b);
             break;
         }
-        default: {
-            intDen = 1;
-        }
     }
-
-    let A = intNum;
-    let B = intDen;
-    while (B !== 0) {
-        [A, B] = [B, A % B];
-    }
-    const gcf = A;
-    const newNum = (intNum / gcf).toString();
-    const newDen = (intDen / gcf).toString();
-    let newOperand = [];
+    const g = gcd(intNum, intDen);
+    const newNum = (intNum / g).toString();
+    const newDen = (intDen / g).toString();
+    let num_1 = num;
     switch (num[0]) {
         case 'natural': {
-            newOperand = [...newOperand, ['natural', newNum]];
+            num_1 = ['natural', newNum];
             break;
         }
         case 'mulchain': {
             if (newNum !== '1') {
                 narrNum = [['mul', ['natural', newNum]], ...narrNum];
             }
-            narrNum = narrNum.length === 1
+            num_1 = narrNum.length === 1
                 ? narrNum[0][1]
                 : ['mulchain', ...narrNum];
-            newOperand = [...newOperand, narrNum];
             break;
-        }
-        default: {
-            newOperand = [...newOperand, num];
         }
     }
     switch (den[0]) {
         case 'natural': {
             return newDen === '1'
-                ? newOperand[0]
-                : [operator, ...newOperand, ['natural', newDen]];
+                ? num_1
+                : [operator, num_1, ['natural', newDen]];
         }
         case 'mulchain': {
             if (newDen !== '1') {
@@ -107,17 +81,18 @@ export function fracSimpInt(tree) {
             narrDen = narrDen.length === 1
                 ? narrDen[0][1]
                 : ['mulchain', ...narrDen];
-            return [operator, ...newOperand, narrDen];
+            return [operator, num_1, narrDen];
         }
         default: {
-            return [operator, ...newOperand, den];
+            return [operator, num_1, den];
         }
     }
 }
-
+/*
 export function EuclidAlg(A, B) {
     while (B !== 0) {
         [A, B] = [B, A % B];
     }
     return A;
 }
+*/

@@ -1,12 +1,13 @@
-import { addNegative } from '../rc/function_71.inc.js';
-
+// import { addNegative } from '../rc/function_71.inc.js';
+import { sign_change } from '../rc/sub_functions.js';
 export function ineqMulNeg(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
 
     const [operator, ...operand] = tree;
-    if (operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'))) {
+    const is_not_negative = operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'));
+    if (is_not_negative) {
         return tree;
     }
 
@@ -14,25 +15,22 @@ export function ineqMulNeg(tree = null) {
     if (operand[0][0] === 'negative') {
         newOperand = [operand[0][1]];
     } else if (operand[0][0] === 'addchain' && operand[0][1][0] === 'sub') {
-        newOperand = [addNegative(['negative', operand[0]])];
+        newOperand = [sign_change(operand[0])];
     }
     const max = Math.floor(operand.length / 2);
+    const ineqs = new Map([
+        ['gt', 'lt'],
+        ['ge', 'le'],
+        ['lt', 'gt'],
+        ['le', 'ge']
+    ]);
     for (let i = 1; i <= max; i++) {
-        const term_odd = operand[2 * i - 1];
-        const ineqs = new Map([
-            ['gt', 'lt'],
-            ['ge', 'le'],
-            ['lt', 'gt'],
-            ['le', 'ge']
-        ]);
-        const op = ineqs.get(term_odd);
-
-        newOperand = [...newOperand, op];
+        newOperand = [...newOperand, ineqs.get(operand[2 * i - 1])];
         const term_even = operand[2 * i];
         const term_add = term_even[0] === 'negative'
             ? term_even[1]
             : term_even[0] === 'addchain'
-                ? addNegative(['negative', term_even])
+                ? sign_change(term_even)
                 : JSON.stringify(term_even) === JSON.stringify(['natural', '0'])
                     ? term_even
                     : ['negative', term_even];
@@ -58,8 +56,8 @@ export function ineqMulNegUS(tree) {
     } else {
         return tree;
     }
-    const condition = operand_1.some(term_1 => Array.isArray(term_1) && term_1[0] !== 'negative' && !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'));
-    if (condition) {
+    const is_not_negative = operand_1.some(term_1 => Array.isArray(term_1) && term_1[0] !== 'negative' && !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'));
+    if (is_not_negative) {
         return tree;
     }
     const ineqs = new Map([
@@ -74,7 +72,7 @@ export function ineqMulNegUS(tree) {
             ? ineqs.get(term)
             : term[0] === 'negative'
                 ? term[1]
-                : addNegative(['negative', term]));
+                : sign_change(term));
     return [operator, ...newOperand];
 }
 

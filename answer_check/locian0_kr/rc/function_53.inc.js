@@ -1,5 +1,5 @@
-import { addNegative } from '../rc/function_71.inc.js';
-
+// import { addNegative } from '../rc/function_71.inc.js';
+import { sign_change } from '../rc/sub_functions.js';
 export function fracNegative(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -23,7 +23,8 @@ export function fracNegative(tree) {
                 [, num] = num;
             } else if (num[0] === 'addchain' && num[1][0] === 'sub') {
                 sign = -1;
-                num = addNegative(['negative', num]);
+                num = sign_change(num);
+                // num = addNegative(['negative', num]);
             }
 
             if (den[0] === 'negative') {
@@ -31,7 +32,8 @@ export function fracNegative(tree) {
                 [, den] = den;
             } else if (den[0] === 'addchain' && den[1][0] === 'sub') {
                 sign *= -1;
-                den = addNegative(['negative', den]);
+                den = sign_change(den);
+                // den = addNegative(['negative', den]);
             }
             return sign === -1
                 ? ['negative', [operator, num, den]]
@@ -39,15 +41,17 @@ export function fracNegative(tree) {
         }
         case 'addchain': {
             let newOperand = [];
+            const signs = new Map([
+                ['add', 'sub'],
+                ['sub', 'add']
+            ]);
             operand.forEach(term => {
                 if (term[1][0] === 'fraction') {
                     const nterm = fracNegative(term[1]);
                     newOperand = nterm[0] === 'negative'
-                        ? term[0] === 'add'
-                            ? [...newOperand, ['sub', nterm[1]]]
-                            : term[0] === 'sub'
-                                ? [...newOperand, ['add', nterm[1]]]
-                                : [...newOperand, [term[0], nterm[1]]]
+                        ? signs.get(term[0])
+                            ? [...newOperand, [signs.get(term[0]), nterm[1]]]
+                            : [...newOperand, [term[0], nterm[1]]]
                         : [...newOperand, [term[0], nterm]];
                 } else {
                     newOperand = [...newOperand, term];
@@ -76,6 +80,7 @@ export function fracNegative(tree) {
         }
     }
 }
+
 /*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = '\\frac{125\\pi}{\\pi}';
