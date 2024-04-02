@@ -64,22 +64,20 @@ export function fracSimpVar(tree) {
     const new_den = [...new_var_den, ...other_den]; // variable + non variable
     new_num.sort();
     new_den.sort();
-    const new_num_length = new_num.length;
-    new_num = new_num_length === 0
+    new_num = new_num.length === 0
         ? ['natural', '1']
-        : new_num_length === 1
-            ? new_num[0][1]
-            : key_num === 0
-                ? mulCommutative(['mulchain', ...new_num]) // 맨앞에만 non variable (3abc)
-                : sub_mulCommutative(['mulchain', ...new_num]); // 그외 (abc)
-    const new_den_length = new_den.length;
-    return new_den_length === 0
+        : form_mulchain(new_num, key_num);
+    return new_den.length === 0
         ? new_num
-        : new_den_length === 1
-            ? [operator, new_num, new_den[0][1]]
-            : key_den === 0
-                ? [operator, new_num, mulCommutative(['mulchain', ...new_den])] // 맨앞에만 non variable (3abc)
-                : [operator, new_num, sub_mulCommutative(['mulchain', ...new_den])]; /// 그외 (abc)
+        : [operator, new_num, form_mulchain(new_den, key_den)];
+}
+
+function form_mulchain(terms, key) {
+    return terms.length === 1
+        ? terms[0][1]
+        : key === 0
+            ? mulCommutative(['mulchain', ...terms]) // 맨앞에만 non variable (3abc)
+            : sub_mulCommutative(['mulchain', ...terms]); /// 그외 (abc)
 }
 
 function simp_exp(terms) { // a^1b^2 => ab^2
@@ -95,7 +93,7 @@ function simp_exp(terms) { // a^1b^2 => ab^2
     return terms_simp;
 }
 
-function term_info(tree) { 
+function term_info(tree) {
     let var_tree = []; // variable
     let other_tree = []; // non variable
     let key_tree = 0; // 분자중 vraiable 아닌것이 제일 앞에만 있는지 확인하기 위함 (최종적으로  num_key === 0 인지 확인) (3ab)
@@ -112,15 +110,15 @@ function term_info(tree) {
                 if (typeof vars.get(term[1][1]) === 'undefined') { // 세로운 variable
                     vars.set(term[1][1], key_var);
                     var_tree = [...var_tree, ['power', term[1], ['natural', '1']]]; // a => a^1
+                    key_var++;
                 } else { // 기존  variable
                     const key_1 = vars.get(term[1][1]);
                     var_tree[key_1][2][1] = (parseInt(var_tree[key_1][2][1]) + 1).toString(); // a^2a => a^3
                 }
-                key_var++
             } else if (term[0] === 'mul' && term[1][0] === 'power' && term[1][1][0] === 'variable') { // power a^2, b^2, c^2
                 var_tree = [...var_tree, term[1]];
-                key_var++
-            } else { // non variable (tree: ab^2(ac)(c+d) =? ac, c+d)
+                key_var++;
+            } else { // non variable (ab^2(ac)(c+d) => ac, c+d)
                 key_tree = key;
                 other_tree = [...other_tree, term];
             }
@@ -128,14 +126,14 @@ function term_info(tree) {
     }
     return [var_tree, other_tree, key_tree];
 }
-
+/*
 import { LatexToTree } from '../checkmath.js';
-const latex_1 = '\\frac{3ab^2a}{a(a+b)}';
+const latex_1 = '\\frac{3ab^2a}{b(a+b)}';
 const tree_1 = LatexToTree(latex_1);
 const tree_11 = fracSimpVar(tree_1);
 const result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
-
+*/
 /*
 import { LatexToTree } from '../checkmath.js';
 const latex_1 = 'aa';
