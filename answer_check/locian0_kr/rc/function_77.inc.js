@@ -142,6 +142,7 @@ const tree_11 = term_info(tree_1);
 const result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */
+/*
 export function fracSimpVar_old(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -306,3 +307,4 @@ export function fracSimpVar_old(tree) {
                 ? [operator, new_num, mulCommutative(['mulchain', ...arrDen])]
                 : [operator, new_num, sub_mulCommutative(['mulchain', ...arrDen])];
 }
+*/
