@@ -22,26 +22,21 @@ export function evaluateEx_new(tree) {
             let newTree = ['inequality'];
             const opernad_length = operand.length;
             const max = Math.floor(opernad_length / 2);
-            if (['gt', 'ge'].includes(operand[1])) {
-                const term_last = operand[opernad_length - 1];
-                for (let i = 0; i < max; i++) {
-                    newTree = [...newTree,
-                        evaluateEx_new(['addchain', ['add', operand[2 * i]], ['sub', term_last]]),
-                        operand[2 * i + 1]
-                    ];
-                }
-            } else {
-                const operand_reverse = operand.reverse();
-                const signs = new Map([
-                    ['lt', 'gt'],
-                    ['le', 'ge']
-                ]);
-                for (let i = 0; i < max; i++) {
-                    newTree = [...newTree,
-                        evaluateEx_new(['addchain', ['add', operand_reverse[2 * i]], ['sub', operand[0]]]),
-                        signs.get(operand_reverse[2 * i + 1])
-                    ];
-                }
+            const signs = new Map([
+                ['gt', 'gt'],
+                ['ge', 'ge'],
+                ['lt', 'gt'],
+                ['le', 'ge']
+            ]);
+            const operand_1 = ['gt', 'ge'].includes(operand[1])
+                ? operand
+                : operand.reverse();
+            const term_sub = operand_1[opernad_length - 1];
+            for (let i = 0; i < max; i++) {
+                newTree = [...newTree,
+                    evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_sub]]),
+                    signs.get(operand_1[2 * i + 1])
+                ];
             }
             return [...newTree, ['natural', '0']];
         }
@@ -134,7 +129,8 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
     // Sort the variable names
     // This ensures that the same variable is assigned with the same value
     // Regardless of when it was added to the varNames array
-    varNames.sort();
+    varNames = [...new Set(varNames)];
+    // varNames.sort();
 
     const maxVal = Number.MAX_SAFE_INTEGER;
     const rangeWidth = 10;
@@ -162,8 +158,8 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // so as to not affect the random number generator state
                     // EDIT epark 20180830: Don't use lcg_value().. srand() wouldn't work as you'd expect
                     // Scale the random numbers appropriately (incl. make them into float values)
-                    let randRe = Math.floor((Math.cos(seed) * Number.MAX_SAFE_INTEGER)) / maxVal;
-                    let randIm = Math.floor((Math.sin(seed) * Number.MAX_SAFE_INTEGER)) / maxVal;
+                    let randRe = Math.floor((Math.cos(seed) * maxVal)) / maxVal;
+                    let randIm = Math.floor((Math.sin(seed) * maxVal)) / maxVal;
                     // EDIT 2018.08.23:
                     // Ensure that x in one tree is assigned a different value than y in another tree
                     // Even when each variable is the only variable present in their respective trees
@@ -415,6 +411,7 @@ export function replace(tree, from, to) {
 Copied mostly from checkmath.php,
 with comments added by epark
 */
+
 export function powComplex_inLocian(A, B) {
     if (A[0] === A[1] === 0) {
         return B[0] === B[1] === 0
@@ -432,6 +429,8 @@ export function powComplex_inLocian(A, B) {
     }
 
     // theta is the argument (angle) from the positive x-axis
+    const theta = Math.atan2(A[1], A[0]);
+    /*
     const theta = A[1] === 0 && A[0] > 0
         ? 0
         : A[1] === 0 && A[0] < 0
@@ -439,6 +438,7 @@ export function powComplex_inLocian(A, B) {
             : A[1] > 0
                 ? Math.acos(A[0] / r)
                 : 2 * Math.PI - Math.acos(A[0] / r);
+    */
     const [c, d] = B;
     const newR = Math.pow(r, c) / Math.exp(d * theta);
     const newTheta = (d * Math.log(r) + c * theta) % (2 * Math.PI);
@@ -534,7 +534,7 @@ export function array2ChainTree(arr, evalNumeric = false) {
         });
         let numRes = array2ChainTree(numericArr);
         arr = nonnumericArr;
-        if (numRes.length > 0) {
+        if (numRes.length) {
             numRes = evalNumericValues(numRes);
             if (operator === 'addchain') {
                 if (arr.length === 0 || JSON.stringify(numRes) !== JSON.stringify(['natural', '0'])) {
