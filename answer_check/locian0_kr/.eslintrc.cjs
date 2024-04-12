@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es2021: true
@@ -9,9 +10,7 @@ module.exports = {
       env: {
         node: true
       },
-      files: [
-        '.eslintrc.{js,cjs}'
-      ],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script'
       }
@@ -29,6 +28,7 @@ module.exports = {
     'prefer-regex-literals': 'off',
     semi: 'off',
     'space-before-function-paren': 'off',
-    'no-labels': 'off'
+    'no-labels': 'off',
+    'no-tabs': 0
   }
-}
+};
