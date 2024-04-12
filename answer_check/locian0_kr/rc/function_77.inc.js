@@ -26,17 +26,17 @@ export function fracSimpVar(tree) {
   // variable 수 세는 맵 { "a": -1, "b": 1, "c": 0 }
   let varMap = new Map();
   // updateVariableCount for num, returns
-  // [ total variable count, array of non variable terms]
-  const [numCount, other_num] = updateVariableCount({ tree: num, map: varMap, increment: 1 });
-  if (numCount === 0) {
+  // [ if variableExists, array of non variable terms]
+  const [hasNumVar, other_num] = updateVariableCount({ tree: num, map: varMap, increment: 1 });
+  if (!hasNumVar) {
     // no variables in num
     return [operator, num, den];
   }
 
   // updateVariableCount for den, returns
-  // [ total variable count, array of non variable terms]
-  const [denCount, other_den] = updateVariableCount({ tree: den, map: varMap, increment: -1 });
-  if (denCount === 0) {
+  // [ if variableExists, array of non variable terms]
+  const [hasDenVar, other_den] = updateVariableCount({ tree: den, map: varMap, increment: -1 });
+  if (!hasDenVar) {
     // no variables in den
     return [operator, num, den];
   }
@@ -58,8 +58,8 @@ export function fracSimpVar(tree) {
 
   newNumerators.sort(); // b2ac -> 2abc
   newDenominators.sort();
-  newNumerators = newNumerators.length === 0 
-    ? ['natural', '1'] 
+  newNumerators = newNumerators.length === 0
+    ? ['natural', '1']
     : form_mulchain(newNumerators);
 
   return newDenominators.length === 0
@@ -76,49 +76,40 @@ function form_mulchain(terms, key) {
 }
 
 function updateVariableCount({ tree, map, increment }) {
-  let var_tree = []; // variable
+  let hasVar = false;
   let other_tree = []; // non variable
-  let key_tree = 0; // 분자중kvraiable 아닌것이 제일 앞에만 있는지 확인하기 위함 (최종적으로  num_key === 1 인지 확인) (3ab)
   const [operator, ...operand] = tree;
-  if (operator === 'variable') {
-    // varialle  (a)
-    var_tree = [['power', tree, ['natural', '1']]]; // a => a^1 (나중 계산을 위해)
+  if (operator === 'variable') { // varialle  (a)
+    hasVar = true
+    // power operand 받아서 맵 설정 또는 증가
+    // ex: [["variable", "a"], ["natural", "n"]] -> map {"a": "n"}
+    // single variable pass in a^1
+    incrementMap(map, [tree, ['natural', '1']], increment); //
   } else if (operator === 'power' && operand[0][0] === 'variable') {
-    // power (a^2, b^2, c^2)
-    var_tree = [tree];
+    hasVar = true;
+    // increment 'a' count by exponent in power operand
+    incrementMap(map, operand, increment);
   } else if (operator === 'mulchain') {
     // mulchain (abc, ab^2(ac))
-    const vars = new Map(); // variable 위치 map
-    let key_var = 0; // variable  위치
-    operand.forEach((term, key) => {
+    operand.forEach(term => {
       if (term[0] === 'mul' && term[1][0] === 'variable') {
+        hasVar = true;
         // variable (a, b, c)
-        if (typeof vars.get(term[1][1]) === 'undefined') {
-          // 세로운 variable
-          vars.set(term[1][1], key_var);
-          var_tree = [...var_tree, ['power', term[1], ['natural', '1']]]; // a => a^1
-          key_var++;
-        } else {
-          // 기존  variable
-          const key_1 = vars.get(term[1][1]);
-          var_tree[key_1][2][1] = (
-            parseInt(var_tree[key_1][2][1]) + 1
-          ).toString(); // a^2a => a^3
-        }
+        // 'a' pass in a^1
+        incrementMap(map, [term[1], ['natural', '1']], increment);
       } else if (
         term[0] === 'mul' &&
         term[1][0] === 'power' &&
         term[1][1][0] === 'variable'
       ) {
         // power a^2, b^2, c^2
-        var_tree = [...var_tree, term[1]];
-        key_var++;
+        hasVar = true;
+        incrementMap(map, [term[1][1], term[1][2]], increment);
       } else {
         // non variable (ab^2(ac)(c+d) => ac, c+d)
-        key_tree = key;
-        other_tree = [...other_tree, term];
+        other_tree.push(term)
       }
     });
   }
-  return [var_tree, other_tree, key_tree];
+  return [hasVar, other_tree];
 }
