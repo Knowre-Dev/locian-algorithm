@@ -1,5 +1,4 @@
 import { mulCommutative } from '../rc/function_46.inc.js';
-import { sub_mulCommutative } from '../rc/function_126.inc.js';
 
 /* tree (math tree)
 2 : ['natural', '2']
@@ -75,19 +74,18 @@ function convertToMulTerm(key, value) {
   return val
 }
 
-function form_mulchain(terms, key) {
+function form_mulchain(terms) {
   return terms.length === 1
     ? terms[0][1]
-    : key === 0
-      ? mulCommutative(['mulchain', ...terms]) // 맨앞에만 non variable (3abc)
-      : sub_mulCommutative(['mulchain', ...terms]); /// 그외 (abc)
+    : mulCommutative(['mulchain', ...terms]) // 맨앞에만 non variable (3abc)  (other 먼저 추가, 소트 해서 여기만 사용)
 }
+
 function incrementMap(map, operand, increment) {
   const [base, exponent] = operand;
   const [, variable] = base;
   const [, stringNum] = exponent;
   const num = parseInt(stringNum);
-  const incrementTotal = increment*num
+  const incrementTotal = increment * num
   if (map.has(variable)) {
     map.set(variable, map.get(variable) + incrementTotal)
   } else {
