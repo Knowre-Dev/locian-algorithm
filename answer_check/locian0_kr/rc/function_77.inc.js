@@ -48,10 +48,10 @@ export function fracSimpVar(tree) {
   varMap.forEach((value, key) => {
     // if power > 0 add no numerator
     if (value > 0) {
-      newNumerators.push(convertToMulchain(key, value));
+      newNumerators.push(convertToMulTerm(key, value));
       // if power < 0 add to denominator, make power positive again
     } else if (value < 0) {
-      newDenominators.push(convertToMulchain(key, -value));
+      newDenominators.push(convertToMulTerm(key, -value));
     }
     // Entries with value 0 are ignored
   });
@@ -67,12 +67,32 @@ export function fracSimpVar(tree) {
     : [operator, newNumerators, form_mulchain(newDenominators)];
 }
 
+// ['mul', operand] 만들기 (variable or power) 설정
+function convertToMulTerm(key, value) {
+  const val = value === 1
+    ? ['mul', ['variable', key]]
+    : ['mul', ['power', ['variable', key], ['natural', value.toString()]]];
+  return val
+}
+
 function form_mulchain(terms, key) {
   return terms.length === 1
     ? terms[0][1]
     : key === 0
       ? mulCommutative(['mulchain', ...terms]) // 맨앞에만 non variable (3abc)
       : sub_mulCommutative(['mulchain', ...terms]); /// 그외 (abc)
+}
+function incrementMap(map, operand, increment) {
+  const [base, exponent] = operand;
+  const [, variable] = base;
+  const [, stringNum] = exponent;
+  const num = parseInt(stringNum);
+  const incrementTotal = increment*num
+  if (map.has(variable)) {
+    map.set(variable, map.get(variable) + incrementTotal)
+  } else {
+    map.set(variable, incrementTotal);
+  }
 }
 
 function updateVariableCount({ tree, map, increment }) {
