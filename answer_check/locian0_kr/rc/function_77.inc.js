@@ -40,46 +40,31 @@ export function fracSimpVar(tree) {
     // no variables in den
     return [operator, num, den];
   }
+  // fill new numerator and denominator with other terms first
+  let newNumerators = [...other_num]
+  let newDenominators = [...other_den]
 
-  // get new numerator and denominator variables (ab/a^2c => b/c^2)
-  const var_num_length = var_num.length;
-  const var_den_length = var_den.length;
-  for (let i = 0; i < var_num_length; i++) {
-    for (let j = 0; j < var_den_length; j++) {
-      if (var_den[j]) {
-        if (var_num[i][1][1] === var_den[j][1][1]) {
-          // 분모 분자 variable  일치
-          const exp = var_num[i][2][1] - var_den[j][2][1]; //  a^x / a^y => x - y
-          if (exp > 0) {
-            // x > y
-            var_num[i][2][1] = exp.toString();
-            var_den[j] = null;
-          } else if (exp < 0) {
-            // x < y
-            var_num[i] = null;
-            var_den[j][2][1] = (-exp).toString();
-          } else {
-            // x === y
-            var_num[i] = null;
-            var_den[j] = null;
-          }
-          break;
-        }
-      }
+  // variable 맵 사용해서 변수 텀 추가
+  varMap.forEach((value, key) => {
+    // if power > 0 add no numerator
+    if (value > 0) {
+      newNumerators.push(convertToMulchain(key, value));
+      // if power < 0 add to denominator, make power positive again
+    } else if (value < 0) {
+      newDenominators.push(convertToMulchain(key, -value));
     }
-  }
-  const new_var_num = simp_exp(var_num);
-  const new_var_den = simp_exp(var_den);
-  // form new numerator and denominator
-  let new_num = [...new_var_num, ...other_num]; // variable + non variable
-  const new_den = [...new_var_den, ...other_den]; // variable + non variable
-  new_num.sort();
-  new_den.sort();
-  new_num =
-    new_num.length === 0 ? ['natural', '1'] : form_mulchain(new_num, key_num);
-  return new_den.length === 0
-    ? new_num
-    : [operator, new_num, form_mulchain(new_den, key_den)];
+    // Entries with value 0 are ignored
+  });
+
+  newNumerators.sort(); // b2ac -> 2abc
+  newDenominators.sort();
+  newNumerators = newNumerators.length === 0 
+    ? ['natural', '1'] 
+    : form_mulchain(newNumerators);
+
+  return newDenominators.length === 0
+    ? newNumerators
+    : [operator, newNumerators, form_mulchain(newDenominators)];
 }
 
 function form_mulchain(terms, key) {
