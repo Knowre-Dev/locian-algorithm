@@ -14,20 +14,21 @@ export function fracCombine(tree) {
     if (operator !== 'addchain') {
         return [operator, ...operand.map(term => fracCombine(term))];
     }
-    let denomArr = findDenominators(tree, true);
-    if (denomArr.length === 0) {
+    let den = findDenominators(tree, true);// 분모 수집
+    if (den.length === 0) { // 분모가 없는 경우
         return tree;
     }
-    denomArr = denomArr.map(denom => ['mul', denom]);
-    let denom = array2ChainTree(denomArr);
-    const find = findGCF(denom);
+    den = den.map(term => ['mul', term]);
+    den = array2ChainTree(den); // 분모들로 mulchain 형성
+    const GCF = findGCF(den);// 분모들의  쵀대공인수(GCF) 계산
 
-    if (find.sym.length !== 0) {
-        const denom_arr = [['mul', find.const], ...find.sym.map(value_1 => ['mul', value_1])];
-        denom = ['mulchain', ...denom_arr];
+    if (GCF.sym.length !== 0) { // GCF의 인자 중에서 symbol이 있는 경우
+        const terms = [['mul', GCF.const], ...GCF.sym.map(value_1 => ['mul', value_1])];
+        den = ['mulchain', ...terms];
     }
-    const newOperand = operand.map(term => [term[0], mulIdentity(mulAssociative(multFactor(term[1], ['mul', denom], true)))]);
-    return ['fraction', array2ChainTree(newOperand), denom];
+    const mul_function = (tree_1, term) => mulIdentity(mulAssociative(multFactor(tree_1, term, true)));
+    const newOperand = operand.map(term => [term[0], mul_function(term[1], ['mul', den])]); // addchain 각 term에 den 곱함
+    return ['fraction', array2ChainTree(newOperand), den]; // 전체를 den으로 나눔
 }
 
 /*

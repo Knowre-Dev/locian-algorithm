@@ -36,30 +36,30 @@ export function groupLikeVariableTerms(tree = null) {
             // added to allow for proper parse in case a power term is present
             operand = operand.map(term => [term[0], groupLikeVariableTerms(term[1])])
             // Find all variables in this tree
-            const varList = findVars([operator, ...operand]);
-            if (varList.length === 0) {
+            const vars = findVars([operator, ...operand]);//  variable 수집
+            if (vars.length === 0) {
                 return [operator, ...operand];
             }
             // Pick a variable
             // and group among the terms not yet visited (i.e., accounted for)
             // that contains this variable/mulchain of variables
-            const termIndices = [...operand.keys()];
+            const keys = [...operand.keys()];
 
-            const coeffArr = {};
-            coeffArr.const = [];
-            for (const key in varList) {
-                coeffArr[key.toString()] = [];
+            const coeffs = {};
+            coeffs.const = [];
+            for (const key in vars) {
+                coeffs[key.toString()] = [];
             }
-            // Iterate through each variable in varList
-            varList.forEach((variable, key) => {
+            // Iterate through each variable in vars
+            vars.forEach((variable, key_var) => {
                 // All terms have been visited,
                 // so no need to execute the outer foreach loop further
-                if (termIndices.length !== 0) {
+                if (keys.length !== 0) {
                     // Go through each unvisited child node in the tree
-                    const key_string = key.toString();
+                    const key_string = key_var.toString();
                     operand.forEach((term, key_operand) => {
-                        if (termIndices.includes(key_operand)) {
-                            const [addOp] = term; // this is just 'add', 'sub', etc.
+                        if (keys.includes(key_operand)) {
+                            const [op] = term; // this is just 'add', 'sub', etc.
                             // If the term contains variable,
                             // then update the coefficient table
                             // and remove this term's index from
@@ -73,49 +73,47 @@ export function groupLikeVariableTerms(tree = null) {
                                     coeff = term_1.filter(term_term_1 => JSON.stringify(variable) !== JSON.stringify(term_term_1[1]));
                                     coeff = array2ChainTree(coeff);
                                 }
-                                coeffArr[key_string] = [...coeffArr[key_string], [addOp, coeff]];
-                                termIndices.splice(termIndices.indexOf(key_operand), 1);
+                                coeffs[key_string] = [...coeffs[key_string], [op, coeff]];
+                                keys.splice(keys.indexOf(key_operand), 1);
                             }
                         }
                     }); // end going through each unvisited child node in the tree
                     // Convert each coefficient
                     // into either a single constant or an addchain of constants
 
-                    if (coeffArr[key_string].length > 0) {
-                        coeffArr[key_string] = array2ChainTree(coeffArr[key_string]);
+                    if (coeffs[key_string].length > 0) {
+                        coeffs[key_string] = array2ChainTree(coeffs[key_string]);
                     }
                 }
             });
             // Account for all constant terms, if any
-            if (termIndices.length > 0) {
-                coeffArr.const = termIndices.map(index => operand[index]);
-                coeffArr.const = array2ChainTree(coeffArr.const);
+            if (keys.length > 0) {
+                coeffs.const = array2ChainTree(keys.map(k => operand[k]));
             }
             // Construct the final list of new operands
             let newOperand = [];
-            varList.forEach((variable, key_variable) => {
+            const ops = new Map([
+                ['negative', 'sub'],
+                ['pm', 'addsub']
+            ]);
+            vars.forEach((variable, key_var) => {
                 // skip if there is no coefficient for this variable
-                if (coeffArr[key_variable.toString()].length !== 0) {
-                    let addOp = 'add';
-                    let coeff = coeffArr[key_variable.toString()];
-                    if (Array.isArray(coeff)) {
-                        if (coeff[0] === 'negative') {
-                            addOp = 'sub';
-                            [, coeff] = coeff;
-                        } else if (coeff[0] === 'pm') {
-                            addOp = 'addsub';
-                            [, coeff] = coeff;
-                        }
+                if (coeffs[key_var.toString()].length !== 0) {
+                    let op = 'add';
+                    let coeff = coeffs[key_var.toString()];
+                    if (Array.isArray(coeff) && ops.has(coeff[0])) {
+                        op = ops.get(coeff[0]);
+                        [, coeff] = coeff;
                     }
-                    newOperand = (JSON.stringify(coeff) === JSON.stringify(['natural', '1']))
-                        ? [...newOperand, [addOp, variable]] // Omit coefficient of 1
-                        : [...newOperand, [addOp, ['mulchain', ['mul', coeff], ['mul', variable]]]];
+                    newOperand = JSON.stringify(coeff) === JSON.stringify(['natural', '1'])
+                        ? [...newOperand, [op, variable]] // Omit coefficient of 1
+                        : [...newOperand, [op, ['mulchain', ['mul', coeff], ['mul', variable]]]];
                 }
             });
             // Don't forget any constant term
-            if (coeffArr.const.length > 0) {
-                const coeff = coeffArr.const;
-                newOperand = (coeff[0] === 'negative')
+            if (coeffs.const.length > 0) {
+                const coeff = coeffs.const;
+                newOperand = coeff[0] === 'negative'
                     ? [...newOperand, ['sub', coeff[1]]]
                     : [...newOperand, ['add', coeff]];
             }
@@ -130,48 +128,48 @@ export function groupLikeVariableTerms(tree = null) {
             // Recursive portion
             operand = operand.map(term => [term[0], groupLikeVariableTerms(term[1])]);
             // Combine each repeating term into an exponential term
-            const baseArr = [];
-            const expoArr = [];
+            const bases = [];
+            const expos = [];
             let ind = 0;
             loop_2: for (const term of operand) {
-                const base = ['mul', term[1]];
-                const expo = ['add', ['natural', '1']];
-                if (base[1][0] === 'power') {
-                    [, [, base[1], expo[1]]] = base;
-                }
-                if (expo[1][0] === 'negative') {
-                    expo[0] = 'sub';
-                    [, [, expo[1]]] = expo;
-                }
-                const baseArr_entries = baseArr.entries();
+                const [, term_1] = term; // term = ['mul', term_1];
+                const base = term_1[0] === 'power' // ['power', a, b] ?
+                    ? ['mul', term_1[1]]
+                    : ['mul', term_1];
+                const expo = term_1[0] === 'power' // ['power', a, b] ?
+                    ? term_1[2][0] === 'negative' // a = ['negative', a_1]
+                        ? ['sub', term_1[2][1]]
+                        : ['add', term_1[2]]
+                    : ['add', ['natural', '1']];
+
+                const bases_entries = bases.entries();
                 const base_string = JSON.stringify(base);
-                for (const [key, value] of baseArr_entries) {
+                for (const [key, value] of bases_entries) {
                     if (base_string === JSON.stringify(value)) {
-                        expoArr[key] = typeof expoArr[key] === 'undefined'
+                        expos[key] = typeof expos[key] === 'undefined'
                             ? [expo]
-                            : [...expoArr[key], expo];
+                            : [...expos[key], expo];
                         continue loop_2;
                     }
                 }
-                baseArr[ind] = base;
-                expoArr[ind] = [expo];
+                bases[ind] = base;
+                expos[ind] = [expo];
                 ind++;
             }
             let newOperand = [];
             const zero = JSON.stringify(['natural', '0']);
+            const one = JSON.stringify(['natural', '1']);
             for (let i = 0; i < ind; i++) {
-                expoArr[i] = exprSimpConst(array2ChainTree(expoArr[i]));
-                if (JSON.stringify(expoArr[i]) !== zero) {
-                    if (expoArr[i][0] === 'negative') {
-                        baseArr[i][0] = 'div';
-                        [, expoArr[i]] = expoArr[i];
+                let expo_i = exprSimpConst(array2ChainTree(expos[i]));
+                if (JSON.stringify(expo_i) !== zero) {
+                    if (expo_i[0] === 'negative') {
+                        bases[i][0] = 'div';
+                        [, expo_i] = expo_i;
                     }
-
-                    const mTerm = [baseArr[i][0], ['power', baseArr[i][1], expoArr[i]]];
-                    if (JSON.stringify(mTerm[1][2]) === JSON.stringify(['natural', '1'])) {
-                        [, [, mTerm[1]]] = mTerm;
-                    }
-                    newOperand = [...newOperand, mTerm];
+                    const term = JSON.stringify(expo_i) === one
+                        ? bases[i]
+                        : [bases[i][0], ['power', bases[i][1], expo_i]];
+                    newOperand = [...newOperand, term];
                 }
             }
             // Snippet 1

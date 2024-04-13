@@ -26,10 +26,10 @@ export function rearrangeTreeEq(A, B) {
         ['negative', 1],
         ['fraction', 2]
     ]);
-    place[0] = operators.get(operatorA)
+    place[0] = operators.has(operatorA)
         ? operators.get(operatorA)
         : 0;
-    place[1] = operators.get(operatorB)
+    place[1] = operators.has(operatorB)
         ? operators.get(operatorB)
         : 0;
     if (place[0] < place[1] || (place[0] === place[1] && operatorA > operatorB)) {

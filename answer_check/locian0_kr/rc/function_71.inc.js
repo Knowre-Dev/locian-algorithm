@@ -18,7 +18,7 @@ export function addNegative(tree) {
                 ['add', 'sub'],
                 ['sub', 'add']
             ]);
-            const newOperand = addchain.map(term => ops.get(term[0])
+            const newOperand = addchain.map(term => ops.has(term[0])
                 ? [ops.get(term[0]), term[1]]
                 : term);
             return [operator, ...newOperand];
@@ -32,7 +32,7 @@ export function addNegative(tree) {
                         ['add', 'sub'],
                         ['sub', 'add']
                     ]);
-                    term_1 = term_1.map(inner => ops.get(inner[0])
+                    term_1 = term_1.map(inner => ops.has(inner[0])
                         ? [ops.get(inner[0]), inner[1]]
                         : inner);
                     newOperand = [...newOperand, ...term_1];

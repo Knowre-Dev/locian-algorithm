@@ -168,9 +168,9 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // which must include mulZero to prevent PHP error
                     // caused at lines 1808,1809,1811,1812
 
-                    const asciiBound = utf8_ord('a') + 13; // Middle of 'a' - 'z'
-                    randRe = (randRe + utf8_ord(varname) - asciiBound) * rangeWidth - bound;
-                    randIm = (randIm + utf8_ord(varname) - asciiBound) * rangeWidth - bound;
+                    const asciiBound = unicode('a') + 13; // Middle of 'a' - 'z'
+                    randRe = (randRe + unicode(varname) - asciiBound) * rangeWidth - bound;
+                    randIm = (randIm + unicode(varname) - asciiBound) * rangeWidth - bound;
                     // Round to 4 decimal places just for efficiency's sake
                     // (otherwise running the new Equivalent preset slows down too much)
                     randRe = parseFloat(randRe.toFixed(4));
@@ -430,15 +430,6 @@ export function powComplex_inLocian(A, B) {
 
     // theta is the argument (angle) from the positive x-axis
     const theta = Math.atan2(A[1], A[0]);
-    /*
-    const theta = A[1] === 0 && A[0] > 0
-        ? 0
-        : A[1] === 0 && A[0] < 0
-            ? Math.PI
-            : A[1] > 0
-                ? Math.acos(A[0] / r)
-                : 2 * Math.PI - Math.acos(A[0] / r);
-    */
     const [c, d] = B;
     const newR = Math.pow(r, c) / Math.exp(d * theta);
     const newTheta = (d * Math.log(r) + c * theta) % (2 * Math.PI);
@@ -556,7 +547,7 @@ export function array2ChainTree(arr, evalNumeric = false) {
         ['sub', 'negative']
     ]);
     return arr.length === 1
-        ? signs.get(arr[0][0])
+        ? signs.has(arr[0][0])
             ? [signs.get(arr[0][0]), arr[0][1]]
             : arr[0][0] === 'div'
                 ? ['fraction', ['natural', '1'], arr[0][1]]
@@ -846,66 +837,71 @@ export function evalNumericValues_power(operand) {
     const sign = base[0] === 'negative'
         ? -1
         : 1;
-    if (base[0] === 'negative') {
-        [, base] = base;
-    }
-    const expFrac = exp[0] === 'fraction'
-        ? [exp[1], exp[2]]
-        : [exp, ['natural', '1']];
+    base = base[0] === 'negative'
+        ? base[1][1]
+        : base[1];
+    let num_exp = exp[0] === 'fraction'
+        ? exp[1]
+        : exp;
+    let den_exp = exp[0] === 'fraction'
+        ? exp[2]
+        : ['natural', '1'];
     // Create a flag to store info on whether the exponent is negative
     // so that we can take reciprocal at the end if appropriate
-    let reciprocFlag = false;
-    expFrac.forEach((obj, k) => {
-        if (obj[0] === 'negative') {
-            reciprocFlag = !reciprocFlag;
-            [, expFrac[k]] = obj;
-        }
-    });
+    // let is_recipro = false;
+    const is_recipro = num_exp[0] !== den_exp[0] && [num_exp[0], den_exp[0]].includes('negative')
+    num_exp = num_exp[0] === 'negative'
+        ? num_exp[1][1]
+        : num_exp[1];
+    den_exp = den_exp[0] === 'negative'
+        ? den_exp[1][1]
+        : den_exp[1];
+
+    // Create a flag to store info on whether the exponent is negative
+    // so that we can take reciprocal at the end if appropriate
+
     // Evaluation
-    let mtermArr = []; // construct as a mulchain, and then simplify later
     // work with absolute value of base for now, will see why later
-    const [, bVal] = base;
-    const [[, xNval], [, xDval]] = expFrac;
     // Factor out any integer result possible
-    const xVal = Math.floor(xNval / xDval);
-    if (Math.log(Number.MAX_SAFE_INTEGER) / Math.log(bVal) < xVal) {
+    exp = Math.floor(num_exp / den_exp);
+    if (Math.log(Number.MAX_SAFE_INTEGER) / Math.log(base) < exp) {
         return ['power', ...operand];
     }
-    const intRes = Math.pow(bVal, xVal);
-    const rtRes = Math.pow(bVal, (xNval % xDval) / xDval);
+    const int = Math.pow(base, exp);
+    const res = num_exp % den_exp;
+    const rem = Math.pow(base, res / den_exp);
     // Here, pow() quietly returns FALSE for inputs like pow(-1, 1 / 2)
     // that was why we work with the absolute value
     // and deal with the sign last
     // so that we can put imaginary unit i properly
 
-    // Add the mul terms to mtermArr
-    if (rtRes === Math.floor(rtRes)) {
-        mtermArr = [...mtermArr, ['mul', ['natural', (intRes * rtRes).toString()]]];
+    let newOperand = []; // construct as a mulchain, and then simplify later
+    if (Number.isInteger(rem)) {
+        newOperand = [['mul', ['natural', (int * rem).toString()]]];
     } else {
-        if (intRes !== 1) {
-            mtermArr = [...mtermArr, ['mul', ['natural', intRes.toString()]]];
+        if (int !== 1) {
+            newOperand = [['mul', ['natural', int.toString()]]];
         }
-        const subtree = [
+        const term = [
             'power',
-            ['natural', bVal],
-            ['fraction', ['natural', (xNval % xDval).toString()], ['natural', xDval]] // xNval % xDval !== 0
+            ['natural', base],
+            ['fraction', ['natural', res.toString()], ['natural', den_exp]]
         ];
-        mtermArr = [...mtermArr, ['mul', subtree]];
+        newOperand = [...newOperand, ['mul', term]];
     }
     // Deal with imaginary number case and negative result case here
     // Watch out for any imaginary number case
-    const imaginaryFlag = sign === -1 && xNval % 2 === 1 && xDval % 2 === 0;
-    let resSign;
-    if (imaginaryFlag) {
-        mtermArr = [...mtermArr, ['mul', ['variable', 'i']]];
-        resSign = -Math.pow(-1, xVal % 2);
-    } else {
-        resSign = Math.pow(sign, xNval % 2);
+    const is_imaginary = sign === -1 && num_exp % 2 === 1 && den_exp % 2 === 0;
+    const sign_tree = is_imaginary
+        ? -Math.pow(-1, exp % 2)
+        : Math.pow(sign, num_exp % 2);
+    if (is_imaginary) {
+        newOperand = [...newOperand, ['mul', ['variable', 'i']]];
     }
-    const tree = reciprocFlag
-        ? ['fraction', ['natural', '1'], array2ChainTree(mtermArr)]
-        : array2ChainTree(mtermArr);
-    return resSign < 0
+    const tree = is_recipro
+        ? ['fraction', ['natural', '1'], array2ChainTree(newOperand)]
+        : array2ChainTree(newOperand);
+    return sign_tree < 0
         ? ['negative', tree]
         : tree;
 }
@@ -933,23 +929,22 @@ export function findDenominators(tree, unique = false, positive = false) {
     }
     const [operator, ...operand] = tree;
     if (operator === 'fraction') {
-        let [, denom] = operand;
-        if (positive && denom[0] === 'negative') {
-            [, denom] = denom;
-        }
-        return [denom];
+        const [, den] = operand;
+        return positive && den[0] === 'negative'
+            ? [den[1]]
+            : [den];
     }
 
-    let denomArr = [];
+    let dens = [];
     operand.forEach(term => {
         const subDenArr = findDenominators(term, unique);
-        const arr_add = subDenArr.reduce((terms, dterm) => !unique && denomArr.some(value => JSON.stringify(value) === JSON.stringify(dterm))
+        const term_add = subDenArr.reduce((terms, dterm) => !unique && dens.some(value => JSON.stringify(value) === JSON.stringify(dterm))
             ? [...terms, dterm, dterm]
             : [...terms, dterm],
-        denomArr);
-        denomArr = [...denomArr, ...arr_add];
+        dens);
+        dens = [...dens, ...term_add];
     });
-    return denomArr;
+    return dens;
 }
 
 /*
@@ -980,12 +975,12 @@ Author: epark
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 export function findGCF(tree = null) {
-    let commonFactorArr = {
+    let comm_factors = {
         const: ['natural', '1'],
         sym: []
     };
     if (!Array.isArray(tree)) {
-        return commonFactorArr;
+        return comm_factors;
     }
 
     const [operator, ...operand] = tree;
@@ -1003,63 +998,62 @@ export function findGCF(tree = null) {
             return findGCF(rdecToFrac(tree));
         }
         case 'natural': {
-            commonFactorArr.const = tree;
-            return commonFactorArr;
+            comm_factors.const = tree;
+            return comm_factors;
         }
         case 'variable': {
-            commonFactorArr.sym = [...commonFactorArr.sym, tree];
-            return commonFactorArr;
+            comm_factors.sym = [...comm_factors.sym, tree];
+            return comm_factors;
         }
         case 'mulchain': {
-            let constF = 1;
-            let symFArr = [];
+            let con = 1;
+            let syms = [];
             operand.forEach(term => {
                 // only consider multiplications (divisions would end up in denominators)
                 if (term[0] === 'mul') {
-                    const subCFArr = findGCF(term[1]);
-                    constF *= subCFArr.const[1];
-                    symFArr = subCFArr.sym.reduce((terms, symb) => terms.every(sym => JSON.stringify(sym) !== JSON.stringify(symb))
+                    const subCFs = findGCF(term[1]);
+                    con *= subCFs.const[1];
+                    syms = subCFs.sym.reduce((terms, symb) => terms.every(sym => JSON.stringify(sym) !== JSON.stringify(symb))
                         ? [...terms, symb]
                         : terms,
-                    symFArr);
+                    syms);
                 }
             });
 
-            commonFactorArr.const = ['natural', constF.toString()];
-            commonFactorArr.sym = symFArr;
-            return commonFactorArr;
+            comm_factors.const = ['natural', con.toString()];
+            comm_factors.sym = syms;
+            return comm_factors;
         }
         case 'addchain':
         case 'equation':
         case 'inequality': {
-            const [term_0, ...operand_1] = operand;
-            if (Array.isArray(term_0)) {
+            const [opertor_1, ...operand_1] = operand;
+            if (Array.isArray(opertor_1)) {
                 const subtree = operator === 'addchain'
-                    ? term_0[1]
-                    : term_0;
-                commonFactorArr = findGCF(subtree);
+                    ? opertor_1[1]
+                    : opertor_1;
+                comm_factors = findGCF(subtree);
             }
-
             operand_1.forEach(term => {
                 // this is the case for inequality signs (e.g., 'le', 'ge')
                 if (Array.isArray(term)) {
                     const subtree = operator === 'addchain'
                         ? term[1]
                         : term;
-                    const subCFArr = findGCF(subtree);
+                    const subCFs = findGCF(subtree);
                     // For numerical constants, update the array with GCF
-                    const a = parseInt(commonFactorArr.const[1]);
-                    const b = parseInt(subCFArr.const[1]);
-                    commonFactorArr.const = ['natural', gcd(a, b).toString()];
+                    const a = parseInt(comm_factors.const[1]);
+                    const b = parseInt(subCFs.const[1]);
+                    comm_factors.const = ['natural', gcd(a, b).toString()];
                     // For variables,
                     // only count the vars already in commonFactorArr['sym']
-                    commonFactorArr.sym = subCFArr.sym.reduce((a, b) => [...a, ...commonFactorArr.sym.filter(symb_1 => JSON.stringify(b) === JSON.stringify(symb_1))], []);
+                    comm_factors.sym = subCFs.sym.reduce((a, b) => [...a, ...comm_factors.sym.filter(symb_1 => JSON.stringify(b) === JSON.stringify(symb_1))], []);
                 }
             });
-            return commonFactorArr;
+            return comm_factors;
         }
         default: {
-            return commonFactorArr;
+            return comm_factors;
         }
     }
 }
@@ -1105,15 +1099,15 @@ export function findVars(tree, option = false) {
         if (operator === 'variable') {
             return [tree];
         }
-        let varList = [];
+        let vars = [];
         operand.forEach(term => {
             const subtree = ['addchain', 'mulchain'].includes(operator)
                 ? term[1]
                 : term;
-            const subVarList = findVars(subtree, option);
-            varList = [...varList, ...subVarList.filter(variable => varList.every(vari => (JSON.stringify(vari) !== JSON.stringify(variable))))];
+            const sub_vars = findVars(subtree, option);
+            vars = [...vars, ...sub_vars.filter(variable => vars.every(vari => (JSON.stringify(vari) !== JSON.stringify(variable))))];
         });
-        return varList;
+        return vars;
     }
 
     switch (operator) {
@@ -1152,16 +1146,16 @@ export function findVars(tree, option = false) {
                 : [];
         }
         case 'addchain': {
-            let varList = [];
+            let vars = [];
             operand.forEach(term => {
                 let [, subtree] = term;
                 if (subtree[0] === 'negative') {
                     [, subtree] = subtree;
                 }
-                const subVarList = findVars(subtree, option);
-                varList = [...varList, ...subVarList.filter(subtree => varList.every(vari => JSON.stringify(vari) !== JSON.stringify(subtree)))];
+                const sub_vars = findVars(subtree, option);
+                vars = [...vars, ...sub_vars.filter(subtree => vars.every(vari => JSON.stringify(vari) !== JSON.stringify(subtree)))];
             });
-            return varList;
+            return vars;
         }
         default: {
             return [];
@@ -1196,45 +1190,43 @@ export function isNumeric(tree, excNegative = false, recursive = false) {
         return false;
     }
     const [operator, ...operand] = tree;
+    if (['natural', 'decimal', 'rdecimal'].includes(operator)) {
+        return true;
+    }
     if (operator === 'absolute') {
         return isNumeric(operand[0]);
     }
     if (operator === 'negative') {
         return !excNegative && isNumeric(operand[0]);
     }
-
-    let fracIsNumeric = operator === 'fraction';
-    let powIsNumeric = operator === 'power';
+    if (!['fraction', 'power'].includes(operator)) {
+        return false;
+    }
     if (recursive) {
         // The second term in logical AND evaluates only if tree is a fraction
         // fracIsNumeric = fracIsNumeric && isNumeric(tree[1], excNegative, recursive);
-        const is_numeric = isNumeric(operand[0], excNegative, recursive) && isNumeric(operand[1], excNegative, recursive);
-        fracIsNumeric &&= is_numeric;
-        // The second term in logical AND evaluates only if tree is a power
-        powIsNumeric &&= is_numeric;
-    } else {
-        fracIsNumeric &&= operand[0][0] === 'natural' && operand[1][0] === 'natural';
-        powIsNumeric &&= (operand[0][0] === 'natural' || (operand[0][0] === 'negative' && operand[0][1][0] === 'natural')) && operand[1][0] === 'natural';
-
-        /*
-        // The following change has been undone as of 20180823
-        // RATIONALE: If we consider fractional exponents as simple numerical expression
-        // then there is no way for us to differentiate, for example,
-        // 313^(1/2) (must NOT simplify) and 81^(1/2) (must simplify)
-        // without actually carrying out the calculation
-        // For power, however,
-        // allow fractional exponent to return TRUE even with recursive === FALSE
-        // as long as the fraction is simple numeric, in addition to
-        // the base being simple numeric
-        // Therefore, split the evaluation of boolean powIsNumeric into multiple steps
-        powIsNumeric = powIsNumeric && tree[1][0] === 'natural';
-        expoIsNat = powIsNumeric && tree[2][0] === 'natural';
-        expoIsSimpFrac = powIsNumeric && tree[2][0] === 'fraction' && isNumeric(tree[2]);
-        expoIsNumeric = expoIsNat || expoIsSimpFrac;
-        powIsNumeric = powIsNumeric && expoIsNumeric;
-        */
+        return isNumeric(operand[0], excNegative, recursive) && isNumeric(operand[1], excNegative, recursive);
     }
-    return ['natural', 'decimal', 'rdecimal'].includes(operator) || fracIsNumeric || powIsNumeric;
+    const is_numeric_frac = operator === 'fraction' && operand[0][0] === 'natural' && operand[1][0] === 'natural';
+    const is_numeric_pow = operator === 'power' && (operand[0][0] === 'natural' || (operand[0][0] === 'negative' && operand[0][1][0] === 'natural')) && operand[1][0] === 'natural';
+    return is_numeric_frac || is_numeric_pow;
+    /*
+    // The following change has been undone as of 20180823
+    // RATIONALE: If we consider fractional exponents as simple numerical expression
+    // then there is no way for us to differentiate, for example,
+    // 313^(1/2) (must NOT simplify) and 81^(1/2) (must simplify)
+    // without actually carrying out the calculation
+    // For power, however,
+    // allow fractional exponent to return TRUE even with recursive === FALSE
+    // as long as the fraction is simple numeric, in addition to
+    // the base being simple numeric
+    // Therefore, split the evaluation of boolean powIsNumeric into multiple steps
+    powIsNumeric = powIsNumeric && tree[1][0] === 'natural';
+    expoIsNat = powIsNumeric && tree[2][0] === 'natural';
+    expoIsSimpFrac = powIsNumeric && tree[2][0] === 'fraction' && isNumeric(tree[2]);
+    expoIsNumeric = expoIsNat || expoIsSimpFrac;
+    powIsNumeric = powIsNumeric && expoIsNumeric;
+    */
 }
 /*
 import {LatexToTree} from '../checkmath.js';
@@ -1267,42 +1259,44 @@ import { addAdjacentSigns } from '../rc/function_83.inc.js';
 import { mulNegative } from '../rc/function_160.inc.js';
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-export function multFactor(tree, fterm, simplifyFrac = false) {
-    if (!Array.isArray(tree) || !Array.isArray(fterm) || fterm.length === 0 || !['mul', 'div'].includes(fterm[0])) {
+export function multFactor(tree, fterm, is_simp_frac = false) {
+    const is_return = !Array.isArray(tree) || !Array.isArray(fterm) || fterm.length === 0 || !['mul', 'div'].includes(fterm[0])
+    if (is_return) {
         return tree;
     }
     const [operator, ...operand] = tree;
+    const [operator_f, operand_f] = fterm;
     const frac_function = tree_1 => fracSimpVar(fracSimpInt(fracNegative(tree_1)));
     switch (operator) {
         case 'fraction': {
-            const idx = fterm[0] === 'div'
+            const idx = operator_f === 'div'
                 ? 1
                 : 0;
-            simplifyFrac && JSON.stringify(fterm[1]) === JSON.stringify(operand[1 - idx])
+            is_simp_frac && JSON.stringify(operand_f) === JSON.stringify(operand[1 - idx])
                 ? operand[1 - idx] = ['natural', '1']
-                : operand[idx] = combine2ChainTree(fterm[1], operand[idx], 'mul');
+                : operand[idx] = combine2ChainTree(operand_f, operand[idx], 'mul');
             const newTree = mulNegative(frac_function([operator, ...operand]));
-            return simplifyFrac
+            return is_simp_frac
                 ? frac_function(newTree)
                 : newTree;
         }
         case 'addchain': {
             let newTree = ['addchain'];
             operand.forEach(aterm => {
-                aterm[1] = multFactor(aterm[1], fterm, simplifyFrac);
+                aterm[1] = multFactor(aterm[1], fterm, is_simp_frac);
                 newTree = [...newTree, aterm];
             });
             newTree = addAdjacentSigns(newTree);
-            return simplifyFrac
+            return is_simp_frac
                 ? frac_function(newTree)
                 : newTree;
         }
         default: {
-            let newTree = fterm[0] === 'mul'
-                ? combine2ChainTree(fterm[1], tree, 'mul')
-                : ['fraction', tree, fterm[1]];
+            let newTree = operator_f === 'mul'
+                ? combine2ChainTree(operand_f, tree, 'mul')
+                : ['fraction', tree, operand_f];
             newTree = mulNegative(newTree);
-            return simplifyFrac
+            return is_simp_frac
                 ? frac_function(newTree)
                 : newTree;
         }
@@ -1325,7 +1319,7 @@ term: Any subtree in Laco format (e.g., ['variable', 'x'], ['natural', '10'])
 tree: A Laco tree
 recursive: An optional boolean that activates recursive call (to search ALL subtrees)
                  (defaults to TRUE)
-excPolyTerm: An optional boolean that excludes power terms from consideration
+exclude_pow: An optional boolean that excludes power terms from consideration
                       For example, if term === ['variable', 'x']
                       and tree === ['power', ['variable', 'x'], ['natural', '2']],
                       then this routine returns TRUE unless excPolyTerm is set to TRUE,
@@ -1338,7 +1332,7 @@ A boolean value
 Author: epark
 */
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-export function termExists(term, tree, recursive = true, excPolyTerm = false) {
+export function termExists(term, tree, recursive = true, exclude_pow = false) {
     const term_string = JSON.stringify(term);
     if (term_string === JSON.stringify(tree)) {
         return true;
@@ -1346,23 +1340,21 @@ export function termExists(term, tree, recursive = true, excPolyTerm = false) {
     if (!Array.isArray(tree)) {
         return false;
     }
-
-    if (recursive === false) {
+    if (!recursive) {
         const [operator, ...operand] = tree;
-        return operand.some(term_1 => ['addchain', 'mulchain'].includes(operator)
-                ? JSON.stringify(term_1[1]) === term_string
-                : JSON.stringify(term_1) === term_string)
-            ? !(operator === 'power' && excPolyTerm)
-            : false;
+        const is_term_exist = operand.some(term_1 => ['addchain', 'mulchain'].includes(operator)
+            ? JSON.stringify(term_1[1]) === term_string
+            : JSON.stringify(term_1) === term_string);
+        return is_term_exist && !(operator === 'power' && exclude_pow);
     }
     for (const term_1 of tree) {
-        if (termExists(term, term_1, recursive, excPolyTerm)) {
+        if (termExists(term, term_1, recursive, exclude_pow)) {
             const [operator_1, ...operand_1] = term_1;
-            return operand_1.some(term_subtree => JSON.stringify(term_subtree) === term_string)
-                ? !(operator_1 === 'power' && excPolyTerm)
-                : true;
+            const is_term_exist = operand_1.some(term_subtree => JSON.stringify(term_subtree) === term_string);
+            return !(is_term_exist && operator_1 === 'power' && exclude_pow);
         }
     }
+    return false; // added
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -1410,41 +1402,29 @@ export function validMathTree(tree) {
             return tree.length === 3 && validMathTree(operand[0]) && validMathTree(operand[1]);
         }
         case 'subscript': {
-            return tree.length !== 3 || operand[0][0] !== 'variable'
-                ? false
-                : validMathTree(operand[0]) && validMathTree(operand[1]);
+            return tree.length === 3 && operand[0][0] === 'variable' && validMathTree(operand[0]) && validMathTree(operand[1]);
         }
         case 'mfraction': {
             return tree.length === 4 && validMathTree(operand[0]) && validMathTree(operand[1]) && validMathTree(operand[2]);
         }
         case 'natural': {
-            return tree.length !== 2
-                ? false
-                : /^\d+$/.test(operand[0]);
+            return tree.length === 2 && /^\d+$/.test(operand[0]);
         }
         case 'decimal': {
-            return tree.length !== 2
-                ? false
-                : operand[0].indexOf('.') === -1 && /^-?\d+(\.\d+)?$/.test(operand[0]);
+            return tree.length === 2 && operand[0].indexOf('.') === -1 && /^-?\d+(\.\d+)?$/.test(operand[0]);
         }
         case 'rdecimal': {
-            return [3, 4].includes(tree.length)
-                ? false
-                : operand.evey(term => validMathTree(['natural', term]));
+            return ![3, 4].includes(tree.length) && operand.evey(term => validMathTree(['natural', term]));
         }
         case 'anything':
         case 'variable': {
             return !operand.some(term => '0'.charCodeAt(0) <= term.charCodeAt(0) && term.charCodeAt(0) <= '9'.charCodeAt(0));
         }
         case 'addchain': {
-            return tree.length === 1
-                ? false
-                : operand.every(term => term.length === 2 && ['add', 'sub', 'addsub', 'subadd'].includes(term[0]) && validMathTree(term[1]));
+            return tree.length > 1 && operand.every(term => term.length === 2 && ['add', 'sub', 'addsub', 'subadd'].includes(term[0]) && validMathTree(term[1]));
         }
         case 'mulchain': {
-            return tree.length === 1
-                ? false
-                : operand.every(term => term.length === 2 && ['mul', 'div'].includes(term[0]) && validMathTree(term[1]));
+            return tree.length > 1 && operand.every(term => term.length === 2 && ['mul', 'div'].includes(term[0]) && validMathTree(term[1]));
         }
         case 'equation': {
             return operand.every(term => validMathTree(term));
@@ -1453,11 +1433,7 @@ export function validMathTree(tree) {
            return operand.every(term => (validMathTree(term) || ['lt', 'gt', 'le', 'ge'].includes(term)));
         }
         case 'interval': {
-            return tree.length !== 5
-                ? false
-                : !(['[', '('].includes(operand[0]) && [']', ')'].includes(operand[3]))
-                    ? false
-                    : validMathTree(operand[1]) && validMathTree(operand[2])
+            return tree.length === 5 && ['[', '('].includes(operand[0]) && [']', ')'].includes(operand[3]) && validMathTree(operand[1]) && validMathTree(operand[2])
         }
         default: {
             return false;
@@ -1465,27 +1441,39 @@ export function validMathTree(tree) {
     }
 }
 
-export function utf8_ord(ch) {
-    const len = ch.length;
-    if (len <= 0) {
+export function unicode(str) {
+    const str_len = str.length;
+    if (str_len <= 0) {
         return false;
     }
-    const h = ch[0].charCodeAt(0);
-    return h <= 0x7F
-        ? h
-        : h < 0xC2
-            ? false
-            : h <= 0xDF && len > 1
-                ? (h & 0x1F) << 6 | (ch[1].charCodeAt(0) & 0x3F)
-                : h <= 0xEF && len > 2
-                    ? (h & 0x0F) << 12 | (ch[1].charCodeAt(0) & 0x3F) << 6 | (ch[2].charCodeAt(0) & 0x3F)
-                    : h <= 0xF4 && len > 3
-                        ? (h & 0x0F) << 18 | (ch[1].charCodeAt(0) & 0x3F) << 12 | (ch[2].charCodeAt(0) & 0x3F) << 6 | (ch[3].charCodeAt(0) & 0x3F)
-                        : h
+    return str_len === 1
+        ? str.charCodeAt(0)
+        : str.reduce((code, ch, i) => code | (ch.charCodeAt(0) & 0x3F) << 6 * i, 0);
 }
+/*
+export function unicode(ch) {
+    const ch_len = ch.length;
+    if (ch_len <= 0) {
+        return false;
+    }
+    const ch_0 = ch.charCodeAt(0);
+    return ch_0 <= 0x7F
+        ? ch_0
+        : ch_0 < 0xC2
+            ? false
+            : ch_0 <= 0xDF && ch_len > 1
+                ? (ch_0 & 0x1F) << 6 | (ch.charCodeAt(1) & 0x3F)
+                : ch_0 <= 0xEF && ch_len > 2
+                    ? (ch_0 & 0x0F) << 12 | (ch.charCodeAt(1) & 0x3F) << 6 | (ch.charCodeAt(2) & 0x3F)
+                    : ch_0 <= 0xF4 && ch_len > 3
+                        ? (ch_0 & 0x0F) << 18 | (ch.charCodeAt(1) & 0x3F) << 12 | (ch.charCodeAt(2) & 0x3F) << 6 | (ch.charCodeAt(3) & 0x3F)
+                        : ch_0
+                        // 0x0F === 2^4 - 1, 0x1F === 2^5 - 1, 0x3F === 2^6 - 1
+}
+*/
 
 /*
-let result = utf8_ord('하');
-//result = utf8_ord('10000');
+let result = unicode('하');
+//result = unicode('10000');
 console.log(JSON.stringify(result, null, 4));
 */

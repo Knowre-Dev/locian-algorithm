@@ -40,7 +40,7 @@ export function rearrangeTree(tree, types = []) {
                     ['le', 'ge']
                 ]);
                 const temp = newOperand_reverse.map(term_reverse =>
-                    ineqs.get(term_reverse)
+                    ineqs.has(term_reverse)
                         ? ineqs.get(term_reverse)
                         : term_reverse);
                 return [operator, ...temp];

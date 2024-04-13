@@ -4,53 +4,29 @@ export function fracPlusMinus(tree) {
     }
 
     const [operator, ...operand] = tree;
-    if (operator === 'fraction') {
-        let num = fracPlusMinus(operand[0]);
-        let sign = 1;
-        switch (num[0]) {
-            case 'negative': {
-                sign = -1;
-                [, num] = num;
-                break;
-            }
-            case 'mp': {
-                sign = -2;
-                [, num] = num;
-                break;
-            }
-            case 'pm': {
-                sign = 2;
-                [, num] = num;
-                break;
-            }
-        }
-        let den = fracPlusMinus(operand[1]);
-        switch (den[0]) {
-            case 'negative': {
-                sign *= -1;
-                [, den] = den;
-                break;
-            }
-            case 'mp': {
-                sign = Math.abs(sign) === 1
-                    ? -2
-                    : sign * (-1);
-                [, den] = den;
-                break;
-            }
-            case 'pm': {
-                sign = Math.abs(sign) === 1
-                    ? 2
-                    : sign;
-                [, den] = den;
-                break;
-            }
-        }
-        return sign === -2
-            ? ['mp', [operator, num, den]]
-            : sign === 2
-                ? ['pm', [operator, num, den]]
-                : tree;
+    if (operator !== 'fraction') {
+        return [operator, ...operand.map(term => fracPlusMinus(term))];
     }
-    return [operator, ...operand.map(term => fracPlusMinus(term))];
+
+    let num = fracPlusMinus(operand[0]);
+    let den = fracPlusMinus(operand[1]);
+    let sign = 1;
+    const ops = new Map([
+        ['negative', -1],
+        ['pm', 2],
+        ['mp', -2]
+    ]);
+    if (ops.has(num[0])) {
+        [, num] = num;
+        sign *= ops.get(num[0]);
+    }
+    if (ops.has(den[0])) {
+        [, den] = den;
+        sign *= ops.get(den[0])
+    }
+    return sign >= 2
+        ? ['pm', [operator, num, den]]
+        : sign <= -2
+            ? ['mp', [operator, num, den]]
+            : tree;
 }

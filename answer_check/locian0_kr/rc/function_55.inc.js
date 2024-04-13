@@ -18,7 +18,7 @@ export function addIdentity(tree) {
         ? ['natural', '0']
         : newOperand_length === 1 && newOperand[0][0] === 'add'
                 ? newOperand[0][1]
-                : newOperand_length === 1 && signs.get(newOperand[0][0])
+                : newOperand_length === 1 && signs.has(newOperand[0][0])
                     ? [signs.get(newOperand[0][0]), newOperand[0][1]]
                     : [operator, ...newOperand];
 }

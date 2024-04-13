@@ -36,20 +36,19 @@ export function exprSimpConst(tree = null) {
         }
         case 'decimal': { // fin
             // Possible output type: fraction
-            return fracDecimal(tree);
+            return fracDecimal(tree);// decimal => fraction
         }
         case 'rdecimal': { // fin
             // Possible output type: fraction
-            return rdecToFrac(tree);
+            return rdecToFrac(tree); // rdecimal => fraction
         }
         case 'mfraction': {
             return fracMfrac(tree);
         }
         case 'negative': { // fin
             // Possible output type: ANYTHING
-            const subresult = exprSimpConst(tree[1]);
-
-            return subresult[0] === 'negative'
+            const subresult = exprSimpConst(operand[0]);
+            return subresult[0] === 'negative' // negative이므로 상쇄 -(-a) = a
                 ? subresult[1]
                 : [operator, subresult];
         }
@@ -58,7 +57,7 @@ export function exprSimpConst(tree = null) {
             // absolute,
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
             let subresult = exprSimpConst(operand[0]);
-            if (subresult[0] === 'negative') {
+            if (subresult[0] === 'negative') { // absolute 이므로 negatgive 제거 |-a| = a
                 [, subresult] = subresult;
             }
             return isNumeric(subresult, true)
@@ -67,16 +66,14 @@ export function exprSimpConst(tree = null) {
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
-            // const [, ...operand] = tree;
-            const is_power = operand[0][0] === 'power' && operand[1][0] === 'power' && operand[0][2] === operand[1][2];
+            const is_power = operand[0][0] === 'power' && operand[1][0] === 'power' && JSON.stringify(operand[0][2]) === JSON.stringify(operand[1][2]);// a^c / b^c 꼴
             return is_power
                 ? exprSimpConst(['power', ['fraction', operand[0][1], operand[1][1]], operand[0][2]])
                 : fracSimpVar(fracSimpInt(fracNegative(fracComplex([operator, exprSimpConst(operand[0]), exprSimpConst(operand[1])]))));
         }
-        case 'nthroot':
-        case 'squareroot': {
+        case 'nthroot': // a^(1/n)
+        case 'squareroot': { // a^(1/2)
             // rootN is the n in nth root (e.g., 2 for square root, 3 for a cubic root)
-            // const [, ...operand] = tree;
             let rootN = [];
             let radicand = [];
             if (operator === 'squareroot') {
@@ -96,21 +93,23 @@ export function exprSimpConst(tree = null) {
 
             [, ...operand] = operand;
             let termArr = [];
+            const signs = new Map([
+                ['add', 'sub'],
+                ['sub', 'add']
+            ]);
             operand.forEach(term => {
-                let [op] = term;
-                let subtree = exprSimpConst(term[1]);
-                if (subtree[0] === 'negative') {
+                let [op, term_1] = term;
+                let subtree = exprSimpConst(term_1);
+                if (subtree[0] === 'negative') { // negative 나오면 부호 변경
                     [, subtree] = subtree;
-                    op = op === 'add'
-                        ? 'sub'
-                        : 'add';
+                    op = signs.get(op);
                 }
                 termArr = [...termArr, [op, subtree]];
             });
             return array2ChainTree(termArr, true);
         }
         case 'mulchain': { // fin
-            [, ...operand] = mulAssociative(array2ChainTree(operand));
+            [, ...operand] = mulAssociative(tree);
             let termArr = [];
             let sign = 1;
             operand.forEach(term => {
@@ -130,46 +129,48 @@ export function exprSimpConst(tree = null) {
         case 'power': {
             // Possible output types:
             // negative, fraction, squareroot, power
-            let basetree = exprSimpConst(operand[0]);
-            let expotree = exprSimpConst(operand[1]);
+            let base = exprSimpConst(operand[0]);
+            let expo = exprSimpConst(operand[1]);
             // If the original expotree is a fraction with even denominator,
             // the result must work with the absolute value of the original base
             // So make a flag variable to store that info
-            let evenRootFlag = false;
-            if (expotree[0] === 'fraction') {
-                const gcfArr = findGCF(expotree[2], ['natural', '2']);
-                evenRootFlag = JSON.stringify(gcfArr.const) === JSON.stringify(['natural', '2']);
+            let is_even_root = false;
+            if (expo[0] === 'fraction') {
+                const GCF = findGCF(expo[2]);
+                // const GCF = findGCF(expo[2], ['natural', '2']);
+                is_even_root = JSON.stringify(GCF.const) === JSON.stringify(['natural', '2']);
             }
 
             // Simplify (a^b)^c to a^(bc)
-            if (basetree[0] === 'power') {
-                expotree = ['mulchain', ['mul', basetree[2]], ['mul', expotree]];
-                expotree = exprSimpConst(mulAssociative(expotree));
-                [, basetree] = basetree;
+            if (base[0] === 'power') {
+                expo = ['mulchain', ['mul', base[2]], ['mul', expo]];
+                expo = exprSimpConst(mulAssociative(expo));
+                [, base] = base;
             }
             // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
             // Reflect this by modifying basetree as applicable
-            const cons = findGCF(expotree, ['natural', '2']).const;
-            const oddExpoFlag = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
-            if (expotree[0] === 'natural' && oddExpoFlag && evenRootFlag) {
-                basetree = ['absolute', basetree];
+            const cons = findGCF(expo).const;
+            // const cons = findGCF(expo, ['natural', '2']).const;
+            const is_odd_expo = JSON.stringify(cons) === JSON.stringify(['natural', '1']);
+            if (expo[0] === 'natural' && is_odd_expo && is_even_root) {
+                base = ['absolute', base];
             }
-            let mtermArr = [];
+            let newOperand = [];
             // Convert fraction to division just to make coding easier
             // The if statement below is omitted out (epark 20180830)
             // because this causes NAN output for inputs like ((103/100)^t),
             // where changing this to (103^t)/(100^t) for large t
             // causes float values to become NAN at evaluateEx_new
 
-            if (basetree[0] === 'mulchain') {
-                const [, ...operand_basetree] = basetree;
-                mtermArr = [...mtermArr, ...operand_basetree.map(term => [term[0], exprSimpConst(['power', term[1], expotree])])];
+            if (base[0] === 'mulchain') {
+                const [, ...operand_base] = base;
+                newOperand = [...newOperand, ...operand_base.map(term => [term[0], exprSimpConst(['power', term[1], expo])])];
             } else {
-                mtermArr = [...mtermArr, ['mul', ['power', basetree, expotree]]];
+                newOperand = [...newOperand, ['mul', ['power', base, expo]]];
             }
 
             // Remove any power of 1 before returning
-            return powIdentity(divFrac(array2ChainTree(mtermArr, true)));
+            return powIdentity(divFrac(array2ChainTree(newOperand, true)));
         }
         default: {
             return [operator, ...operand.map(term => exprSimpConst(term))];

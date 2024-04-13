@@ -68,7 +68,7 @@ export function ineqMulNegUS(tree) {
     ]);
     const newOperand = operand.map(term => JSON.stringify(term) === zero
         ? term
-        : ineqs.get(term)
+        : ineqs.has(term)
             ? ineqs.get(term)
             : term[0] === 'negative'
                 ? term[1]

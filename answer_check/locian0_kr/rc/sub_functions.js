@@ -11,7 +11,7 @@ export function sign_change(addchain) {
         ['add', 'sub'],
         ['sub', 'add']
     ]);
-    const new_operand = operand.map(term => signs.get(term[0])
+    const new_operand = operand.map(term => typeof signs.get(term[0]) !== 'undefined'
         ? [signs.get(term[0]), term[1]]
         : term);
     return [operator, ...new_operand];

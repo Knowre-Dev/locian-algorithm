@@ -13,12 +13,12 @@ export function mulNegative(tree) {
         case 'mulchain': {
             let newOperand = [];
             let sign = 1;
-            operand.forEach(mterm => {
-                if (mterm[1][0] === 'negative') {
+            operand.forEach(term => {
+                if (term[1][0] === 'negative') {
                     sign *= -1;
-                    [, [, mterm[1]]] = mterm;
+                    [, [, term[1]]] = term;
                 }
-                newOperand = [...newOperand, mterm];
+                newOperand = [...newOperand, term];
             });
             return sign === -1
                 ? ['negative', [operator, ...newOperand]]
@@ -28,12 +28,12 @@ export function mulNegative(tree) {
             let newOperand = [];
             let sign = 1;
             operand.forEach(term => {
-                let ner_term = mulNegative(term);
-                if (operator === 'fraction' && ner_term[0] === 'negative') {
+                let new_term = mulNegative(term);
+                if (operator === 'fraction' && new_term[0] === 'negative') {
                     sign *= -1;
-                    [, ner_term] = ner_term;
+                    [, new_term] = new_term;
                 }
-                newOperand = [...newOperand, ner_term];
+                newOperand = [...newOperand, new_term];
             });
             return sign === -1
                 ? ['negative', [operator, ...newOperand]]

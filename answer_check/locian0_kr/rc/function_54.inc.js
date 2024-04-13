@@ -25,7 +25,7 @@ export function fracSeparation(tree) {
         let sign;
         let nden;
         if (den[0] === 'negative') {
-            sign = signs.get(term[0])
+            sign = signs.has(term[0])
                 ? signs.get(term[0])
                 : term[0];
             nden = den[1];
