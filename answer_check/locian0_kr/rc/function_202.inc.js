@@ -2,7 +2,7 @@ import { fracNegative } from '../rc/function_53.inc.js';
 import { fracSeparation } from '../rc/function_54.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 
-export function eqIneqDivPi(tree = null) {
+export function eqIneqDivPi(tree = null) { // 등식, 부둥식에서 각 항을  pi로 나눔
     if (!Array.isArray(tree)) {
         return tree;
     }
@@ -23,9 +23,8 @@ export function eqIneqDivPi(tree = null) {
                 : tree;
         }
         case 'inequality': {
-            const operand_length = operand.length;
-            const max = Math.floor(operand_length / 2);
-            for (let i = 0; i <= max; i++) {
+            const max = Math.floor(operand.length / 2);
+            for (let i = 0; i <= max; i++) { // 부둥호 아닌 부분만 체크
                 if (!checkPi(operand[2 * i])) {
                     return tree
                 }
@@ -34,7 +33,7 @@ export function eqIneqDivPi(tree = null) {
                 ? operand[0]
                 : frac_function(['fraction', operand[0], pi]);
             let newOperand = [term];
-            for (let i = 1; i <= max; i++) {
+            for (let i = 1; i <= max; i++) { // 부둥호 아닌 부분만 pi로 나눔
                 term = JSON.stringify(operand[2 * i]) === zero
                     ? operand[2 * i]
                     : frac_function(['fraction', operand[2 * i], pi]);
@@ -66,22 +65,23 @@ export function sub_divPi(tree, div) {
 }
 */
 export function checkPi(tree) {
-    if (Array.isArray(tree)) {
-        const [operator, ...operand] = tree;
-        switch (operator) {
-            case 'natural': {
-                // 0 이어도 pi 나누기 가능해서 추가
-                return operand[0] === '0';
-            }
-            case 'variable': {
-                return operand[0] === 'pi';
-            }
-            case 'mulchain': {
-                return operand.some(term => term[0] === 'mul' && checkPi(term[1]));
-            }
-            default: {
-                return operand.some(term => checkPi(term));
-            }
+    if (!Array.isArray(tree)) {
+        return false;
+    }
+    const [operator, ...operand] = tree;
+    switch (operator) {
+        case 'natural': {
+            // 0 이어도 pi 나누기 가능해서 추가
+            return operand[0] === '0';
+        }
+        case 'variable': {
+            return operand[0] === 'pi';
+        }
+        case 'mulchain': {
+            return operand.some(term => term[0] === 'mul' && checkPi(term[1]));
+        }
+        default: {
+            return operand.some(term => checkPi(term));
         }
     }
 }

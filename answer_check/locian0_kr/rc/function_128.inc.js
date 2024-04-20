@@ -3,10 +3,11 @@ import { fracSimp } from '../rc/function_67.inc.js';
 import { fracSimpInt } from '../rc/function_76.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 import { gcd } from '../rc/sub_functions.js';
+// accchain 항들의 계수의 쵀대공약수를 구해 그 수로 factorize
 export function addFactor_1(tree = null) {
-    const tree1 = JSON.stringify(tree);
+    const tree_1 = JSON.stringify(tree);
     // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
-    if (tree1 !== JSON.stringify(fracSimp(tree)) || tree1 !== JSON.stringify(fracSimpVar(tree))) {
+    if (tree_1 !== JSON.stringify(fracSimp(tree)) || tree_1 !== JSON.stringify(fracSimpVar(tree))) {
         return tree;
     }
 
@@ -15,91 +16,77 @@ export function addFactor_1(tree = null) {
         return addCommutative(tree);
     }
 
-    let power = false;
     let cons = [];
-    operand.forEach(addterm => {
-        const [, [operator_1]] = addterm;
-        if (operator_1 === 'mulchain') {
-            let con = ['natural', '1'];
-            let syms = [];
-            const [, [, term_1, ...addterm_1]] = addterm;
-            if (term_1[0] === 'mul') {
-                const is_variable = ['variable', 'squareroot'].includes(term_1[1][0]) || (term_1[1][0] === 'power' && term_1[1][1][0] === 'variable');
-                if (is_variable) {
-                    syms = [...syms, term_1];
-                } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
-                    con = term_1;
+    const operand_length = operand.length; // accchain
+    for (let i = 0; i < operand_length; i++) {
+        const [, [operator_i, ...operand_i]] = operand[i];
+        if (operator_i === 'power') {
+            return addCommutative(tree);
+        }
+        if (is_bigger_one(operand[i][1])) { /// operand[i] === [, ['natural', '']]
+            cons = [...cons, parseInt(operand_i[0])];
+            continue;
+        }
+        let con = 1;
+        let has_sym = false;
+        if (operator_i === 'mulchain') {
+            const [term_0, ...operand_1] = operand_i;
+            if (term_0[0] === 'mul') { // 첫항이 숫자인지 아닌 지 확인
+                if (is_variable(term_0[1])) {
+                    has_sym = true;
+                } else if (is_bigger_one(term_0[1])) {
+                    con = parseInt(term_0[1][1]);
                 }
             }
-            addterm_1.forEach(term_2 => {
-                const is_variable = ['variable', 'squareroot'].includes(term_2[1][0]) || (term_2[1][0] === 'power' && term_2[1][1][0] === 'variable');
-                if (term_2[0] === 'mul' && is_variable) {
-                    syms = [...syms, term_2];
-                }
-            });
-            if (syms.length > 0 && con[1] !== '1') {
-                cons = [...cons, con];
-            }
-        } else if (operator_1 === 'fraction') {
-            let con = [];
-            let syms = [];
-            if (addterm[1][1][0] === 'mulchain') {
-                con = ['natural', '1'];
-                const [, [, [, ...addterm_1]]] = addterm;
-                addterm_1.forEach(term_1 => {
-                    if (term_1[0] === 'mul') {
-                        if (['variable', 'squareroot'].includes(term_1[1][0])) {
-                            syms = [...syms, term_1];
-                        } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
-                            con = term_1;
+            has_sym = operand_1.some(term => term[0] === 'mul' && is_variable(term[1]));
+        } else if (operator_i === 'fraction') {
+            const [num] = operand_i;
+            if (num[0] === 'mulchain') {
+                const [, ...operand_num] = num
+                operand_num.forEach(term => {
+                    if (term[0] === 'mul') {
+                        if (['variable', 'squareroot'].includes(term[1][0])) {
+                            has_sym = true;
+                        } else if (is_bigger_one(term[1])) {
+                            con = parseInt(term[1][1]);
                         }
                     }
                 });
-            } else if (addterm[1][1][0] === 'natural' && addterm[1][1][1] !== '1') {
-                [, con] = addterm;
+            } else if (is_bigger_one(num)) {
+                con = parseInt(num[1]);
             }
-
-            if (syms.length > 0 && con[1] !== '1') {
-                cons = [...cons, con];
-            }
-        } else if (operator_1 === 'natural' && addterm[1][1] !== '1') {
-            cons = [...cons, addterm];
-        } else if (operator_1 === 'power') {
-            power = true;
         }
-    });
-
-    const cons_length = cons.length;
-    if (cons_length === 0) {
+        if (has_sym && con !== 1) {
+            cons = [...cons, con];
+        }
+    }
+    if (cons.length <= 1) {
         return addCommutative(tree);
     }
-    let con = [];
-    if (cons_length === 1 || power === true) {
-        con = ['natural', '1'];
-    } else {
-        let [[, [, g]], ...cons_rest] = cons;
-        g = cons_rest.reduce(function(a, b) {
-                const [, [, b_1]] = b;
-                return gcd(a, b_1);
-            },
-        g);
-        con = ['natural', g.toString()];
-    }
-
-    if (con[1] === '1') {
-        return addCommutative(tree);
-    }
-
-    let newAdd = ['addchain'];
-    operand.forEach(term => {
-        if (term[1][0] === 'fraction') {
-            if (term[1][2][0] !== 'mulchain') {
-                term[1][2] = ['mulchain', ['mul', term[1][2]]];
-            }
-            newAdd = [...newAdd, [term[0], fracSimpInt(['fraction', term[1][1], [...term[1][2], ...[['mul', con]]]])]];
-        } else {
-            newAdd = [...newAdd, [term[0], fracSimpInt(['fraction', term[1], con])]];
+    let [g, ...cons_1] = cons;
+    g = cons_1.reduce((a, b) => gcd(a, b), g);
+    const con = ['natural', g.toString()];
+    let addchain = ['addchain'];
+    operand.forEach(term => { // addchain;
+        const [operator_t, operand_t] = term;
+        let new_num_t = operand_t;
+        let new_den_t = con;
+        if (operand_t[0] === 'fraction') {
+            const [, num_t, den_t] = operand_t;
+            new_num_t = num_t;
+            new_den_t = den_t[0] !== 'mulchain'
+                ? ['mulchain', ['mul', den_t], ['mul', con]]
+                : [...den_t, ['mul', con]];
         }
+        addchain = [...addchain, [operator_t, fracSimpInt(['fraction', new_num_t, new_den_t])]];
     });
-    return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);
+    return addCommutative(['mulchain', ['mul', con], ['mul', addchain]]);
+}
+
+function is_variable(term) {
+    return ['variable', 'squareroot'].includes(term[0]) || (term[0] === 'power' && term[1][0] === 'variable');
+}
+
+function is_bigger_one(term) {
+    return term[0] === 'natural' && !['0', '1'].includes(term[1]);
 }

@@ -1,5 +1,5 @@
 import { addAssociative } from '../rc/function_45.inc.js';
-
+// associative 적용
 export function setAssociative(tree) {
     if (!Array.isArray(tree)) {
         return tree;

@@ -10,23 +10,24 @@ export function addFactoredForm(tree) {
     switch (operator) {
         case 'negative': {
             const term = addFactoredForm(operand[0]);
-            return term[0] === 'negative'
+            return term[0] === 'negative' // negtive  제거
                 ? term[1]
                 : [operator, term];
         }
         case 'mulchain': {
-            let add = false;
+            let is_addchain = false;
             let sign = 1;
-            let termArr = [];
-            let factArr = [];
-            let consArr = [];
+            let terms = [];
+            let facts = [];
+            let cons = [];
             operand.forEach((term, key) => {
                 if (term[0] === 'mul' && term[1][0] === 'addchain') {
+                    is_addchain = true;
                     const fact = addFactor_1(term[1]);
                     let addchain;
                     const [operator_1] = fact;
                     if (operator_1 === 'mulchain') {
-                        consArr = [...consArr, fact[1]];
+                        cons = [...cons, fact[1]];
                         [, , [, addchain]] = fact;
                     } else if (operator_1 === 'addchain') {
                         addchain = fact;
@@ -35,23 +36,22 @@ export function addFactoredForm(tree) {
                         addchain = sign_change(addchain);
                         sign *= -1;
                     }
-                    factArr = [...factArr, ['mul', addchain]];
-                    add = true;
+                    facts = [...facts, ['mul', addchain]];
                 } else if (term[0] === 'mul' && term[1][0] === 'natural' && key === 0) {
-                    consArr = [...consArr, term];
+                    cons = [...cons, term];
                 } else {
-                    termArr = [...termArr, term];
+                    terms = [...terms, term];
                 }
             });
-            if (!add) {
+            if (!is_addchain) {
                 return sign === -1
                     ? ['negative', tree]
                     : tree;
             }
-            const val = consArr.reduce((a, b) => a * b[1][1], 1);
+            const val = cons.reduce((a, b) => a * b[1][1], 1);
             const newOperand = val !== 1
-                ? [['mul', ['natural', val.toString()]], ...termArr, ...factArr]
-                : [...termArr, ...factArr];
+                ? [['mul', ['natural', val.toString()]], ...terms, ...facts]
+                : [...terms, ...facts];
             return sign === -1
                 ? ['negative', [operator, ...newOperand]]
                 : [operator, ...newOperand];

@@ -10,48 +10,48 @@ export function fracSimpInt(tree) {
     }
     const num = fracSimpInt(operand[0]);
     const den = fracSimpInt(operand[1]);
-    let intNum = 1;
-    let narrNum = [];
+    let num_int = 1;
+    let num_others = [];
     switch (num[0]) {
         case 'natural': {
-            [, intNum] = num;
+            [, num_int] = num;
             break;
         }
         case 'mulchain': {
-            let arrNum = [1];
+            let ints = [1];
             const [, ...num_1] = num;
             num_1.forEach(term => {
                 term[0] === 'mul' && term[1][0] === 'natural'
-                    ? arrNum = [...arrNum, term[1][1]]
-                    : narrNum = [...narrNum, term];
+                    ? ints = [...ints, term[1][1]]
+                    : num_others = [...num_others, term];
             });
-            intNum = arrNum.reduce((a, b) => a * b);
+            num_int = ints.reduce((a, b) => a * b);
             break;
         }
     }
 
-    let intDen = 1;
-    let narrDen = [];
+    let den_int = 1;
+    let den_others = [];
     switch (den[0]) {
         case 'natural': {
-            [, intDen] = den;
+            [, den_int] = den;
             break;
         }
         case 'mulchain': {
             const [, ...den_1] = den;
-            let arrDen = [1];
+            let ints = [1];
             den_1.forEach(term => {
                 term[0] === 'mul' && term[1][0] === 'natural'
-                    ? arrDen = [...arrDen, term[1][1]]
-                    : narrDen = [...narrDen, term];
+                    ? ints = [...ints, term[1][1]]
+                    : den_others = [...den_others, term];
             });
-            intDen = arrDen.reduce((a, b) => a * b);
+            den_int = ints.reduce((a, b) => a * b);
             break;
         }
     }
-    const g = gcd(intNum, intDen);
-    const newNum = (intNum / g).toString();
-    const newDen = (intDen / g).toString();
+    const g = gcd(num_int, den_int);
+    const newNum = (num_int / g).toString();
+    const newDen = (den_int / g).toString();
     let num_1 = num;
     switch (num[0]) {
         case 'natural': {
@@ -60,11 +60,11 @@ export function fracSimpInt(tree) {
         }
         case 'mulchain': {
             if (newNum !== '1') {
-                narrNum = [['mul', ['natural', newNum]], ...narrNum];
+                num_others = [['mul', ['natural', newNum]], ...num_others];
             }
-            num_1 = narrNum.length === 1
-                ? narrNum[0][1]
-                : ['mulchain', ...narrNum];
+            num_1 = num_others.length === 1
+                ? num_others[0][1]
+                : ['mulchain', ...num_others];
             break;
         }
     }
@@ -76,23 +76,28 @@ export function fracSimpInt(tree) {
         }
         case 'mulchain': {
             if (newDen !== '1') {
-                narrDen = [['mul', ['natural', newDen]], ...narrDen];
+                den_others = [['mul', ['natural', newDen]], ...den_others];
             }
-            narrDen = narrDen.length === 1
-                ? narrDen[0][1]
-                : ['mulchain', ...narrDen];
-            return [operator, num_1, narrDen];
+            den_others = den_others.length === 1
+                ? den_others[0][1]
+                : ['mulchain', ...den_others];
+            return [operator, num_1, den_others];
         }
         default: {
             return [operator, num_1, den];
         }
     }
 }
+
 /*
-export function EuclidAlg(A, B) {
-    while (B !== 0) {
-        [A, B] = [B, A % B];
-    }
-    return A;
+function int_separation(terms, others) {
+    let ints = [1];
+    const [, ...num_1] = terms;
+    num_1.forEach(term => {
+        term[0] === 'mul' && term[1][0] === 'natural'
+            ? ints = [...ints, term[1][1]]
+            : num_others = [...num_others, term];
+    });
+    num_int = ints.reduce((a, b) => a * b);
 }
 */

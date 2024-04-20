@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export function varReverseShift(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -18,7 +16,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
         }
         vars = [...vars, term[1][1]];
     }
-    const vars_1 = _.cloneDeep(vars);
+
+    const vars_1 = [...vars];
     vars_1.sort();
     let k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
     const vars_length = vars.length;
@@ -32,12 +31,8 @@ export function varReverseShift(tree, types = [null], parent = null) {
         k = vars_length - 1 - k;
         vars = vars.reverse();
     }
-    let newOperand = [];
-    for (let i = k; i < vars_length; i++) {
-        newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
-    }
-    for (let i = 0; i < k; i++) {
-        newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
-    }
-    return [operator + '_fixed', ...newOperand];
+    const newOperand = vars.map(vari => ['mul', ['variable', vari]]);
+    const newOperand_1 = newOperand.slice(k);
+    const newOperand_2 = newOperand.slice(0, k);
+    return [operator + '_fixed', ...newOperand_1, ...newOperand_2];
 }

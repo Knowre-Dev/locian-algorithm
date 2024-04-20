@@ -1,4 +1,4 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 
 export function varShift(tree, types = [null], parent = null) {
     if (!Array.isArray(tree)) {
@@ -17,16 +17,11 @@ export function varShift(tree, types = [null], parent = null) {
         }
         vars = [...vars, term[1][1]];
     }
-    const vars_1 = _.cloneDeep(vars);
+    const vars_1 = [...vars];
     vars_1.sort();
     const k = Object.keys(vars).find(key => vars[key] === vars_1[0]);
-    let newOperand = [];
-    const vars_length = vars.length;
-    for (let i = k; i < vars_length; i++) {
-        newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
-    }
-    for (let i = 0; i < k; i++) {
-        newOperand = [...newOperand, ['mul', ['variable', vars[i]]]];
-    }
-    return [operator + '_fixed', ...newOperand];
+    const newOperand = vars.map(vari => ['mul', ['variable', vari]])
+    const newOperand_1 = newOperand.slice(k);
+    const newOperand_2 = newOperand.slice(0, k);
+    return [operator + '_fixed', ...newOperand_1, ...newOperand_2];
 }

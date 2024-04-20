@@ -2,7 +2,6 @@ import { fracSimp } from '../rc/function_67.inc.js';
 import { addFactoredForm } from '../rc/function_70.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 import { addFactoredFormVar } from '../rc/function_117.inc.js';
-
 export function sub_addFactored(tree = null) {
     // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)
     if (!Array.isArray(tree)) {
@@ -16,23 +15,22 @@ export function sub_addFactored(tree = null) {
 
     switch (operator) {
         case 'addchain': {
-            const newOperand = [];
-            let add_term = [];
+            let add_terms = [];
+            const signs = new Map([
+                ['add', 'sub'],
+                ['sub', 'add']
+            ]);
             for (const term of operand) {
-                const [operator_term, [operator_term_1, ...operand_term_1]] = term;
-                add_term = operator_term_1 === 'addchain'
-                    ? operator_term === 'add'
-                        ? [...add_term, ...operand_term_1]
-                        : [...add_term, ...operand_term_1.map(term_term_1 => term_term_1[0] === 'add'
-                            ? ['sub', term_term_1[1]]
-                            : ['add', term_term_1[1]])]
+                const [sign, [operator_term_1, ...operand_term_1]] = term;
+                add_terms = operator_term_1 === 'addchain'
+                    ? sign === 'add'
+                        ? [...add_terms, ...operand_term_1]
+                        : [...add_terms, ...operand_term_1.map(term_term_1 => [signs.get(term_term_1[0]), term_term_1[1]])]
                     : operator_term_1 === 'mulchain' && operand_term_1.some(term_term_1 => term_term_1[1][0] === 'addchain')
-                        ? [...add_term, addFactoredForm(addFactoredFormVar(term))]
-                        : [...add_term, term];
+                        ? [...add_terms, addFactoredForm(addFactoredFormVar(term))]
+                        : [...add_terms, term];
             }
-            return add_term.length !== 0
-                ? addFactoredFormVar(['addchain', ...add_term])
-                : [operator, ...newOperand];
+            return addFactoredFormVar(['addchain', ...add_terms]);
         }
         case 'mulchain': {
             return [operator, ...operand.map(term => sub_addFactored(term))];

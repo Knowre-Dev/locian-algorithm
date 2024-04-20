@@ -1,4 +1,5 @@
 // import { addNegative } from '../rc/function_71.inc.js';
+// fraction의 negative 정리
 import { sign_change } from '../rc/sub_functions.js';
 export function fracNegative(tree) {
     if (!Array.isArray(tree)) {
@@ -17,27 +18,12 @@ export function fracNegative(tree) {
             let sign = 1;
             let num = fracNegative(operand[0]);
             let den = fracNegative(operand[1]);
-
-            if (num[0] === 'negative') {
-                sign = -1;
-                [, num] = num;
-            } else if (num[0] === 'addchain' && num[1][0] === 'sub') {
-                sign = -1;
-                num = sign_change(num);
-                // num = addNegative(['negative', num]);
-            }
-
-            if (den[0] === 'negative') {
-                sign *= -1;
-                [, den] = den;
-            } else if (den[0] === 'addchain' && den[1][0] === 'sub') {
-                sign *= -1;
-                den = sign_change(den);
-                // den = addNegative(['negative', den]);
-            }
+            [num, sign] = sign_simp(num, sign);
+            [den, sign] = sign_simp(den, sign);
+            const new_tree = [operator, num, den];
             return sign === -1
-                ? ['negative', [operator, num, den]]
-                : [operator, num, den];
+                ? ['negative', new_tree]
+                : new_tree;
         }
         case 'addchain': {
             let newOperand = [];
@@ -46,16 +32,16 @@ export function fracNegative(tree) {
                 ['sub', 'add']
             ]);
             operand.forEach(term => {
+                let term_add = term;
                 if (term[1][0] === 'fraction') {
                     const nterm = fracNegative(term[1]);
-                    newOperand = nterm[0] === 'negative'
+                    term_add = nterm[0] === 'negative'
                         ? signs.has(term[0])
-                            ? [...newOperand, [signs.get(term[0]), nterm[1]]]
-                            : [...newOperand, [term[0], nterm[1]]]
-                        : [...newOperand, [term[0], nterm]];
-                } else {
-                    newOperand = [...newOperand, term];
+                            ? [signs.get(term[0]), nterm[1]]
+                            : [term[0], nterm[1]]
+                        : [term[0], nterm];
                 }
+                newOperand = [...newOperand, term_add];
             });
             return [operator, ...newOperand];
         }
@@ -64,21 +50,35 @@ export function fracNegative(tree) {
             let sign = 1;
             operand.forEach(term => {
                 const nterm = fracNegative(term[1]);
+                let term_mul;
                 if (nterm[0] === 'negative') {
                     sign *= -1;
-                    newOperand = [...newOperand, [term[0], nterm[1]]];
+                    term_mul = [term[0], nterm[1]];
                 } else {
-                    newOperand = [...newOperand, [term[0], nterm]];
+                    term_mul = [term[0], nterm];
                 }
+                newOperand = [...newOperand, term_mul];
             });
+            const new_tree = [operator, ...newOperand];
             return sign === -1
-                ? ['negative', [operator, ...newOperand]]
-                : [operator, ...newOperand];
+                ? ['negative', new_tree]
+                : new_tree;
         }
         default: {
             return [operator, ...operand.map(term => fracNegative(term))];
         }
     }
+}
+
+function sign_simp(term, sign) {
+    if (term[0] === 'negative') {
+        sign *= -1;
+        [, term] = term;
+    } else if (term[0] === 'addchain' && term[1][0] === 'sub') {
+        sign *= -1;
+        term = sign_change(term);
+    }
+    return [term, sign];
 }
 
 /*

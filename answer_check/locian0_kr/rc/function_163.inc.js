@@ -1,3 +1,6 @@
+/*
+a(b+c+d) => ab+ac+ad
+*/
 export function solParenthesis(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -6,81 +9,73 @@ export function solParenthesis(tree = null) {
     const [operator, ...operand] = tree;
     switch (operator) {
         case 'mulchain': {
-            let mul = true;
-            let addchain = [];
-            let mono = [];
-            operand.forEach(term => {
-                if (term[0] === 'mul') {
-                    switch (term[1][0]) {
-                        case 'addchain': {
-                            addchain = [...addchain, term[1]];
-                            break;
-                        }
-                        case 'mulchain':
-                        case 'power': {
-                            const expand = solParenthesis(term[1]);
-                            expand[0] === 'addchain'
-                                ? addchain = [...addchain, expand]
-                                : mono = [...mono, term];
-                            break;
-                        }
-                        default: {
-                            mono = [...mono, term];
-                        }
+            let addchains = [];
+            let others = [];
+            operand.forEach(term => { // addchain들 수집
+                if (term[0] !== 'mul') {
+                    return tree;
+                }
+                switch (term[1][0]) {
+                    case 'addchain': {
+                        addchains = [...addchains, term[1]];
+                        break;
                     }
-                } else {
-                    mul = false;
+                    case 'mulchain':
+                    case 'power': {
+                        const expand = solParenthesis(term[1]);
+                        expand[0] === 'addchain'
+                            ? addchains = [...addchains, expand]
+                            : others = [...others, term];
+                        break;
+                    }
+                    default: {
+                        others = [...others, term];
+                    }
                 }
             });
-            if (!mul) {
-                return tree;
-            }
-            const addchain_length = addchain.length;
-            switch (addchain_length) {
+            const addchains_length = addchains.length;
+            switch (addchains_length) {
                 case 0: {
                     return tree;
                 }
                 case 1: {
-                    const newOperand = addchain[0].reduce((terms, term) => Array.isArray(term)
-                        ? [...terms, [term[0], ['mulchain', ...mono, ['mul', term[1]]]]]
-                        : terms, []);
+                    const [[, ...operand_add]] = addchains;
+                    const newOperand = operand_add.map(term => [term[0], ['mulchain', ...others, ['mul', term[1]]]]);
                     return ['addchain', ...newOperand];
                 }
-                default: {
-                    let [first] = addchain;
-                    [, ...addchain] = addchain;
-                    if (mono.length !== 0) {
-                        first = solParenthesis(['mulchain', ['mul', first], ...mono]);
+                default: { // addchains_length >= 2
+                    let [addchain_0] = addchains;
+                    [, ...addchains] = addchains;
+                    if (others.length !== 0) { // adchain 아닌 것들을 앞으로 몰아줌
+                        addchain_0 = solParenthesis(['mulchain', ['mul', addchain_0], ...others]);
                     }
-                    addchain.forEach(term_a => {
-                        [, ...term_a] = term_a;
-                        let term = [];
-                        term_a.forEach(term_a_1 => {
-                            const term_a_1_0 = JSON.stringify(term_a_1[0]);
-                            first.forEach(term_f => {
-                                if (Array.isArray(term_f) && Array.isArray(term_a_1)) {
-                                    const flag1 = JSON.stringify(term_f[0]) === term_a_1_0
-                                        ? 'add'
-                                        : 'sub';
-                                    const merge = ['mulchain', ['mul', term_f[term_f.length - 1]], ['mul', term_a_1[term_a_1.length - 1]]];
-                                    term = [...term, [flag1, merge]];
-                                }
+                    let [, ...newOperand] = addchain_0;
+                    addchains.forEach(addchain => {
+                        const [, ...operand_a] = addchain;
+                        let terms = [];
+                        operand_a.forEach(term_a => {
+                            newOperand.forEach(term_n => {
+                                const sign = term_n[0] === term_a[0]
+                                    ? 'add'
+                                    : 'sub';
+                                const mulchain = ['mulchain', ['mul', term_n[1]], ['mul', term_a[1]]];
+                                terms = [...terms, [sign, mulchain]];
                             });
                         });
-                        first = ['addchain', ...term];
+                        newOperand = terms;
                     });
-                    return ['addchain', ...first.slice(1)];
+                    return ['addchain', ...newOperand];
                 }
             }
         }
         case 'power': {
             if (operand[0][0] === 'addchain' && operand[1][0] === 'natural') {
                 const [, [, max]] = operand;
-                let arr = [];
+                let newOperand = [];
                 for (let i = 0; i < max; i++) {
-                    arr = [...arr, ['mul', operand[0]]];
+                    newOperand = [...newOperand, ['mul', operand[0]]];
                 }
-                return solParenthesis(['mulchain', ...arr]);
+                return solParenthesis(['mulchain', ...newOperand]);
             }
             return tree;
         }

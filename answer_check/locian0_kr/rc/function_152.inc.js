@@ -168,9 +168,9 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // which must include mulZero to prevent PHP error
                     // caused at lines 1808,1809,1811,1812
 
-                    const asciiBound = unicode('a') + 13; // Middle of 'a' - 'z'
-                    randRe = (randRe + unicode(varname) - asciiBound) * rangeWidth - bound;
-                    randIm = (randIm + unicode(varname) - asciiBound) * rangeWidth - bound;
+                    const asciiBound = string_code('a') + 13; // Middle of 'a' - 'z'
+                    randRe = (randRe + string_code(varname) - asciiBound) * rangeWidth - bound;
+                    randIm = (randIm + string_code(varname) - asciiBound) * rangeWidth - bound;
                     // Round to 4 decimal places just for efficiency's sake
                     // (otherwise running the new Equivalent preset slows down too much)
                     randRe = parseFloat(randRe.toFixed(4));
@@ -268,7 +268,7 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
         case 'positive':
         case 'add':
         case 'mul': {
-            return operand[0];
+            return operand[0]; // ['add', tree]
         }
         case 'pm':
         case 'addsub': {
@@ -1441,15 +1441,17 @@ export function validMathTree(tree) {
     }
 }
 
-export function unicode(str) {
-    const str_len = str.length;
-    if (str_len <= 0) {
+// 스트링을 고유의 숫자로 바꾸어줌
+export function string_code(string) {
+    const str_length = string.length;
+    if (str_length <= 0) {
         return false;
     }
-    return str_len === 1
-        ? str.charCodeAt(0)
-        : str.reduce((code, ch, i) => code | (ch.charCodeAt(0) & 0x3F) << 6 * i, 0);
+    return str_length === 1
+        ? string.charCodeAt(0)
+        : string.reduce((code, ch, i) => code | (ch.charCodeAt(0) & 0x3F) << 6 * i, 0);
 }
+// a+b b+a
 /*
 export function unicode(ch) {
     const ch_len = ch.length;
@@ -1471,7 +1473,19 @@ export function unicode(ch) {
                         // 0x0F === 2^4 - 1, 0x1F === 2^5 - 1, 0x3F === 2^6 - 1
 }
 */
-
+/*
+function utf8_ord($ch) {
+    $len = strlen($ch);
+    if($len <= 0) return false;
+    $h = ord($ch{0});
+    if ($h <= 0x7F) return $h;
+    if ($h < 0xC2) return false;
+    if ($h <= 0xDF && $len>1) return ($h & 0x1F) <<  6 | (ord($ch{1}) & 0x3F);
+    if ($h <= 0xEF && $len>2) return ($h & 0x0F) << 12 | (ord($ch{1}) & 0x3F) << 6 | (ord($ch{2}) & 0x3F);
+    if ($h <= 0xF4 && $len>3) return ($h & 0x0F) << 18 | (ord($ch{1}) & 0x3F) << 12 | (ord($ch{2}) & 0x3F) << 6 | (ord($ch{3}) & 0x3F);
+    return false;
+  }
+*/
 /*
 let result = unicode('하');
 //result = unicode('10000');

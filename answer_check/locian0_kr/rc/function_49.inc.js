@@ -14,17 +14,19 @@ export function fracDecimal(tree) {
     let num = parseInt(int + dec);
     const exp = dec.length;
     let exp_2 = 0;
-    let exp_5 = 0;
     while (num % 2 === 0 && exp_2 < exp) {
         num /= 2;
         exp_2++;
     }
+    let exp_5 = 0;
     while (num % 5 === 0 && exp_5 < exp) {
         num /= 5;
         exp_5++;
     }
-    const den = Math.pow(2, exp - exp_2) * Math.pow(5, exp - exp_5);
-    return ['fraction', ['natural', num.toString()], ['natural', den.toString()]];
+    let den = Math.pow(2, exp - exp_2) * Math.pow(5, exp - exp_5);
+    num = ['natural', num.toString()];
+    den = ['natural', den.toString()];
+    return ['fraction', num, den];
 }
 /*
 import {LatexToTree} from '../checkmath.js';

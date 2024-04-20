@@ -1,4 +1,4 @@
-export function mulToExp(tree = null) {
+export function mulToExp(tree = null) { // mulchian to expnetial aaa => a^3
     if (!Array.isArray(tree)) {
         return tree;
     }
@@ -7,22 +7,22 @@ export function mulToExp(tree = null) {
     if (operator !== 'mulchain') {
         return [operator, ...operand.map(term => mulToExp(term))];
     }
-    const power = {};
-    let varNum = [];
+    const powers = new Map();
+    let newOperand = [];
     operand.forEach(term => {
         term[0] === 'mul' && term[1][0] === 'variable'
-            ? power[term[1][1]] = !Object.prototype.hasOwnProperty.call(power, term[1][1])
+            ? powers.set(term[1][1], !powers.has(term[1][1])
                 ? [term[1]]
-                : [...power[term[1][1]], term[1]]
-            : varNum = [...varNum, term]
+                : [...powers.get(term[1][1]), term[1]])
+            : newOperand = [...newOperand, term]
     });
-    Object.values(power).forEach(term => {
+    powers.forEach(term => {
         const term_length = term.length;
-        varNum = term_length > 1
-            ? [...varNum, ['mul', ['power', term[0], ['natural', (term_length).toString()]]]]
-            : [...varNum, ['mul', term[0]]];
+        newOperand = term_length > 1
+            ? [...newOperand, ['mul', ['power', term[0], ['natural', (term_length).toString()]]]]
+            : [...newOperand, ['mul', term[0]]];
     });
-    return varNum.length === 1
-        ? varNum[0][1]
-        : [operator, ...varNum];
+    return newOperand.length === 1
+        ? newOperand[0][1]
+        : [operator, ...newOperand];
 }

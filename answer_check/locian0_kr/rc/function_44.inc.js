@@ -11,9 +11,10 @@ export function 곱셈결합법칙(tree) {
         // a(b(cd))-> a(bcd) -> abcd
         const [operator_term_1, ...operand_term_1] = term_1;
         const is_mulchain = operator === 'mulchain' && operator_term_1 === 'mul' && operand_term_1[0][0] === 'mulchain';
-        newOperand = is_mulchain
-            ? [...newOperand, ...operand_term_1[0].slice(1)]
-            : [...newOperand, term_1];
+        const new_terms = is_mulchain
+            ? operand_term_1[0].slice(1)
+            : [term_1];
+        newOperand = [...newOperand, ...new_terms];
     });
     return [operator, ...newOperand];
 }
