@@ -1,3 +1,4 @@
+// 0에 앞에 부호가 -인경우 + 로 a-0 => a+0
 export function addPolyZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;

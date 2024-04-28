@@ -1,3 +1,4 @@
+// 소수만앞에 0일 없을 때 추가시켜줌 .001 => 0.001
 export function decIdentity(tree) {
     if (!Array.isArray(tree)) {
         return tree;

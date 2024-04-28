@@ -47,7 +47,7 @@ export function fracExpress(tree) {
 
 function update_frac(term, num, den) {
     const [op, [, num_t, den_t]] = term;
-    let is_nega;
+    let is_nega = false;
 
     const [operator_num, ...operand_num] = num_t
     if (operator_num === 'mulchain') {
@@ -62,9 +62,9 @@ function update_frac(term, num, den) {
 
     const [operator_den, ...operand_den] = den_t
     if (operator_den === 'mulchain') {
-        den = [...den, ...operand_den];
+       den = [...den, ...operand_den];
     } else if (operand_den[0] !== '1') {
-        den = [...den, [op, den_t]];
+       den = [...den, [op, den_t]];
     }
     return [num, den, is_nega];
 }

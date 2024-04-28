@@ -3,7 +3,7 @@ import { fracSimp } from '../rc/function_67.inc.js';
 import { fracSimpInt } from '../rc/function_76.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 import { gcd } from '../rc/sub_functions.js';
-// accchain 항들의 계수의 쵀대공약수를 구해 그 수로 factorize
+// addchain 항들의 계수의 쵀대공약수를 구해 그 수를 전체 계수로
 export function addFactor_1(tree = null) {
     const tree_1 = JSON.stringify(tree);
     // 약분되는 경우는 안묶고 그냥 return (어차피 틀림)

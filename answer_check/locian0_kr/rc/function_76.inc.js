@@ -1,4 +1,79 @@
 import { gcd } from '../rc/sub_functions.js'
+// 분수에서 자여준 약분
+export function fracSimpInt(tree) {
+    if (!Array.isArray(tree)) {
+        return tree;
+    }
+
+    const [operator, ...operand] = tree;
+    if (operator !== 'fraction') {
+        return [operator, ...operand.map(term => fracSimpInt(term))];
+    }
+
+    const num = fracSimpInt(operand[0]);
+    const den = fracSimpInt(operand[1]);
+
+    // 자연수와 나머지 분리
+    const [num_int, num_others] = update_term(num);
+    const [den_int, den_others] = update_term(den);
+
+    // 자연수 부분 서로소로 만들기
+    const g = gcd(num_int, den_int);
+    const new_num_int = (num_int / g).toString();
+    const new_den_int = (den_int / g).toString();
+
+    const new_num = form_term(num, new_num_int, num_others);
+    const new_den = form_term(den, new_den_int, den_others);
+    return JSON.stringify(new_den) === JSON.stringify(['natural', '1']) // 분자가 1인가 아닌가
+        ? new_num
+        : [operator, new_num, new_den]
+}
+
+function form_term(term, int, others) {
+    let new_term = term
+    const [operator] = term;
+    switch (operator) {
+        case 'natural': {
+            new_term = ['natural', int];
+            break;
+        }
+        case 'mulchain': {
+            if (int !== '1') {
+                others = [['mul', ['natural', int]], ...others];
+            }
+            new_term = others.length === 1
+                ? others[0][1]
+                : ['mulchain', ...others];
+            break;
+        }
+    }
+    return new_term
+}
+
+function update_term(term) {
+    let int = 1;
+    let others = [];
+    const [operator_t, ...operand_t] = term;
+    switch (operator_t) {
+        case 'natural': {
+            [int] = operand_t;
+            break;
+        }
+        case 'mulchain': {
+            let ints = [1];
+            operand_t.forEach(term_t => {
+                term_t[0] === 'mul' && term_t[1][0] === 'natural'
+                    ? ints = [...ints, term_t[1][1]]
+                    : others = [...others, term_t];
+            });
+            int = ints.reduce((a, b) => a * b);
+            break;
+        }
+    }
+    return [int, others];
+}
+
+/*
 export function fracSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -87,17 +162,5 @@ export function fracSimpInt(tree) {
             return [operator, num_1, den];
         }
     }
-}
-
-/*
-function int_separation(terms, others) {
-    let ints = [1];
-    const [, ...num_1] = terms;
-    num_1.forEach(term => {
-        term[0] === 'mul' && term[1][0] === 'natural'
-            ? ints = [...ints, term[1][1]]
-            : num_others = [...num_others, term];
-    });
-    num_int = ints.reduce((a, b) => a * b);
 }
 */

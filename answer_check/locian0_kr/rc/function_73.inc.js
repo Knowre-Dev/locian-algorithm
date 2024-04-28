@@ -8,16 +8,16 @@ export function eqMulNeg(tree) {
     if (!is_negative) {
         return tree;
     }
-    let newOperand = [];
-    newOperand = operand[0][0] === 'negative'
-        ? [...newOperand, operand[0][1]]
-        : [...newOperand, addNegative(['negative', operand[0]])];
-    newOperand = operand[1][0] === 'negative'
-        ? [...newOperand, operand[1][1]]
+    let newOperand = operand[0][0] === 'negative'
+        ? [operand[0][1]]
+        : [addNegative(['negative', operand[0]])];
+    const term_add = operand[1][0] === 'negative'
+        ? operand[1][1]
         : operand[1][0] === 'addchain'
-            ? [...newOperand, addNegative(['negative', operand[1]])]
+            ? addNegative(['negative', operand[1]])
             : operand[1][0] === 'natural' && operand[1][1] === '0'
-                ? [...newOperand, operand[1]]
-                : [...newOperand, ['negative', operand[1]]];
+                ? operand[1]
+                : ['negative', operand[1]];
+    newOperand = [...newOperand, term_add];
     return [operator, ...newOperand];
 }

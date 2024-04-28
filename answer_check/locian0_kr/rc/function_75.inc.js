@@ -24,10 +24,10 @@ export function eqMulPropUS(tree) {
     // Input now guaranteed to be a tree array representing equation or inequality
 
     // Find the common factors for all sides
-    const gcfArr = findGCF(tree);
+    const gcf = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
-    let factor = [['mul', gcfArr.const], ...gcfArr.sym.map(sym => ['mul', sym])];
+    let factor = [['mul', gcf.const], ...gcf.sym.map(sym => ['mul', sym])];
     factor = array2ChainTree(factor);
     const factor_1 = JSON.stringify(factor);
     if (factor_1 === JSON.stringify(['natural', '1']) || factor_1 === JSON.stringify(['natural', '0'])) {

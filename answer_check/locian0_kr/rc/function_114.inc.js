@@ -1,3 +1,4 @@
+// mulahcin sign정리  (-a)bc => -abc
 export function mulToNega(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -11,6 +12,6 @@ export function mulToNega(tree = null) {
     if (!is_not_minus_one) {
         return tree;
     }
-    const [operator_1, ...operand_1] = operand;
-    return ['negative', ['mulchain', ['mul', operator_1[1][1]], ...operand_1]];
+    const [term_1, ...operand_1] = operand;
+    return ['negative', ['mulchain', ['mul', term_1[1][1]], ...operand_1]];
 }

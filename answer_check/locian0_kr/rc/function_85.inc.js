@@ -1,3 +1,4 @@
+// ineequality를 set으로 만들어줌
 export function ineqSetNot(tree, vari = ['anything', 'x']) {
     if (!Array.isArray(tree)) {
         return tree;

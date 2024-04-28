@@ -8,15 +8,15 @@ export function addFactorNegative(tree) {
     const [operator, ...operand] = tree;
     switch (operator) {
         case 'negative': {
-            const newOperand = [addFactorNegative(operand[0])];
-            return newOperand[0][0] === 'negative'
-                ? newOperand[0][1]
-                : [operator, ...newOperand];
+            const term = addFactorNegative(operand[0]);
+            return term[0] === 'negative'
+                ? term[1]
+                : [operator, term];
         }
         case 'mulchain': {
             let sign = 1;
-            let termArr = [];
-            let factArr = [];
+            let others = [];
+            let facts = [];
             operand.forEach(term => {
                 if (term[0] === 'mul' && term[1][0] === 'addchain') {
                     let [, addchain] = term;
@@ -24,21 +24,20 @@ export function addFactorNegative(tree) {
                         addchain = sign_change(addchain);
                         sign *= -1;
                     }
-                    factArr = [...factArr, ['mul', addchain]];
+                    facts = [...facts, ['mul', addchain]];
                 } else {
-                    termArr = [...termArr, term];
+                    others = [...others, term];
                 }
             });
-           const newOperand = [...termArr, ...factArr];
+            const new_tree = [operator, ...others, ...facts];
             return sign === -1
-                ? ['negative', [operator, ...newOperand]]
-                : [operator, ...newOperand];
+                ? ['negative', new_tree]
+                : new_tree;
         }
         case 'addchain': {
-            const addchain = ['addchain', ...operand];
-            return addchain[1][0] === 'sub'
-                ? ['negative', sign_change(addchain)]
-                : addchain;
+            return operand[0][0] === 'sub'
+                ? ['negative', sign_change(tree)]
+                : tree;
         }
         default: {
             return [operator, ...operand.map(term => addFactorNegative(term))];

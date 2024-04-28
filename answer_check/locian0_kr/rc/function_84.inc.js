@@ -1,3 +1,5 @@
+// 구간을 집합으로 만들어줌 (a, b) => a < x < b
+
 export function intervalSetNot(tree, vari = ['anything', 'x']) {
     if (!Array.isArray(tree)) {
         return tree;

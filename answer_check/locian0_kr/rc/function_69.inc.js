@@ -1,3 +1,5 @@
+// (a/b) / (c/d) => ad / bc
+
 export function fracComplex(tree) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -8,28 +10,28 @@ export function fracComplex(tree) {
     if (operator !== 'fraction') {
         return [operator, ...operand.map(term => fracComplex(term))];
     }
-    let numArr = [];
-    let denArr = [];
+    let nums = [];
+    let dens = [];
     const num = fracComplex(operand[0]);
     const den = fracComplex(operand[1]);
     if (num[0] === 'fraction') {
-        numArr = [...numArr, num[1]];
-        denArr = [...denArr, num[2]];
+        nums = [...nums, num[1]];
+        dens = [...dens, num[2]];
     } else {
-        numArr = [...numArr, num];
+        nums = [...nums, num];
     }
     if (den[0] === 'fraction') {
-        denArr = [...denArr, den[1]];
-        numArr = [...numArr, den[2]];
+        dens = [...dens, den[1]];
+        nums = [...nums, den[2]];
     } else {
-        denArr = [...denArr, den];
+        dens = [...dens, den];
     }
 
-    const newNum = numArr.length > 1
-        ? ['mulchain', ...numArr.map(term => ['mul', term])]
-        : numArr[0];
-    const newDen = denArr.length > 1
-        ? ['mulchain', ...denArr.map(term => ['mul', term])]
-        : denArr[0];
+    const newNum = nums.length > 1
+        ? ['mulchain', ...nums.map(term => ['mul', term])]
+        : nums[0];
+    const newDen = dens.length > 1
+        ? ['mulchain', ...dens.map(term => ['mul', term])]
+        : dens[0];
     return [operator, newNum, newDen]
 }

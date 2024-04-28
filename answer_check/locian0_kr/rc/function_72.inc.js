@@ -11,76 +11,73 @@ export function addFactor(tree) {
         return addCommutative(tree);
     }
     // extract all constant coefficents (not in denominator)
-    let consArr = [];
-    operand.forEach(addterm => {
-        switch (addterm[1][0]) {
+    let cons = [];
+    operand.forEach(term => { // addchain
+        [, term] = term
+        const [operator_t, ...operand_t] = term;
+        switch (operator_t) {
             case 'mulchain': {
-                let con = ['natural', '1'];
-                let syms = [];
-                const [, [, term_1, ...addterm_1]] = addterm;
-                if (term_1[0] === 'mul') {
-                    if (term_1[1][0] === 'variable') {
-                        syms = [...syms, term_1];
-                    } else if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
-                        con = term_1;
-                    }
+                let con = '1';
+                const [term_1] = operand_t;
+                if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
+                    con = term_1[1][1];
                 }
-                syms = [...syms, ...addterm_1.filter(multerm => (multerm[0] === 'mul' && multerm[1][0] === 'variable'))];
-                if (syms.length > 0 && con[1] !== '1') {
-                    consArr = [...consArr, con];
+                const has_sym = operand_t.some(term_t => term_t[0] === 'mul' && term_t[1][0] === 'variable');
+                if (has_sym && con !== '1') {
+                    cons = [...cons, con];
                 }
                 break;
             }
             case 'fraction': {
-                if (addterm[1][1][0] === 'mulchain') {
-                    let con = ['natural', '1'];
-                    let syms = [];
-                    const [, [, [, ...addterm_2]]] = addterm;
-                    addterm_2.forEach(multerm => {
-                        if (multerm[0] === 'mul') {
-                            if (multerm[1][0] === 'variable') {
-                                syms = [...syms, multerm];
-                            } else if (multerm[1][0] === 'natural' && multerm[1][1] !== '0') {
-                                con = multerm;
-                            }
+                const [num_t] = operand_t;
+                if (num_t[0] === 'mulchain') {
+                    let con = '1';
+                    const [, ...terms_t] = num_t;
+                    const has_sym = terms_t.some(term_t => term_t[0] === 'mul' && term_t[1][0] === 'variable');
+                    terms_t.forEach(term_t => {
+                        if (term_t[0] === 'mul' && term_t[1][0] === 'natural' && term_t[1][1] !== '0') {
+                            con = term_t[1][1];
                         }
                     });
-                    if (syms.length > 0 && con[1] !== '1') {
-                        consArr = [...consArr, con];
+                    if (has_sym && con !== '1') {
+                        cons = [...cons, con];
                     }
                 }
                 break;
             }
         }
     });
-
     // divide each term by the constant coefficients
-    if (consArr.length === 0) {
+    if (cons.length === 0) {
         return addCommutative(tree);
     }
-    let [[, con]] = consArr;
-    if (consArr.length !== 1) {
-        let [, lcm] = con;
-        const [, ...consArr_rest] = consArr;
-        lcm = consArr_rest.reduce(function (a, b) {
-                const [, [, b_1]] = b;
-                return b[1][1] / gcd(a, b_1);
-            },
-        lcm)
-        con = ['natural', lcm.toString()];
-    }
-
-    let newAdd = ['addchain'];
-    operand.forEach(addterm => {
-        if (addterm[1][0] === 'fraction') {
-            if (addterm[1][2][0] !== 'mulchain') {
-                addterm[1][2] = ['mulchain', ['mul', addterm[1][2]]];
+    const lcm = cons.reduce((a, b) => a * b / gcd(a, b), 1);
+    const con = ['natural', lcm.toString()];
+    cons = cons.map(term => ['mul', ['natural', term]]);
+    let new_addchain = ['addchain'];
+    operand.forEach(term => {
+        let num;
+        let den;
+        const [operator_t, term_t] = term;
+        if (term_t[0] === 'fraction') {
+            [, num, den] = term_t;
+            if (den[0] !== 'mulchain') {
+                den = ['mulchain', ['mul', den]];
             }
-            const den = [...addterm[1][2], ...consArr];
-            newAdd = [...newAdd, [addterm[0], fracSimpInt(['fraction', addterm[1][1], den])]];
+            den = [...den, ...cons];
         } else {
-            newAdd = [...newAdd, [addterm[0], fracSimpInt(['fraction', addterm[1], con])]];
+            num = term_t;
+            den = con;
         }
+        new_addchain = [...new_addchain, [operator_t, fracSimpInt(['fraction', num, den])]];
     });
-    return addCommutative(['mulchain', ['mul', con], ['mul', newAdd]]);
+    return addCommutative(['mulchain', ['mul', con], ['mul', new_addchain]]);
 }
+/*
+import { LatexToTree } from '../checkmath.js';
+const latex_1 = '\\frac{4x}{5}-12';
+const tree_1 = LatexToTree(latex_1)
+const tree_11 = addFactor(tree_1);
+const result_1 = JSON.stringify(tree_11, null, 4);
+console.log(result_1);
+*/

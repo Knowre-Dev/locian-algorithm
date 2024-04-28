@@ -1,5 +1,5 @@
 import { fracSimpInt } from '../rc/function_76.inc.js';
-
+// mfraction을 단순화 시켜줌 14/2 => 2
 export function mfracEquiv(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
