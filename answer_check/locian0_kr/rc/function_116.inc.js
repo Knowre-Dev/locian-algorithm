@@ -16,92 +16,111 @@ export function rootSimpInt(tree) {
 
 function simp_mulchain(tree) {
     const [operator, ...operand] = tree;
-    let newOperand = [];
-        let cons = [];
-        operand.forEach(term => {
-            const [op, term_1] = term;
-            if (op === 'mul' && term_1[0] === 'squareroot') {
-                const nroot = rootSimpInt(term_1);
-                switch (nroot[0]) {
-                    case 'natural': {
-                        cons = [...cons, ['mul', nroot]];
-                        break;
-                    }
-                    case 'mulchain': {
-                        cons = [...cons, nroot[1]]; // 첫항이 수
-                        newOperand = [...newOperand, nroot[2]];
-                        break;
-                    }
-                    case 'squareroot': {
-                        newOperand = [...newOperand, ['mul', nroot]];
-                        break;
-                    }
-                }
-            } else if (op === 'mul' && ['natural', 'fraction'].includes(term_1[0])) {
-                cons = [...cons, term];
-            } else {
-                newOperand = [...newOperand, term];
-            }
-        });
-        switch (cons.length) {
-            case 0: {
-                return [operator, ...newOperand];
-            }
-            case 1: {
-                return [operator, cons[0], ...newOperand];
-            }
-            default: {
-                let num = 1;
-                let den = 1;
-                cons.forEach(term => {
-                    if (term[1][0] === 'natural') {
-                        num *= term[1][1];
-                    } else if (term[1][0] === 'fraction') {
-                        num *= term[1][1][1];
-                        den *= term[1][2][1];
-                    }
-                });
-                const mul = den === 1
-                    ? ['mul', ['natural', num.toString()]]
-                    : ['mul', ['fraction', ['natural', num.toString()], ['natural', den.toString()]]];
-                return [operator, mul, ...newOperand];
-            }
+    let cons = []; // 상수
+    let others = [];
+    operand.forEach(term => {
+        const [op, term_1] = term;
+        if (op !== 'mul') {
+            others = [...others, term];
         }
+        if (term_1[0] === 'squareroot') {
+            const nroot = rootSimpInt(term_1);
+            switch (nroot[0]) {
+                case 'natural': {
+                    cons = [...cons, ['mul', nroot]];
+                    break;
+                }
+                case 'mulchain': {
+                    cons = [...cons, nroot[1]]; // 첫항이 수
+                    others = [...others, nroot[2]];
+                    break;
+                }
+                case 'squareroot': {
+                    others = [...others, ['mul', nroot]];
+                    break;
+                }
+            }
+        } else if (['natural', 'fraction'].includes(term_1[0])) {
+            cons = [...cons, term];
+        }
+    });
+    if (cons.length < 2) {
+        return [operator, ...cons, ...others];
+    }
+    let num = 1;
+    let den = 1;
+    cons.forEach(term => {
+        const [, term_1] = term;
+        if (term_1[0] === 'natural') {
+            num *= term_1[1];
+        } else if (term_1[0] === 'fraction') {
+            num *= term_1[1][1];
+            den *= term_1[2][1];
+        }
+    });
+    num = ['natural', num.toString()];
+    const con = den === 1
+        ? ['mul', num]
+        : ['mul', ['fraction', num, ['natural', den.toString()]]];
+    return [operator, con, ...others];
 }
 
 function simp_squareroot(tree) {
     let [, [, n]] = tree;
-    let d = 2;
-    let dmax = Math.floor(Math.sqrt(n));
+    let max = Math.floor(Math.sqrt(n));
+    let inside = 1; // 근호안의 수
+    let outside = 1; // 근호밖의 수
+    if (n % 2 === 0) {
+        [n, inside, outside, max] = root_separation(n, 2, inside, outside);
+    }
+    let p = 3;
     let primes = [];
-    let inside = 1;
-    let outside = 1;
-    do {
-        let exp = 0;
-        while (n % d === 0) {
-            exp++;
-            n /= d;
-        }
-        if (exp !== 0) {
-            inside *= Math.pow(d, exp % 2);
-            outside *= Math.pow(d, (exp - exp % 2) / 2);
-            dmax = Math.floor(Math.sqrt(n));
-            primes = [...primes, d];
+    while (n > 1 && p <= max) {
+        if (n % p === 0) {
+            [n, inside, outside, max] = root_separation(n, p, inside, outside);
         }
         if (n > 1) {
             do {
-                d++;
-            } while (d < dmax && primes.every(p => d % p === 0));
-            if (d > dmax) {
+                p += 2;
+            } while (p < max && primes.some(p_1 => p % p_1 === 0));
+            if (p > max) {
                 inside *= n;
             }
         }
-    } while (n > 1 && d <= dmax);
-    return inside === 1 || outside === 1
+        primes = [...primes, p];
+    }
+    return outside === 1
+        ? tree
+        : inside === 1
+            ? ['squareroot', ['natural', inside.toString()]]
+            : ['mulchain', ['mul', ['natural', outside.toString()]], ['mul', ['squareroot', ['natural', inside.toString()]]]];
+    /* 원래 함수 (내부가 1일때도 그냥 tree 반환)
+    return outside === 1 || inside === 1
         ? tree
         : ['mulchain', ['mul', ['natural', outside.toString()]], ['mul', ['squareroot', ['natural', inside.toString()]]]];
+    */
 }
 
+function root_separation(n, p, inside, outside) {
+    let exp = 0;
+    while (n % p === 0) {
+        exp++;
+        n /= p;
+    }
+    inside *= Math.pow(p, exp % 2);
+    outside *= Math.pow(p, (exp - exp % 2) / 2);
+    const max = Math.floor(Math.sqrt(n));
+    return [n, inside, outside, max]
+}
+/*
+import { LatexToTree } from '../checkmath.js';
+const latex_1 = '\\sqrt{60}';
+const tree_1 = LatexToTree(latex_1)
+console.log(JSON.stringify(tree_1, null, 4));
+const tree_11 = rootSimpInt(tree_1);
+const result_1 = JSON.stringify(tree_11, null, 4);
+console.log(result_1);
+*/
 /*
 export function pfactor(n) {
     let d = 2;
