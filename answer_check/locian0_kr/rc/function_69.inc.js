@@ -26,12 +26,13 @@ export function fracComplex(tree) {
     } else {
         dens = [...dens, den];
     }
-
-    const newNum = nums.length > 1
-        ? ['mulchain', ...nums.map(term => ['mul', term])]
-        : nums[0];
-    const newDen = dens.length > 1
-        ? ['mulchain', ...dens.map(term => ['mul', term])]
-        : dens[0];
+    const newNum = form_term(nums);
+    const newDen = form_term(dens);
     return [operator, newNum, newDen]
+}
+
+function form_term(terms) {
+    return terms.length > 1
+        ? ['mulchain', ...terms.map(term => ['mul', term])]
+        : terms[0];
 }

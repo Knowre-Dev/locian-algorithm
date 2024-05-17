@@ -1,3 +1,5 @@
+// absoulte에서 negative 제거
+
 export function absToMul(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -7,32 +9,35 @@ export function absToMul(tree = null) {
     if (operator !== 'absolute') {
         return [operator, ...operand.map(term => absToMul(term))];
     }
+    // operator === 'absolute'
     const [[operator_1, ...operand_1]] = operand;
     if (operator_1 === 'variable') {
         return tree;
     }
-    if (operator_1 === 'negative' && operand_1[0][0] === 'variable') {
-        return [operator, ...operand_1];
+    if (operator_1 === 'negative') {
+        return operand_1[0][0] === 'variable'
+            ? [operator, ...operand_1]
+            : absToMul(['absolute', ...operand_1]);
     }
-    if (operator_1 === 'mulchain') {
-        let vari = [];
-        let nat = [];
-        operand_1.forEach(term => {
-            term[1][0] === 'negative'
-                ? term[1][1][0] === 'variable'
-                    ? vari = [...vari, [term[0], term[1][1]]]
-                    : nat = [...nat, [term[0], term[1][1]]]
-                : term[1][0] === 'variable'
-                    ? vari = [...vari, term]
-                    : nat = [...nat, term];
-        });
-        return nat.length === 0
-            ? [operator, ['mulchain', ...vari]]
-            : vari.length === 1
-                ? ['mulchain', ...nat, ...[[vari[0][0], ['absolute', vari[0][1]]]]]
-                : ['mulchain', ...nat, ...[['mul', ['absolute', ['mulchain', ...vari]]]]];
+    if (operator_1 !== 'mulchain') {
+        return tree;
     }
-    return operator_1 === 'negative'
-        ? absToMul(['absolute', ...operand_1])
-        : tree;
+    let vars = [];
+    let others = [];
+    // 변수와 다른 것들 분리 및 negative 제거
+    operand_1.forEach(term => {
+        const [op, term_1] = term;
+        term_1[0] === 'negative'
+            ? term_1[1][0] === 'variable'
+                ? vars = [...vars, [op, term_1[1]]]
+                : others = [...others, [op, term_1[1]]]
+            : term_1[0] === 'variable'
+                ? vars = [...vars, term]
+                : others = [...others, term];
+    });
+    return others.length === 0
+        ? [operator, ['mulchain', ...vars]]
+        : vars.length === 1
+            ? ['mulchain', ...others, ...[[vars[0][0], ['absolute', vars[0][1]]]]]
+            : ['mulchain', ...others, ...[['mul', ['absolute', ['mulchain', ...vars]]]]];
 }

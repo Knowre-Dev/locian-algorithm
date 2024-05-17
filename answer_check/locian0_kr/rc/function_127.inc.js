@@ -1,3 +1,4 @@
+// inequality에서 부호정리 -a<b<-c => c<-b<a
 export function ineqRearrange(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -7,11 +8,11 @@ export function ineqRearrange(tree = null) {
     if (!(operator === 'inequality' && operand[0][0] === 'negative')) {
         return tree;
     }
-    const operand_reverse = operand.reverse();
-    const newOperand = operand_reverse.map(term_reverse => Array.isArray(term_reverse)
-        ? term_reverse[0] === 'negative'
-            ? term_reverse[1]
-            : ['negative', term_reverse]
-        : term_reverse);
+    const opeerand_rev = operand.reverse();
+    const newOperand = opeerand_rev.map(term_rev => Array.isArray(term_rev)
+        ? term_rev[0] === 'negative'
+            ? term_rev[1]
+            : ['negative', term_rev]
+        : term_rev);
     return [operator, ...newOperand];
 }

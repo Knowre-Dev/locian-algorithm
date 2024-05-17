@@ -1,5 +1,5 @@
 import { gcd } from '../rc/sub_functions.js'
-// 분수에서 자여준 약분
+// 분수에서 자연수 약분
 export function fracSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;

@@ -10,8 +10,10 @@ export function sub_mulCommutative(tree = null) {
         return [operator, ...operand.map(term => sub_mulCommutative(term))];
     }
     const array = operand.flat(Infinity);
-    const condition = array.some(value => ['natural', 'decimal'].includes(value)) && array.includes('variable') && (!sub_deter(tree) || operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1])));
-    return condition
+    const has_number = array.some(value => ['natural', 'decimal'].includes(value));
+    const is_sub_deter_chain = operand.some(term => term[1][0] === 'addchain' && term[1][1][1][0] === 'mulchain' && !sub_deter(term[1][1][1]));
+    const is_not_applicable = has_number && array.includes('variable') && (!sub_deter(tree) || is_sub_deter_chain);
+    return is_not_applicable
         ? tree
         : mulCommutative(tree);
 }

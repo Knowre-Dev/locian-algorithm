@@ -17,20 +17,20 @@ export function addFactor_1(tree = null) {
     }
 
     let cons = [];
-    const operand_length = operand.length; // accchain
+    const operand_length = operand.length; // addchain
     for (let i = 0; i < operand_length; i++) {
         const [, [operator_i, ...operand_i]] = operand[i];
         if (operator_i === 'power') {
             return addCommutative(tree);
         }
-        if (is_bigger_one(operand[i][1])) { /// operand[i] === [, ['natural', '']]
+        if (is_bigger_one(operand[i][1])) { // operand[i] === [, ['natural', '']]
             cons = [...cons, parseInt(operand_i[0])];
             continue;
         }
         let con = 1;
         let has_sym = false;
         if (operator_i === 'mulchain') {
-            const [term_0, ...operand_1] = operand_i;
+            const [term_0, ...terms_i] = operand_i;
             if (term_0[0] === 'mul') { // 첫항이 숫자인지 아닌 지 확인
                 if (is_variable(term_0[1])) {
                     has_sym = true;
@@ -38,7 +38,7 @@ export function addFactor_1(tree = null) {
                     con = parseInt(term_0[1][1]);
                 }
             }
-            has_sym = operand_1.some(term => term[0] === 'mul' && is_variable(term[1]));
+            has_sym = terms_i.some(term => term[0] === 'mul' && is_variable(term[1]));
         } else if (operator_i === 'fraction') {
             const [num] = operand_i;
             if (num[0] === 'mulchain') {
@@ -63,9 +63,13 @@ export function addFactor_1(tree = null) {
     if (cons.length <= 1) {
         return addCommutative(tree);
     }
-    let [g, ...cons_1] = cons;
-    g = cons_1.reduce((a, b) => gcd(a, b), g);
+    const g = cons.reduce((a, b) => gcd(a, b), cons[0]);
     const con = ['natural', g.toString()];
+    const addchain = form_addchain(operand, con);
+    return addCommutative(['mulchain', ['mul', con], ['mul', addchain]]);
+}
+
+function form_addchain(operand, con) {
     let addchain = ['addchain'];
     operand.forEach(term => { // addchain;
         const [operator_t, operand_t] = term;
@@ -80,7 +84,7 @@ export function addFactor_1(tree = null) {
         }
         addchain = [...addchain, [operator_t, fracSimpInt(['fraction', new_num_t, new_den_t])]];
     });
-    return addCommutative(['mulchain', ['mul', con], ['mul', addchain]]);
+    return addchain;
 }
 
 function is_variable(term) {

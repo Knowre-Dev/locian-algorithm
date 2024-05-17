@@ -1,4 +1,4 @@
-// import { addNegative } from '../rc/function_71.inc.js';
+// ineqwuatliy 부호 정렬
 import { sign_change } from '../rc/sub_functions.js';
 export function ineqMulNeg(tree = null) {
     if (!Array.isArray(tree)) {
@@ -6,11 +6,11 @@ export function ineqMulNeg(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    const is_not_negative = operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'));
-    if (is_not_negative) {
+    const is_first_not_nega = operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'));
+    if (is_first_not_nega) {
         return tree;
     }
-
+    // operand = [term, op, term, op, term]
     let newOperand = [];
     if (operand[0][0] === 'negative') {
         newOperand = [operand[0][1]];
@@ -24,17 +24,18 @@ export function ineqMulNeg(tree = null) {
         ['lt', 'gt'],
         ['le', 'ge']
     ]);
+    const zero = JSON.stringify(['natural', '0']);
     for (let i = 1; i <= max; i++) {
         newOperand = [...newOperand, ineqs.get(operand[2 * i - 1])];
         const term_even = operand[2 * i];
-        const term_add = term_even[0] === 'negative'
+        const term_new = term_even[0] === 'negative'
             ? term_even[1]
             : term_even[0] === 'addchain'
                 ? sign_change(term_even)
-                : JSON.stringify(term_even) === JSON.stringify(['natural', '0'])
+                : JSON.stringify(term_even) === zero
                     ? term_even
                     : ['negative', term_even];
-        newOperand = [...newOperand, term_add];
+        newOperand = [...newOperand, term_new];
     }
     return [operator, ...newOperand];
 }
@@ -56,8 +57,8 @@ export function ineqMulNegUS(tree) {
     } else {
         return tree;
     }
-    const is_not_negative = operand_1.some(term_1 => Array.isArray(term_1) && term_1[0] !== 'negative' && !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'));
-    if (is_not_negative) {
+    const is_not_nega = operand_1.some(term_1 => Array.isArray(term_1) && term_1[0] !== 'negative' && !(term_1[0] === 'addchain' && term_1[1][0] === 'sub'));
+    if (is_not_nega) {
         return tree;
     }
     const ineqs = new Map([
