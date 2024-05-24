@@ -15,10 +15,10 @@ Returns:
 A new tree with like terms grouped together into mulchains of an addchain and variable(s)
 
 */
-
-import { array2ChainTree, findVars, termExists } from '../rc/function_152.inc.js';
+import { findVars } from '../rc/function_152.inc.js';
+import { termExists, array2ChainTree } from '../rc/sub_functions.js';
+// import { array2ChainTree, findVars, termExists } from '../rc/function_152.inc.js';
 import { exprSimpConst } from '../rc/function_154.inc.js';
-
 export function groupLikeVariableTerms(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;

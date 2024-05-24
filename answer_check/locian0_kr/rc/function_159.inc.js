@@ -1,5 +1,6 @@
 import { mulIdentity } from '../rc/function_56.inc.js';
-import { array2ChainTree, evalNumericValues, findDenominators, isNumeric, multFactor } from '../rc/function_152.inc.js';
+// import { array2ChainTree, evalNumericValues } from '../rc/function_152.inc.js';
+import { array2ChainTree, evalNumericValues, findDenominators, isNumeric, multFactor } from '../rc/sub_functions.js';
 
 export function mulAllSidesByCommonDenom(tree = null) {
     if (!Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0])) {

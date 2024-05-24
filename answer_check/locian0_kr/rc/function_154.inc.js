@@ -17,9 +17,9 @@ import { fracSimpInt } from '../rc/function_76.inc.js';
 import { fracSimpVar } from '../rc/function_77.inc.js';
 import { rdecToFrac } from '../rc/function_78.inc.js';
 import { mulZero } from '../rc/function_82.inc.js';
-import { array2ChainTree, findGCF, isNumeric } from '../rc/function_152.inc.js';
 import { mulAssociative } from '../rc/function_157.inc.js';
 import { divFrac } from '../rc/function_161.inc.js';
+import { array2ChainTree, findGCF, isNumeric } from './sub_functions.js';
 
 export function exprSimpConst(tree = null) {
     if (!Array.isArray(tree) || tree.length === 0) {

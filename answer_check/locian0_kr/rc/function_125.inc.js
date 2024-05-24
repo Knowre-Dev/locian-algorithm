@@ -2,6 +2,8 @@ import { fracNegative } from '../rc/function_53.inc.js';
 import { fracSeparation } from '../rc/function_54.inc.js';
 import { fracSimpInt } from '../rc/function_76.inc.js';
 import { gcd } from '../rc/sub_functions.js'
+
+//  equation이나 ineuality에서 계수의 공통 인수로 전체를 나눔 2a=4 => a=2 2a<4b<4c => a<2c<2c
 export function eqIneqMulProp(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
@@ -12,30 +14,30 @@ export function eqIneqMulProp(tree = null) {
     }
     switch (operator) {
         case 'equation': {
-            const [, ...operand] = tree;
+            const [, ...operand] = tree; // [equation, left, right]
             const terms = operand;
-            const [is_applicable, cons] = form_cons(terms);
-            if (!is_applicable) {
+            const [is_not_appl_1, cons] = form_cons(terms);
+            if (is_not_appl_1) {
                 return tree;
             }
-            const [is_not_applicable, g] = form_gcd(terms, cons);
-            return is_not_applicable
+            const [is_not_appl_2, g] = form_gcd(terms, cons);
+            return is_not_appl_2
                 ? tree
                 : form_equation(operand, g);
         }
-        case 'inequality': {
+        case 'inequality': { // a < b
             const [, ...operand] = tree;
             const max = Math.floor(operand.length / 2);
             let terms = [];
             for (let i = 0; i <= max; i++) {
                 terms = [...terms, operand[2 * i]];
             }
-            const [is_applicable, cons] = form_cons(terms);
-            if (!is_applicable) {
+            const [is_not_appl_1, cons] = form_cons(terms);
+            if (is_not_appl_1) {
                 return tree;
             }
-            const [is_not_applicable, g] = form_gcd(terms, cons);
-            return is_not_applicable
+            const [is_not_appl_2, g] = form_gcd(terms, cons);
+            return is_not_appl_2
                 ? tree
                 : form_inequality(operand, g, max);
         }
@@ -44,19 +46,16 @@ export function eqIneqMulProp(tree = null) {
 function form_cons(terms) {
     let cons = terms.reduce((array, term) => [...array, ...sub_getConstant(term)], []);
     cons = [...new Set(cons)];
-    let is_applicable = true;
-    if (cons.includes(1) || cons.length === 0) {
-        is_applicable = false;
-    }
-    return [is_applicable, cons];
+    const is_not_appl = cons.includes(1) || cons.length === 0;
+    return [is_not_appl, cons];
 }
 
 function form_gcd(terms, cons) {
     const zero = JSON.stringify(['natural', '0']);
     const has_zero = terms.some(term => JSON.stringify(term) === zero);
     const g = cons.reduce((a, b) => gcd(a, b), cons[0]);
-    const is_not_applicable = (cons.length === 1 && !has_zero) || g === 1;
-    return [is_not_applicable, g];
+    const is_not_appl = (cons.length === 1 && !has_zero) || g === 1;
+    return [is_not_appl, g];
 }
 
 function form_equation(operand, den) {
@@ -68,7 +67,7 @@ function form_equation(operand, den) {
     return ['equation', left, right];
 }
 
-function form_inequality(operand, den, max) {
+function form_inequality(operand, den, max) { // a<b<c  a <b <c
     const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
     den = ['natural', den.toString()];
     let newOperand = [frac_function(['fraction', operand[0], den])];

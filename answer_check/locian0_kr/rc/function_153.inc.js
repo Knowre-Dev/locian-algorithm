@@ -2,8 +2,10 @@
 Combines an addchain with at least one fraction into a single fraction
 */
 import { mulIdentity } from '../rc/function_56.inc.js';
-import { array2ChainTree, findDenominators, findGCF, multFactor } from '../rc/function_152.inc.js';
+// import { array2ChainTree } from '../rc/function_152.inc.js';
+// import { array2ChainTree, findDenominators, findGCF, multFactor } from '../rc/function_152.inc.js';
 import { mulAssociative } from '../rc/function_157.inc.js';
+import { findDenominators, findGCF, multFactor, array2ChainTree } from '../rc/sub_functions.js';
 
 export function fracCombine(tree) {
     if (!Array.isArray(tree) || tree.length === 0) {
@@ -22,8 +24,8 @@ export function fracCombine(tree) {
     den = array2ChainTree(den); // 분모들로 mulchain 형성
     const GCF = findGCF(den);// 분모들의  쵀대공인수(GCF) 계산
 
-    if (GCF.sym.length !== 0) { // GCF의 인자 중에서 symbol이 있는 경우
-        const terms = [['mul', GCF.const], ...GCF.sym.map(value_1 => ['mul', value_1])];
+    if (GCF.syms.length !== 0) { // GCF의 인자 중에서 symbol이 있는 경우
+        const terms = [['mul', GCF.const], ...GCF.syms.map(value_1 => ['mul', value_1])];
         den = ['mulchain', ...terms];
     }
     const mul_function = (tree_1, term) => mulIdentity(mulAssociative(multFactor(tree_1, term, true)));

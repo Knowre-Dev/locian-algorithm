@@ -13,8 +13,8 @@ export function eqMulProp(tree) {
         : tree;
 }
 
-import { array2ChainTree, findGCF, multFactor } from '../rc/function_152.inc.js';
 import { mulNegative } from '../rc/function_160.inc.js';
+import { multFactor, findGCF, array2ChainTree } from './sub_functions.js';
 
 export function eqMulPropUS(tree) {
     if (!Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0])) {
@@ -27,7 +27,7 @@ export function eqMulPropUS(tree) {
     const gcf = findGCF(tree);
     // Here, elements in gcfArr are guaranteed to be positive,
     // so as to guarantee correct inequality directions
-    let factor = [['mul', gcf.const], ...gcf.sym.map(sym => ['mul', sym])];
+    let factor = [['mul', gcf.const], ...gcf.syms.map(sym => ['mul', sym])];
     factor = array2ChainTree(factor);
     const factor_1 = JSON.stringify(factor);
     if (factor_1 === JSON.stringify(['natural', '1']) || factor_1 === JSON.stringify(['natural', '0'])) {

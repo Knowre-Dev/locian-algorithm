@@ -1,4 +1,5 @@
-import { termExists } from '../rc/function_152.inc.js';
+import { termExists } from '../rc/sub_functions.js';
+// import { termExists } from '../rc/function_152.inc.js';
 
 export function makeOneSideOfEqIneqZero(tree = null) {
     if (!Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0])) {
