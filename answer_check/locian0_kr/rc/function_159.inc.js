@@ -1,5 +1,4 @@
 import { mulIdentity } from '../rc/function_56.inc.js';
-// import { array2ChainTree, evalNumericValues } from '../rc/function_152.inc.js';
 import { array2ChainTree, evalNumericValues, findDenominators, isNumeric, multFactor } from '../rc/sub_functions.js';
 
 export function mulAllSidesByCommonDenom(tree = null) {
@@ -11,62 +10,69 @@ export function mulAllSidesByCommonDenom(tree = null) {
 
     // Initialize array to store product of all denominators in each side
     const [operator, ...operand] = tree;
-    let denoms = [];
+    let dens = [];
     operand.forEach(term => {
         // Find all unique denominators in this subtree
         // Make sure to pass the third arg as TRUE
         // to get absolute values of all denominators (in case of any negative denominators)
         // to ensure preservation of directions of inequality
-        const denom = findDenominators(term, true, operator === 'inequality');
+        let den = findDenominators(term, true, operator === 'inequality');
 
         // Multiply all denominators in this subtree into a single quantity
-        if (denom.length === 0) {
-            denoms = [...denoms, ['natural', '1']];
-        } else {
-            const prod = denom.map(term_1 => ['mul', term_1]);
-            denoms = [...denoms, array2ChainTree(prod, true)];
+        if (den.length !== 0) {
+            den = den.map(term_1 => ['mul', term_1]);
+            dens = [...dens, array2ChainTree(den, true)];
         }
     });
 
     // Calculate the common denominator to multiply on all sides of the equation
-    let denom_comm = denoms.map(denom => ['mul', denom]);
-    denom_comm = mulIdentity(array2ChainTree(denom_comm, true));
+    let den_com = [];
+    if (dens.length === 0) {
+        den_com = ['natural', '1'];
+    } else {
+        den_com = dens.map(den => ['mul', den]);
+        den_com = mulIdentity(array2ChainTree(den_com, true));
+    }
 
     // Construct a new tree with the common denominator multiplied
     // Execute only if denom_comm !== ['natural', '1']
-    if (JSON.stringify(denom_comm) === JSON.stringify(['natural', '1'])) {
+    const one = JSON.stringify(['natural', '1']);
+    if (JSON.stringify(den_com) === one) {
         return tree;
     }
     let newOperand = [];
     const zero = JSON.stringify(['natural', '0']);
-    const one = JSON.stringify(['natural', '1']);
     const minus_one = JSON.stringify(['negative', ['natural', '1']]);
-    operand.forEach(side => {
-        if (JSON.stringify(side) === zero) {
-            newOperand = [...newOperand, side];
-        } else if (side[0] === 'addchain') {
+    const is_numeric_den_com = isNumeric(den_com);
+    operand.forEach(term => {
+        const [op, ...terms_1] = term;
+        if (JSON.stringify(term) === zero) {
+            newOperand = [...newOperand, term];
+        } else if (op === 'addchain') {
             let terms = [];
-            const [, ...side_1] = side;
-            side_1.forEach(term => {
+            terms_1.forEach(term_1 => {
                 let new_term = [];
-                if (JSON.stringify(term[1]) === one) {
-                    new_term = denom_comm;
-                } else if (JSON.stringify(term[1]) === minus_one) {
-                    new_term = ['negative', denom_comm];
+                const [op_1, term_11] = term_1;
+                const term_11_s = JSON.stringify(term_11);
+                if (term_11_s === one) {
+                    new_term = den_com;
+                } else if (term_11_s === minus_one) {
+                    new_term = ['negative', den_com];
                 } else {
-                    new_term = multFactor(term[1], ['mul', denom_comm], true);
-                    if (isNumeric(term[1]) && isNumeric(denom_comm)) {
+                    new_term = multFactor(term_11, ['mul', den_com], true);
+                    if (isNumeric(term_11) && is_numeric_den_com) {
                         new_term = evalNumericValues(new_term);
                     }
                 }
-                terms = [...terms, [term[0], new_term]];
+                terms = [...terms, [op_1, new_term]];
             });
             newOperand = [...newOperand, array2ChainTree(terms)];
         } else {
-            const newSide = multFactor(side, ['mul', denom_comm]);
-            newOperand = isNumeric(side) && isNumeric(denom_comm)
-                ? [...newOperand, evalNumericValues(newSide)]
-                : [...newOperand, newSide];
+            let new_term = multFactor(term, ['mul', den_com]);
+            if (isNumeric(term) && is_numeric_den_com) {
+                new_term = evalNumericValues(new_term);
+            }
+            newOperand = [...newOperand, new_term];
         }
     });
     return [operator, ...newOperand];

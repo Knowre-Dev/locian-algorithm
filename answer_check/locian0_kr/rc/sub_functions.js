@@ -71,15 +71,19 @@ export function array2ChainTree(operand, evalNumeric = false) {
         return operand;
     }
 
-    let operator;
-    if (['add', 'sub', 'addsub', 'subadd'].includes(operand[0][0])) {
-        operator = 'addchain'
-    } else if (['mul', 'div'].includes(operand[0][0])) {
-        operator = 'mulchain'
-    } else {
+    const ops = new Map();
+    ops.set('add', 'addchain');
+    ops.set('sub', 'addchain');
+    ops.set('addsub', 'addchain');
+    ops.set('subadd', 'addchain');
+    ops.set('mul', 'mulchain');
+    ops.set('div', 'mulchain');
+    const [[op]] = operand;
+    if (!ops.has(op)) {
         return operand;
-        // Can only handle addchain or mulchain; return the input array otherwise
+         // Can only handle addchain or mulchain; return the input array otherwise
     }
+    const operator = ops.get(op);
     // Optional: Evaluate all numerical terms into a single term
     if (evalNumeric) {
         let numers = [];
@@ -92,10 +96,12 @@ export function array2ChainTree(operand, evalNumeric = false) {
         });
         let numers_c = array2ChainTree(numers);
         operand = others;
+
         if (numers_c.length) {
             numers_c = evalNumericValues(numers_c);
             if (operator === 'addchain') {
-                if (operand.length === 0 || JSON.stringify(numers_c) !== JSON.stringify(['natural', '0'])) {
+                const is_empty_operand = operand.length === 0 || JSON.stringify(numers_c) !== JSON.stringify(['natural', '0']);
+                if (is_empty_operand) {
                     operand = numers_c[0] === 'negative'
                         ? [['sub', numers_c[1]], ...operand]
                         : [['add', numers_c], ...operand];
@@ -122,7 +128,6 @@ export function array2ChainTree(operand, evalNumeric = false) {
                 : term_0
         : [operator, ...operand];
 }
-
 /*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = '3^2';
@@ -166,7 +171,6 @@ export function evalNumericValues(tree) {
         }
         case 'rdecimal': {
             return evalNumericValues(rdecToFrac(tree));
-            // return evalNumericValues(rdecToFrac([operator, operand[0]])); - original code
         }
         case 'negative': {
             const operand_0 = evalNumericValues(operand[0]);
@@ -249,12 +253,17 @@ export function evalNumericValues_addChain(operand) {
     // Construct the output tree as a fraction, and then simplify before returning
     const num_t = ['natural', Math.abs(num).toString()];
     const den_t = ['natural', den.toString()];
-    const tree = ['fraction', num_t, den_t];
-
+    let tree = ['fraction', num_t, den_t];
+    tree = tree = fracSimpInt(tree);
+    if (operand_as.length === 0) {
+        return num > 0
+            ? tree
+            : ['negative', tree]
+    }
     const op = num > 0
         ? 'add'
         : 'sub';
-    return ['addchain', [op, fracSimpInt(tree)], ...operand_as];
+    return ['addchain', [op, tree], ...operand_as];
 }
 /*
 import {LatexToTree} from '../checkmath.js';
@@ -351,27 +360,27 @@ export function evalNumericValues_power(operand) {
     // Evaluation
     // work with absolute value of base for now, will see why later
     // Factor out any integer result possible
-    exp = Math.floor(num_e / den_e);
-    if (Math.log(Number.MAX_SAFE_INTEGER) / Math.log(base) < exp) {
+    const exp_f = Math.floor(num_e / den_e);
+    if (Math.log(Number.MAX_SAFE_INTEGER) / Math.log(base) < exp_f) {
         return ['power', ...operand];
     }
-    const int = Math.pow(base, exp);
-    const res = num_e % den_e;
-    const rem = Math.pow(base, res / den_e);
+    const pow_quo = Math.pow(base, exp_f);
+    const exp_res = num_e % den_e;
+    const pow_rem = Math.pow(base, exp_res / den_e);
     // Here, pow() quietly returns FALSE for inputs like pow(-1, 1 / 2)
     // that was why we work with the absolute value
     // and deal with the sign last
     // so that we can put imaginary unit i properly
 
     let newOperand = []; // construct as a mulchain, and then simplify later
-    if (Number.isInteger(rem)) {
-        newOperand = [['mul', ['natural', (int * rem).toString()]]];
+    if (Number.isInteger(pow_rem)) {
+        newOperand = [['mul', ['natural', (pow_quo * pow_rem).toString()]]];
     } else {
-        if (int !== 1) {
-            newOperand = [['mul', ['natural', int.toString()]]];
+        if (pow_quo !== 1) {
+            newOperand = [['mul', ['natural', pow_quo.toString()]]];
         }
         const base_t = ['natural', base];
-        const exp_t = ['fraction', ['natural', res.toString()], ['natural', den_e]];
+        const exp_t = ['fraction', ['natural', exp_res.toString()], ['natural', den_e]];
         const term = ['power', base_t, exp_t];
         newOperand = [...newOperand, ['mul', term]];
     }
@@ -558,6 +567,112 @@ export function findGCF(tree = null) {
         }
     }
 }
+
+/*
+Returns an array of objects representing all variables in the given tree
+NOTE: Any product of variables are also included in addition to individual variables
+
+Parameters:
+tree: A Laco tree
+option:
+An optional boolean argument
+When set to TRUE, the routine does a DFS of the whole tree
+  and outputs an array of individual variables, with no mulchain of variables
+By default, the argument is set to FALSE, in which case
+  the routine considers as one separate variable
+  an addchain within a mulchain,
+  provided that it contains at least one variable term
+
+Returns:
+An array of variable objects
+
+Author: epark
+*/
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
+export function findVars(tree, option = false) {
+    if (!Array.isArray(tree)) {
+        return [];
+    }
+    const [operator, ...operand] = tree;
+    if (option) {
+        if (isNumeric(tree)) {
+            return [];
+        }
+        if (operator === 'variable') {
+            return [tree];
+        }
+        let vars = [];
+        operand.forEach(term => {
+            const term_c = ['addchain', 'mulchain'].includes(operator)
+                ? term[1]
+                : term;
+            const vars_c = findVars(term_c, option);
+            const vars_c_filter = vars_filter(vars_c, vars);
+            vars = [...vars, ...vars_c_filter];
+        });
+        return vars;
+    }
+
+    switch (operator) {
+        case 'natural': {
+            return [];
+        }
+        case 'variable': {
+            return [tree];
+        }
+        case 'power': {
+            return findVars(operand[0], option).length > 0
+                ? [tree]
+                : [];
+        }
+        case 'negative': {
+            return findVars(operand[0], option);
+        }
+        case 'mulchain': {
+            let vars = [];
+            operand.forEach(term => {
+                let [op, term_m] = term;
+                if (term_m[0] === 'negative') {
+                    [, term_m] = term_m;
+                }
+                const has_vars = findVars(term_m, option).length > 0;
+                if (has_vars) {
+                    vars = [...vars, [op, term_m]];
+                    // This way, same variable multiplied twice (e.g., ['variable', 'x'])
+                    // will be parsed as a mulchain
+                    // (e.g., ['mulchain', ['mul', ['variable', 'x']], ['mul', ['variable', 'x']]])
+                    // rather than just as one variable (e.g., ['variable', 'x'])
+                }
+            });
+            vars = array2ChainTree(vars);
+            return vars.length > 0
+                ? [vars]
+                : [];
+        }
+        case 'addchain': {
+            let vars = [];
+            operand.forEach(term => {
+                let [, term_a] = term;
+                if (term_a[0] === 'negative') {
+                    [, term_a] = term_a;
+                }
+                const vars_a = findVars(term_a, option);
+                const vars_a_filter = vars_filter(vars_a, vars);
+                vars = [...vars, ...vars_a_filter];
+            });
+            return vars;
+        }
+        default: {
+            return [];
+        }
+    }
+}
+
+function vars_filter(vars_1, vars) {
+    return vars_1.filter(var_1 => vars.every(vari => JSON.stringify(vari) !== JSON.stringify(var_1)));
+}
+
 /*
 import {LatexToTree} from '../checkmath.js';
 let latex_1 = 'c*c^2';
@@ -791,16 +906,16 @@ export function termExists(term, tree, recursive = true, exclude_pow = false) {
     }
     if (!recursive) {
         const [operator, ...operand] = tree;
-        const is_term_exist = operand.some(term_1 => ['addchain', 'mulchain'].includes(operator)
+        const has_term = operand.some(term_1 => ['addchain', 'mulchain'].includes(operator)
             ? JSON.stringify(term_1[1]) === term_string
             : JSON.stringify(term_1) === term_string);
-        return is_term_exist && !(operator === 'power' && exclude_pow);
+        return has_term && !(operator === 'power' && exclude_pow);
     }
     for (const term_1 of tree) {
         if (termExists(term, term_1, recursive, exclude_pow)) {
             const [operator_1, ...operand_1] = term_1;
-            const is_term_exist = operand_1.some(term_subtree => JSON.stringify(term_subtree) === term_string);
-            return !(is_term_exist && operator_1 === 'power' && exclude_pow);
+            const has_term = operand_1.some(term_subtree => JSON.stringify(term_subtree) === term_string);
+            return !(has_term && operator_1 === 'power' && exclude_pow);
         }
     }
     return false; // added

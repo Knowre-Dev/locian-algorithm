@@ -6,23 +6,21 @@
 // import { fracComplex } from '../rc/function_69.inc.js';
 // import { fracSimpInt } from '../rc/function_76.inc.js';
 // import { rdecToFrac } from '../rc/function_78.inc.js';
-import { array2ChainTree, isNumeric } from '../rc/sub_functions.js';
-
+// import { array2ChainTree, findVars, isNumeric } from '../rc/sub_functions.js';
+import { findVars } from '../rc/sub_functions.js';
 export function evaluateEx_new(tree) {
     if (!is_valid_tree(tree)) {
         return tree;
     }
 
-    // let newTree;
-    // let newOperands;
-    // let seedArr;
     const [operator, ...operand] = tree;
     switch (operator) {
         // 160828 larwein - inequality patch
         case 'inequality': {
             // 20180817 epark - Leave alone inequalities with infinity sign'
             const infs = [JSON.stringify(['infinity']), JSON.stringify(['negative', ['infinity']])];
-            if (infs.includes(JSON.stringify(operand[0])) || infs.includes(JSON.stringify(operand[4]))) {
+            const has_inf = infs.includes(JSON.stringify(operand[0])) || infs.includes(JSON.stringify(operand[4]));
+            if (has_inf) {
                 return tree;
             }
             let newTree = ['inequality'];
@@ -39,10 +37,9 @@ export function evaluateEx_new(tree) {
                 : operand.reverse();
             const term_end = operand_1[operand_length - 1];
             for (let i = 0; i < max; i++) {
-                newTree = [...newTree,
-                    evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_end]]),
-                    signs.get(operand_1[2 * i + 1])
-                ];
+                const term = evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_end]])
+                const op = signs.get(operand_1[2 * i + 1]);
+                newTree = [...newTree, term, op];
             }
             return [...newTree, ['natural', '0']];
         }
@@ -247,8 +244,8 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // so as to not affect the random number generator state
                     // EDIT epark 20180830: Don't use lcg_value().. srand() wouldn't work as you'd expect
                     // Scale the random numbers appropriately (incl. make them into float values)
-                    let randRe = Math.floor((Math.cos(seed) * maxVal)) / maxVal;
-                    let randIm = Math.floor((Math.sin(seed) * maxVal)) / maxVal;
+                    let real = Math.floor((Math.cos(seed) * maxVal)) / maxVal;
+                    let imag = Math.floor((Math.sin(seed) * maxVal)) / maxVal;
                     // EDIT 2018.08.23:
                     // Ensure that x in one tree is assigned a different value than y in another tree
                     // Even when each variable is the only variable present in their respective trees
@@ -258,15 +255,15 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // caused at lines 1808,1809,1811,1812
 
                     const asciiBound = string_code('a') + 13; // Middle of 'a' - 'z'
-                    randRe = (randRe + string_code(varname) - asciiBound) * rangeWidth - bound;
-                    randIm = (randIm + string_code(varname) - asciiBound) * rangeWidth - bound;
+                    real = (real + string_code(varname) - asciiBound) * rangeWidth - bound;
+                    imag = (imag + string_code(varname) - asciiBound) * rangeWidth - bound;
                     // Round to 4 decimal places just for efficiency's sake
                     // (otherwise running the new Equivalent preset slows down too much)
-                    randRe = parseFloat(randRe.toFixed(4));
-                    randIm = parseFloat(randIm.toFixed(4));
+                    real = parseFloat(real.toFixed(4));
+                    imag = parseFloat(imag.toFixed(4));
 
                     // Initialize the new complex value
-                    eval_var = [randRe, randIm];
+                    eval_var = [real, imag];
                     break;
                 }
             }
@@ -329,111 +326,6 @@ export function getVarName(operand) {
     return operand.length > 1
         ? ('(' + operand.join() + ')')
         : operand[0].toString();
-}
-
-/*
-Returns an array of objects representing all variables in the given tree
-NOTE: Any product of variables are also included in addition to individual variables
-
-Parameters:
-tree: A Laco tree
-option:
-An optional boolean argument
-When set to TRUE, the routine does a DFS of the whole tree
-  and outputs an array of individual variables, with no mulchain of variables
-By default, the argument is set to FALSE, in which case
-  the routine considers as one separate variable
-  an addchain within a mulchain,
-  provided that it contains at least one variable term
-
-Returns:
-An array of variable objects
-
-Author: epark
-*/
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-
-export function findVars(tree, option = false) {
-    if (!Array.isArray(tree)) {
-        return [];
-    }
-    const [operator, ...operand] = tree;
-    if (option) {
-        if (isNumeric(tree)) {
-            return [];
-        }
-        if (operator === 'variable') {
-            return [tree];
-        }
-        let vars = [];
-        operand.forEach(term => {
-            const term_c = ['addchain', 'mulchain'].includes(operator)
-                ? term[1]
-                : term;
-            const vars_c = findVars(term_c, option);
-            const vars_c_filter = vars_filter(vars_c, vars);
-            vars = [...vars, ...vars_c_filter];
-        });
-        return vars;
-    }
-
-    switch (operator) {
-        case 'natural': {
-            return [];
-        }
-        case 'variable': {
-            return [tree];
-        }
-        case 'power': {
-            return findVars(operand[0], option).length > 0
-                ? [tree]
-                : [];
-        }
-        case 'negative': {
-            return findVars(operand[0], option);
-        }
-        case 'mulchain': {
-            let vars = [];
-            operand.forEach(term => {
-                let [op, term_m] = term;
-                if (term_m[0] === 'negative') {
-                    [, term_m] = term_m;
-                }
-                const has_vars = findVars(term_m, option).length > 0;
-                if (has_vars) {
-                    vars = [...vars, [op, term_m]];
-                    // This way, same variable multiplied twice (e.g., ['variable', 'x'])
-                    // will be parsed as a mulchain
-                    // (e.g., ['mulchain', ['mul', ['variable', 'x']], ['mul', ['variable', 'x']]])
-                    // rather than just as one variable (e.g., ['variable', 'x'])
-                }
-            });
-            vars = array2ChainTree(vars);
-            return vars.length > 0
-                ? [vars]
-                : [];
-        }
-        case 'addchain': {
-            let vars = [];
-            operand.forEach(term => {
-                let [, term_a] = term;
-                if (term_a[0] === 'negative') {
-                    [, term_a] = term_a;
-                }
-                const vars_a = findVars(term_a, option);
-                const vars_a_filter = vars_filter(vars_a, vars);
-                vars = [...vars, ...vars_a_filter];
-            });
-            return vars;
-        }
-        default: {
-            return [];
-        }
-    }
-}
-
-function vars_filter(vars_1, vars) {
-    return vars_1.filter(var_1 => vars.every(vari => JSON.stringify(vari) !== JSON.stringify(var_1)));
 }
 
 // 스트링을 고유의 숫자로 바꾸어줌
@@ -577,11 +469,13 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             //          the returned value is really the principal value Log z of the input z=x+iy
         }
         case 'log': {
-            const [base, number] = operand;
-            const term_add = typeof base !== 'undefined'
-                ? evaluateOperation('ln', [number], seed, lookupTable)
-                : evaluateOperation('ln', [[10, 0]], seed, lookupTable);
-            const newOperand = [evaluateOperation('ln', [base], seed, lookupTable), term_add];
+            let [number, base] = operand;
+            const num = evaluateOperation('ln', [number], seed, lookupTable);
+            if (typeof base !== 'undefined') {
+                base = [10, 0];
+            }
+            const den = evaluateOperation('ln', [base], seed, lookupTable)
+            const newOperand = [num, den];
             return evaluateOperation('fraction', newOperand, seed, lookupTable);
         }
         case 'summation': {
@@ -592,10 +486,10 @@ export function evaluateOperation(operator, operand, seed = null, lookupTable = 
             }
             let sum = [0, 0];
             const vari_s = JSON.stringify(vari);
-            const operand_2 = JSON.stringify(operand[2]);
+            const operand_s = JSON.stringify(operand[2]);
             for (let ind = min; ind <= max; ind++) {
                 const number = JSON.stringify(['natural', ind.toString()]);
-                let newEx = JSON.parse(operand_2.replaceAll(vari_s, number));
+                let newEx = JSON.parse(operand_s.replaceAll(vari_s, number));
                 newEx = evaluateExWithSeed(newEx, seed, lookupTable);
                 sum = evaluateOperation('addchain', [sum, newEx], seed, lookupTable);
             }
@@ -610,12 +504,12 @@ function eval_add(sum, term) {
     if (!Array.isArray(term)) {
         return sum
     }
-    sum[0] = !isNaN(term[0])
-        ? sum[0] + term[0]
-        : sum[0];
-    sum[1] = !isNaN(term[1])
-        ? sum[1] + term[1]
-        : sum[1];
+    if (!isNaN(term[0])) {
+        sum[0] += term[0];
+    }
+    if (!isNaN(term[1])) {
+        sum[1] += term[1];
+    }
     return sum
 }
 
@@ -635,8 +529,8 @@ with comments added by epark
 */
 
 export function eval_pow(A, B) {
-    if (A[0] === A[1] === 0) {
-        return B[0] === B[1] === 0
+    if (A[0] === 0 && A[1] === 0) {
+        return B[0] === 0 && B[1] === 0
             ? [1, 0]
             : [0, 0];
     }
@@ -667,15 +561,14 @@ console.log(result);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 /*
 Contents:
-array2ChainTree
 
-evalNumericValues
-  - evalNumericValues_addchain
-  - evalNumericValues_mulchain
-  - evalNumericValues_power
-
-// validMathTree -> evaluateEx_new
-// findVars -> move to evaluateExWithSeed
+// validMathTree -> move to evaluateEx_new
+// evalNumericValues -> move to sub
+  - evalNumericValues_addchain -> move to sub
+  - evalNumericValues_mulchain -> move to sub
+  - evalNumericValues_power -> move to sub
+// array2ChainTree -> move to sub
+// findVars -> move to sub
 // isNumeric -> move to sub
 // multFactor -> move to sub
 // termExists -> move to sub
