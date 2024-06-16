@@ -11,6 +11,20 @@ export function addFactor(tree) {
         return addCommutative(tree);
     }
     // extract all constant coefficents (not in denominator)
+    let cons = collect_cons(operand);
+
+    // divide each term by the constant coefficients
+    if (cons.length === 0) {
+        return addCommutative(tree);
+    }
+    const lcm = cons.reduce((a, b) => a * b / gcd(a, b), 1);
+    const con = ['natural', lcm.toString()];
+    cons = cons.map(term => ['mul', ['natural', term]]);
+    const addchain_new = form_addchain(operand, con, cons);
+    return addCommutative(['mulchain', ['mul', con], ['mul', addchain_new]]);
+}
+
+function collect_cons(operand) {
     let cons = [];
     operand.forEach(term => { // addchain
         [, term] = term
@@ -18,12 +32,11 @@ export function addFactor(tree) {
         switch (operator_t) {
             case 'mulchain': {
                 let con = '1';
-                const [term_1] = operand_t;
-                if (term_1[1][0] === 'natural' && term_1[1][1] !== '0') {
-                    con = term_1[1][1];
+                const [[, [op_0, term_0]]] = operand_t;
+                if (op_0 === 'natural' && term_0 !== '0') {
+                    con = term_0;
                 }
-                const has_sym = operand_t.some(term_t => term_t[0] === 'mul' && term_t[1][0] === 'variable');
-                if (has_sym && con !== '1') {
+                if (has_var(operand_t) && con !== '1') {
                     cons = [...cons, con];
                 }
                 break;
@@ -33,13 +46,16 @@ export function addFactor(tree) {
                 if (num_t[0] === 'mulchain') {
                     let con = '1';
                     const [, ...terms_t] = num_t;
-                    const has_sym = terms_t.some(term_t => term_t[0] === 'mul' && term_t[1][0] === 'variable');
+                    if (!has_var(terms_t)) {
+                        break;
+                    }
                     terms_t.forEach(term_t => {
-                        if (term_t[0] === 'mul' && term_t[1][0] === 'natural' && term_t[1][1] !== '0') {
-                            con = term_t[1][1];
+                        const [op_t, [op_t1, term_t1]] = term_t;
+                        if (op_t === 'mul' && op_t1 === 'natural' && term_t1 !== '0') {
+                            con = term_t1;
                         }
                     });
-                    if (has_sym && con !== '1') {
+                    if (con !== '1') {
                         cons = [...cons, con];
                     }
                 }
@@ -47,32 +63,32 @@ export function addFactor(tree) {
             }
         }
     });
-    // divide each term by the constant coefficients
-    if (cons.length === 0) {
-        return addCommutative(tree);
-    }
-    const lcm = cons.reduce((a, b) => a * b / gcd(a, b), 1);
-    const con = ['natural', lcm.toString()];
-    cons = cons.map(term => ['mul', ['natural', term]]);
-    let new_addchain = ['addchain'];
+    return cons;
+}
+
+function has_var(terms) {
+    return terms.some(term => term[0] === 'mul' && term[1][0] === 'variable');
+}
+
+function form_addchain(operand, con, cons) {
+    let addchain_new = ['addchain'];
     operand.forEach(term => {
-        let num;
-        let den;
-        const [operator_t, term_t] = term;
+        const [op_t, term_t] = term;
+        let num = term_t;
+        let den = con;
         if (term_t[0] === 'fraction') {
             [, num, den] = term_t;
             if (den[0] !== 'mulchain') {
                 den = ['mulchain', ['mul', den]];
             }
             den = [...den, ...cons];
-        } else {
-            num = term_t;
-            den = con;
         }
-        new_addchain = [...new_addchain, [operator_t, fracSimpInt(['fraction', num, den])]];
+        const frac = fracSimpInt(['fraction', num, den]);
+        addchain_new = [...addchain_new, [op_t, frac]];
     });
-    return addCommutative(['mulchain', ['mul', con], ['mul', new_addchain]]);
+    return addchain_new;
 }
+
 /*
 import { LatexToTree } from '../checkmath.js';
 const latex_1 = '\\frac{4x}{5}-12';

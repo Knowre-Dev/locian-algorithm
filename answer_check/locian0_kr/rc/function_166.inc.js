@@ -9,9 +9,9 @@ export function setAssociative(tree) {
     let newOperand = [];
     operand.forEach(term => {
         const term_1 = addAssociative(term);
-        const [opertor_term_1, ...operand_term_1] = term_1;
-        newOperand = operator === opertor_term_1
-            ? [...newOperand, ...operand_term_1]
+        const [operator_1, ...operand_1] = term_1;
+        newOperand = operator === operator_1
+            ? [...newOperand, ...operand_1]
             : [...newOperand, term_1];
     });
     return [operator, ...newOperand];

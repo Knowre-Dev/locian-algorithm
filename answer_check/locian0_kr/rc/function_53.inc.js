@@ -15,15 +15,16 @@ export function fracNegative(tree) {
                 : [operator, term];
         }
         case 'fraction': {
+            let [num, den] = operand;
+            num = fracNegative(num);
+            den = fracNegative(den);
             let sign = 1;
-            let num = fracNegative(operand[0]);
-            let den = fracNegative(operand[1]);
             [num, sign] = sign_simp(num, sign);
             [den, sign] = sign_simp(den, sign);
-            const new_tree = [operator, num, den];
+            const tree_new = [operator, num, den];
             return sign === -1
-                ? ['negative', new_tree]
-                : new_tree;
+                ? ['negative', tree_new]
+                : tree_new;
         }
         case 'addchain': {
             let newOperand = [];
@@ -33,13 +34,14 @@ export function fracNegative(tree) {
             ]);
             operand.forEach(term => {
                 let term_add = term;
-                if (term[1][0] === 'fraction') {
-                    const nterm = fracNegative(term[1]);
-                    term_add = nterm[0] === 'negative'
-                        ? signs.has(term[0])
-                            ? [signs.get(term[0]), nterm[1]]
-                            : [term[0], nterm[1]]
-                        : [term[0], nterm];
+                let [op, term_1] = term;
+                if (term_1[0] === 'fraction') {
+                    term_1 = fracNegative(term_1);
+                    term_add = term_1[0] === 'negative'
+                        ? signs.has(op)
+                            ? [signs.get(op), term_1[1]]
+                            : [op, term_1[1]]
+                        : [op, term_1];
                 }
                 newOperand = [...newOperand, term_add];
             });
@@ -49,13 +51,14 @@ export function fracNegative(tree) {
             let newOperand = [];
             let sign = 1;
             operand.forEach(term => {
-                const nterm = fracNegative(term[1]);
+                let [op, term_1] = term;
+                term_1 = fracNegative(term_1);
                 let term_mul;
-                if (nterm[0] === 'negative') {
+                if (term_1[0] === 'negative') {
                     sign *= -1;
-                    term_mul = [term[0], nterm[1]];
+                    term_mul = [op, term_1[1]];
                 } else {
-                    term_mul = [term[0], nterm];
+                    term_mul = [op, term_1];
                 }
                 newOperand = [...newOperand, term_mul];
             });

@@ -3,18 +3,17 @@ export function 곱셈결합법칙(tree) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-
     const [operator, ...operand] = tree;
     let newOperand = [];
     operand.forEach(term => {
-        const term_1 = 곱셈결합법칙(term);
+        term = 곱셈결합법칙(term);
         // a(b(cd))-> a(bcd) -> abcd
-        const [operator_term_1, ...operand_term_1] = term_1;
-        const is_mulchain = operator === 'mulchain' && operator_term_1 === 'mul' && operand_term_1[0][0] === 'mulchain';
-        const new_terms = is_mulchain
-            ? operand_term_1[0].slice(1)
-            : [term_1];
-        newOperand = [...newOperand, ...new_terms];
+        const [op, term_1] = term;
+        const is_mulchain = operator === 'mulchain' && op === 'mul' && term_1[0] === 'mulchain';
+        const terms_new = is_mulchain
+            ? term_1.slice(1)
+            : [term];
+        newOperand = [...newOperand, ...terms_new];
     });
     return [operator, ...newOperand];
 }

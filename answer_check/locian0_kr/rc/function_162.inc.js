@@ -7,33 +7,35 @@ export function sub_addFactored(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const tree_1 = JSON.stringify(tree)
-    if (tree_1 !== JSON.stringify(fracSimp(tree)) || tree_1 !== JSON.stringify(fracSimpVar(tree))) {
+    const tree_s = JSON.stringify(tree)
+    if (tree_s !== JSON.stringify(fracSimp(tree)) || tree_s !== JSON.stringify(fracSimpVar(tree))) {
         return tree;
     }
     const [operator, ...operand] = tree;
 
     switch (operator) {
         case 'addchain': {
-            let add_terms = [];
-            const signs = new Map([
+            let operand_new = [];
+            const ops = new Map([
                 ['add', 'sub'],
                 ['sub', 'add']
-            ]);
-            for (const term of operand) {
-                const [sign, [operator_term_1, ...operand_term_1]] = term;
-                add_terms = operator_term_1 === 'addchain'
-                    ? sign === 'add'
-                        ? [...add_terms, ...operand_term_1]
-                        : [...add_terms, ...operand_term_1.map(term_term_1 => [signs.get(term_term_1[0]), term_term_1[1]])]
-                    : operator_term_1 === 'mulchain' && operand_term_1.some(term_term_1 => term_term_1[1][0] === 'addchain')
-                        ? [...add_terms, addFactoredForm(addFactoredFormVar(term))]
-                        : [...add_terms, term];
-            }
-            return addFactoredFormVar(['addchain', ...add_terms]);
+            ])
+            operand.forEach(term => {
+                const [op, [operator_1, ...terms_1]] = term;
+                const terms_new = operator_1 === 'addchain'
+                    ? op === 'add'
+                        ? terms_1
+                        : terms_1.map(term_1 => [ops.get(term_1[0]), term_1[1]])
+                    : operator_1 === 'mulchain' && terms_1.some(term_1 => term_1[1][0] === 'addchain')
+                        ? [addFactoredForm(addFactoredFormVar(term))]
+                        : [term];
+                operand_new = [...operand_new, ...terms_new];
+            })
+            return addFactoredFormVar(['addchain', ...operand_new]);
         }
         case 'mulchain': {
-            return [operator, ...operand.map(term => sub_addFactored(term))];
+            const operand_new = operand.map(term => sub_addFactored(term));
+            return [operator, ...operand_new];
         }
         default: {
             return tree;

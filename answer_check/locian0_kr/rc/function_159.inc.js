@@ -16,12 +16,15 @@ export function mulAllSidesByCommonDenom(tree = null) {
         // Make sure to pass the third arg as TRUE
         // to get absolute values of all denominators (in case of any negative denominators)
         // to ensure preservation of directions of inequality
-        let den = findDenominators(term, true, operator === 'inequality');
+        const den = findDenominators(term, true, operator === 'inequality');
 
         // Multiply all denominators in this subtree into a single quantity
         if (den.length !== 0) {
+            dens = [...dens, ...den];
+            /* original code, don't delete
             den = den.map(term_1 => ['mul', term_1]);
             dens = [...dens, array2ChainTree(den, true)];
+            */
         }
     });
 
@@ -42,40 +45,46 @@ export function mulAllSidesByCommonDenom(tree = null) {
     }
     let newOperand = [];
     const zero = JSON.stringify(['natural', '0']);
-    const minus_one = JSON.stringify(['negative', ['natural', '1']]);
     const is_numeric_den_com = isNumeric(den_com);
     operand.forEach(term => {
         const [op, ...terms_1] = term;
         if (JSON.stringify(term) === zero) {
             newOperand = [...newOperand, term];
         } else if (op === 'addchain') {
-            let terms = [];
-            terms_1.forEach(term_1 => {
-                let new_term = [];
-                const [op_1, term_11] = term_1;
-                const term_11_s = JSON.stringify(term_11);
-                if (term_11_s === one) {
-                    new_term = den_com;
-                } else if (term_11_s === minus_one) {
-                    new_term = ['negative', den_com];
-                } else {
-                    new_term = multFactor(term_11, ['mul', den_com], true);
-                    if (isNumeric(term_11) && is_numeric_den_com) {
-                        new_term = evalNumericValues(new_term);
-                    }
-                }
-                terms = [...terms, [op_1, new_term]];
-            });
-            newOperand = [...newOperand, array2ChainTree(terms)];
+            const term_new = form_new_term_addchain(terms_1, den_com, is_numeric_den_com);
+            newOperand = [...newOperand, term_new];
         } else {
-            let new_term = multFactor(term, ['mul', den_com]);
+            let term_new = multFactor(term, ['mul', den_com]);
             if (isNumeric(term) && is_numeric_den_com) {
-                new_term = evalNumericValues(new_term);
+                term_new = evalNumericValues(term_new);
             }
-            newOperand = [...newOperand, new_term];
+            newOperand = [...newOperand, term_new];
         }
     });
     return [operator, ...newOperand];
+}
+
+function form_new_term_addchain(terms_1, den_com, is_numeric_den_com) {
+    const one = JSON.stringify(['natural', '1']);
+    const minus_one = JSON.stringify(['negative', ['natural', '1']]);
+    let terms_new = [];
+    terms_1.forEach(term_1 => {
+        let term_new = [];
+        const [op_1, term_11] = term_1;
+        const term_11_s = JSON.stringify(term_11);
+        if (term_11_s === one) {
+            term_new = den_com;
+        } else if (term_11_s === minus_one) {
+            term_new = ['negative', den_com];
+        } else {
+            term_new = multFactor(term_11, ['mul', den_com], true);
+            if (isNumeric(term_11) && is_numeric_den_com) {
+                term_new = evalNumericValues(term_new);
+            }
+        }
+        terms_new = [...terms_new, [op_1, term_new]];
+    });
+    return array2ChainTree(terms_new)
 }
 
 /*

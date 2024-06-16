@@ -432,7 +432,7 @@ Author: epark
 */
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
-export function findDenominators(tree, unique = false, positive = false) {
+export function findDenominators(tree, is_unique = false, is_positive = false) {
     if (!Array.isArray(tree)) {
         return [];
     }
@@ -440,15 +440,15 @@ export function findDenominators(tree, unique = false, positive = false) {
     if (operator === 'fraction') {
         const [, den] = operand;
         const [operator_d, operand_d] = den;
-        return positive && operator_d === 'negative'
+        return is_positive && operator_d === 'negative'
             ? [operand_d]
             : [den];
     }
 
     let dens = [];
     operand.forEach(term => {
-        const sub_dens = findDenominators(term, unique);
-        const terms_add = sub_dens.reduce((terms, term_d) => !unique && dens.some(value => JSON.stringify(value) === JSON.stringify(term_d))
+        const sub_dens = findDenominators(term, is_unique);
+        const terms_add = sub_dens.reduce((terms, term_d) => !is_unique && dens.some(value => JSON.stringify(value) === JSON.stringify(term_d))
             ? [...terms, term_d, term_d]
             : [...terms, term_d],
         dens);

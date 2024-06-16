@@ -126,24 +126,24 @@ function update_coef(term, vari_s, coef) {
         coef.push(term_c);
         return true;
     }
-    if (term_1[0] === 'mulchain') {
-        const [, ...terms_1] = term_1;
-        let term_c = [];
-        let has_var = false;
-        terms_1.forEach(term_11 => {
-            if (JSON.stringify(term_11[1]) === vari_s) {
-                has_var = true;
-            } else {
-                term_c = [...term_c, term_11];
-            }
-        })
-        if (has_var) {
-            term_c = [op, array2ChainTree(term_c)];
-            coef.push(term_c)
-        }
-        return has_var;
+    const [op_1, ...terms_1] = term_1;
+    if (op_1 !== 'mulchain') {
+        return false;
     }
-    return false;
+    let term_c = [];
+    let has_var = false;
+    terms_1.forEach(term_11 => {
+        if (JSON.stringify(term_11[1]) === vari_s) {
+            has_var = true;
+        } else {
+            term_c = [...term_c, term_11];
+        }
+    })
+    if (has_var) {
+        term_c = [op, array2ChainTree(term_c)];
+        coef.push(term_c)
+    }
+    return has_var;
 }
 
 function form_term(coef, vari) {
@@ -173,7 +173,7 @@ function group_mulchain(operator, operand) { // operator === 'mulchain'
     const [bases, exps] = form_bases_exps(operand);
 
     // form new opernad
-    const newOperand = form_new_operand(bases, exps);
+    let newOperand = form_new_operand(bases, exps);
 
     // Snippet 1
     // If there is only one operand, just output that operand
@@ -186,9 +186,10 @@ function group_mulchain(operator, operand) { // operator === 'mulchain'
     }
     // Prepend 1 at the front if all terms are division terms
     const has_mul = newOperand.some(term => term[0] === 'mul');
-    return has_mul
-        ? [operator, ...newOperand]
-        : [operator, ['mul', ['natural', '1'], ...newOperand]];
+    if (has_mul) {
+        newOperand = [['mul', ['natural', '1']], ...newOperand]
+    }
+    return [operator, ...newOperand];
 }
 
 function form_bases_exps(operand) {

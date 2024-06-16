@@ -68,6 +68,7 @@ function update_frac(term, num, den) {
     }
     return [num, den, is_nega];
 }
+
 /*
 function add(arr) {
     arr.push(1);

@@ -1,15 +1,15 @@
 import { termExists } from '../rc/sub_functions.js';
-// import { termExists } from '../rc/function_152.inc.js';
 
+// equation 이나 inequatliy의 한뽁을 으로 만듬  a = b => 0 = b - a
 export function makeOneSideOfEqIneqZero(tree = null) {
     const is_not_appl = !Array.isArray(tree) || !['equation', 'inequality'].includes(tree[0]);
     if (is_not_appl) {
         return tree;
     }
     const [operator, ...operand] = tree;
+    const zero = JSON.stringify(['natural', '0']);
     switch (operator) {
         case 'equation': { // a = b => 0 = a - b
-            const zero = JSON.stringify(['natural', '0']);
             const [term_0, ...terms] = operand;
             if (JSON.stringify(term_0) === zero) {
                 return tree;
@@ -28,7 +28,6 @@ export function makeOneSideOfEqIneqZero(tree = null) {
             return [operator, ...newOperand]; // no side in the chain of inequalities is already identically zero
         }
         case 'inequality': {
-            const zero = JSON.stringify(['natural', '0']);
             const [term_0, ...operand_1] = operand;
             if (JSON.stringify(term_0) === zero) {
                 return tree;
