@@ -10,11 +10,11 @@ export function mulToExp(tree = null) { // mulchian to expnetial aaa => a^3
     const powers = new Map();
     let newOperand = [];
     operand.forEach(term => {
-        const [op, [op_1, term_11]] = term;
+        const [op, [op_1, term_1]] = term;
         op === 'mul' && op_1 === 'variable'
-            ? powers.set(term_11, !powers.has(term_11)
+            ? powers.set(term_1, !powers.has(term_1)
                 ? 1
-                : powers.get(term_11) + 1)
+                : powers.get(term_1) + 1)
             : newOperand = [...newOperand, term]
     });
     powers.forEach((exp, base) => {

@@ -6,16 +6,17 @@ export function ineqMulNeg(tree = null) {
     }
 
     const [operator, ...operand] = tree;
-    const is_first_not_nega = operator !== 'inequality' || (operand[0][0] !== 'negative' && !(operand[0][0] === 'addchain' && operand[0][1][0] === 'sub'));
+    const [term_0] = operand;
+    const is_first_not_nega = operator !== 'inequality' || (term_0[0] !== 'negative' && !(term_0[0] === 'addchain' && term_0[1][0] === 'sub'));
     if (is_first_not_nega) {
         return tree;
     }
     // operand = [term, op, term, op, term]
     let newOperand = [];
-    if (operand[0][0] === 'negative') {
-        newOperand = [operand[0][1]];
-    } else if (operand[0][0] === 'addchain' && operand[0][1][0] === 'sub') {
-        newOperand = [sign_change(operand[0])];
+    if (term_0[0] === 'negative') {
+        newOperand = [term_0[1]];
+    } else if (term_0[0] === 'addchain' && term_0[1][0] === 'sub') {
+        newOperand = [sign_change(term_0)];
     }
     const max = Math.floor(operand.length / 2);
     const ineqs = new Map([

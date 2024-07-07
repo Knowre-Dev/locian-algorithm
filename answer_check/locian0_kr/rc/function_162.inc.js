@@ -7,8 +7,9 @@ export function sub_addFactored(tree = null) {
     if (!Array.isArray(tree)) {
         return tree;
     }
-    const tree_s = JSON.stringify(tree)
-    if (tree_s !== JSON.stringify(fracSimp(tree)) || tree_s !== JSON.stringify(fracSimpVar(tree))) {
+    const tree_s = JSON.stringify(tree);
+    const is_frac_simp = tree_s !== JSON.stringify(fracSimp(tree)) || tree_s !== JSON.stringify(fracSimpVar(tree));
+    if (is_frac_simp) {
         return tree;
     }
     const [operator, ...operand] = tree;

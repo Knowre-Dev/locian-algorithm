@@ -18,8 +18,9 @@ export function addFactorNegative(tree) {
             let others = [];
             let facts = [];
             operand.forEach(term => {
-                if (term[0] === 'mul' && term[1][0] === 'addchain') {
-                    let [, addchain] = term;
+                const [op, term_1] = term;
+                if (op === 'mul' && term_1[0] === 'addchain') {
+                    let addchain = term_1;
                     if (addchain[1][0] === 'sub') {
                         addchain = sign_change(addchain);
                         sign *= -1;

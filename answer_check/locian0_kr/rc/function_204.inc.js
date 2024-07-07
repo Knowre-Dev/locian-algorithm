@@ -9,14 +9,14 @@ export function addNegaToSub(tree = null) {
         const operand_new = operand.map(term => addNegative(term));
         return [operator, ...operand_new];
     }
-    const [term_0, ...terms_1] = operand;
-    const [op_0, [op_10, term_11]] = term_0;
-    const term_0_new = op_0 === 'add' && op_10 === 'negative'
-        ? ['sub', term_11]
-        : op_0 === 'add' && op_10 === 'positive'
-            ? ['add', term_11]
+    const [term_0, ...terms] = operand;
+    const [op_0, [op_01, term_01]] = term_0;
+    const term_0_new = op_0 === 'add' && op_01 === 'negative'
+        ? ['sub', term_01]
+        : op_0 === 'add' && op_01 === 'positive'
+            ? ['add', term_01]
             : term_0;
-    return [operator, term_0_new, ...terms_1];
+    return [operator, term_0_new, ...terms];
 }
 
 /*

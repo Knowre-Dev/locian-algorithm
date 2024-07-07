@@ -27,12 +27,12 @@ export function rearrangeTreeAdd(A, B) {
     if ((operatorA < operatorB && !is_includes_A_1 && !is_includes_A_2) || (is_includes_A_1 && is_includes_B_2)) {
         return -1;
     }
-    const operandA_length = operandA.length;
-    const operandB_length = operandB.length;
-    if (operandA_length > operandB_length) {
+    const length_A = operandA.length;
+    const length_B = operandB.length;
+    if (length_A > length_B) {
         return 1;
     }
-    if (operandA_length < operandB_length) {
+    if (length_A < length_B) {
         return -1;
     }
     let result = 0;

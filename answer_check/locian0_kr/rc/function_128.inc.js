@@ -30,7 +30,7 @@ export function addFactor_1(tree = null) {
         let con = 1;
         let has_sym = false;
         if (operator_i === 'mulchain') {
-            const [term_0, ...terms_i] = operand_i;
+            const [term_0, ...terms_1] = operand_i;
             if (term_0[0] === 'mul') { // 첫항이 숫자인지 아닌 지 확인
                 if (is_variable(term_0[1])) {
                     has_sym = true;
@@ -38,17 +38,18 @@ export function addFactor_1(tree = null) {
                     con = parseInt(term_0[1][1]);
                 }
             }
-            has_sym = terms_i.some(term => term[0] === 'mul' && is_variable(term[1]));
+            has_sym = terms_1.some(term_1 => term_1[0] === 'mul' && is_variable(term_1[1]));
         } else if (operator_i === 'fraction') {
             const [num] = operand_i;
             if (num[0] === 'mulchain') {
-                const [, ...operand_num] = num
-                operand_num.forEach(term => {
-                    if (term[0] === 'mul') {
-                        if (['variable', 'squareroot'].includes(term[1][0])) {
+                const [, ...terms_num] = num
+                terms_num.forEach(term_num => {
+                    const [op_n, term_n_1] = term_num;
+                    if (op_n === 'mul') {
+                        if (['variable', 'squareroot'].includes(term_n_1[0])) {
                             has_sym = true;
-                        } else if (is_bigger_one(term[1])) {
-                            con = parseInt(term[1][1]);
+                        } else if (is_bigger_one(term_n_1)) {
+                            con = parseInt(term_n_1[1]);
                         }
                     }
                 });

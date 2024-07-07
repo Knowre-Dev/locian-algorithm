@@ -23,7 +23,7 @@ export function evaluateEx_new(tree) {
             if (has_inf) {
                 return tree;
             }
-            let newTree = ['inequality'];
+            let tree_new = ['inequality'];
             const operand_length = operand.length;
             const max = Math.floor(operand_length / 2);
             const signs = new Map([
@@ -39,12 +39,12 @@ export function evaluateEx_new(tree) {
             for (let i = 0; i < max; i++) {
                 const term = evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_end]])
                 const op = signs.get(operand_1[2 * i + 1]);
-                newTree = [...newTree, term, op];
+                tree_new = [...tree_new, term, op];
             }
-            return [...newTree, ['natural', '0']];
+            return [...tree_new, ['natural', '0']];
         }
         default: {
-            let newTree = ['eval'];
+            let tree_new = ['eval'];
             const seeds = [-2, -1, 1, 2, 3];
             for (const seed of seeds) {
                 const eval_t = evaluateExWithSeed(tree, seed);
@@ -54,20 +54,20 @@ export function evaluateEx_new(tree) {
 
                 if (Array.isArray(eval_t)) {
                     const [eval_0, ...evals_1] = eval_t;
-                    const is_operator = ['equation', 'inequality', 'neq', 'ratio', 'orchain'].includes(eval_0);
-                    const some_not_numeric = evals_1.some(term => is_not_numeric(term[0], term[1]));
-                    if (is_operator && some_not_numeric) {
+                    const is_equ = ['equation', 'inequality', 'neq', 'ratio', 'orchain'].includes(eval_0);
+                    const is_some_not_numeric = evals_1.some(term => is_not_numeric(term[0], term[1]));
+                    if (is_equ && is_some_not_numeric) {
                         return tree
                     }
                     const [real, imag] = eval_t;
                     const not_numeric = is_not_numeric(real, imag);
-                    if (!is_operator && not_numeric) {
+                    if (!is_equ && not_numeric) {
                         return tree
                     }
                 }
-                newTree = [...newTree, eval_t];
+                tree_new = [...tree_new, eval_t];
             }
-            return newTree;
+            return tree_new;
         }
     }
 }

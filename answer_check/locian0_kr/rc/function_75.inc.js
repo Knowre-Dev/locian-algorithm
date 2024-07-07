@@ -29,8 +29,8 @@ export function eqMulPropUS(tree) {
     // so as to guarantee correct inequality directions
     let factor = [['mul', gcf.const], ...gcf.syms.map(sym => ['mul', sym])];
     factor = array2ChainTree(factor);
-    const factor_1 = JSON.stringify(factor);
-    if (factor_1 === JSON.stringify(['natural', '1']) || factor_1 === JSON.stringify(['natural', '0'])) {
+    const factor_s = JSON.stringify(factor);
+    if (factor_s === JSON.stringify(['natural', '1']) || factor_s === JSON.stringify(['natural', '0'])) {
         return tree; // No need to divide by 1
     }
     const [operator, ...operand] = tree;

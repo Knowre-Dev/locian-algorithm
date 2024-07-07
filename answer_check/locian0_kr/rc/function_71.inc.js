@@ -28,15 +28,15 @@ export function addNegative(tree) {
             let newOperand = [];
             operand.forEach(term => {
                 if (term[0] === 'sub' && term[1][0] === 'addchain') {
-                    let [, [, ...term_1]] = term;
+                    let [, [, ...terms_1]] = term;
                     const ops = new Map([
                         ['add', 'sub'],
                         ['sub', 'add']
                     ]);
-                    term_1 = term_1.map(inner => ops.has(inner[0])
-                        ? [ops.get(inner[0]), inner[1]]
-                        : inner);
-                    newOperand = [...newOperand, ...term_1];
+                    terms_1 = terms_1.map(term_1 => ops.has(term_1[0])
+                        ? [ops.get(term_1[0]), term_1[1]]
+                        : term_1);
+                    newOperand = [...newOperand, ...terms_1];
                 } else {
                     newOperand = [...newOperand, term];
                 }

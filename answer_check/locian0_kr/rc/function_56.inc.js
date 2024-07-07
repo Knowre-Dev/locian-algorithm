@@ -25,12 +25,12 @@ export function mulIdentity(tree) {
                     newOperand = [...newOperand, mulIdentity(term)];
                 }
             });
-            const new_tree = newOperand.length === 1
+            const tree_new = newOperand.length === 1
                 ? newOperand[0][1]
                 : [operator, ...newOperand]
             return is_nega
-                    ? ['negative', new_tree]
-                    : new_tree;
+                    ? ['negative', tree_new]
+                    : tree_new;
         }
         default: {
             return [operator, ...operand.map(term => mulIdentity(term))];

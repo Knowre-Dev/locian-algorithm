@@ -26,7 +26,7 @@ export function exprSimpConst(tree = null) {
         return tree;
     }
 
-    let [operator, ...operand] = tree;
+    const [operator, ...operand] = tree;
 
     switch (operator) {
         case 'infinity': // fin
@@ -47,22 +47,22 @@ export function exprSimpConst(tree = null) {
         }
         case 'negative': { // fin
             // Possible output type: ANYTHING
-            const new_operand = exprSimpConst(operand[0]);
-            return new_operand[0] === 'negative' // negative이므로 상쇄 -(-a) = a
-                ? new_operand[1]
-                : [operator, new_operand];
+            const operand_new = exprSimpConst(operand[0]);
+            return operand_new[0] === 'negative' // negative이므로 상쇄 -(-a) = a
+                ? operand_new[1]
+                : [operator, operand_new];
         }
         case 'absolute': { // fin
             // Possible output types:
             // absolute,
             // natural, fraction (numerical), decimal, rdecimal, power (numerical)
-            let new_operand = exprSimpConst(operand[0]);
-            if (new_operand[0] === 'negative') { // absolute 이므로 negatgive 제거 |-a| = a
-                [, new_operand] = new_operand;
+            let operand_new = exprSimpConst(operand[0]);
+            if (operand_new[0] === 'negative') { // absolute 이므로 negatgive 제거 |-a| = a
+                [, operand_new] = operand_new;
             }
-            return isNumeric(new_operand, true)
-                ? new_operand
-                : [operator, new_operand];
+            return isNumeric(operand_new, true)
+                ? operand_new
+                : [operator, operand_new];
         }
         case 'fraction': { // fin
             // Possible output types: ANYTHINGlet
@@ -86,97 +86,109 @@ export function exprSimpConst(tree = null) {
             return exprSimpConst(['power', radicand, exp]);
         }
         case 'addchain': { // fin
-            operand = addNegative(addAssociative(addIdentity(array2ChainTree(operand))));
-            if (operand[0] !== 'addchain') {
-                return operand;
-            }
-            [, ...operand] = operand;
-            let terms = [];
-            const signs = new Map([
-                ['add', 'sub'],
-                ['sub', 'add']
-            ]);
-            operand.forEach(term => {
-                let [op, term_1] = term;
-                term_1 = exprSimpConst(term_1);
-                if (term_1[0] === 'negative') { // negative 나오면 부호 변경
-                    [, term_1] = term_1;
-                    op = signs.get(op);
-                }
-                terms = [...terms, [op, term_1]];
-            });
-            return array2ChainTree(terms, true);
+            return simp_addchain(operator, operand);
         }
         case 'mulchain': { // fin
-            [, ...operand] = mulAssociative(tree);
-            let terms = [];
-            let sign = 1;
-            operand.forEach(term => {
-                let [op, term_1] = term;
-                term_1 = exprSimpConst(term_1);
-                // Take all negative signs out to the front
-                if (Array.isArray(term_1) && term_1[0] === 'negative') {
-                    sign *= -1;
-                    [, term_1] = term_1;
-                }
-                terms = [...terms, [op, term_1]];
-            });
-            const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(terms, true))));
-            return sign === -1
-                ? ['negative', newtree]
-                : newtree;
+            return simp_mulchain(tree);
         }
         case 'power': {
-            // Possible output types:
-            // negative, fraction, squareroot, power
-            let [base, exp] = operand;
-            base = exprSimpConst(base);
-            exp = exprSimpConst(exp);
-            // If the original expotree is a fraction with even denominator,
-            // the result must work with the absolute value of the original base
-            // So make a flag variable to store that info
-            let is_even_root = false;
-            if (exp[0] === 'fraction') {
-                const GCF = findGCF(exp[2]);
-                is_even_root = JSON.stringify(GCF.const) === JSON.stringify(['natural', '2']);
-            }
-
-            // Simplify (a^b)^c to a^(bc)
-            if (base[0] === 'power') {
-                exp = ['mulchain', ['mul', base[2]], ['mul', exp]];
-                exp = exprSimpConst(mulAssociative(exp));
-                [, base] = base;
-            }
-            // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
-            // Reflect this by modifying basetree as applicable
-            const con = findGCF(exp).const;
-            const is_odd_expo = JSON.stringify(con) === JSON.stringify(['natural', '1']);
-            if (exp[0] === 'natural' && is_odd_expo && is_even_root) {
-                base = ['absolute', base];
-            }
-            let newOperand = [];
-            // Convert fraction to division just to make coding easier
-            // The if statement below is omitted out (epark 20180830)
-            // because this causes NAN output for inputs like ((103/100)^t),
-            // where changing this to (103^t)/(100^t) for large t
-            // causes float values to become NAN at evaluateEx_new
-
-            if (base[0] === 'mulchain') {
-                const [, ...operand_b] = base;
-                const new_operand_b = operand_b.map(term => [term[0], exprSimpConst(['power', term[1], exp])])
-                newOperand = [...newOperand, new_operand_b];
-            } else {
-                newOperand = [...newOperand, ['mul', ['power', base, exp]]];
-            }
-
-            // Remove any power of 1 before returning
-            return powIdentity(divFrac(array2ChainTree(newOperand, true)));
+            return simp_power(operand);
         }
         default: {
-            const new_operand = operand.map(term => exprSimpConst(term));
-            return [operator, ...new_operand];
+            const operand_new = operand.map(term => exprSimpConst(term));
+            return [operator, ...operand_new];
         }
     }
+}
+
+function simp_addchain(operator, operand) {
+    operand = addNegative(addAssociative(addIdentity(array2ChainTree(operand))));
+    if (operand[0] !== 'addchain') {
+        return operand;
+    }
+    [, ...operand] = operand;
+    let terms = [];
+    const signs = new Map([
+        ['add', 'sub'],
+        ['sub', 'add']
+    ]);
+    operand.forEach(term => {
+        let [op, term_1] = term;
+        term_1 = exprSimpConst(term_1);
+        if (term_1[0] === 'negative') { // negative 나오면 부호 변경
+            [, term_1] = term_1;
+            op = signs.get(op);
+        }
+        terms = [...terms, [op, term_1]];
+    });
+    return array2ChainTree(terms, true);
+}
+
+function simp_mulchain(tree) {
+    const [, ...operand] = mulAssociative(tree);
+    let terms = [];
+    let sign = 1;
+    operand.forEach(term => {
+        let [op, term_1] = term;
+        term_1 = exprSimpConst(term_1);
+        // Take all negative signs out to the front
+        if (Array.isArray(term_1) && term_1[0] === 'negative') {
+            sign *= -1;
+            [, term_1] = term_1;
+        }
+        terms = [...terms, [op, term_1]];
+    });
+    const newtree = mulAssociative(mulIdentity(mulZero(array2ChainTree(terms, true))));
+    return sign === -1
+        ? ['negative', newtree]
+        : newtree;
+}
+
+function simp_power(operand) {
+    // Possible output types:
+    // negative, fraction, squareroot, power
+    let [base, exp] = operand;
+    base = exprSimpConst(base);
+    exp = exprSimpConst(exp);
+    // If the original expotree is a fraction with even denominator,
+    // the result must work with the absolute value of the original base
+    // So make a flag variable to store that info
+    let is_even_root = false;
+    if (exp[0] === 'fraction') {
+        const GCF = findGCF(exp[2]);
+        is_even_root = JSON.stringify(GCF.const) === JSON.stringify(['natural', '2']);
+    }
+
+    // Simplify (a^b)^c to a^(bc)
+    if (base[0] === 'power') {
+        exp = ['mulchain', ['mul', base[2]], ['mul', exp]];
+        exp = exprSimpConst(mulAssociative(exp));
+        [, base] = base;
+    }
+    // Remember, ((x^(2k-1))^2)^(1/2) === |x|^(2k-1), not x
+    // Reflect this by modifying basetree as applicable
+    const con = findGCF(exp).const;
+    const is_odd_expo = JSON.stringify(con) === JSON.stringify(['natural', '1']);
+    if (exp[0] === 'natural' && is_odd_expo && is_even_root) {
+        base = ['absolute', base];
+    }
+    let newOperand = [];
+    // Convert fraction to division just to make coding easier
+    // The if statement below is omitted out (epark 20180830)
+    // because this causes NAN output for inputs like ((103/100)^t),
+    // where changing this to (103^t)/(100^t) for large t
+    // causes float values to become NAN at evaluateEx_new
+
+    if (base[0] === 'mulchain') {
+        let [, ...operand_b] = base;
+        operand_b = operand_b.map(term => [term[0], exprSimpConst(['power', term[1], exp])])
+        newOperand = [...newOperand, operand_b];
+    } else {
+        newOperand = [...newOperand, ['mul', ['power', base, exp]]];
+    }
+
+    // Remove any power of 1 before returning
+    return powIdentity(divFrac(array2ChainTree(newOperand, true)));
 }
 
 /*

@@ -5,7 +5,8 @@ export function addPolyZero(tree) {
     }
     const [operator, ...operand] = tree;
     if (operator !== 'addchain') {
-        return [operator, ...operand.map(term => addPolyZero(term))];
+        const operand_new = operand.map(term => addPolyZero(term));
+        return [operator, ...operand_new];
     }
     const newOperand = operand.map(term => term[0] === 'sub' && checkZeroEquiv(term[1])
         ? ['add', term[1]]

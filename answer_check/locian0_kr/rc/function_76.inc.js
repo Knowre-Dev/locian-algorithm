@@ -9,21 +9,20 @@ export function fracSimpInt(tree) {
     if (operator !== 'fraction') {
         return [operator, ...operand.map(term => fracSimpInt(term))];
     }
-
-    const num = fracSimpInt(operand[0]);
-    const den = fracSimpInt(operand[1]);
-
+    let [num, den] = operand;
+    num = fracSimpInt(num);
+    den = fracSimpInt(den);
     // 자연수와 나머지 분리
     const [num_int, num_others] = update_term(num);
     const [den_int, den_others] = update_term(den);
 
     // 자연수 부분 서로소로 만들기
     const g = gcd(num_int, den_int);
-    const new_num_int = (num_int / g).toString();
-    const new_den_int = (den_int / g).toString();
+    const num_int_new = (num_int / g).toString();
+    const den_int_new = (den_int / g).toString();
 
-    const new_num = form_term(num, new_num_int, num_others);
-    const new_den = form_term(den, new_den_int, den_others);
+    const new_num = form_term(num, num_int_new, num_others);
+    const new_den = form_term(den, den_int_new, den_others);
     return JSON.stringify(new_den) === JSON.stringify(['natural', '1']) // 분자가 1인가 아닌가
         ? new_num
         : [operator, new_num, new_den]
@@ -62,8 +61,9 @@ function update_term(term) {
         case 'mulchain': {
             let ints = [1];
             operand_t.forEach(term_t => {
-                term_t[0] === 'mul' && term_t[1][0] === 'natural'
-                    ? ints = [...ints, term_t[1][1]]
+                const [op_t, term_t1] = term_t
+                op_t === 'mul' && term_t1[0] === 'natural'
+                    ? ints = [...ints, term_t1[1]]
                     : others = [...others, term_t];
             });
             int = ints.reduce((a, b) => a * b);

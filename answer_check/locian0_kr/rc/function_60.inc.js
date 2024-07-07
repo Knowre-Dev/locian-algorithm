@@ -38,12 +38,12 @@ export function rearrangeTreeEq(A, B) {
     if (place[0] > place[1] || operatorA < operatorB) {
         return -1;
     }
-    const operandA_lehgth = operandA.length;
-    const operandB_length = operandB.length
-    if (operandA_lehgth > operandB_length) {
+    const length_A = operandA.length;
+    const length_B = operandB.length
+    if (length_A > length_B) {
         return 1;
     }
-    if (operandA_lehgth < operandB_length) {
+    if (length_A < length_B) {
         return -1;
     }
     let result = 0;

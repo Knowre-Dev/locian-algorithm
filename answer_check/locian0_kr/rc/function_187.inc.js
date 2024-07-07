@@ -1,4 +1,4 @@
-// a^(-c/d)꼴을 분수꼴로
+// (a/b)^(-c) => (b/a)^c
 
 export function expToFrac(tree = null) {
     if (!Array.isArray(tree)) {

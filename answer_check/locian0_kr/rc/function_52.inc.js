@@ -7,9 +7,10 @@ export function fracMfrac(tree) {
     if (!(operator === 'mfraction' && operand[1][1] < operand[2][1])) {
         return [operator, ...operand.map(term => fracMfrac(term))];
     }
-    let num = (parseInt(operand[0][1]) * parseInt(operand[2][1]) + parseInt(operand[1][1])).toString()
-    num = ['natural', num];
-    return ['fraction', num, operand[2]];
+    const [nat, num, den] = operand;
+    let num_new = (parseInt(nat[1]) * parseInt(den[1]) + parseInt(num[1])).toString()
+    num_new = ['natural', num_new];
+    return ['fraction', num_new, den];
 }
 
 /*

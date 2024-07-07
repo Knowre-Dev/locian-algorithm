@@ -7,10 +7,13 @@ export function mfracEquiv(tree = null) {
 
     const [operator, ...operand] = tree;
     if (operator !== 'mfraction') {
-        return [operator, ...operand.map(term => mfracEquiv(term))];
+        const operand_new = operand.map(term => mfracEquiv(term));
+        return [operator, ...operand_new];
+        // return [operator, ...operand.map(term => mfracEquiv(term))];
     }
-    const nfrac = fracSimpInt(['fraction', operand[1], operand[2]]);
-    return nfrac[0] === 'fraction'
-        ? [operator, operand[0], nfrac[1], nfrac[2]]
-        : ['natural', (parseInt(operand[0][1]) + parseInt(nfrac[1])).toString()];
+    const [nat, num, den] = operand;
+    const frac = fracSimpInt(['fraction', num, den]);
+    return frac[0] === 'fraction'
+        ? [operator, nat, frac[1], frac[2]]
+        : ['natural', (parseInt(nat[1]) + parseInt(frac[1])).toString()];
 }

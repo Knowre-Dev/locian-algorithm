@@ -15,13 +15,14 @@ export function addAdjacentSigns(tree) {
         ['sub', 'add']
     ]);
     operand.forEach(term => {
-        const nterm = addAdjacentSigns(term[1]);
-        const term_add = nterm[0] === 'negative'
-            ? signs.has(term[0])
-                ? [signs.get(term[0]), nterm[1]]
-                : [term[0], nterm[1]]
-            : [term[0], nterm];
-        newOperand = [...newOperand, term_add];
+        let [op, term_1] = term;
+        term_1 = addAdjacentSigns(term_1);
+        const term_new = term_1[0] === 'negative'
+            ? signs.has(op)
+                ? [signs.get(op), term_1[1]]
+                : [op, term_1[1]]
+            : [op, term_1];
+        newOperand = [...newOperand, term_new];
     });
     return [operator, ...newOperand];
 }

@@ -11,33 +11,27 @@ export function eqIneqDivPi(tree = null) { // 등식, 부둥식에서 각 항을
     if (!['equation', 'inequality'].includes(operator)) {
         return tree;
     }
-    const frac_function = tree_1 => fracSimpVar(fracSeparation(fracNegative(tree_1)));
-    const zero = JSON.stringify(['natural', '0']);
-    const pi = ['variable', 'pi'];
     switch (operator) {
         case 'equation': {
-            return checkPi(operand[0]) && checkPi(operand[1])
-                ? [operator, ...operand.map(term => JSON.stringify(term) === zero
-                    ? term
-                    : frac_function(['fraction', term, pi]))]
+            return operand.every(term => checkPi(term))
+                ? [operator, ...operand.map(term => divide_by_pi(term))]
                 : tree;
         }
         case 'inequality': {
+            const term = operand[0];
+            if (!checkPi(term)) {
+                return tree
+            }
+            const term_new = divide_by_pi(term);
+            let newOperand = [term_new];
             const max = Math.floor(operand.length / 2);
-            for (let i = 0; i <= max; i++) { // 부둥호 아닌 부분만 체크
-                if (!checkPi(operand[2 * i])) {
+            for (let i = 1; i <= max; i++) { // 부둥호 아닌 부분만 pi로 나눔
+                const term = operand[2 * i];
+                if (!checkPi(term)) {
                     return tree
                 }
-            }
-            let term = JSON.stringify(operand[0]) === zero
-                ? operand[0]
-                : frac_function(['fraction', operand[0], pi]);
-            let newOperand = [term];
-            for (let i = 1; i <= max; i++) { // 부둥호 아닌 부분만 pi로 나눔
-                term = JSON.stringify(operand[2 * i]) === zero
-                    ? operand[2 * i]
-                    : frac_function(['fraction', operand[2 * i], pi]);
-                newOperand = [...newOperand, operand[2 * i - 1], term];
+                const term_new = divide_by_pi(term);
+                newOperand = [...newOperand, operand[2 * i - 1], term_new];
             }
             return [operator, ...newOperand];
         }
@@ -64,6 +58,16 @@ export function sub_divPi(tree, div) {
         : fracSimpVar(fracSeparation(fracNegative(['fraction', tree, div])));
 }
 */
+export function divide_by_pi(term) {
+    const frac_function = tree_1 => fracSimpVar(fracSeparation(fracNegative(tree_1)));
+    const zero = JSON.stringify(['natural', '0']);
+    const pi = ['variable', 'pi'];
+
+    return JSON.stringify(term) === zero
+        ? term
+        : frac_function(['fraction', term, pi]);
+}
+
 export function checkPi(tree) {
     if (!Array.isArray(tree)) {
         return false;

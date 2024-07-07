@@ -43,10 +43,10 @@ export function addFactoredForm(tree) {
             if (natural !== 1) {
                 newOperand = [['mul', ['natural', natural.toString()]], ...newOperand];
             }
-            const new_tree = [operator, ...newOperand];
+            const tree_new = [operator, ...newOperand];
             return is_nega
-                ? ['negative', new_tree]
-                : new_tree;
+                ? ['negative', tree_new]
+                : tree_new;
         }
         case 'addchain': {
             const fact = addFactor_1(tree); // constant부분을 앞으로 몰아줌
@@ -68,7 +68,8 @@ export function addFactoredForm(tree) {
                 : new_tree;
         }
         default: {
-            return [operator, ...operand.map(term => addFactoredForm(term))];
+            const operand_new = operand.map(term => addFactoredForm(term));
+            return [operator, ...operand_new];
         }
     }
 }

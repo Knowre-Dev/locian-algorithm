@@ -5,19 +5,21 @@ export function powDecomposition(tree) {
 
     const [operator, ...operand] = tree;
     if (operator !== 'power') {
-        return [operator, ...operand.map(term => powDecomposition(term))];
+        const operand_new = operand.map(term => powDecomposition(term));
+        return [operator, ...operand_new];
     }
     let newOperand = [];
-    const base = powDecomposition(operand[0]);
-    const expo = powDecomposition(operand[1]);
-    if (base[0] === 'addchain' && expo[0] === 'natural') {
-        const [, max] = expo;
+    let [base, exp] = operand;
+    base = powDecomposition(base);
+    exp = powDecomposition(exp);
+    if (base[0] === 'addchain' && exp[0] === 'natural') {
+        const [, max] = exp;
         for (let i = 0; i < max; i++) {
             newOperand = [...newOperand, ['mul', base]];
         }
         return ['mulchain', ...newOperand];
     }
-    return [operator, base, expo];
+    return [operator, base, exp];
 }
 
 /*

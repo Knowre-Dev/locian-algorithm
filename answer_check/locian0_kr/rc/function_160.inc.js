@@ -47,6 +47,7 @@ export function mulNegative(tree) {
         }
     }
 }
+
 /*
 import { LatexToTree } from '../checkmath.js';
 const latex_1 = '-3x';
