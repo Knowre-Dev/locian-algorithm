@@ -1,132 +1,4 @@
-// const
-
 /* eslint-disable no-useless-escape */
-
-/*
-convert latex to tree
-*/
-
-// const
-const partL = '@';
-const partR = '#';
-
-const delimeter = '\\';
-const whitespace = ':';
-
-const left = 'left';
-const right = 'right';
-
-const parenthesis_left = '(';
-const parenthesis_right = ')';
-const bracket_left = '[';
-const bracket_right = ']';
-const brace_left = '{';
-const brace_right = '}';
-const bar = '|';
-
-const decimaldot = '.';
-const exponent = '^';
-const subscript = '_';
-
-const cmd = new Map([
-    ['pi', 1],
-    ['theta', 2],
-    ['overline', 3],
-    ['mfrac', 4],
-    ['frac', 5],
-    ['sqrt', 6],
-    ['nthroot', 7],
-    ['abs', 8],
-    ['times', 9],
-    ['cdot', 10],
-    ['div', 11],
-    ['neq', 12],
-    ['ne', 12],
-    ['gt', 13],
-    ['ge', 14],
-    ['lt', 15],
-    ['le', 16],
-    ['summ', 17],
-    ['overrightarrow', 18],
-    ['overleftarrow', 19],
-    ['overleftrightarrow', 20],
-    ['arc', 21],
-    ['cap', 41],
-    ['cup', 42],
-    ['mangle', 30],
-    ['angle', 31],
-    ['sin', 32],
-    ['cos', 33],
-    ['tan', 34],
-    ['varnothing', 22],
-    ['infty', 23],
-    ['pm', 24],
-    ['mp', 60],
-    ['circ', 25],
-    ['R', 26],
-    ['mathbb(R)', 26],
-    ['text', 27],
-    ['alpha', 51],
-    ['beta', 52],
-    ['gamma', 53]
-]);
-
-const cmd_special = new Map([
-    ['logbase', 1],
-    ['log', 2],
-    ['ln', 3]
-]);
-
-export function LatexToTree(A, node = null, node_idx = null) {
-    if (A === '') {
-        return []
-    }
-    if (node === null) {
-        node = [];
-    }
-    if (node_idx === null) {
-        node_idx = 1;
-    }
-    let newA = A;
-
-    newA = newA.replace(/\s+/g, '');// added
-
-    // pre-process
-    newA = LatexToTree_pre(newA);
-
-    // get number
-    [newA, node_idx] = LatexToTree_number(newA, node, node_idx);
-
-    // get cmd (one 0)
-    cmd.forEach((value, key) => {
-        newA = newA.replaceAll(delimeter + key, partL + '0' + value + partR);
-    });
-
-    // get cmd_special (two 0s)
-    cmd_special.forEach((value, key) => {
-        newA = newA.replaceAll(key, partL + '00' + value + partR);
-    });
-
-    // get variable
-    [newA, node_idx] = LatexToTree_variable(newA, node, node_idx);
-
-    // get single command (symbol)
-    [newA, node_idx] = LatexToTree_symbol(newA, node, node_idx);
-
-    // get grouping
-    [newA, node_idx] = LatexToTree_group(newA, node, node_idx);
-
-    // command with args
-    [newA, node_idx] = LatextoTree_com(newA, node, node_idx);
-
-    // special lv1 command
-    [newA, node_idx] = LatexToTree_sp_1(newA, node, node_idx);
-
-    // special lv2 command
-    [newA, node_idx] = LatexToTree_sp_2(newA, node, node_idx);
-
-    return form_tree(newA, node);
-}
 
 export function forregex(c) {
     const specials = [
@@ -144,11 +16,95 @@ export function forregex(c) {
     return result;
 }
 
-function LatexToTree_pre(newA) {
+/*
+convert latex to tree
+*/
+
+export function LatexToTree(A, node = null, node_idx = null) {
+    const partL = '@';
+    const partR = '#';
+
+    const delimeter = '\\';
+    const cmdWhitespace = ':';
+
+    const cmdLeft = 'left';
+    const cmdRight = 'right';
+
+    const cmd = new Map([
+        ['pi', 1],
+        ['theta', 2],
+        ['overline', 3],
+        ['mfrac', 4],
+        ['frac', 5],
+        ['sqrt', 6],
+        ['nthroot', 7],
+        ['abs', 8],
+        ['times', 9],
+        ['cdot', 10],
+        ['div', 11],
+        ['neq', 12],
+        ['ne', 12],
+        ['gt', 13],
+        ['ge', 14],
+        ['lt', 15],
+        ['le', 16],
+        ['summ', 17],
+        ['overrightarrow', 18],
+        ['overleftarrow', 19],
+        ['overleftrightarrow', 20],
+        ['arc', 21],
+        ['cap', 41],
+        ['cup', 42],
+        ['mangle', 30],
+        ['angle', 31],
+        ['sin', 32],
+        ['cos', 33],
+        ['tan', 34],
+        ['varnothing', 22],
+        ['infty', 23],
+        ['pm', 24],
+        ['mp', 60],
+        ['circ', 25],
+        ['R', 26],
+        ['mathbb(R)', 26],
+        ['text', 27],
+        ['alpha', 51],
+        ['beta', 52],
+        ['gamma', 53]
+    ]);
+    const cmd_special = new Map([
+        ['logbase', 1],
+        ['log', 2],
+        ['ln', 3]
+    ]);
+
+    const signParenthesisLeft = '(';
+    const signParenthesisRight = ')';
+    const signBracketLeft = '[';
+    const signBracketRight = ']';
+    const signBraceLeft = '{';
+    const signBraceRight = '}';
+    const signBar = '|';
+
+    const signDecimaldot = '.';
+    const signExponent = '^';
+    const signSubscript = '_';
+
+    if (node === null) {
+        node = [];
+    }
+    if (node_idx === null) {
+        node_idx = 1;
+    }
+    let newA = A;
+
+    newA = newA.replace(/\s+/g, '');// added
+
+    // pre-process
     let replace = new Map();
     // remove whitespace(\:)
     replace = new Map([
-        [delimeter + whitespace, '']
+        [delimeter + cmdWhitespace, '']
     ]);
     replace.forEach((value, key) => {
         newA = newA.replaceAll(key, value);
@@ -156,8 +112,8 @@ function LatexToTree_pre(newA) {
 
     // change absolute sign
     replace = new Map([
-        [delimeter + left + bar, delimeter + 'abs' + brace_left],
-        [delimeter + right + bar, brace_right]
+        [delimeter + cmdLeft + signBar, delimeter + 'abs' + signBraceLeft],
+        [delimeter + cmdRight + signBar, signBraceRight]
     ]);
     replace.forEach((value, key) => {
         newA = newA.replaceAll(key, value);
@@ -165,8 +121,8 @@ function LatexToTree_pre(newA) {
 
     // change all grouping sign to parenthesis
     replace = new Map([
-        [brace_left, parenthesis_left],
-        [brace_right, parenthesis_right]
+        [signBraceLeft, signParenthesisLeft],
+        [signBraceRight, signParenthesisRight]
     ]);
     replace.forEach((value, key) => {
         newA = newA.replaceAll(key, value);
@@ -174,8 +130,8 @@ function LatexToTree_pre(newA) {
 
     // remove cmd 'left' and 'right' and 'text'
     replace = new Map([
-        [delimeter + left, ''],
-        [delimeter + right, ''],
+        [delimeter + cmdLeft, ''],
+        [delimeter + cmdRight, ''],
         [delimeter + 'text', '']
     ]);
     replace.forEach((value, key) => {
@@ -201,24 +157,24 @@ function LatexToTree_pre(newA) {
         '([0-9]+)' +
         forregex(delimeter) +
         'frac' +
-        forregex(parenthesis_left) +
+        forregex(signParenthesisLeft) +
         '([0-9]+)' +
-        forregex(parenthesis_right) +
-        forregex(parenthesis_left) +
+        forregex(signParenthesisRight) +
+        forregex(signParenthesisLeft) +
         '([0-9]+)' +
-        forregex(parenthesis_right),
+        forregex(signParenthesisRight),
         'g');
     replace = delimeter +
         'mfrac' +
-        parenthesis_left +
+        signParenthesisLeft +
         '$1' +
-        parenthesis_right +
-        parenthesis_left +
+        signParenthesisRight +
+        signParenthesisLeft +
         '$2' +
-        parenthesis_right +
-        parenthesis_left +
+        signParenthesisRight +
+        signParenthesisLeft +
         '$3' +
-        parenthesis_right;
+        signParenthesisRight;
     newA = newA.replaceAll(regex, replace);
 
     // _a, ^a
@@ -227,9 +183,9 @@ function LatexToTree_pre(newA) {
         'g');
     replace =
         '$1' +
-        parenthesis_left +
+        signParenthesisLeft +
         '$2' +
-        parenthesis_right;
+        signParenthesisRight;
     newA = newA.replaceAll(regex, replace);
 
     // sqrt
@@ -256,15 +212,13 @@ function LatexToTree_pre(newA) {
     replace.forEach((value, key) => {
         newA = newA.replaceAll(key, value);
     });
-    return newA;
-}
 
-function LatexToTree_number(newA, node, node_idx) {
     let matches = [];
+    // get number
     // repeating decimal
-    let regex = new RegExp(
+    regex = new RegExp(
         '([0-9]*)' +
-        forregex(decimaldot) +
+        forregex(signDecimaldot) +
         '([0-9]*)' +
         forregex(delimeter) +
         'overline' +
@@ -275,7 +229,10 @@ function LatexToTree_number(newA, node, node_idx) {
         matches.forEach(match => match.sort().reverse());
         const [match_0] = matches;
         match_0.forEach((value, key) => {
-            newA = replace_RegExp(newA, value, node_idx);
+            newA = newA.replaceAll(
+                new RegExp(forregex(value), 'g'),
+                partL + node_idx + partR
+            );
             node[node_idx] = ['rdecimal', matches[1][key], matches[2][key], matches[3][key]];
             node_idx++;
         });
@@ -284,7 +241,7 @@ function LatexToTree_number(newA, node, node_idx) {
     // decimal
     regex = new RegExp(
         '[0-9]*' +
-        forregex(decimaldot) +
+        forregex(signDecimaldot) +
         '[0-9]+',
         'g');
     matches = match_all(newA, regex);
@@ -292,7 +249,10 @@ function LatexToTree_number(newA, node, node_idx) {
         const [match_0] = matches;
         match_0.sort().reverse();
         match_0.forEach(value => {
-            newA = replace_RegExp(newA, value, node_idx);
+            newA = newA.replaceAll(
+                new RegExp(forregex(value), 'g'),
+                partL + node_idx + partR
+            );
             node[node_idx] = ['decimal', value];
             node_idx++;
         });
@@ -324,23 +284,35 @@ function LatexToTree_number(newA, node, node_idx) {
             node_idx++;
         });
     }
-    return [newA, node_idx];
-}
 
-function LatexToTree_variable(newA, node, node_idx) {
-    // korean
-    let regex = new RegExp('([ㄱ-ㅎ|가-힣])', 'g');
-    let matches = match_all(newA, regex);
+    // get cmd (one 0)
+    cmd.forEach((value, key) => {
+        newA = newA.replaceAll(delimeter + key, partL + '0' + value + partR);
+    });
+
+    // get cmd_special (two 0s)
+    cmd_special.forEach((value, key) => {
+        newA = newA.replaceAll(key, partL + '00' + value + partR);
+    });
+
+    // get variable
+    // korean (variable)
+    regex = new RegExp('([ㄱ-ㅎ|가-힣])', 'g');
+    matches = match_all(newA, regex);
     if (matches.length !== 0) {
         const [match_0] = matches;
         match_0.sort().reverse();
         match_0.forEach(value => {
-            newA = replace_RegExp(newA, value, node_idx);
+            newA = newA.replaceAll(
+                new RegExp(forregex(value), 'g'),
+                partL + node_idx + partR
+            );
             node[node_idx] = ['variable', value];
             node_idx++;
         });
     }
-    // greek
+
+    // greek (variable)
     regex = new RegExp(
         forregex(partL) +
         '0(' +
@@ -361,7 +333,10 @@ function LatexToTree_variable(newA, node, node_idx) {
     if (matches.length !== 0) {
         const match_0_entries = matches[0].entries();
         for (const [key, value] of match_0_entries) {
-            newA = replace_RegExp(newA, value, node_idx);
+            newA = newA.replaceAll(
+                new RegExp(forregex(value), 'g'),
+                partL + node_idx + partR
+            );
             switch (matches[1][key]) {
                 case cmd.get('pi').toString(): {
                     node[node_idx] = ['variable', 'pi'];
@@ -388,26 +363,21 @@ function LatexToTree_variable(newA, node, node_idx) {
         }
     }
 
-    // english
+    // english (variable)
     regex = new RegExp("[a-zA-Z][']*", 'g');
     matches = match_all(newA, regex);
     if (matches.length !== 0) {
         const [match_0] = matches;
         match_0.sort().reverse();
         match_0.forEach(value => {
-            newA = newA.replaceAll(
-                value,
-                partL + node_idx + partR
-            );
+            newA = newA.replaceAll(value, partL + node_idx + partR);
             node[node_idx] = ['variable', value];
             node_idx++;
         });
     }
-    return [newA, node_idx];
-}
 
-function LatexToTree_symbol(newA, node, node_idx) {
-    const regex = new RegExp(
+    // get single command (command with no arg)
+    regex = new RegExp(
         forregex(partL) +
         '0(' +
         cmd.get('R') +
@@ -419,11 +389,14 @@ function LatexToTree_symbol(newA, node, node_idx) {
         forregex(partR) +
         ' ?',
         'g');
-    const matches = match_all(newA, regex);
+    matches = match_all(newA, regex);
     if (matches.length !== 0) {
         const match_0_entries = matches[0].entries();
         for (const [key, value] of match_0_entries) {
-            newA = replace_RegExp(newA, value, node_idx);
+            newA = newA.replaceAll(
+                    new RegExp(forregex(value), 'g'),
+                    partL + node_idx + partR
+                );
             switch (matches[1][key]) {
                 case cmd.get('R').toString(): {
                     node[node_idx] = ['setname', 'real'];
@@ -441,31 +414,29 @@ function LatexToTree_symbol(newA, node, node_idx) {
             node_idx++;
         }
     }
-    return [newA, node_idx];
-}
 
-function LatexToTree_group(newA, node, node_idx) {
+    // get grouping
     let oldA = '';
-    do {
+    while (newA !== oldA) {
         oldA = newA;
         // get parenthesis
-        let regex = new RegExp(
+        regex = new RegExp(
             '([' +
-            forregex(bracket_left) +
-            forregex(parenthesis_left) +
+            forregex(signBracketLeft) +
+            forregex(signParenthesisLeft) +
             '])' +
             '([^' +
-            forregex(parenthesis_left) +
-            forregex(parenthesis_right) +
-            forregex(bracket_left) +
-            forregex(bracket_right) +
+            forregex(signParenthesisLeft) +
+            forregex(signParenthesisRight) +
+            forregex(signBracketLeft) +
+            forregex(signBracketRight) +
             ']*)' +
             '([' +
-            forregex(bracket_right) +
-            forregex(parenthesis_right) +
+            forregex(signBracketRight) +
+            forregex(signParenthesisRight) +
             '])',
             'g');
-        let matches = match_all(newA, regex);
+        matches = match_all(newA, regex);
         if (matches.length !== 0) {
             const [match_0] = matches;
             match_0.forEach((value, key) => {
@@ -502,8 +473,8 @@ function LatexToTree_group(newA, node, node_idx) {
             '([1-9][0-9]*)' +
             forregex(partR) +
             '([' +
-            forregex(exponent) +
-            forregex(subscript) +
+            forregex(signExponent) +
+            forregex(signSubscript) +
             '])' +
             forregex(partL) +
             '([1-9][0-9]*)' +
@@ -518,25 +489,17 @@ function LatexToTree_group(newA, node, node_idx) {
                     partL + node_idx + partR
                 );
                 node[node_idx] = [
-                    matches[2][key] === '^'
-                        ? 'power'
-                        : 'subscript',
+                    matches[2][key] === '^' ? 'power' : 'subscript',
                     node[matches[1][key]],
                     node[matches[3][key]]
                 ];
                 node_idx++;
             });
         }
-    } while (newA !== oldA);
-    return [newA, node_idx];
-}
 
-function LatextoTree_com(newA, node, node_idx) {
-    let oldA = '';
-    do {
-        oldA = newA;
+        // get command with no arg
         // get command with 1 arg
-        let regex = new RegExp(
+        regex = new RegExp(
             forregex(partL) +
             '0' +
             '(' +
@@ -569,7 +532,7 @@ function LatextoTree_com(newA, node, node_idx) {
             '([1-9][0-9]*)' +
             forregex(partR),
             'g');
-        let matches = match_all(newA, regex);
+        matches = match_all(newA, regex);
         if (matches.length !== 0) {
             const match_0_entries = matches[0].entries();
             for (const [key, value] of match_0_entries) {
@@ -662,9 +625,7 @@ function LatextoTree_com(newA, node, node_idx) {
                     partL + node_idx + partR
                 );
                 node[node_idx] = [
-                    matches[1][key] === cmd.get('frac').toString()
-                        ? 'fraction'
-                        : 'nthroot',
+                    matches[1][key] === cmd.get('frac').toString() ? 'fraction' : 'nthroot',
                     node[matches[2][key]],
                     node[matches[3][key]]
                 ];
@@ -707,16 +668,15 @@ function LatextoTree_com(newA, node, node_idx) {
                 node_idx++;
             });
         }
-    } while (newA !== oldA);
-    return [newA, node_idx];
-}
 
-function LatexToTree_sp_1(newA, node, node_idx) {
-    let oldA = '';
-    do {
+        // get function
+    }
+
+    oldA = '';
+    while (oldA !== newA) {
         oldA = newA;
         // get special lv1 command with 2 args
-        let regex = new RegExp(
+        regex = new RegExp(
             forregex(partL) +
             '00' +
             '(' +
@@ -733,7 +693,7 @@ function LatexToTree_sp_1(newA, node, node_idx) {
             ')*)',
             'g'
         );
-        let matches = match_all(newA, regex);
+        matches = match_all(newA, regex);
         if (matches.length !== 0) {
             const [match_0] = matches;
             match_0.forEach((value, key) => {
@@ -743,7 +703,7 @@ function LatexToTree_sp_1(newA, node, node_idx) {
                 );
                 node[node_idx] = [
                     'log',
-                    form_tree(matches[3][key], node),
+                    sub_LatexToTree(matches[3][key], node, node_idx),
                     node[matches[2][key]]
                 ];
                 node_idx++;
@@ -769,31 +729,25 @@ function LatexToTree_sp_1(newA, node, node_idx) {
         matches = match_all(newA, regex);
         if (matches.length !== 0) {
             const [match_0] = matches;
-            const log_ind = cmd_special.get('log').toString();
             match_0.forEach((value, key) => {
                 newA = newA.replaceAll(
                     value,
                     partL + node_idx + partR
                 );
                 node[node_idx] = [
-                    matches[1][key] === log_ind
-                        ? 'log'
-                        : 'ln',
-                    form_tree(matches[2][key], node)
+                    matches[1][key] === cmd_special.get('log').toString() ? 'log' : 'ln',
+                    sub_LatexToTree(matches[2][key], node, node_idx)
                 ];
                 node_idx++;
             });
         }
-    } while (oldA !== newA);
-    return [newA, node_idx];
-}
+    }
 
-function LatexToTree_sp_2(newA, node, node_idx) {
-    let oldA = '';
-    do {
+    oldA = '';
+    while (oldA !== newA) {
         oldA = newA;
         // get special lv2 command with 3 args
-        const regex = new RegExp(
+        regex = new RegExp(
             forregex(partL) +
             '0' +
             '(' +
@@ -812,7 +766,7 @@ function LatexToTree_sp_2(newA, node, node_idx) {
             forregex(partR) +
             ')*)',
             'g');
-        const matches = match_all(newA, regex);
+        matches = match_all(newA, regex);
         if (matches.length !== 0) {
             const [match_0] = matches;
             match_0.forEach((value, key) => {
@@ -824,26 +778,68 @@ function LatexToTree_sp_2(newA, node, node_idx) {
                     'summation',
                     node[matches[2][key]],
                     node[matches[3][key]],
-                    form_tree(matches[4][key], node)
+                    sub_LatexToTree(matches[4][key], node, node_idx)
                 ];
                 node_idx++;
             });
         }
-    } while (oldA !== newA);
-    return [newA, node_idx];
-}
-
-function form_tree(newA, node) {
-    if (newA === '') {
-        return [];
     }
 
-    const comma = ',';
+    return sub_LatexToTree(newA, node, node_idx);
+}
 
-    const plus = '+';
-    const minus = '-';
-    const equation = '=';
-    const ratio = ':';
+function sub_LatexToTree(newA, node, node_idx) {
+    // const node_1 = node;
+    const partL = '@';
+    const partR = '#';
+    // const delimeter = '\\';
+
+    const cmd = new Map([
+            ['pi', 1],
+            ['theta', 2],
+            ['overline', 3],
+            ['mfrac', 4],
+            ['frac', 5],
+            ['sqrt', 6],
+            ['nthroot', 7],
+            ['abs', 8],
+            ['times', 9],
+            ['cdot', 10],
+            ['div', 11],
+            ['neq', 12],
+            ['ne', 12],
+            ['gt', 13],
+            ['ge', 14],
+            ['lt', 15],
+            ['le', 16],
+            ['summ', 17],
+            ['overrightarrow', 18],
+            ['overleftarrow', 19],
+            ['overleftrightarrow', 20],
+            ['arc', 21],
+            ['cap', 41],
+            ['cup', 42],
+            ['mangle', 30],
+            ['angle', 31],
+            ['sin', 32],
+            ['cos', 33],
+            ['tan', 34],
+            ['varnothing', 22],
+            ['infty', 23],
+            ['pm', 24],
+            ['mp', 60],
+            ['circ', 25],
+            ['R', 26],
+            ['alpha', 51],
+            ['beta', 52],
+            ['gamma', 53]
+    ]);
+    const signComma = ',';
+
+    const signPlus = '+';
+    const signMinus = '-';
+    const signEquation = '=';
+    const signRatio = ':';
 
     let matches = [];
     let regex = new RegExp();
@@ -862,9 +858,9 @@ function form_tree(newA, node) {
     }
 
     // array
-    let arr = newA.split(new RegExp(comma, 'g'));
+    let arr = newA.split(new RegExp(signComma, 'g'));
     if (arr.length > 1) {
-        return ['array', ...arr.map(value => form_tree(value, node))];
+        return ['array', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
     let result = [];
@@ -889,8 +885,8 @@ function form_tree(newA, node) {
         result = ['inequality'];
         const max = Math.floor(arr_length / 2);
         for (let i = 0; i < max; i++) {
-            const j = 2 * i + 1;
-            result[j] = form_tree(arr[2 * i], node);
+            const j = 2 * i + 1
+            result[j] = sub_LatexToTree(arr[2 * i], node, node_idx);
             switch (parseInt(arr[2 * i + 1])) {
                 case cmd.get('gt') : {
                     result[j + 1] = 'gt';
@@ -913,11 +909,10 @@ function form_tree(newA, node) {
                 }
             }
         }
-        result[2 * max + 1] = form_tree(arr[2 * max], node);
+        result[2 * max + 1] = sub_LatexToTree(arr[2 * max], node, node_idx);
         return result;
     }
 
-    // neq
     regex = new RegExp(
         forregex(partL) +
         '0' +
@@ -927,22 +922,19 @@ function form_tree(newA, node) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['neq', ...arr.map(value => form_tree(value, node))];
+        return ['neq', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
-    // equation
-    arr = newA.split(new RegExp(equation, 'g'));
+    arr = newA.split(new RegExp(signEquation, 'g'));
     if (arr.length !== 1) {
-        return ['equation', ...arr.map(value => form_tree(value, node))];
+        return ['equation', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
-    // ratio
-    arr = newA.split(ratio);
+    arr = newA.split(signRatio);
     if (arr.length !== 1) {
-        return ['ratio', ...arr.map(value => form_tree(value, node))];
+        return ['ratio', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
-    // composition
     regex = new RegExp(
         forregex(partL) +
         '0' +
@@ -952,15 +944,15 @@ function form_tree(newA, node) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['composition', ...arr.map(value => form_tree(value, node))];
+        return ['composition', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
     // addchain
     regex = new RegExp(
         '(' +
-        forregex(plus) +
+        forregex(signPlus) +
         '|' +
-        forregex(minus) +
+        forregex(signMinus) +
         '|' +
         forregex(partL) +
         '0' +
@@ -980,54 +972,55 @@ function form_tree(newA, node) {
         result = [];
         const max = Math.floor(arr_length / 2);
         if (arr[0] !== '') {
-            result = [...result, ['add', form_tree(arr[0], node)]];
+            result = [...result, ['add', sub_LatexToTree(arr[0], node, node_idx)]];
         }
         for (let i = 1; i <= max; i++) {
-            const term_add = form_tree(arr[2 * i], node);
-            let op = '';
+            let term_add = [];
             switch (arr[2 * i - 1]) {
-                case plus: {
-                    op = 'add';
+                case signPlus: {
+                    term_add = ['add', sub_LatexToTree(arr[2 * i], node, node_idx)];
                     break;
                 }
-                case minus: {
-                    op = 'sub';
+                case signMinus: {
+                    term_add = ['sub', sub_LatexToTree(arr[2 * i], node, node_idx)];
                     break;
                 }
                 case partL + '0' + cmd.get('pm') + partR: {
-                    op = 'addsub';
+                    term_add = ['addsub', sub_LatexToTree(arr[2 * i], node, node_idx)];
                     break;
                 }
                 case partL + '0' + cmd.get('mp') + partR: {
-                    op = 'subadd';
+                    term_add = ['subadd', sub_LatexToTree(arr[2 * i], node, node_idx)]
                     break;
                 }
             }
-            result = [...result, [op, term_add]]
-        }
-        if (result.length !== 1) {
-            return ['addchain', ...result];
-        }
-        let operator = '';
-        switch (result[0][0]) {
-            case 'add': {
-                operator = 'positive';
-                break;
-            }
-            case 'sub': {
-                operator = 'negative';
-                break;
-            }
-            case 'addsub': {
-                operator = 'pm';
-                break;
-            }
-            case 'subadd': {
-                operator = 'mp';
-                break;
+            if (term_add.length !== 0) {
+                result = [...result, term_add]
             }
         }
-        return [operator, result[0][1]]
+        if (result.length === 1) {
+            switch (result[0][0]) {
+                case 'add': {
+                    result = ['positive', result[0][1]];
+                    break;
+                }
+                case 'sub': {
+                    result = ['negative', result[0][1]];
+                    break;
+                }
+                case 'addsub': {
+                    result = ['pm', result[0][1]];
+                    break;
+                }
+                case 'subadd': {
+                    result = ['mp', result[0][1]];
+                    break;
+                }
+            }
+        } else {
+            result = ['addchain', ...result];
+        }
+        return result;
     }
 
     // times, div => mulchain
@@ -1045,12 +1038,12 @@ function form_tree(newA, node) {
     arr_length = arr.length;
     if (arr_length !== 1) {
         const max = Math.floor(arr_length / 2);
-        result = ['mulchain', ['mul', form_tree(arr[0], node)]];
+        result = ['mulchain', ['mul', sub_LatexToTree(arr[0], node, node_idx)]];
         for (let i = 1; i <= max; i++) {
             const op = arr[2 * i - 1] === cmd.get('times').toString()
                 ? 'mul'
                 : 'div';
-            result = [...result, [op, form_tree(arr[2 * i], node)]]
+            result = [...result, [op, sub_LatexToTree(arr[2 * i], node, node_idx)]]
         }
         return result;
     }
@@ -1065,7 +1058,7 @@ function form_tree(newA, node) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['cap', ...arr.map(value => form_tree(value, node))];
+        return ['cap', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
     // cup
@@ -1078,7 +1071,7 @@ function form_tree(newA, node) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['cup', ...arr.map(value => form_tree(value, node))];
+        return ['cup', ...arr.map(value => sub_LatexToTree(value, node, node_idx))];
     }
 
     // cdot
@@ -1091,10 +1084,10 @@ function form_tree(newA, node) {
         'g');
     arr = newA.split(regex);
     if (arr.length !== 1) {
-        return ['mulchain', ...arr.map(value => ['mul', form_tree(value, node)])];
+        return ['mulchain', ...arr.map(value => ['mul', sub_LatexToTree(value, node, node_idx)])];
     }
 
-    // mulchain
+    // 항들이 나열된 경우
     regex = new RegExp(
         forregex(partL) +
         '([1-9][0-9]*)' +
@@ -1133,13 +1126,6 @@ function form_tree(newA, node) {
     return result;
 }
 
-function replace_RegExp(newA, value, node_idx) {
-    return newA.replaceAll(
-        new RegExp(forregex(value), 'g'),
-        partL + node_idx + partR
-    );
-}
-
 /*
 javascript version preg_match_all
 */
@@ -1163,6 +1149,7 @@ export function match_all(string, regexp) {
 /*
 const latex_0 = 'x2';
 console.log(JSON.stringify(LatexToTree(latex_0), null, 4));
+*/
 /*
 function: compare two trees
 input: treeA - tree, treeB - tree
@@ -1173,18 +1160,13 @@ export function compareMathTree(tree_A, tree_B) {
         return false;
     }
     if (!Array.isArray(tree_A)) {
-        return JSON.stringify(tree_A) === JSON.stringify(tree_B);
+        return (JSON.stringify(tree_A) === JSON.stringify(tree_B));
     }
-    if ([tree_A[0], tree_B[0]].includes('anything')) {
-        return true;
-    }
-    /* don't delete (둘중 하나라도 "anything"이면 결국 두 트리는 같은 것이 되므로 결과는  true)
     if (tree_A[0] === 'anything') {
         tree_A = tree_B;
     } else if (tree_B[0] === 'anything') {
         tree_B = tree_A;
     }
-    */
     if (tree_A.length === 1) {
         return true;
     }

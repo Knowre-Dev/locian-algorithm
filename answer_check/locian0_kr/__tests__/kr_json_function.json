@@ -2150,7 +2150,7 @@
       },
       { 
         "answer": "125\\pi \\le \\frac{25}{3}\\pi x\\le 200\\pi", 
-        "inswer": "125\\le \\frac{25}3{x}\\le 200", 
+        "inswer": "125\\le \\frac{25}{3}x\\le 200", 
         "result": 1
       },
       { 
