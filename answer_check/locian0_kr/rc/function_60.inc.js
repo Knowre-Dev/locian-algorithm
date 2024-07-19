@@ -14,7 +14,6 @@ export function rearrangeTreeEq(A, B) {
                 ? -1
                 : 0;
     }
-    // is_array_A === true && is_array_B === ture;
     const [operatorA, ...operandA] = A[0] === 'negative'
         ? A[1]
         : A;

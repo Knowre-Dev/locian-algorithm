@@ -2,8 +2,6 @@
 Combines an addchain with at least one fraction into a single fraction
 */
 import { mulIdentity } from '../rc/function_56.inc.js';
-// import { array2ChainTree } from '../rc/function_152.inc.js';
-// import { array2ChainTree, findDenominators, findGCF, multFactor } from '../rc/function_152.inc.js';
 import { mulAssociative } from '../rc/function_157.inc.js';
 import { findDenominators, findGCF, multFactor, array2ChainTree } from '../rc/sub_functions.js';
 

@@ -29,7 +29,7 @@ export function rearrangeTree(tree, types = []) {
             for (let i = 1; i <= max; i++) {
                 ['gt', 'ge'].includes(newOperand[2 * i - 1])
                     ? rightNum++
-                    : rightNum--
+                    : rightNum--;
             }
             if (rightNum < 0) {
                 const newOperand_reverse = newOperand.reverse();

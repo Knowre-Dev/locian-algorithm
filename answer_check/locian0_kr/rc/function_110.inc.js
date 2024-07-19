@@ -9,7 +9,6 @@ export function mfracEquiv(tree = null) {
     if (operator !== 'mfraction') {
         const operand_new = operand.map(term => mfracEquiv(term));
         return [operator, ...operand_new];
-        // return [operator, ...operand.map(term => mfracEquiv(term))];
     }
     const [nat, num, den] = operand;
     const frac = fracSimpInt(['fraction', num, den]);
