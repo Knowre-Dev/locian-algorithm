@@ -20,7 +20,7 @@ export function eqIneqDivPi(tree = null) { // 등식, 부둥식에서 각 항을
         case 'inequality': {
             const term = operand[0];
             if (!checkPi(term)) {
-                return tree
+                return tree;
             }
             const term_new = divide_by_pi(term);
             let newOperand = [term_new];

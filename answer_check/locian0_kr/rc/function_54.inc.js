@@ -14,7 +14,7 @@ export function fracSeparation(tree) {
     let [num, den] = operand;// num: addchain
     const merge = ['fraction', addFactoredForm(num), addFactoredForm(den)];
     const merge_s = JSON.stringify(merge);
-    const simple = JSON.stringify(fracSimp(merge)) === merge_s && JSON.stringify(fracSimpVar(merge)) === merge_s;
+    const is_simple = JSON.stringify(fracSimp(merge)) === merge_s && JSON.stringify(fracSimpVar(merge)) === merge_s;
     den = fracSeparation(den);
     let newOperand = [];
     const signs = new Map([
@@ -40,7 +40,7 @@ export function fracSeparation(tree) {
                 ? signs_both.get(op_den)
                 : op;
         let term_add = ['fraction', fracSeparation(term[1]), new_den];
-        if (simple) {
+        if (is_simple) {
             term_add = fracSimp(term_add);
         }
         newOperand = [...newOperand, [sign, term_add]];

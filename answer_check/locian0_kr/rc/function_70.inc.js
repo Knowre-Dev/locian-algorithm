@@ -18,28 +18,24 @@ export function addFactoredForm(tree) {
         case 'mulchain': {
             let is_addchain = false;
             let is_nega = false;
-            let cons = [];
+            let nsts = [];
             const facts = [];
             const others = [];
             const [term_0, ...operand_1] = operand;
             if (term_0[0] === 'mul' && term_0[1][0] === 'natural') { // 첫항이 자연수
-                cons = [...cons, term_0];
+                nsts = [...nsts, term_0];
             } else {
-                [is_addchain, is_nega] = update_terms(term_0, is_addchain, is_nega, cons, facts, others); // term을 종류별로 분류
+                [is_addchain, is_nega] = update_terms(term_0, is_addchain, is_nega, nsts, facts, others); // term을 종류별로 분류
             }
             operand_1.forEach(term => {
-                [is_addchain, is_nega] = update_terms(term, is_addchain, is_nega, cons, facts, others);
+                [is_addchain, is_nega] = update_terms(term, is_addchain, is_nega, nsts, facts, others);
             });
             if (!is_addchain) {
-                /* 지우지 말것
-                return is_nega
-                    ? ['negative', tree]
-                    : tree;
-                    */
-                   return tree;
+                // not addchain -> not negative
+                return tree;
             }
             let newOperand = [...others, ...facts];
-            const natural = cons.reduce((a, b) => a * b[1][1], 1);
+            const natural = nsts.reduce((a, b) => a * b[1][1], 1);
             if (natural !== 1) {
                 newOperand = [['mul', ['natural', natural.toString()]], ...newOperand];
             }
@@ -60,12 +56,12 @@ export function addFactoredForm(tree) {
                 addchain = sign_change(addchain);
                 is_nega = true;
             }
-            const new_tree = fact[0] === 'mulchain'
+            const tree_new = fact[0] === 'mulchain'
                 ? ['mulchain', con, ['mul', addchain]]
                 : addchain;
             return is_nega
-                ? ['negative', new_tree]
-                : new_tree;
+                ? ['negative', tree_new]
+                : tree_new;
         }
         default: {
             const operand_new = operand.map(term => addFactoredForm(term));

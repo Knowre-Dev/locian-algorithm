@@ -27,37 +27,8 @@ export function addFactor_1(tree = null) {
             cons = [...cons, parseInt(operand_i[0])];
             continue;
         }
-        let con = 1;
-        let has_sym = false;
-        if (operator_i === 'mulchain') {
-            const [term_0, ...terms_1] = operand_i;
-            if (term_0[0] === 'mul') { // 첫항이 숫자인지 아닌 지 확인
-                if (is_variable(term_0[1])) {
-                    has_sym = true;
-                } else if (is_bigger_one(term_0[1])) {
-                    con = parseInt(term_0[1][1]);
-                }
-            }
-            has_sym = terms_1.some(term_1 => term_1[0] === 'mul' && is_variable(term_1[1]));
-        } else if (operator_i === 'fraction') {
-            const [num] = operand_i;
-            if (num[0] === 'mulchain') {
-                const [, ...terms_num] = num
-                terms_num.forEach(term_num => {
-                    const [op_n, term_n_1] = term_num;
-                    if (op_n === 'mul') {
-                        if (['variable', 'squareroot'].includes(term_n_1[0])) {
-                            has_sym = true;
-                        } else if (is_bigger_one(term_n_1)) {
-                            con = parseInt(term_n_1[1]);
-                        }
-                    }
-                });
-            } else if (is_bigger_one(num)) {
-                con = parseInt(num[1]);
-            }
-        }
-        if (has_sym && con !== 1) {
+        const [con, has_sym] = compute_con(operator_i, operand_i);
+        if (con !== 1 && has_sym) {
             cons = [...cons, con];
         }
     }
@@ -70,20 +41,54 @@ export function addFactor_1(tree = null) {
     return addCommutative(['mulchain', ['mul', con], ['mul', addchain]]);
 }
 
+function compute_con(operator_i, operand_i) {
+    let con = 1;
+    let has_sym = false;
+    if (operator_i === 'mulchain') {
+        const [term_0, ...terms_1] = operand_i;
+        if (term_0[0] === 'mul') { // 첫항이 숫자인지 아닌 지 확인
+            if (is_variable(term_0[1])) {
+                has_sym = true;
+            } else if (is_bigger_one(term_0[1])) {
+                con = parseInt(term_0[1][1]);
+            }
+        }
+        has_sym = terms_1.some(term_1 => term_1[0] === 'mul' && is_variable(term_1[1]));
+    } else if (operator_i === 'fraction') {
+        const [num] = operand_i;
+        if (num[0] === 'mulchain') {
+            const [, ...terms_num] = num
+            terms_num.forEach(term_num => {
+                const [op_n, term_n_1] = term_num;
+                if (op_n === 'mul') {
+                    if (['variable', 'squareroot'].includes(term_n_1[0])) {
+                        has_sym = true;
+                    } else if (is_bigger_one(term_n_1)) {
+                        con = parseInt(term_n_1[1]);
+                    }
+                }
+            });
+        } else if (is_bigger_one(num)) {
+            con = parseInt(num[1]);
+        }
+    }
+    return [con, has_sym];
+}
+
 function form_addchain(operand, con) {
     let addchain = ['addchain'];
     operand.forEach(term => { // addchain;
-        const [operator_t, operand_t] = term;
-        let new_num_t = operand_t;
-        let new_den_t = con;
-        if (operand_t[0] === 'fraction') {
-            const [, num_t, den_t] = operand_t;
-            new_num_t = num_t;
-            new_den_t = den_t[0] !== 'mulchain'
-                ? ['mulchain', ['mul', den_t], ['mul', con]]
-                : [...den_t, ['mul', con]];
+        const [op, term_1] = term;
+        let num_1_new = term_1;
+        let den_1_new = con;
+        if (term_1[0] === 'fraction') {
+            const [, num_1, den_1] = term_1;
+            num_1_new = num_1;
+            den_1_new = den_1[0] !== 'mulchain'
+                ? ['mulchain', ['mul', den_1], ['mul', con]]
+                : [...den_1, ['mul', con]];
         }
-        addchain = [...addchain, [operator_t, fracSimpInt(['fraction', new_num_t, new_den_t])]];
+        addchain = [...addchain, [op, fracSimpInt(['fraction', num_1_new, den_1_new])]];
     });
     return addchain;
 }

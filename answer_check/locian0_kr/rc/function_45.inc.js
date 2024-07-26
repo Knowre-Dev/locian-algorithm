@@ -9,10 +9,10 @@ export function addAssociative(tree) {
         term = addAssociative(term);
         const [op, term_1] = term;
         const is_addchain = operator === 'addchain' && op === 'add' && term_1[0] === 'addchain';
-        const new_terms = is_addchain
+        const terms_new = is_addchain
             ? term_1.slice(1)
             : [term];
-        newOperand = [...newOperand, ...new_terms];
+        newOperand = [...newOperand, ...terms_new];
     });
     return [operator, ...newOperand];
 }

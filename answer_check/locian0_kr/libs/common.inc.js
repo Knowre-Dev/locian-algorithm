@@ -9,11 +9,6 @@ export class Laco {
     _instance = null;
     _before = [];
 
-    /*
-    constructor() {
-
-    }
-    */
     getInstance() {
         if (this._instance === null) {
             this._instance = new Laco();
@@ -34,7 +29,6 @@ export class Laco {
 
     setTree(tree = []) {
         const tree_1 = JSON.parse(JSON.stringify(tree));
-
         if (JSON.stringify(this._tree) === JSON.stringify([])) {
             this._tree = tree_1;
         }
@@ -60,7 +54,6 @@ export class Laco {
         }
 
         this._before = this._tree;
-
         return this;
     }
 
@@ -87,8 +80,7 @@ export class Laco {
     parseTree(tree) {
         const tree_1 = JSON.parse(JSON.stringify(tree));
         if (Array.isArray(tree_1)) {
-            const operator = tree_1[0];
-            const operands = tree_1.slice(1);
+            const [operator, ...operands] = tree_1;
 
             for (const k in operands) {
                 operands[k] = this.parseTree(operands[k]);
@@ -116,7 +108,6 @@ export class Laco {
             if (!k) {
                 continue;
             }
-
             html += '<tr><td class="margin"></td><td>' + this.getTable(v) + '</td></tr>';
         }
         html += '</table>';

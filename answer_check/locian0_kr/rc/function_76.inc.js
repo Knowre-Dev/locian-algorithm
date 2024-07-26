@@ -29,24 +29,24 @@ export function fracSimpInt(tree) {
 }
 
 function form_term(term, int, others) {
-    let new_term = term
+    let term_new = term
     const [operator] = term;
     switch (operator) {
         case 'natural': {
-            new_term = ['natural', int];
+            term_new = ['natural', int];
             break;
         }
         case 'mulchain': {
             if (int !== '1') {
                 others = [['mul', ['natural', int]], ...others];
             }
-            new_term = others.length === 1
+            term_new = others.length === 1
                 ? others[0][1]
                 : ['mulchain', ...others];
             break;
         }
     }
-    return new_term
+    return term_new
 }
 
 function update_term(term) {

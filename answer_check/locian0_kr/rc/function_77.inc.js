@@ -18,11 +18,10 @@ export function fracSimpVar(tree) {
     if (operator !== 'fraction') { // fraction 아닌 경우
         return [operator, ...operand.map(term => fracSimpVar(term))];
     }
-
-    const num = fracSimpVar(operand[0]); // 분자
-    const den = fracSimpVar(operand[1]); // 분모
+    let [num, den] = operand;
+    num = fracSimpVar(num); // 분자
+    den = fracSimpVar(den); // 분모
     const vars = new Map();
-
     const [has_var_num, others_num] = update_vars(vars, num, 1);
     if (!has_var_num) {
         return [operator, num, den];
@@ -70,7 +69,7 @@ function form_mulchain(terms, key) { // mulchain  형성
 
 function update_vars(vars, tree, sign) {
     let has_var = false;
-    let others = [];
+    const others = [];
     const [operator, ...operand] = tree;
     if (operator === 'variable') { // varialle  (a)
         update_exp(vars, operand[0], sign)
@@ -80,14 +79,15 @@ function update_vars(vars, tree, sign) {
         has_var = true;
     } else if (operator === 'mulchain') { // mulchain (abc, ab^2(ac))
         operand.forEach(term => {
-            if (term[0] === 'mul' && term[1][0] === 'variable') { // variable (a, b, c)
-                update_exp(vars, term[1][1], sign)
+            const [op, term_1] = term;
+            if (op === 'mul' && term_1[0] === 'variable') { // variable (a, b, c)
+                update_exp(vars, term_1[1], sign)
                 has_var = true;
-            } else if (term[0] === 'mul' && term[1][0] === 'power' && term[1][1][0] === 'variable') {
-                update_exp(vars, term[1][1][1], sign * term[1][2][1]);
+            } else if (op === 'mul' && term_1[0] === 'power' && term_1[1][0] === 'variable') {
+                update_exp(vars, term_1[1][1], sign * term_1[2][1]);
                 has_var = true;
             } else { // non variable (ab^2(ac)(c+d) => ac, c+d)
-                others = [...others, term];
+                others.push(term);
             }
         });
     }

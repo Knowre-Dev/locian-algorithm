@@ -10,7 +10,7 @@ export function varReverse(tree, types = [null], parent = null) {
     operand = operand.map(term => varReverse(term, types, operator));
     let vars = [];
     for (const term of operand) {
-        const is_variable = term[0] === 'mul' && term[1][0] === 'variable'//  && term.length === 2;
+        const is_variable = term[0] === 'mul' && term[1][0] === 'variable';
         if (!is_variable) {
             return [operator, ...operand];
         }

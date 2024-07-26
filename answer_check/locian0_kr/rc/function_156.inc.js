@@ -30,8 +30,8 @@ export function groupLikeVariableTerms(tree = null) {
     }
     const is_not_chain = !['addchain', 'mulchain'].includes(operator);
     if (is_not_chain) {
-        const new_operand = operand.map(term => groupLikeVariableTerms(term))
-        return [operator, ...new_operand];
+        const operand_new = operand.map(term => groupLikeVariableTerms(term))
+        return [operator, ...operand_new];
     }
     switch (operator) {
         case 'addchain': {
@@ -152,12 +152,12 @@ function form_term(coef, vari) {
         ['pm', 'addsub']
     ]);
     coef = array2ChainTree(coef);
-                let op = 'add';
-                const has_op = Array.isArray(coef) && ops.has(coef[0]);
-                if (has_op) {
-                    op = ops.get(coef[0]);
-                    [, coef] = coef;
-                }
+    let op = 'add';
+    const has_op = Array.isArray(coef) && ops.has(coef[0]);
+    if (has_op) {
+        op = ops.get(coef[0]);
+        [, coef] = coef;
+    }
     const term = JSON.stringify(coef) === JSON.stringify(['natural', '1'])
         ? vari // Omit coefficient of 1
         : ['mulchain', ['mul', coef], ['mul', vari]];

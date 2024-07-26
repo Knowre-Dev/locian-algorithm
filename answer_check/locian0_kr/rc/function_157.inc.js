@@ -8,8 +8,8 @@ export function mulAssociative(tree) { // a(bc) => abc
     operand.forEach(term => {
         term = mulAssociative(term);
         if (operator === 'mulchain') {
-            const [op, [op_1, ...operand_1]] = term;
-            newOperand = op === 'mul' && op_1 === 'mulchain'
+            const [op, [operator_1, ...operand_1]] = term;
+            newOperand = op === 'mul' && operator_1 === 'mulchain'
                 ? [...newOperand, ...operand_1]
                 : [...newOperand, term];
         } else {

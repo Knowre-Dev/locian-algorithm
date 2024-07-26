@@ -64,7 +64,7 @@ Author: epark
 */
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
-export function array2ChainTree(operand, evalNumeric = false) {
+export function array2ChainTree(operand, is_eval_numeric = false) {
     // For any invalid input, just return the input back
     const is_not_appl = !Array.isArray(operand) || operand.length === 0 || operand[0].length === 0;
     if (is_not_appl) {
@@ -85,7 +85,7 @@ export function array2ChainTree(operand, evalNumeric = false) {
     }
     const operator = ops.get(op);
     // Optional: Evaluate all numerical terms into a single term
-    if (evalNumeric) {
+    if (is_eval_numeric) {
         let numers = [];
         let others = [];
         operand.forEach(term => {
@@ -254,7 +254,7 @@ export function evalNumericValues_addChain(operand) {
     const num_t = ['natural', Math.abs(num).toString()];
     const den_t = ['natural', den.toString()];
     let tree = ['fraction', num_t, den_t];
-    tree = tree = fracSimpInt(tree);
+    tree = fracSimpInt(tree);
     if (operand_as.length === 0) {
         return num > 0
             ? tree
@@ -896,7 +896,7 @@ A boolean value
 Author: epark
 */
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-export function termExists(term, tree, recursive = true, exclude_pow = false) {
+export function termExists(term, tree, is_recursive = true, is_exclude_pow = false) {
     const term_string = JSON.stringify(term);
     if (term_string === JSON.stringify(tree)) {
         return true;
@@ -904,18 +904,18 @@ export function termExists(term, tree, recursive = true, exclude_pow = false) {
     if (!Array.isArray(tree)) {
         return false;
     }
-    if (!recursive) {
+    if (!is_recursive) {
         const [operator, ...operand] = tree;
         const has_term = operand.some(term_1 => ['addchain', 'mulchain'].includes(operator)
             ? JSON.stringify(term_1[1]) === term_string
             : JSON.stringify(term_1) === term_string);
-        return has_term && !(operator === 'power' && exclude_pow);
+        return has_term && !(operator === 'power' && is_exclude_pow);
     }
     for (const term_1 of tree) {
-        if (termExists(term, term_1, recursive, exclude_pow)) {
+        if (termExists(term, term_1, is_recursive, is_exclude_pow)) {
             const [operator_1, ...operand_1] = term_1;
             const has_term = operand_1.some(term_subtree => JSON.stringify(term_subtree) === term_string);
-            return !(has_term && operator_1 === 'power' && exclude_pow);
+            return !(has_term && operator_1 === 'power' && is_exclude_pow);
         }
     }
     return false; // added

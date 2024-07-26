@@ -14,62 +14,58 @@ export function evaluateEx_new(tree) {
     }
 
     const [operator, ...operand] = tree;
-    switch (operator) {
-        // 160828 larwein - inequality patch
-        case 'inequality': {
-            // 20180817 epark - Leave alone inequalities with infinity sign'
-            const infs = [JSON.stringify(['infinity']), JSON.stringify(['negative', ['infinity']])];
-            const has_inf = infs.includes(JSON.stringify(operand[0])) || infs.includes(JSON.stringify(operand[4]));
-            if (has_inf) {
+    // 160828 larwein - inequality patch
+    if (operator === 'inequality') {
+        // 20180817 epark - Leave alone inequalities with infinity sign'
+        const infs = [JSON.stringify(['infinity']), JSON.stringify(['negative', ['infinity']])];
+        const has_inf = infs.includes(JSON.stringify(operand[0])) || infs.includes(JSON.stringify(operand[4]));
+        if (has_inf) {
+            return tree;
+        }
+        let tree_new = ['inequality'];
+        const operand_length = operand.length;
+        const max = Math.floor(operand_length / 2);
+        const signs = new Map([
+            ['gt', 'gt'],
+            ['ge', 'ge'],
+            ['lt', 'gt'],
+            ['le', 'ge']
+        ]);
+        const operand_1 = ['gt', 'ge'].includes(operand[1])
+            ? operand
+            : operand.reverse();
+        const term_end = operand_1[operand_length - 1];
+        for (let i = 0; i < max; i++) {
+            const term = evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_end]])
+            const op = signs.get(operand_1[2 * i + 1]);
+            tree_new = [...tree_new, term, op];
+        }
+        return [...tree_new, ['natural', '0']];
+    }
+    let tree_new = ['eval'];
+    const seeds = [-2, -1, 1, 2, 3];
+    for (const seed of seeds) {
+        const eval_t = evaluateExWithSeed(tree, seed);
+        // If the value is too large for numerical evaluation
+        // so that any of the five substitutions produce INF or NAN,
+        // then just return the original tree
+
+        if (Array.isArray(eval_t)) {
+            const [eval_0, ...evals_1] = eval_t;
+            const is_equ = ['equation', 'inequality', 'neq', 'ratio', 'orchain'].includes(eval_0);
+            const is_some_not_numeric = evals_1.some(term => is_not_numeric(term[0], term[1]));
+            if (is_equ && is_some_not_numeric) {
                 return tree;
             }
-            let tree_new = ['inequality'];
-            const operand_length = operand.length;
-            const max = Math.floor(operand_length / 2);
-            const signs = new Map([
-                ['gt', 'gt'],
-                ['ge', 'ge'],
-                ['lt', 'gt'],
-                ['le', 'ge']
-            ]);
-            const operand_1 = ['gt', 'ge'].includes(operand[1])
-                ? operand
-                : operand.reverse();
-            const term_end = operand_1[operand_length - 1];
-            for (let i = 0; i < max; i++) {
-                const term = evaluateEx_new(['addchain', ['add', operand_1[2 * i]], ['sub', term_end]])
-                const op = signs.get(operand_1[2 * i + 1]);
-                tree_new = [...tree_new, term, op];
+            const [real, imag] = eval_t;
+            const not_numeric = is_not_numeric(real, imag);
+            if (!is_equ && not_numeric) {
+                return tree;
             }
-            return [...tree_new, ['natural', '0']];
         }
-        default: {
-            let tree_new = ['eval'];
-            const seeds = [-2, -1, 1, 2, 3];
-            for (const seed of seeds) {
-                const eval_t = evaluateExWithSeed(tree, seed);
-                // If the value is too large for numerical evaluation
-                // so that any of the five substitutions produce INF or NAN,
-                // then just return the original tree
-
-                if (Array.isArray(eval_t)) {
-                    const [eval_0, ...evals_1] = eval_t;
-                    const is_equ = ['equation', 'inequality', 'neq', 'ratio', 'orchain'].includes(eval_0);
-                    const is_some_not_numeric = evals_1.some(term => is_not_numeric(term[0], term[1]));
-                    if (is_equ && is_some_not_numeric) {
-                        return tree
-                    }
-                    const [real, imag] = eval_t;
-                    const not_numeric = is_not_numeric(real, imag);
-                    if (!is_equ && not_numeric) {
-                        return tree
-                    }
-                }
-                tree_new = [...tree_new, eval_t];
-            }
-            return tree_new;
-        }
+        tree_new = [...tree_new, eval_t];
     }
+    return tree_new;
 }
 
 /*
@@ -222,9 +218,9 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
     const rangeWidth = 10;
     const bound = rangeWidth / 2;
     if (JSON.stringify(lookupTable) === '{}') {
-        varNames.forEach(varname => {
+        varNames.forEach(var_name => {
             let eval_var = [];
-            switch (varname) {
+            switch (var_name) {
                 // Add below any other cases of special mathematical constants as needed
                 case 'i': { // imaginary unit
                     eval_var = [0, 1];
@@ -255,8 +251,8 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     // caused at lines 1808,1809,1811,1812
 
                     const asciiBound = string_code('a') + 13; // Middle of 'a' - 'z'
-                    real = (real + string_code(varname) - asciiBound) * rangeWidth - bound;
-                    imag = (imag + string_code(varname) - asciiBound) * rangeWidth - bound;
+                    real = (real + string_code(var_name) - asciiBound) * rangeWidth - bound;
+                    imag = (imag + string_code(var_name) - asciiBound) * rangeWidth - bound;
                     // Round to 4 decimal places just for efficiency's sake
                     // (otherwise running the new Equivalent preset slows down too much)
                     real = parseFloat(real.toFixed(4));
@@ -267,7 +263,7 @@ export function evaluateExWithSeed(tree, seed = 1, lookupTable = {}) {
                     break;
                 }
             }
-            lookupTable[varname] = eval_var;
+            lookupTable[var_name] = eval_var;
         });
     }
     const [operator, ...operand] = tree;

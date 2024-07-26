@@ -12,7 +12,10 @@ export function varShift(tree, types = [null], parent = null) {
     let vars = [];
     for (const term of operand) {
         const [op, term_1] = term;
+        const is_variable = op === 'mul' && term_1[0] === 'variable';
+        /*
         const is_variable = op === 'mul' && term_1[0] === 'variable' && term.length === 2;
+        */
         if (!is_variable) {
             return tree;
         }
