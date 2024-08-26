@@ -7,6 +7,10 @@ export function is_numeric(number) {
     return isFinite(number) && !isNaN(parseFloat(number))
 }
 
+export function is_include(items, a) {
+    return items.some(item => is_equal(item, a));
+}
+
 // javascript version preg_match_all
 
 export function match_all(string, regexp) {
@@ -25,4 +29,22 @@ export function match_all(string, regexp) {
         });
     });
     return result;
+}
+
+export function _replacementInMathTree(tree, from, to) {
+    if (is_equal(tree, from)) {
+        return to;
+    }
+    const [operator, ...operand] = tree;
+
+    const newOperand = [];
+    for (const v of operand) {
+        if (Array.isArray(v)) {
+            newOperand.push(_replacementInMathTree(v, from, to));
+        } else {
+            newOperand.push(v);
+        }
+    }
+
+    return [operator, ...operand];
 }

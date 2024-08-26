@@ -1,11 +1,13 @@
+/* eslint-disable no-tabs */
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {곱셈_교환법칙} from "../rc/preset_73.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { 곱셈_교환법칙 } from "../rc/preset_73.inc.js";
 import json from "./kr_json_preset";
 
 let data;
 for (let item of json) {
-	if (item.id ===  73) {
+	if (item.id === 73) {
 		data = item.data;
 		break;
 	}

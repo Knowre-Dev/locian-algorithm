@@ -1,6 +1,7 @@
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {등식_좌우변경가능} from "../rc/preset_63.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { 등식_좌우변경가능 } from "../rc/preset_63.inc.js";
 import json from "./kr_json_preset";
 
 let data;

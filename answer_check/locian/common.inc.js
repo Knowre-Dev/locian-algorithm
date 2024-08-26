@@ -1,5 +1,5 @@
 
-import { is_numeric, match_all} from './app/functions.js';
+import { is_numeric, match_all} from './answer/functions.js';
 
 function _ganswer(object, answer) { // getanswer
     const escp = new Map([
@@ -58,7 +58,7 @@ function _ganswer(object, answer) { // getanswer
                 escp_2.forEach((value, key) => object.value = object.values.replaceAll(key, value));
                 let exp = new RegEx("/^(\\\\overline)\\\\text{([A-Z]+)}/", 'g');
                 if (object.value.match(regex)) {
-                    object.value =object.value.replaceAll(exp, '1{2}');
+                    object.value = object.value.replaceAll(exp, '1{2}');
                 }
                 exp = new RexEx("/^(\\\\overline)([A-Z]+)/", 'g');
                 if (object.value.match(exp))
@@ -783,7 +783,7 @@ function _compareMedia(r, u) {
                     } 
                 }
             })
-            return ineqs.length === 0 && (rlocianOptions.fill === ufill);
+            return ineqs.length === 0 && rlocianOptions.fill === ufill;
         }
         case 'Input:CompInEq': {
             return r.dataFill === u.dataFill;
@@ -1062,6 +1062,9 @@ function sort_dropzone(a, b) {
             : 1;
     }
 }
+
+
+
 
 
 

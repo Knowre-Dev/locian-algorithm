@@ -1,6 +1,7 @@
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {식간단히_지수유리수} from "../rc/preset_72.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { 식간단히_지수유리수 } from "../rc/preset_72.inc.js";
 import json from "./kr_json_preset";
 
 let data;

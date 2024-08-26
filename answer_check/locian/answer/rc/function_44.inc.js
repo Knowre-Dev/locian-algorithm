@@ -18,8 +18,8 @@ export function 곱셈결합법칙(tree) {
     return [operator, ...newOperand];
 }
 /*
-import { LatexToTree, compareMathTree } from '../checkmath.js';
-
+import { compareMathTree } from '../checkmath.js';
+import { LatexToTree } from '../LatexToTree.js';
 let tree_1 = LatexToTree('a(b(cd))');
 let tree_2 = LatexToTree('abcd');
 tree_1 = 곱셈결합법칙(tree_1);

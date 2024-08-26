@@ -1,6 +1,7 @@
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {intervalSetNot} from "../rc/function_84.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { intervalSetNot } from "../rc/function_84.inc.js";
 import json from "./kr_json_function";
 
 let data;

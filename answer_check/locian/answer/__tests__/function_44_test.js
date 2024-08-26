@@ -1,4 +1,6 @@
-import { LatexToTree, compareMathTree } from '../checkmath.js';
+/* eslint-disable no-tabs */
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
 import { 곱셈결합법칙 } from '../rc/function_44.inc.js';
 import json from './kr_json_function';
 

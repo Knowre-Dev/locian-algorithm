@@ -1,6 +1,7 @@
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {simp_distribute} from "../rc/preset_29.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { simp_distribute } from "../rc/preset_29.inc.js";
 import json from "./kr_json_preset";
 
 let data;

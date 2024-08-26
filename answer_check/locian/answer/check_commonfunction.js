@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-import { is_numeric } from './functions.js'
+import { is_numeric, is_include } from './functions.js'
 import { checkMath_one } from './checkmath.js'
 /***********************************************************
 name:   getOrderedAnswerArray
@@ -42,15 +42,15 @@ input:
 output:
 ***********************************************************/
 export function compareOrderedAnswerArray(A, B, type) {
-	const func = checkMath_one;
 	// const func = 'check' + type + '_one';
+	const func = checkMath_one;
 	const keyA = A.keys();
 	const delArray = [];
 	if (keyA[0].substring(0, 6) === 'answer') {
 		for_1: for (const vA of A) {
             const entries_B = B.entries();
 			for_2: for (const [kB, vB] of entries_B) {
-				if (delArray.includes(vB)) {
+				if (is_include(delArray, vB)) {
 					continue;
                 } else {
                     if (Object.hasOwn(vA, 'blacklist')) {
@@ -98,7 +98,7 @@ export function compareOrderedAnswerArray(A, B, type) {
         for_1: for (const vA of A) {
             const entries_B = B.entries();
 			for (const [kB, vB] of entries_B) {
-				if (delArray.includes(kB)) {
+				if (is_include(delArray, kB)) {
 					continue;
                 } else if (compareOrderedAnswerArray(vA, vB, type)) {
 					delArray.push(kB);

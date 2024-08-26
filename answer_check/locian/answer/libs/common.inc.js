@@ -1,4 +1,4 @@
-import { LatexToTree } from '../checkmath.js';
+import { LatexToTree } from '../LatexToTree.js';
 /**
  *  Locian Answer Checking Organizer
  */
@@ -125,66 +125,110 @@ export class Laco {
 
         switch (op) {
             case 'pm':
-            case 'addsub':
+            case 'addsub': {
                 return '\\pm ' + this.getLatex(tree_1[0]);
+            }
             case 'mp':
-            case 'subadd':
+            case 'subadd': {
                 return '\\mp ' + this.getLatex(tree_1[0]);
-            case 'sine':
+            }
+            case 'sine': {
                 return '\\sin{' + this.getLatex(tree_1[0]) + '}';
-            case 'tangent':
+            }
+            case 'tangent': {
                 return '\\tan{' + this.getLatex(tree_1[0]) + '}';
-            case 'absolute':
+            }
+            case 'absolute': {
                 return '\\left|' + this.getLatex(tree_1[0]) + '\\right|';
-            case 'rdecimal':
+            }
+            case 'rdecimal': {
                 return this.getLatex(tree_1[0]) + '\\overline{' + this.getLatex(tree_1[2]) + '}';
+            }
             case 'natural':
             case 'decimal':
             case 'anything':
-            case 'variable':
+            case 'variable': {
                 return this.getLatex(tree_1[0]);
+            }
             case 'positive':
-            case 'add':
-                return '+' + (tree_1[0][0].indexOf('chain') ? '(' : '') + this.getLatex(tree_1[0]) + (tree_1[0][0].indexOf('chain') ? ')' : '');
+            case 'add': {
+                return '+' +
+                    (tree_1[0][0].indexOf('chain')
+                        ? '('
+                        : '') +
+                    this.getLatex(tree_1[0]) +
+                    (tree_1[0][0].indexOf('chain')
+                        ? ')'
+                        : '');
+            }
             case 'negative':
-            case 'sub':
-                return '-' + (tree_1[0][0].indexOf('chain') ? '(' : '') + this.getLatex(tree_1[0]) + (tree_1[0][0].indexOf('chain') ? ')' : '');
-            case 'mul':
-                return '\\cdot ' + (tree_1[0][0].indexOf('chain') ? '(' : '') + this.getLatex(tree_1[0]) + (tree_1[0][0].indexOf('chain') ? ')' : '');
-            case 'div':
-                return '\\div ' + (tree_1[0][0].indexOf('chain') ? '(' : '') + this.getLatex(tree_1[0]) + (tree_1[0][0].indexOf('chain') ? ')' : '');
-
+            case 'sub': {
+                return '-' +
+                    (tree_1[0][0].indexOf('chain')
+                        ? '('
+                        : '') +
+                    this.getLatex(tree_1[0]) +
+                    (tree_1[0][0].indexOf('chain')
+                        ? ')'
+                        : '');
+            }
+            case 'mul': {
+                return '\\cdot ' +
+                    (tree_1[0][0].indexOf('chain')
+                        ? '('
+                        : '') +
+                    this.getLatex(tree_1[0]) +
+                    (tree_1[0][0].indexOf('chain')
+                    ? ')'
+                    : '');
+            }
+            case 'div': {
+                return '\\div ' +
+                    (tree_1[0][0].indexOf('chain')
+                        ? '('
+                        : '') +
+                    this.getLatex(tree_1[0]) +
+                    (tree_1[0][0].indexOf('chain')
+                        ? ')'
+                        : '');
+            }
             case 'addchain_fixed':
             case 'mulchain_fixed':
             case 'addchain':
             case 'mulchain': {
-                const str = tree_1.map(
-                    function(v) {
-                        return Laco.getLatex(v);
-                    }).join();
+                const str = tree_1.map(v => Laco.getLatex(v)).join();
                 return str.replace(/^(\\\\cdot|\+)+/g, '');
             }
-            case 'cap':
+            case 'cap': {
                 return '(' + this.getLatex(tree_1[0]) + ')\\cap (' + this.getLatex(tree_1[1]) + ')';
-            case 'cup':
+            }
+            case 'cup': {
                 return '(' + this.getLatex(tree_1[0]) + ')\\cup (' + this.getLatex(tree_1[1]) + ')';
-            case 'power':
+            }
+            case 'power': {
                 return '{' + this.getLatex(tree_1[0]) + '}^{' + this.getLatex(tree_1[1]) + '}';
-            case 'fraction':
+            }
+            case 'fraction': {
                 return '\\frac{' + this.getLatex(tree_1[0]) + '}{' + this.getLatex(tree_1[1]) + '}';
-            case 'equation':
+            }
+            case 'equation': {
                 return tree_1.map(
                     function(v) {
                         return Laco.getLatex(v);
                     }).join('=');
-            case 'inequality':
+            }
+            case 'inequality': {
                 return tree_1.map(function(v) { return Laco.getLatex(v); }).join();
-            case 'squareroot':
+            }
+            case 'squareroot': {
                 return '\\sqrt{' + this.getLatex(tree_1[0]) + '}';
-            case 'mangle':
+            }
+            case 'mangle': {
                 return 'm\\angle{' + this.getLatex(tree_1[0]) + '}';
-            default :
+            }
+            default : {
                 return '\\' + op + '{' + tree_1.map(function(v) { return Laco.getLatex(v); }, tree_1).join() + '}';
+            }
         }
         /*
         let latex = '';

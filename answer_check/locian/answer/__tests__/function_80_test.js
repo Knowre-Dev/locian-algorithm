@@ -1,4 +1,5 @@
-import { LatexToTree, compareMathTree } from '../checkmath.js';
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
 import { addPolyZero } from '../rc/function_80.inc.js';
 import json from './kr_json_function';
 

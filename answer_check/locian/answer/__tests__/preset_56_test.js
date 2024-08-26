@@ -1,6 +1,7 @@
 
-import {LatexToTree, compareMathTree} from "../checkmath.js";
-import {식_간단히} from "../rc/preset_56.inc.js";
+import { LatexToTree } from '../LatexToTree.js';
+import { compareMathTree } from '../checkmath.js';
+import { 식_간단히 } from "../rc/preset_56.inc.js";
 import json from "./kr_json_preset";
 
 let data;
