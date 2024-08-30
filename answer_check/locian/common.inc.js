@@ -675,7 +675,7 @@ function _compareMedia(r, u) {
             return r.answer === u.answer;
         }
         case 'SelectBox': {
-            return u.answer.length !== 0 & (r.answer === u.answer);
+            return u.answer.length !== 0 & r.answer === u.answer;
         }
         case 'SingleChoice': {
             return r.answer.every((v) => v.toString() === u.answer);
@@ -796,7 +796,7 @@ function _compareMedia(r, u) {
         case 'Input:ExpoCurve':
         case 'Input:SqrtCurve': {
             let eqn = r.eqn;
-            prev = null;
+            let prev = null;
             u.coords.forEach((pair) => {
                 if (prev.join(',') === pair.join(',')) {
                     return false;
@@ -878,7 +878,7 @@ function _compareMedia(r, u) {
         }
         
         default: {
-         return false;
+            return false;
         }
     }
 }

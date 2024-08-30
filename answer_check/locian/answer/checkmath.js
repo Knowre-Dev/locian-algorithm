@@ -22,7 +22,7 @@ export function compareMathTree(tree_A, tree_B) {
     if ([tree_A[0], tree_B[0]].includes('anything')) {
         return true;
     }
-    /* don't delete (둘중 하나라도 "anything"이면 결국 두 트리는 같은 것이 되므로 결과는  true)
+    /* don't delete (둘중 하나라도 "anything"이면 앞에서 true 출력)
     if (tree_A[0] === 'anything') {
         tree_A = tree_B;
     } else if (tree_B[0] === 'anything') {
@@ -55,17 +55,17 @@ export function compareMathTree(tree_A, tree_B) {
         let re_B;
         let im_A;
         let im_B;
-        if (term_A[0] === 'equation') {
+        if (term_A[0] === 'equation') { // ['equation', left, right]
             // 160818 larwein - equation patch : 계산값의 차를 구해서 비교 + 이항 부호 다르면 바꿔서 비교
             const [, [re_l_A, im_l_A], [re_r_A, im_r_A]] = term_A;
-            re_A = (parseFloat(re_l_A) - parseFloat(re_r_A)).toExponential(4);
-            im_A = (parseFloat(im_l_A) - parseFloat(im_r_A)).toExponential(4);
+            re_A = re_l_A - re_r_A;// 양변 실수의 차
+            im_A = im_l_A - im_r_A; // 양변 허수의 차
 
             const [, [re_l_B, im_l_B], [re_r_B, im_r_B]] = term_B;
-            re_B = (parseFloat(re_l_B) - parseFloat(re_r_B)).toExponential(4);
-            im_B = (parseFloat(im_l_B) - parseFloat(im_r_B)).toExponential(4);
+            re_B = re_l_B - re_r_B; // 양변 실수의 차
+            im_B = im_l_B - im_r_B; // 양변 허수의 차
 
-            if (re_A === -1 * re_B && im_A === -1 * im_B) {
+            if (is_equal_numeric(re_A, -1 * re_B) && is_equal_numeric(im_A, -1 * im_B)) {
                 continue;
                 // re_B = re_A;
                 // im_B = im_A;
@@ -73,18 +73,17 @@ export function compareMathTree(tree_A, tree_B) {
         } else {
             // 150818 larwein - 유효숫자 범위 줄임
             [re_A, im_A] = term_A;
-            re_A = parseFloat(re_A).toExponential(4);
-            im_A = parseFloat(im_A).toExponential(4);
-
             [re_B, im_B] = term_B;
-            re_B = parseFloat(re_B).toExponential(4);
-            im_B = parseFloat(im_B).toExponential(4);
         }
-        if (re_A !== re_B || im_A !== im_B) {
+        if (!is_equal_numeric(re_A, re_B) || !is_equal_numeric(im_A, im_B)) {
             return false;
         }
     }
     return true;
+}
+
+function is_equal_numeric(a, b) {
+    return parseFloat(a).toExponential(4) === parseFloat(b).toExponential(4);
 }
 
 // checkmath

@@ -844,6 +844,213 @@
     "module": 0
 }
 
+// dropzone
+
+{
+    "result": false,
+    "results": [
+        false,
+        null
+    ],
+    "requestURI": "",
+    "answer": {
+        "E": [],
+        "M": [
+            {
+                "type": "Dropzone",
+                "answer": [
+                    {
+                        "type": "Math",
+                        "content": "\\log_{\\frac{1}{3}}x",
+                        "wrap": false,
+                        "whiteSpaces": true,
+                        "innerPadding": false,
+                        "font": {
+                            "color": {
+                                "text": {
+                                    "weight": "normalHard"
+                                }
+                            }
+                        },
+                        "option": {
+                            "ds": "\\log{x}{\\frac{1}{3}}",
+                            "classname": "Log"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "Dropzone",
+                "answer": [
+                    {
+                        "type": "Math",
+                        "content": "7^{x}",
+                        "wrap": false,
+                        "whiteSpaces": true,
+                        "innerPadding": false,
+                        "font": {
+                            "color": {
+                                "text": {
+                                    "weight": "normalHard"
+                                }
+                            }
+                        },
+                        "option": {
+                            "ds": "7^{x}",
+                            "classname": "Exponential"
+                        }
+                    }
+                ]
+            }
+        ],
+        "Stack": []
+    },
+    "inswer": {
+        "E": [],
+        "M": [
+            {
+                "type": "Dropzone",
+                "answer": [
+                    {
+                        "type": "Math",
+                        "content": "\\log_{\\frac{1}{7}}x",
+                        "wrap": false,
+                        "whiteSpaces": true,
+                        "innerPadding": false,
+                        "font": {
+                            "color": {
+                                "text": {
+                                    "weight": "normalHard",
+                                    "code": 0,
+                                    "opacity": 1,
+                                    "useOpacity": false,
+                                    "red": 0,
+                                    "green": 0,
+                                    "blue": 0,
+                                    "useCustomColor": false
+                                },
+                                "background": {
+                                    "code": -1,
+                                    "weight": "opaqueWeak",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            },
+                            "size": 1,
+                            "decoration": {
+                                "underline": false,
+                                "bold": false,
+                                "italic": false,
+                                "color": {
+                                    "code": 0,
+                                    "weight": "normalMedium",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            }
+                        },
+                        "option": {
+                            "ds": "\\log{x}{\\frac{1}{7}}",
+                            "classname": "Log"
+                        },
+                        "category": "Basic",
+                        "useUnderlineColor": false,
+                        "display": "inline",
+                        "align": {
+                            "ver": "baseline"
+                        },
+                        "interaction": {
+                            "selectable": false,
+                            "selected": false
+                        },
+                        "border": {
+                            "top": {
+                                "width": 0,
+                                "style": "solid",
+                                "color": {
+                                    "code": 0,
+                                    "weight": "normalMedium",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            },
+                            "right": {
+                                "width": 0,
+                                "style": "solid",
+                                "color": {
+                                    "code": 0,
+                                    "weight": "normalMedium",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            },
+                            "bottom": {
+                                "width": 0,
+                                "style": "solid",
+                                "color": {
+                                    "code": 0,
+                                    "weight": "normalMedium",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            },
+                            "left": {
+                                "width": 0,
+                                "style": "solid",
+                                "color": {
+                                    "code": 0,
+                                    "weight": "normalMedium",
+                                    "opacity": 1,
+                                    "useOpacity": false
+                                }
+                            },
+                            "radius": {
+                                "topLeft": 0,
+                                "topRight": 0,
+                                "bottomRight": 0,
+                                "bottomLeft": 0
+                            }
+                        },
+                        "padding": {
+                            "top": 0,
+                            "bottom": 0,
+                            "left": 0,
+                            "right": 0
+                        },
+                        "margin": {
+                            "top": 0,
+                            "bottom": 0,
+                            "left": 0,
+                            "right": 0
+                        },
+                        "position": {
+                            "left": 0,
+                            "top": 0
+                        },
+                        "transform": {
+                            "rotate": 0,
+                            "flip": {
+                                "x": false,
+                                "y": false
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "Dropzone",
+                "answer": []
+            }
+        ],
+        "Stack": []
+    },
+    "groupMedia": [
+        null,
+        null
+    ],
+    "module": 0
+}
+
 
 // dropzone
 
@@ -2093,3 +2300,5 @@
     ],
     "module": 0
 }
+
+
