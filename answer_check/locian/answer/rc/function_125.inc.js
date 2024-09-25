@@ -50,48 +50,6 @@ function form_cons(terms) {
     return [is_not_appl, cons];
 }
 
-function form_gcd(terms, cons) {
-    const zero = JSON.stringify(['natural', '0']);
-    const has_zero = terms.some(term => JSON.stringify(term) === zero);
-    const g = cons.reduce((a, b) => gcd(a, b), cons[0]);
-    const is_not_appl = (cons.length === 1 && !has_zero) || g === 1;
-    return [is_not_appl, g];
-}
-
-function form_equation(operand, den) {
-    let [left, right] = operand;
-    const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
-    den = ['natural', den.toString()];
-    left = frac_function(['fraction', left, den]);
-    right = frac_function(['fraction', right, den]);
-    return ['equation', left, right];
-}
-
-function form_inequality(operand, den, max) { // a<b<c  a <b <c
-    const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
-    den = ['natural', den.toString()];
-    let newOperand = [frac_function(['fraction', operand[0], den])];
-    for (let i = 1; i <= max; i++) {
-        const term_new = frac_function(['fraction', operand[2 * i], den]);
-        newOperand = [...newOperand, operand[2 * i - 1], term_new];
-    }
-    return ['inequality', ...newOperand];
-}
-/*
-import {LatexToTree, match_all} from '../checkmath.js';
-let latex_1 = '2\\pi x=4\\pi  ';
-let latex_2 = '2x=4';
-let tree_1 = LatexToTree(latex_1);
-let tree_2 = LatexToTree(latex_2);
-let tree_11 = eqIneqMulProp(tree_1);
-let tree_21 = eqIneqMulProp(tree_2);
-let result1 = JSON.stringify(tree_11, null, 4);
-let result2 = JSON.stringify(tree_21, null, 4);
-console.log(result1 === result2);
-console.log(JSON.stringify(tree_11, null, 4));
-console.log(JSON.stringify(tree_21, null, 4));
-*/
-
 export function sub_getConstant(tree) {
     if (!Array.isArray(tree)) {
         return [];
@@ -133,6 +91,48 @@ export function sub_getConstant(tree) {
         }
     }
 }
+
+function form_gcd(terms, cons) {
+    const zero = JSON.stringify(['natural', '0']);
+    const has_zero = terms.some(term => JSON.stringify(term) === zero);
+    const g = cons.reduce((a, b) => gcd(a, b), cons[0]);
+    const is_not_appl = (cons.length === 1 && !has_zero) || g === 1;
+    return [is_not_appl, g];
+}
+
+function form_equation(operand, den) {
+    let [left, right] = operand;
+    const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
+    den = ['natural', den.toString()];
+    left = frac_function(['fraction', left, den]);
+    right = frac_function(['fraction', right, den]);
+    return ['equation', left, right];
+}
+
+function form_inequality(operand, den, max) { // a<b<c  a <b <c
+    const frac_function = tree_1 => fracSimpInt(fracSeparation(fracNegative(tree_1)));
+    den = ['natural', den.toString()];
+    let newOperand = [frac_function(['fraction', operand[0], den])];
+    for (let i = 1; i <= max; i++) {
+        const term_new = frac_function(['fraction', operand[2 * i], den]);
+        newOperand = [...newOperand, operand[2 * i - 1], term_new];
+    }
+    return ['inequality', ...newOperand];
+}
+/*
+import {LatexToTree, match_all} from '../checkmath.js';
+let latex_1 = '2\\pi x=4\\pi  ';
+let latex_2 = '2x=4';
+let tree_1 = LatexToTree(latex_1);
+let tree_2 = LatexToTree(latex_2);
+let tree_11 = eqIneqMulProp(tree_1);
+let tree_21 = eqIneqMulProp(tree_2);
+let result1 = JSON.stringify(tree_11, null, 4);
+let result2 = JSON.stringify(tree_21, null, 4);
+console.log(result1 === result2);
+console.log(JSON.stringify(tree_11, null, 4));
+console.log(JSON.stringify(tree_21, null, 4));
+*/
 
 /*
 import {LatexToTree, match_all} from '../checkmath.js';

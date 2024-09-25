@@ -34,6 +34,8 @@ export function math_step(r, sign) {
         : 0;
 }
 
+// tree functions
+
 export function sign_change(addchain) {
     const [operator, ...operand] = addchain;
     const signs = new Map([

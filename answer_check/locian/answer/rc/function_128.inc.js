@@ -75,6 +75,14 @@ function compute_con(operator_i, operand_i) {
     return [con, has_sym];
 }
 
+function is_variable(term) {
+    return ['variable', 'squareroot'].includes(term[0]) || (term[0] === 'power' && term[1][0] === 'variable');
+}
+
+function is_bigger_one(term) {
+    return term[0] === 'natural' && !['0', '1'].includes(term[1]);
+}
+
 function form_addchain(operand, con) {
     let addchain = ['addchain'];
     operand.forEach(term => { // addchain;
@@ -91,12 +99,4 @@ function form_addchain(operand, con) {
         addchain = [...addchain, [op, fracSimpInt(['fraction', num_1_new, den_1_new])]];
     });
     return addchain;
-}
-
-function is_variable(term) {
-    return ['variable', 'squareroot'].includes(term[0]) || (term[0] === 'power' && term[1][0] === 'variable');
-}
-
-function is_bigger_one(term) {
-    return term[0] === 'natural' && !['0', '1'].includes(term[1]);
 }

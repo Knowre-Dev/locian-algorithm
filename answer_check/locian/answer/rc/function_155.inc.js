@@ -1,6 +1,6 @@
 import { termExists } from '../rc/sub_functions.js';
 
-// equation 이나 inequatliy의 한뽁을 0으로 만듬  a = b => 0 = b - a,   a < b < c => 0 < b - a < c - a
+// equation 이나 inequatliy의 한쪽을 0으로 만듬  a = b => 0 = b - a,   a < b < c => 0 < b - a < c - a
 // equation : ['equation', left, right]
 //            a = b => ['equation', ['variable', 'a'],  ['variable', 'b']]
 // inequality: ['inequality', term ineq, term, ineq, term]

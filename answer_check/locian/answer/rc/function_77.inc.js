@@ -61,11 +61,6 @@ const tree_11 = fracSimpVar(tree_1);
 const result_1 = JSON.stringify(tree_11, null, 4);
 console.log(result_1);
 */
-function form_mulchain(terms, key) { // mulchain  형성
-    return terms.length === 1
-        ? terms[0][1]
-        : mulCommutative(['mulchain', ...terms]);
-}
 
 function update_vars(vars, tree, sign) {
     let has_var = false;
@@ -106,6 +101,12 @@ function var_to_tree(base, exp) {
     return exp === 1
         ? ['variable', base]
         : ['power', ['variable', base], ['natural', exp.toString()]];
+}
+
+function form_mulchain(terms) { // mulchain  형성
+    return terms.length === 1
+        ? terms[0][1]
+        : mulCommutative(['mulchain', ...terms]);
 }
 
 /*

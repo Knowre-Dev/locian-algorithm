@@ -1,4 +1,4 @@
-// 소수에서 앞에 불피요한 0제거 00.1 => 0.1
+// 소수에서 불필요한 0제거 1.00 => 1
 export function decElimZero(tree) {
     if (!Array.isArray(tree)) {
         return tree;

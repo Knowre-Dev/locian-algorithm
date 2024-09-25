@@ -1,4 +1,4 @@
-// squareroot안 정리해서 정부 부분으로 분리 sqrt(8) => 2*sqrt(2)
+// squareroot안 정리해서 natural로 분리 sqrt(8) => 2*sqrt(2)
 export function rootSimpInt(tree) {
     if (!Array.isArray(tree)) {
         return tree;

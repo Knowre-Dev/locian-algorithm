@@ -1,5 +1,5 @@
 import { fracSimp } from '../rc/function_67.inc.js';
-// 숱환소수를 분수로 만듬
+// 순환소수를 분수로 만듬
 export function rdecToFrac(tree) {
     if (!Array.isArray(tree)) {
         return tree;

@@ -86,7 +86,7 @@ export function exprSimpConst(tree = null) {
             return exprSimpConst(['power', radicand, exp]);
         }
         case 'addchain': { // fin
-            return simp_addchain(operator, operand);
+            return simp_addchain(operand);
         }
         case 'mulchain': { // fin
             return simp_mulchain(tree);
@@ -101,7 +101,7 @@ export function exprSimpConst(tree = null) {
     }
 }
 
-function simp_addchain(operator, operand) {
+function simp_addchain(operand) {
     operand = addNegative(addAssociative(addIdentity(array2ChainTree(operand))));
     if (operand[0] !== 'addchain') {
         return operand;

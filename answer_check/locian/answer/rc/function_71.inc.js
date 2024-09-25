@@ -1,4 +1,4 @@
-// addchain 부호 정리 -a+b => -(a-b)
+// addchain 부호 정리 -(a+b)+c => -a-b+c
 export function addNegative(tree) {
     if (!Array.isArray(tree)) {
         return tree;

@@ -24,7 +24,7 @@ export function varReverseShift(tree, types = [null], parent = null) {
     const length_vars = vars.length;
     const key_1 = (k - 1 + length_vars) % length_vars;
     const term_1 = vars[key_1];
-    const key_2 = (parseInt(k) + 1) % length_vars
+    const key_2 = (parseInt(k) + 1) % length_vars;
     const term_2 = vars[key_2];
     if (term_1 < term_2) {
         k = length_vars - 1 - k;

@@ -519,11 +519,6 @@ function eval_modul_sq(real, imag) {
     return Math.pow(real, 2) + Math.pow(imag, 2);
 }
 
-/*
-Copied mostly from checkmath.php,
-with comments added by epark
-*/
-
 export function eval_pow(A, B) {
     if (A[0] === 0 && A[1] === 0) {
         return B[0] === 0 && B[1] === 0

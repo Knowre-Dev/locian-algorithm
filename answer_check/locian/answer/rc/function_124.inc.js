@@ -1,4 +1,4 @@
-// ineqwuatliy 부호 정렬
+// inequatliy 부호 정렬
 import { sign_change } from '../rc/sub_functions.js';
 export function ineqMulNeg(tree = null) {
     if (!Array.isArray(tree)) {

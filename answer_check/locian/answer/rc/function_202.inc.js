@@ -25,7 +25,7 @@ export function eqIneqDivPi(tree = null) { // 등식, 부둥식에서 각 항을
             const term_new = divide_by_pi(term);
             let newOperand = [term_new];
             const max = Math.floor(operand.length / 2);
-            for (let i = 1; i <= max; i++) { // 부둥호 아닌 부분만 pi로 나눔
+            for (let i = 1; i <= max; i++) { // 부등호 아닌 부분만 pi로 나눔
                 const term = operand[2 * i];
                 if (!checkPi(term)) {
                     return tree
